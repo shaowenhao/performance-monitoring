@@ -1,0 +1,10 @@
+pytest==5.2.2
+allure-pytest==2.8.6
+requests==2.22.0
+validators==0.14.0
+formats==0.1.1
+pyyaml==5.1.2
+colorama==0.4.1
+colorlog==4.0.2
+deepdiff==4.0.8
+httpretty==0.9.7

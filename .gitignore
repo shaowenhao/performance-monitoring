@@ -1,0 +1,15 @@
+*.egg-info/
+*__pycache__/
+*.pyc
+.cache/
+.coverage
+.eggs/
+.tox
+.idea
+*.pytest_cache/
+build/
+dist/
+geckodriver.log
+docs/build/
+venv/
+report/

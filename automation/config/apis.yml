@@ -1,0 +1,6 @@
+apis:
+  base: https://dog.ceo/api/breeds
+  random: image/random
+  list_all: list/all
+  by_breed: hound/images
+  by_sub_breeds: hound/list
