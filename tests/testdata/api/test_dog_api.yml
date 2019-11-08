@@ -3,7 +3,7 @@ test_list_all_breeds:
       api: list_all
       method: get
     validate:
-      type: part_check
+      type: part_contain_check
       points:
         status_code: 200
         body:
@@ -21,7 +21,7 @@ test_list_all_breeds:
       api: list_all
       method: get
     validate:
-      type: regular_part_check
+      type: part_check
       points:
         - eq : [status_code, 200]
         - eq : [body.status, success]
@@ -29,8 +29,8 @@ test_list_all_breeds:
       api: list_all
       method: get
     validate:
-      type: part_check
+      type: part_contain_check
       points:
-        status_code: 200
+        status_code: 201
         body:
           status: success

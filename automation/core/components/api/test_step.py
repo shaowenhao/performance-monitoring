@@ -15,7 +15,8 @@ class TestStep(object):
         resp = self.api.request()
         # validate response
         v = Validator()
-        v.validate(self.validate, resp.to_check(**self._get_if_check_others()))
+        if not v.validate(self.validate, resp.to_check(**self._get_if_check_others())):
+            raise AssertionError('validate result is False, test case failed!')
 
     def _get_if_check_others(self):
         result = {
