@@ -1,11 +1,13 @@
 import pytest
 import os
 from automation.core import logger
+from automation.core.components.api.apis import Apis
 import yaml
 # conftest.py
 
 # https://docs.pytest.org/en/latest/example/parametrize.html
 def pytest_generate_tests(metafunc):
+    prepare_apis_if_need()
     if "testdata" in metafunc.fixturenames:
         path = metafunc.module.__file__
         method_name = metafunc.definition.name
@@ -28,5 +30,9 @@ def get_testdata(path):
             else:
                 CACHES[testdata_path] = testdata
     return CACHES[testdata_path]
+
+def prepare_apis_if_need():
+    if not Apis.all_apis:
+        Apis.load_default_apis()
 
 CACHES = {}

@@ -1,5 +1,7 @@
 import yaml
+import os
 from automation.core import logger
+from automation import config
 
 class Apis(object):
 
@@ -17,6 +19,10 @@ class Apis(object):
             else:
                 Apis.all_apis = apis.get('apis', {})
 
+    @classmethod
+    def load_default_apis(cls):
+        path = os.path.join(os.path.dirname(config.__file__), 'apis.yml')
+        Apis.load_apis(path)
 
     @classmethod
     def get_api(cls, name):

@@ -13,3 +13,4 @@ geckodriver.log
 docs/build/
 venv/
 report/
+logs/

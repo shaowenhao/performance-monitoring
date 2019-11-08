@@ -2,7 +2,7 @@ import requests
 import pytest
 import yaml
 import os
-from automation.core.components.api.http_client import HttpClient
+from automation.core.components.api import call_api
 
 # @pytest.fixture
 # def get_testdata():
@@ -27,8 +27,6 @@ from automation.core.components.api.http_client import HttpClient
 #             return apis['apis']
 
 class TestDogApi(object):
-    domain = 'https://www.v2ex.com/'
 
     def test_list_all_breeds(self, testdata):
-        print(testdata)
-        assert 'a' == 'b'
+        call_api(testdata)
