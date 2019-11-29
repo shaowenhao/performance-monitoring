@@ -1,6 +1,4 @@
 apis:
-  base: https://dog.ceo/api/breeds
-  random: image/random
-  list_all: list/all
-  by_breed: hound/images
-  by_sub_breeds: hound/list
+  base: 139.24.161.180:9001
+  searchModelSchemaByName: connector/searchModelSchemaByName
+  searchData: connector/searchData

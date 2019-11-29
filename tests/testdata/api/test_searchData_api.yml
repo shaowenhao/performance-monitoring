@@ -1,0 +1,89 @@
+test_get_without_name_param:
+  - request:
+      api: searchData
+      method: get
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4004
+          message: Required String parameter 'name' is not present
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: ''
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4002
+          message: name can't be empty
+test_get_with_fields_name_forbidden:
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: or
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4001
+          message: "Fields should not contain key word: or"
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: and
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4001
+          message: "Fields should not contain key word: and"
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: equal
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4001
+          message: "Fields should not contain key word: equal"
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: like
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4001
+          message: "Fields should not contain key word: like"
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: in
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 4001
+          message: "Fields should not contain key word: in"

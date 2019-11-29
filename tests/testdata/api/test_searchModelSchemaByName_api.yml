@@ -1,0 +1,88 @@
+test_get_with_correct_name:
+  - request:
+      api: searchModelSchemaByName
+      method: get
+      params:
+        name: Equipment
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          data:
+            name: Equipment
+            schemas:
+              Description: String
+              ID: String
+          message: Operate success.
+  - request:
+      api: searchModelSchemaByName
+      method: get
+      params:
+        name: Material_Sublot
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          data:
+            name: Material_Sublot
+            schemas:
+              Status: String
+              Quantity_Unit_of_Measure: String
+              Description: String
+              Quantity: String
+              Storage_Location: String
+          message: Operate success.
+test_get_without_name_param:
+  - request:
+      api: searchModelSchemaByName
+      method: get
+      params:
+        hello: world
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 4004
+          message: Required String parameter 'name' is not present
+  - request:
+      api: searchModelSchemaByName
+      method: get
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 4004
+          message: Required String parameter 'name' is not present
+
+#  - request:
+#      api: list_all
+#      method: get
+#    validate:
+#      type: full_check
+#      points:
+#        status_code: 200
+#        body:
+#          status: success
+#  - request:
+#      api: list_all
+#      method: get
+#    validate:
+#      type: part_check
+#      points:
+#        - eq : [status_code, 200]
+#        - eq : [body.status, success]
+#  - request:
+#      api: list_all
+#      method: get
+#    validate:
+#      type: part_contain_check
+#      points:
+#        status_code: 201
+#        body:
+#          status: success

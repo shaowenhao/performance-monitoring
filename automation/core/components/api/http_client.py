@@ -17,6 +17,10 @@ class HttpClient(object):
             self.base_url = base_url
 
         self.cache = cache
+        if not headers:
+            headers = {}
+        if not params:
+            params = {}
         self.config = {
             'headers': headers,
             'params': params,
