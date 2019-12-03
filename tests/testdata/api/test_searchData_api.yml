@@ -87,3 +87,77 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: in"
+test_get_with_correct_name_param:
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: Operate success.
+      others:
+        items_no: 56
+        keys:
+          - ID
+          - Description
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Material_Produced_Requirement
+        condition: 1=1 limit 5
+        fields: PartNo,Next1stWeekSOFrom,Event_Time
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: Operate success.
+      others:
+        items_no: 5
+        keys:
+          - PartNo
+          - Next1stWeekSOFrom
+          - Event_Time
+test_get_with_condition_param:
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        condition: Description like '%test%'
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: Operate success.
+          data:
+            -
+              ID: 808D PPU161.2 mainboard fixture
+              Description: test data
+test_get_with_fields_param:
+  - request:
+      api: searchData
+      method: get
+      params:
+        name: Equipment
+        fields: Description
+        condition: Description like '%test%'
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: Operate success.
+          data:
+            -
+              Description: test data
