@@ -1,0 +1,11 @@
+test_get_schema:
+  - request:
+      api: get_graphql_schema
+      method: get
+    validate:
+      type: part_check
+      points:
+        - eq: [status_code, 200]
+        - contains: [body, 'type Equipment {']
+        - contains: [body, 'Description: String']
+        - contains: [body, 'ID: String']

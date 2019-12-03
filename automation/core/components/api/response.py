@@ -1,6 +1,6 @@
 import json
 from automation.core.utils import formats
-
+from automation.core import logger
 
 class Response(object):
 
@@ -13,7 +13,11 @@ class Response(object):
         if not has_body:
             self.body = {}
         else:
-            self.body = formats.parse(response_format, request_response.text)
+            try:
+                self.body = formats.parse(response_format, request_response.text)
+            except:
+                logger.log_error('Failed to parse response text! return it directly')
+                self.body = request_response.text
 
         self.headers = request_response.headers
         self.cookies = request_response.cookies

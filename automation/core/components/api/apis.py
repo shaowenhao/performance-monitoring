@@ -26,7 +26,31 @@ class Apis(object):
 
     @classmethod
     def get_api(cls, name):
-        api = Apis.all_apis.get(name, {})
+        api = None
+        try:
+            for item in Apis.all_apis:
+                if name in item:
+                    api = item[name]
+                    break
+        except Exception as e:
+            logger.log_error("Failed to get api with name {}, exception is {}".format(name, e))
+            raise
         if not api:
             raise ValueError("Can not find api with name {}, pls check if it defined")
         return api
+
+
+    @classmethod
+    def get_base_api(cls, name):
+        base_api = None
+        try:
+            for item in Apis.all_apis:
+                if name in item:
+                    base_api = item['base']
+                    break
+        except Exception as e:
+            logger.log_error("Failed to get base api with name {}, exception is {}".format(name, e))
+            raise
+        if not base_api:
+            raise ValueError("Can not find base api with name {}, pls check if it defined")
+        return base_api

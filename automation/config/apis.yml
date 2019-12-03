@@ -1,4 +1,7 @@
 apis:
-  base: 139.24.161.180:9001
-  searchModelSchemaByName: connector/searchModelSchemaByName
-  searchData: connector/searchData
+  - base: 139.24.161.180:9001
+    searchModelSchemaByName: connector/searchModelSchemaByName
+    searchData: connector/searchData
+  - base: 192.168.66.132:9002
+    graphqlController: graphqlController
+    get_graphql_schema: graphqlController/schema
