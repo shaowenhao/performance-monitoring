@@ -9,3 +9,25 @@ test_get_schema:
         - contains: [body, 'type Equipment {']
         - contains: [body, 'Description: String']
         - contains: [body, 'ID: String']
+test_search_data:
+  - request:
+      api: graphqlController
+      method: post
+      data: "{
+                Equipment{
+                  ID
+                }
+             }"
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          errors: []
+          extensions:
+          dataPresent: True
+      others:
+        items_no: 56
+        entity_name: Equipment
+        keys:
+          - ID

@@ -15,6 +15,8 @@ def pytest_generate_tests(metafunc):
         if not testdata:
             logger.log_warning('Notice!!! Not find testdata with name {} , please check if the name same with the method name'.format(method_name))
         metafunc.parametrize("testdata", testdata)
+    else:
+        pytest.skip("skip for not support")
 
 
 def get_testdata(path):
