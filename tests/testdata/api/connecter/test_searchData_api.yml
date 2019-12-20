@@ -9,6 +9,7 @@ test_get_without_name_param:
         body:
           code: 4004
           message: Required String parameter 'name' is not present
+          data:
   - request:
       api: searchData
       method: get
@@ -21,6 +22,7 @@ test_get_without_name_param:
         body:
           code: 4002
           message: name can't be empty
+          data:
 test_get_with_fields_name_forbidden:
   - request:
       api: searchData
@@ -35,6 +37,7 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: or"
+          data:
   - request:
       api: searchData
       method: get
@@ -48,6 +51,7 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: and"
+          data:
   - request:
       api: searchData
       method: get
@@ -61,6 +65,7 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: equal"
+          data:
   - request:
       api: searchData
       method: get
@@ -74,6 +79,7 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: like"
+          data:
   - request:
       api: searchData
       method: get
@@ -87,6 +93,7 @@ test_get_with_fields_name_forbidden:
         body:
           code: 4001
           message: "Fields should not contain key word: in"
+          data:
 test_get_with_correct_name_param:
   - request:
       api: searchData
