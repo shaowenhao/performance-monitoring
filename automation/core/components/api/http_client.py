@@ -45,7 +45,7 @@ class HttpClient(object):
 
 
     def request(self, method, path, headers=None, params=None, data=None,
-                 debug=None, cache_lifetime=None, silent=None, ignore_cache=True,
+                 debug=None, cache_lifetime=None, silent=True, ignore_cache=True,
                  format='json', delay=None, **kwargs):
         """Requests a path and returns response.
         """
