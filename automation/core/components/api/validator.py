@@ -3,10 +3,10 @@ import types
 import json
 import collections
 from collections.abc import Mapping, Iterable
-from deepdiff import DeepDiff
 from automation.config.config import Config
 from automation.core import exceptions, logger, utils
 from automation.core.components.api import comparators
+from automation.core.components.api.diff import DeepDiff
 
 
 class Validator(object):
@@ -23,7 +23,7 @@ class Validator(object):
         return True
 
     def _validate_with_full_check(self, expect, check):
-        ddiff = DeepDiff(expect, check, ignore_order=True, report_repetition=True)
+        ddiff = DeepDiff(expect, check)
         if ddiff:
             logger.log_error("there's different between expect and check, detail is \n {}".format(ddiff))
             return False

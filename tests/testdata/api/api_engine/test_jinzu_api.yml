@@ -1,0 +1,26 @@
+test_get_projectList:
+  - request:
+      api: jinzu_projectList
+      method: get
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message:
+          data:
+            Project:
+              -
+                "business_mgr": "沈忱宜"
+                "business_unit": "业务三部"
+                "charge_frequency": 3
+                "city": null
+                "classification_level": "正常"
+                "credit_amount": 50000000
+                "detail_address": null
+                "discount_ratio": 0.7255863544876627
+                "district": null
+                "expire_date": "2026-07-15 00:00:00"
+                "guarantee_type": "质押"
+                "id": "84"
