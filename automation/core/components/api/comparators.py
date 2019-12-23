@@ -1,6 +1,5 @@
 import re
-
-basestring = (str, bytes)
+from automation.core.utils import basestring
 
 
 def equals(check_value, expect_value):

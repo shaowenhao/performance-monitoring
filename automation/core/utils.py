@@ -3,6 +3,8 @@ from automation.core import logger, exceptions
 from formats import FormatBank, discover_json, discover_yaml
 
 
+basestring = (str, bytes)
+
 formats = FormatBank()
 
 discover_json(formats, content_type='application/json')
@@ -94,3 +96,37 @@ if __name__ == '__main__':
         }
     }
     print(query_json(json_content, "person.name.first_name"))
+
+def ensure_mapping_format(variables):
+    """ ensure variables are in mapping format.
+
+    Args:
+        variables (list/dict): original variables
+
+    Returns:
+        dict: ensured variables in dict format
+
+    Examples:
+        >>> variables = [
+                {"a": 1},
+                {"b": 2}
+            ]
+        >>> print(ensure_mapping_format(variables))
+            {
+                "a": 1,
+                "b": 2
+            }
+
+    """
+    if isinstance(variables, list):
+        variables_dict = {}
+        for map_dict in variables:
+            variables_dict.update(map_dict)
+
+        return variables_dict
+
+    elif isinstance(variables, dict):
+        return variables
+
+    else:
+        raise exceptions.ParamsError("variables format error!")

@@ -5,7 +5,10 @@ from automation.core import logger
 def call_api(data, http_client=None):
     try:
         test_step = TestStep(data, http_client=http_client)
-        return test_step.test()
+        test_step.before_test()
+        response = test_step.test()
+        test_step.after_test()
+        return response
     except AssertionError:
         raise
     except Exception as e:
