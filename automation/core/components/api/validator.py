@@ -103,9 +103,9 @@ class Validator(object):
                         check_result = False
                         break
                 elif isinstance(values, list):
-                    not_contain_values = list(set(values) - set(superdict[key]))
-                    if not_contain_values:
-                        logger.log_error("Key {} with values {} not in the check dict".format(key, not_contain_values))
+                    ddiff = DeepDiff(values, superdict[key], ignore_order=True)
+                    if ddiff:
+                        logger.log_error("Key {} with values {} not in the check dict".format(key, ddiff))
                         check_result = False
                         break
                 else:

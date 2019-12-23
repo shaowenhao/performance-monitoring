@@ -116,6 +116,48 @@ test_get_with_correct_name_param:
       api: searchData
       method: get
       params:
+        name: Site
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: Operate success.
+          data:
+            - "pr": "85.83"
+              "production": "16222.34"
+              "firradiance": "3.827"
+              "commissioning_date": "1544609580000"
+              "full_generation_hours": "0.84"
+              "system_engaged_date": "1487347200000"
+              "type": "1"
+              "peak_power": "4667.32"
+              "capacity": "19.325"
+              "revenue": "13788.99"
+              "name": "河南安阳中晖20MW光伏电站"
+              "grid_inject_production": "16222.34"
+              "id": "402895e467631b280167a1e7c4240000"
+      others:
+        items_no: 1
+        keys:
+          - pr
+          - production
+          - firradiance
+          - commissioning_date
+          - full_generation_hours
+          - system_engaged_date
+          - type
+          - peak_power
+          - capacity
+          - revenue
+          - name
+          - grid_inject_production
+          - id
+  - request:
+      api: searchData
+      method: get
+      params:
         name: Material_Produced_Requirement
         condition: 1=1 limit 5
         fields: PartNo,Next1stWeekSOFrom,Event_Time
