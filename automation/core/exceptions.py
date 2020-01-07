@@ -78,3 +78,19 @@ class ApiNotFound(NotFoundError):
 
 class TestcaseNotFound(NotFoundError):
     pass
+
+
+class IncorrectSelectorType(NotFoundError):
+    pass
+
+
+class ElementNotFound(NotFoundError):
+    pass
+
+
+class TextNotPresent(NotFoundError):
+    pass
+
+
+class ElementNotDisplayed(NotFoundError):
+    pass

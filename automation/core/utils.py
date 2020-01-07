@@ -130,3 +130,4 @@ def ensure_mapping_format(variables):
 
     else:
         raise exceptions.ParamsError("variables format error!")
+

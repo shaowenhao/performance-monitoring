@@ -9,3 +9,5 @@ colorlog==4.0.2
 deepdiff==4.0.8
 httpretty==0.9.7
 jsonpath==0.82
+selenium==3.141.0
+Pillow==7.0.0
