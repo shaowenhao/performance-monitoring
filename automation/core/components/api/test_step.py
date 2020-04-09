@@ -34,9 +34,9 @@ class TestStep(object):
             'with_headers': False,
             'with_cookies': False
         }
-        if 'headers' in self.validate.get('points'):
+        if self.validate.get('points') and 'headers' in self.validate.get('points'):
             result['with_headers'] = True
-        if 'cookies' in self.validate.get('points'):
+        if self.validate.get('points') and 'cookies' in self.validate.get('points'):
             result['with_cookies'] = True
         return result
 

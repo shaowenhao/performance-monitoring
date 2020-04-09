@@ -1,4 +1,5 @@
 import os
+import sys, getopt
 import shutil
 import subprocess
 import pytest
@@ -25,18 +26,49 @@ def invoke(cmd):
     return o
 
 
-if __name__ == '__main__':
+def main(*args):
+    # try:
+    #     opts, aargs = getopt.getopt(args, "he:c:", ["engine=", "connector="])
+    # except getopt.GetoptError:
+    #     print('main.py -e <engine host> -c <connect host>')
+    #     sys.exit(2)
+    engine = None
+    connector = None
+
+
+    try:
+        if not (set(['-e', '-c']) - set(args)):
+            engine = args[args.index('-e') + 1]
+            connector = args[args.index('-c') + 1]
+        else:
+            print('main.py -a <engine host> -c <connect host> -k <match case>')
+            sys.exit()
+    except Exception as e:
+        print(e)
+        raise
+    else:
+        Config.update_api_base(connector, engine)
+        other_args = list(args)
+        for item in ['-e', engine, '-c', connector]:
+            other_args.remove(item)
+
     logger.setup_logger(Config.LOG_LEVEL, Config.LOG_FILE)
-    args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
-    pytest.main(args)
+    default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
+
+    pytest.main([*default_args, *other_args])
+
     if not os.path.exists(Config.HTML_REPORT_PATH):
         os.makedirs(Config.HTML_REPORT_PATH, 0o755, True)
     else:
         shutil.rmtree(Config.HTML_REPORT_PATH)
         os.mkdir(Config.HTML_REPORT_PATH)
-    cmd = ['allure', 'generate', Config.XML_REPORT_PATH, '-o', Config.HTML_REPORT_PATH]
-    print('ddddddd')
-    msg = invoke(cmd)
-    print('ssssss')
-    print(msg)
-    print('Finished!')
+    # cmd = ['allure', 'generate', Config.XML_REPORT_PATH, '-o', Config.HTML_REPORT_PATH]
+    # print('ddddddd')
+    # msg = invoke(cmd)
+    # print('ssssss')
+    # print(msg)
+    # print('Finished!')
+
+
+if __name__ == '__main__':
+    main(*sys.argv[1:])

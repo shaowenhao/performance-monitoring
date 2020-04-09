@@ -1,0 +1,14 @@
+apis:
+  connector:
+    base: 140.231.89.86:9001
+    searchData: connector/searchData
+    searchModelSchemaByName: connector/searchModelSchemaByName
+  entine:
+    base: 140.231.89.86:9002
+    entities: entities
+oracle:
+  db: xe
+  password: IEC4SNC
+  port: 1521
+  server: 192.168.100.5
+  username: IEC4SNC

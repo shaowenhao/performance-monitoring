@@ -1,34 +1,21 @@
 import yaml
 import os
 from automation.core import logger
-from automation import config
+from automation.config.config import Config
 
 class Apis(object):
 
     all_apis = {}
 
     @classmethod
-    def load_apis(cls, yml_path):
-        with open(yml_path, 'r') as stream:
-            try:
-                apis = yaml.safe_load(stream)
-            except yaml.YAMLError as exc:
-                print(exc)
-                logger.log_error("Failed to load apis from {} , exception is : \n {} \n".format(yml_path, exc))
-                raise
-            else:
-                Apis.all_apis = apis.get('apis', {})
-
-    @classmethod
     def load_default_apis(cls):
-        path = os.path.join(os.path.dirname(config.__file__), 'apis.yml')
-        Apis.load_apis(path)
+        Apis.all_apis = Config.load_configs().get('apis', {})
 
     @classmethod
     def get_api(cls, name):
         api = None
         try:
-            for item in Apis.all_apis:
+            for _, item in Apis.all_apis.items():
                 if name in item:
                     api = item[name]
                     break
@@ -36,7 +23,7 @@ class Apis(object):
             logger.log_error("Failed to get api with name {}, exception is {}".format(name, e))
             raise
         if not api:
-            raise ValueError("Can not find api with name {}, pls check if it defined")
+            raise ValueError("Can not find api with name {}, pls check if it defined".format(name))
         return api
 
 
@@ -44,7 +31,7 @@ class Apis(object):
     def get_base_api(cls, name):
         base_api = None
         try:
-            for item in Apis.all_apis:
+            for _, item in Apis.all_apis.items():
                 if name in item:
                     base_api = item['base']
                     break

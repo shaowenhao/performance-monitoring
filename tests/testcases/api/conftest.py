@@ -22,7 +22,7 @@ def pytest_generate_tests(metafunc):
 def get_testdata(path):
     testdata_path = path.replace("testcases", "testdata").replace(".py", ".yml")
     if testdata_path not in CACHES:
-        with open(testdata_path, 'r') as stream:
+        with open(testdata_path, 'r', encoding='utf8') as stream:
             try:
                 testdata = yaml.safe_load(stream)
             except yaml.YAMLError as exc:

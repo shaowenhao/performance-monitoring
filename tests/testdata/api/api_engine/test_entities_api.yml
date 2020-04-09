@@ -1,0 +1,252 @@
+test_entities_search_pagination:
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[SINAMICS_300_Info][][][][1,10]'
+          - '[IoT_Contract][][][][]'
+        root: SINAMICS_300_Info
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            SINAMICS_300_Info:
+              totalElements: 1025
+              totalPages: 103
+              pageSize: 10
+              page: 1
+              numberOfElements: 10
+#      others:
+#        sql: "SELECT COUNT(*) as count FROM \"sinamics_300_info\""
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[SINAMICS_300_Info][][][][1,1]'
+        root: SINAMICS_300_Info
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            SINAMICS_300_Info:
+              totalElements: 1025
+              totalPages: 1025
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[SINAMICS_300_Info][][][][1,-2]'
+        root: SINAMICS_300_Info
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            SINAMICS_300_Info:
+              totalElements: 1025
+              totalPages: 52
+              pageSize: 20
+              page: 1
+              numberOfElements: 20
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[SINAMICS_300_Info][][][][1,99999]'
+        root: SINAMICS_300_Info
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            SINAMICS_300_Info:
+              totalElements: 1025
+              totalPages: 1
+              pageSize: 99999
+              page: 1
+              numberOfElements: 1025
+test_entities_search_filter:
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][registered_capital][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            Plant_Owner:
+              totalElements: 6
+              totalPages: 6
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+      others:
+        json_path: "data.Plant_Owner.content"
+        content_length: 1
+        key_values:
+          registered_capital: value
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][not_exist, name][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            Plant_Owner:
+              totalElements: 6
+              totalPages: 6
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+      others:
+        json_path: "data.Plant_Owner.content"
+        content_length: 1
+        key_values:
+          name: value
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            Plant_Owner:
+              totalElements: 6
+              totalPages: 6
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+      others:
+        json_path: "data.Plant_Owner.content"
+        content_length: 1
+        key_values:
+          tax_register_org_name: "上海市工商局"
+          credit_card: "91320214762418438A"
+          name: "薄建军"
+          cellphone: "13232341234"
+          id: "3"
+          identification_card: "110103123412341234"
+          org_no: "76241843-8"
+          org_name: "济南西门子变压器有限公司"
+          tax_register_no: "91320214762418438A"
+          registered_capital: 50000000
+          email: "fujianjun@siemens.com"
+          Owner_Plant: null
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][credit_card,registered_capital,Owner_Plant][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+            Plant_Owner:
+              totalElements: 6
+              totalPages: 6
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+      others:
+        json_path: "data.Plant_Owner.content"
+        content_length: 1
+        key_values:
+          credit_card: "91320214762418438A"
+          registered_capital: 50000000
+          Owner_Plant: null
+test_entities_search_filter_nagetive:
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][not_exist][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][name space][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Plant_Owner][not_exist,not_exist][][][1,1]'
+        root: Plant_Owner
+    validate:
+      type: full_check
+      points:
+        status_code: 200
+        body:
+          code: 200
+          message: OK
+          data:
