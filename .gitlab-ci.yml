@@ -1,0 +1,43 @@
+stages:
+  - test
+  - deploy
+
+
+before_script:
+  - echo "Deploy to test automation"
+
+test:
+
+  tags:
+    - automation
+  stage: test
+  script:
+    # this configures Django application to use attached postgres database that is run on `postgres` host
+    - echo 'in test'
+
+deploy:
+  stage: deploy
+  tags:
+    - automation
+  script:
+    - echo 'in deploy'
+    # 通过Dockerfile生成镜像
+    - docker build -t data-layer-automation:0.0.1 .
+    # 删除已经在运行的容器
+    - if [ $(docker ps -aq --filter name=automation) ]; then docker rm -f automation;fi
+    #删除多阶段过程中的<none>镜像(虚悬镜像)
+#    - docker rmi $(docker images -f "dangling=true" -q)
+    - docker run -d --name automation data-layer-automation:0.0.1 -c "$CONNECTOR_URL" -e "$ENGINE_URL" "$OTHER_ARGS"
+    - docker wait automation
+    - docker cp automation:/app/report/xml/. /var/lib/jenkins/workspace/demo/xml/
+    - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
+  only:
+    - master
+
+production:
+  stage: deploy
+  tags:
+    - automation
+  script:
+    - apt-get update -qy
+    - echo 'in production test'

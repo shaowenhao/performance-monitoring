@@ -3,6 +3,7 @@ import time
 import validators
 from automation.core.utils import formats, url_path_join
 from automation.core.components.api.response import Response
+from automation.core import logger
 
 
 #: The maximum length of a response displayed in a debug message
@@ -104,6 +105,15 @@ class HttpClient(object):
         for name, value in self.defaults.items():
             kwargs.setdefault(name, value)
 
+        logger.log_info("".join([
+                        "request details:\n"
+                        "  method: {} \n".format(method),
+                        "  url: {} \n".format(url),
+                        "  params: {} \n".format(request_params),
+                        "  headers: {} \n".format(request_headers),
+                        "  data: {} \n".format(data),
+                        "  kwargs: {} \n".format(kwargs)
+        ]))
         # execute the request
         r = self.send_request(method, url, params=request_params,
                               headers=request_headers, data=data, **kwargs)
@@ -117,15 +127,16 @@ class HttpClient(object):
 
         try:
             # parse the response into something nice
-            has_body = len(r.text) > 0
+            logger.log_info("print response body text: {}".format(r.text))
             response = Response(r)
         except ValueError as e:
+            logger.log_error("failed to parse response")
             # we've failed, raise this stuff when not silent
             if len(r.text) > DEBUG_MAX_TEXT_LENGTH:
                 text = r.text[:DEBUG_MAX_TEXT_LENGTH] + '...'
             else:
                 text = r.text
-            print(text)
+            logger.log_error(text)
             if silent:
                 return None
             raise e
