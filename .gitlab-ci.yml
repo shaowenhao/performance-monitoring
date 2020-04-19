@@ -7,9 +7,6 @@ before_script:
   - echo "Deploy to test automation"
 
 test:
-
-  tags:
-    - automation
   stage: test
   script:
     # this configures Django application to use attached postgres database that is run on `postgres` host
@@ -17,8 +14,6 @@ test:
 
 deploy:
   stage: deploy
-  tags:
-    - automation
   script:
     - echo 'in deploy'
     # 通过Dockerfile生成镜像
@@ -33,11 +28,3 @@ deploy:
     - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
   only:
     - master
-
-production:
-  stage: deploy
-  tags:
-    - automation
-  script:
-    - apt-get update -qy
-    - echo 'in production test'
