@@ -22,9 +22,9 @@ deploy:
     - if [ $(docker ps -aq --filter name=automation) ]; then docker rm -f automation;fi
     #删除多阶段过程中的<none>镜像(虚悬镜像)
 #    - docker rmi $(docker images -f "dangling=true" -q)
-    - docker run -d --name automation data-layer-automation:0.0.1 -c "$CONNECTOR_URL" -e "$ENGINE_URL" "$OTHER_ARGS"
+    - docker run -d --name automation data-layer-automation:0.0.1 -c "$CONNECTOR_URL" -e "$ENGINE_URL" -k entities
     - docker wait automation
-    - docker cp automation:/app/report/xml/. /var/lib/jenkins/workspace/demo/xml/
+    - docker cp automation:/app/report/xml/. /home/gitlab-runner/xml/
     - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
   only:
     - dev
