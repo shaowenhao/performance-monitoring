@@ -27,4 +27,4 @@ deploy:
     - docker cp automation:/app/report/xml/. /var/lib/jenkins/workspace/demo/xml/
     - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
   only:
-    - master
+    - dev
