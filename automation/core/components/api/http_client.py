@@ -127,7 +127,6 @@ class HttpClient(object):
 
         try:
             # parse the response into something nice
-            logger.log_info("print response body text: {}".format(r.text))
             response = Response(r)
         except ValueError as e:
             logger.log_error("failed to parse response")

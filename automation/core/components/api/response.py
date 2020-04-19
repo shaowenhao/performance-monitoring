@@ -20,6 +20,7 @@ class Response(object):
         else:
             try:
                 self.body = formats.parse(response_format, request_response.text)
+                logger.log_info("print response body text: {}".format(self.body))
             except:
                 logger.log_error('Failed to parse response text! return it directly')
                 self.body = request_response.text
