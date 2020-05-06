@@ -34,6 +34,7 @@ class Config:
                     "Failed to save config data to {} , exception is : \n {} \n".format(Config.CONFIG_YML_PATH, exc))
                 raise
             else:
+                logger.log_info("current config file: \n {} ".format(data))
                 logger.log_info("Save data success to config file {} \n".format(Config.CONFIG_YML_PATH))
 
     @classmethod

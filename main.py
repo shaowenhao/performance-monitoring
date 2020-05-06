@@ -34,7 +34,6 @@ def main(*args):
     #     sys.exit(2)
     engine = None
     connector = None
-    print(*args)
 
     try:
         if not (set(['-e', '-c']) - set(args)):
@@ -54,7 +53,7 @@ def main(*args):
 
     logger.setup_logger(Config.LOG_LEVEL, Config.LOG_FILE)
     default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
-
+    logger.log_info("start to run with default_args {} , other_args {}".format(default_args, other_args))
     pytest.main([*default_args, *other_args])
 
     if not os.path.exists(Config.HTML_REPORT_PATH):
