@@ -34,7 +34,7 @@ def main(*args):
     #     sys.exit(2)
     engine = None
     connector = None
-
+    print(*args)
 
     try:
         if not (set(['-e', '-c']) - set(args)):
