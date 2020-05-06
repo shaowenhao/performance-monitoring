@@ -14,9 +14,7 @@ class HttpClient(object):
     def __init__(self, base_url, headers=None, params=None,
                  debug=None, cache_lifetime=None, silent=None,
                  cache=None, delay=None, **kwargs):
-        if validators.url(base_url):
-            self.base_url = base_url
-
+        self.base_url = base_url
         self.cache = cache
         if not headers:
             headers = {}
