@@ -29,5 +29,10 @@ deploy:
 #    - docker cp automation:/app/report/xml/. /home/gitlab-runner/xml/
 #    - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
     - docker push ${DOCKER_REPO_PREFIX}${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+    - kubectl apply -f k8s.yaml -n auto
+    - kubectl wait --for=condition=complete --timeout=3600s job/automation -n auto
+    - mkdir -p /home/gitlab-runner/xml/
+    - docker cp automation:/app/report/xml/. /home/gitlab-runner/xml/
+    - curl -I -u admin:11216710b5f7f2a384173097a004f9b4dc  -X GET http://140.231.89.97:8080/job/demo/build?token=helloworld
   only:
     - dev

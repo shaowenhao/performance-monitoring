@@ -1,6 +1,7 @@
 import os
 import sys, getopt
 import shutil
+from distutils.dir_util import copy_tree
 import subprocess
 import pytest
 from automation.config.config import Config
@@ -52,7 +53,7 @@ def main(*args):
             other_args.remove(item)
 
     logger.setup_logger(Config.LOG_LEVEL, Config.LOG_FILE)
-    default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
+    default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_REPO_PATH]
     logger.log_info("start to run with default_args {} , other_args {}".format(default_args, other_args))
     pytest.main([*default_args, *other_args])
 
@@ -61,12 +62,13 @@ def main(*args):
     else:
         shutil.rmtree(Config.HTML_REPORT_PATH)
         os.mkdir(Config.HTML_REPORT_PATH)
+    copy_tree(Config.XML_REPORT_PATH, Config.XML_REPORT_REPO_PATH)
     # cmd = ['allure', 'generate', Config.XML_REPORT_PATH, '-o', Config.HTML_REPORT_PATH]
     # print('ddddddd')
     # msg = invoke(cmd)
     # print('ssssss')
     # print(msg)
-    # print('Finished!')
+    print('Finished!')
 
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ from automation.core import logger
 
 class Config:
     XML_REPORT_PATH = './report/xml'
+    XML_REPORT_REPO_PATH = '/allure-xml'
     HTML_REPORT_PATH = './report/html'
     LOG_LEVEL = 'INFO'
     LOG_FILE = './logs/automation.log'

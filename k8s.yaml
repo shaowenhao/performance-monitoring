@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: automation
+spec:
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - image: 140.231.89.84:30003/ctsharp-datalayer/data-layer-automation:dev
+        name: automation
+        imagePullPolicy: Always
+        resources: {}
+        args: ["-c", "data-layer-connector:80", "-e", "data-layer-api-engine:80", "-k", "entities"]
+      restartPolicy: Never
+status: {}
