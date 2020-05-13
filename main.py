@@ -53,7 +53,7 @@ def main(*args):
             other_args.remove(item)
 
     logger.setup_logger(Config.LOG_LEVEL, Config.LOG_FILE)
-    default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_REPO_PATH]
+    default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
     logger.log_info("start to run with default_args {} , other_args {}".format(default_args, other_args))
     pytest.main([*default_args, *other_args])
 
