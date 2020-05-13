@@ -1,6 +1,6 @@
 FROM 140.231.89.84:30003/ctsharp-datalayer/data-layer-automation:base
 WORKDIR /app
-
+RUN rm -rf /app/*
 # Install app dependencies
 COPY requirements.txt ./
 
