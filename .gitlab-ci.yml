@@ -23,7 +23,7 @@ deploy:
     - echo "${DOCKER_REPO_PREFIX} ${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}"
     - docker build -t ${DOCKER_REPO_PREFIX}${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG} .
     - docker push ${DOCKER_REPO_PREFIX}${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
-    - kubectl delete -f k8s.yaml -n ${namespace}
+    - kubectl delete -f k8s.yaml -n ${namespace} || true
     - kubectl apply -f k8s.yaml -n ${namespace}
     - kubectl wait --for=condition=complete --timeout=3600s job/automation -n ${namespace}
     - curl -I -u admin:11b029ee01dd7e93525177cc20d66d6474  -X GET http://140.231.89.85:32693/job/data-layer-release/build?token=data-layer
