@@ -92,50 +92,24 @@ test_entities_search_filter:
       method: get
       params:
         filter:
-          - '[Plant_Owner][registered_capital][][][1,1]'
-        root: Plant_Owner
+          - '[Project][name][][][1,1]'
+        root: Project
     validate:
       type: part_contain_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
-            Plant_Owner:
-              totalElements: 6
-              totalPages: 6
+            Project:
+              totalElements: 62
+              totalPages: 62
               pageSize: 1
               page: 1
               numberOfElements: 1
       others:
-        json_path: "data.Plant_Owner.content"
-        content_length: 1
-        key_values:
-          registered_capital: value
-  - request:
-      api: entities
-      method: get
-      params:
-        filter:
-          - '[Plant_Owner][not_exist, name][][][1,1]'
-        root: Plant_Owner
-    validate:
-      type: part_contain_check
-      points:
-        status_code: 200
-        body:
-          code: 200
-          message: OK
-          data:
-            Plant_Owner:
-              totalElements: 6
-              totalPages: 6
-              pageSize: 1
-              page: 1
-              numberOfElements: 1
-      others:
-        json_path: "data.Plant_Owner.content"
+        json_path: "data.Project.content"
         content_length: 1
         key_values:
           name: value
@@ -144,109 +118,147 @@ test_entities_search_filter:
       method: get
       params:
         filter:
-          - '[Plant_Owner][][][][1,1]'
-        root: Plant_Owner
+          - '[Project][not_exist, name][][][1,1]'
+        root: Project
     validate:
       type: part_contain_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
-            Plant_Owner:
-              totalElements: 6
-              totalPages: 6
+            Project:
+              totalElements: 62
+              totalPages: 62
               pageSize: 1
               page: 1
               numberOfElements: 1
       others:
-        json_path: "data.Plant_Owner.content"
+        json_path: "data.Project.content"
         content_length: 1
         key_values:
-          tax_register_org_name: "上海市工商局"
-          credit_card: "91320214762418438A"
-          name: "薄建军"
-          cellphone: "13232341234"
-          id: "3"
-          identification_card: "110103123412341234"
-          org_no: "76241843-8"
-          org_name: "济南西门子变压器有限公司"
-          tax_register_no: "91320214762418438A"
-          registered_capital: 50000000
-          email: "fujianjun@siemens.com"
-          Owner_Plant: null
+          name: value
   - request:
       api: entities
       method: get
       params:
         filter:
-          - '[Plant_Owner][credit_card,registered_capital,Owner_Plant][][][1,1]'
-        root: Plant_Owner
+          - '[Project][][][][1,1]'
+        root: Project
     validate:
       type: part_contain_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
-            Plant_Owner:
-              totalElements: 6
-              totalPages: 6
+            Project:
+              totalElements: 62
+              totalPages: 62
               pageSize: 1
               page: 1
               numberOfElements: 1
       others:
-        json_path: "data.Plant_Owner.content"
+        json_path: "data.Project.content"
         content_length: 1
         key_values:
-          credit_card: "91320214762418438A"
-          registered_capital: 50000000
-          Owner_Plant: null
+          "rent_type": "融资租赁/回租"
+          "is_manufacture_buy_back": false
+          "no": "20180827"
+          "classification_level": "正常"
+          "city": "无锡市"
+          "detail_address": null
+          "charge_frequency": 3
+          "credit_amount": 12000000
+          "risk_mgr": "朱金龙"
+          "is_manufacture_leasing": false
+          "business_unit": "业务三部"
+          "discount_ratio": 0.6409508764341453
+          "manufacture": null
+          "class_level": "正常"
+          "business_mgr": "张龙飞"
+          "expire_date": "2026-01-15 00:00:00.0"
+          "province": "江苏省"
+          "district": "宜兴市"
+          "guarantee_type": "质押"
+          "name": "宜兴奕阳电力工程有限公司回租项目1期"
+          "id": "49"
+          "status": "online"
+          "Restricted_By_Contract": null
+          "Refer_To_Lease_Group": null
+  - request:
+      api: entities
+      method: get
+      params:
+        filter:
+          - '[Project][discount_ratio,classification_level,Restricted_By_Contract][][][1,1]'
+        root: Project
+    validate:
+      type: part_contain_check
+      points:
+        status_code: 200
+        body:
+          code: 100000
+          message: Successfully
+          data:
+            Project:
+              totalElements: 62
+              totalPages: 62
+              pageSize: 1
+              page: 1
+              numberOfElements: 1
+      others:
+        json_path: "data.Project.content"
+        content_length: 1
+        key_values:
+          classification_level: "91320214762418438A"
+          discount_ratio: 50000000
+          Restricted_By_Contract: null
 test_entities_search_filter_nagetive:
   - request:
       api: entities
       method: get
       params:
         filter:
-          - '[Plant_Owner][not_exist][][][1,1]'
-        root: Plant_Owner
+          - '[Project][not_exist][][][1,1]'
+        root: Project
     validate:
       type: full_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
   - request:
       api: entities
       method: get
       params:
         filter:
-          - '[Plant_Owner][name space][][][1,1]'
-        root: Plant_Owner
+          - '[Project][name space][][][1,1]'
+        root: Project
     validate:
       type: full_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
   - request:
       api: entities
       method: get
       params:
         filter:
-          - '[Plant_Owner][not_exist,not_exist][][][1,1]'
-        root: Plant_Owner
+          - '[Project][not_exist,not_exist][][][1,1]'
+        root: Project
     validate:
       type: full_check
       points:
         status_code: 200
         body:
-          code: 200
-          message: OK
+          code: 100000
+          message: Successfully
           data:
