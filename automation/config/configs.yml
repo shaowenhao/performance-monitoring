@@ -1,10 +1,17 @@
 apis:
   connector:
-    base: 140.231.89.86:9001
+    base: data-layer-connector:80
     searchData: connector/searchData
     searchModelSchemaByName: connector/searchModelSchemaByName
+  eagle:
+    base: http://140.231.89.85:31294/
+    entity: /api/entities
+    entityLibraries: /api/entityLibraries
+    entityLibrary-domain: /api/entityLibrary/domains
+    graph: api/graphs
+    relations: /api/relations
   entine:
-    base: 140.231.89.86:9002
+    base: data-layer-api-engine:80
     entities: entities
 oracle:
   db: xe

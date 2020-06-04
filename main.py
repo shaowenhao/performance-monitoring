@@ -26,6 +26,13 @@ def invoke(cmd):
     o = result.decode("utf-8")
     return o
 
+def parse_args(name, args, remain_args):
+    result = None
+    if name in args:
+        result = args[args.index(name) + 1]
+        for item in [name, result]:
+            remain_args.remove(item)
+    return result
 
 def main(*args):
     # try:
@@ -35,22 +42,20 @@ def main(*args):
     #     sys.exit(2)
     engine = None
     connector = None
+    eagle = None
+
+    other_args = list(args)
 
     try:
-        if not (set(['-e', '-c']) - set(args)):
-            engine = args[args.index('-e') + 1]
-            connector = args[args.index('-c') + 1]
-        else:
-            print('main.py -a <engine host> -c <connect host> -k <match case>')
-            sys.exit()
+        engine = parse_args('-e', args, other_args)
+        connector = parse_args('-c', args, other_args)
+        eagle = parse_args('-m', args, other_args)
     except Exception as e:
         print(e)
+        print('Usage: python main.py -a <engine host> -c <connect host> -m <eagle host> -k <match case>')
         raise
     else:
-        Config.update_api_base(connector, engine)
-        other_args = list(args)
-        for item in ['-e', engine, '-c', connector]:
-            other_args.remove(item)
+        Config.update_api_base(connector=connector, engine=engine, eagle=eagle)
 
     logger.setup_logger(Config.LOG_LEVEL, Config.LOG_FILE)
     default_args = ['-s', '-q', './tests', '--alluredir', Config.XML_REPORT_PATH]
@@ -73,3 +78,21 @@ def main(*args):
 
 if __name__ == '__main__':
     main(*sys.argv[1:])
+    # import requests
+    #
+    # url = "http://140.231.89.85:31294/api/graphs"
+    #
+    # payload = {'partitionName': 'ontology'}
+    # files = [
+    #     ('graph',
+    #      open('./SP5_CIM_EXPO_Fusion_KG.xml',
+    #           'rb'))
+    # ]
+    # headers = {
+    #     'accept': '*/*',
+    #     'Content-Type': 'multipart/form-data'
+    # }
+    #
+    # response = requests.request("POST", url, headers=headers, data=payload, files=files)
+    #
+    # print(response.text.encode('utf8'))

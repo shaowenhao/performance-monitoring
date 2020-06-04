@@ -1,7 +1,9 @@
+import os
 import copy
 from automation.core.components.api.apis import Apis
 from automation.core.components.api.http_client import HttpClient
-
+from automation.core import logger
+from automation.config.config import Config
 
 class ApiWrapper(object):
 
@@ -22,4 +24,14 @@ class ApiWrapper(object):
         return base_url
 
     def request(self):
+        if 'files' in self.request_data:
+            files = self.request_data.get('files', None)
+            try:
+                content = open(os.path.join(Config.ROOT_DIR, files[1]), 'rb')
+            except Exception as e:
+                logger.log_error("Failed to load file content {}".format(e))
+                raise
+            else:
+                files[1] = content
+                self.request_data['files'] = [tuple(files)]
         return self.http_client.request(self.method, self.api_url, **self.request_data)

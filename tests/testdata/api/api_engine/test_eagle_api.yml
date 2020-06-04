@@ -1,0 +1,28 @@
+#test_load_graphs_api:
+#  - request:
+#      api: graph
+#      method: post
+#      data:
+#        partitionName: ontology
+#      headers:
+#        Content-Type: multipart/form-data
+#      files: [graph, SP5_CIM_EXPO_Fusion_KG.xml]
+#
+#    validate:
+#      type: part_contain_check
+#      points:
+#        status_code: 200
+#        body:
+#          code: 200
+#          message: OK
+#          data:
+#            SINAMICS_300_Info:
+#              totalElements: 1025
+#              totalPages: 103
+#              pageSize: 10
+#              page: 1
+#              numberOfElements: 10
+test_load_graphs_api:
+  - request:
+      api: graph
+      method: get

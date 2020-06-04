@@ -67,10 +67,10 @@ class HttpClient(object):
         # add the 'Content-Type' header and compose data, only when:
         #   1. the content is actually sent (whatever the HTTP verb is used)
         #   2. the format is provided ('json' by default)
-        if request_format and (data is not None) and not isinstance(data, str):
-            request_headers.setdefault(
-                'Content-Type', formats.meta(request_format).get('content_type'))
-            data = formats.compose(request_format, data)
+        # if request_format and (data is not None) and not isinstance(data, str):
+        #     request_headers.setdefault(
+        #         'Content-Type', formats.meta(request_format).get('content_type'))
+        #     data = formats.compose(request_format, data)
 
         if validators.url(path):
             url = path

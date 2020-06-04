@@ -9,7 +9,8 @@ class Config:
     LOG_LEVEL = 'INFO'
     LOG_FILE = './logs/automation.log'
     VALIDATE_TYPES = ['no_check', 'full_check', 'part_check', 'part_contain_check']
-    UI_SETTINGS_PATH = os.path.join(os.path.dirname(__file__), '../../settings.json')
+    ROOT_DIR = os.path.join(os.path.dirname(__file__), '../../')
+    UI_SETTINGS_PATH = os.path.join(ROOT_DIR, 'settings.json')
     CONFIG_YML_PATH = os.path.join(os.path.dirname(__file__), 'configs.yml')
 
     @classmethod
@@ -39,12 +40,20 @@ class Config:
                 logger.log_info("Save data success to config file {} \n".format(Config.CONFIG_YML_PATH))
 
     @classmethod
-    def update_api_base(cls, connector, engine):
+    def update_api_base(cls, connector=None, engine=None, eagle=None):
         configs = Config.load_configs()
+        changed = False
         if connector:
             configs['apis']['connector']['base'] = connector
             logger.log_info("Set connector base to {} \n".format(connector))
+            changed = True
         if engine:
             configs['apis']['entine']['base'] = engine
             logger.log_info("Set engine base to {} \n".format(engine))
-        Config.save_configs(configs)
+            changed = True
+        if eagle:
+            configs['apis']['eagle']['base'] = eagle
+            logger.log_info("Set eagle base to {} \n".format(eagle))
+            changed = True
+        if changed:
+            Config.save_configs(configs)
