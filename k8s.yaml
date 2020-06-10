@@ -14,7 +14,7 @@ spec:
         name: automation
         imagePullPolicy: Always
         resources: {}
-        args: ["-c", "data-layer-connector:80", "-e", "data-layer-api-engine:80", "-m", "data-layer-entity-mgmt:80", "-k", "entities"]
+        args: ["-c", "data-layer-connector:80", "-e", "data-layer-api-engine:80", "-m", "data-layer-entity-mgmt:80", "-k", "eagle"]
         volumeMounts:
         - name: "allure-xml"
           mountPath: /allure-xml
