@@ -6,10 +6,14 @@ apis:
   eagle:
     base: http://140.231.89.85:31294/
     entity: /api/entities
-    entityLibraries: /api/entityLibraries
-    entityLibrary-domain: /api/entityLibrary/domains
+    entity-by-id: /api/entities/{entityId}
     graph: api/graphs
+    ontologies: /api/ontologies
+    ontologies-domain: /api/ontologies/domains
+    projects: /api/projects
+    projects-type: /api/{type}/projects
     relations: /api/relations
+    relations-by-id: /api/relations/{relationId}
   entine:
     base: data-layer-api-engine:80
     entities: entities

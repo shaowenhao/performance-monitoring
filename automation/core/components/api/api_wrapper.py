@@ -1,9 +1,12 @@
 import os
+import re
 import copy
 from automation.core.components.api.apis import Apis
 from automation.core.components.api.http_client import HttpClient
 from automation.core import logger
 from automation.config.config import Config
+
+URL_REGEX_COMPILE = re.compile(r"\{(\w+)\}")
 
 class ApiWrapper(object):
 
@@ -12,6 +15,17 @@ class ApiWrapper(object):
         self.method = self.request_data.pop('method', 'get').lower()
         api_name = self.request_data.pop('api')
         self.api_url = Apis.get_api(api_name)
+        if 'sub_url' in self.request_data:
+            sub_url = self.request_data.pop('sub_url')
+            if URL_REGEX_COMPILE.search(self.api_url):
+               if isinstance(sub_url, str):
+                    self.api_url = URL_REGEX_COMPILE.sub(sub_url, self.api_url)
+               else:
+                   for surl in sub_url:
+                       self.api_url = URL_REGEX_COMPILE.sub(surl, self.api_url, count=1)
+            else:
+                self.api_url = '/'.join((self.api_url, sub_url))
+
         self.http_client = http_client
         if not self.http_client:
             base_url = self._parse_url(api_name)
