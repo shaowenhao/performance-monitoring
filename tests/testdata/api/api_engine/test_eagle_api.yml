@@ -36,19 +36,19 @@ test_load_graphs_api:
           code: 103025
           message: Parition not exist
           data:
-  - request:
-      api: graph
-      method: delete
-      params:
-        partitionName: not_exist
-    validate:
-      type: full_check
-      points:
-        status_code: 200
-        body:
-          code: 103025
-          message: Parition not exist
-          data:
+#  - request:
+#      api: graph
+#      method: delete
+#      params:
+#        partitionName: not_exist
+#    validate:
+#      type: full_check
+#      points:
+#        status_code: 200
+#        body:
+#          code: 103025
+#          message: Parition not exist
+#          data:
   - request:
       api: graph
       sub_url: not_exist
@@ -118,19 +118,19 @@ test_projects_api:
           code: 103025
           message: Parition not exist
           data:
-  - request:
-      api: projects
-      method: delete
-      params:
-        partitionName: not_exist
-    validate:
-      type: full_check
-      points:
-        status_code: 200
-        body:
-          code: 103502
-          message: project not exist
-          data:
+#  - request:
+#      api: projects
+#      method: delete
+#      params:
+#        partitionName: not_exist
+#    validate:
+#      type: full_check
+#      points:
+#        status_code: 200
+#        body:
+#          code: 103502
+#          message: project not exist
+#          data:
 test_entities_api:
   - request:
       api: entity
@@ -145,19 +145,19 @@ test_entities_api:
           code: 103502
           message: not_exist project not exist
           data:
-  - request:
-      api: entity
-      method: delete
-      params:
-        projectName: not_exist
-    validate:
-      type: full_check
-      points:
-        status_code: 200
-        body:
-          code: 103502
-          message: not_exist project not exist
-          data:
+#  - request:
+#      api: entity
+#      method: delete
+#      params:
+#        projectName: not_exist
+#    validate:
+#      type: full_check
+#      points:
+#        status_code: 200
+#        body:
+#          code: 103502
+#          message: not_exist project not exist
+#          data:
   - request:
       api: entity-by-id
       method: get
@@ -186,19 +186,19 @@ test_relations_api:
           code: 103502
           message: not_exist project not exist
           data:
-  - request:
-      api: relations
-      method: delete
-      params:
-        projectName: not_exist
-    validate:
-      type: full_check
-      points:
-        status_code: 200
-        body:
-          code: 103502
-          message: not_exist project not exist
-          data:
+#  - request:
+#      api: relations
+#      method: delete
+#      params:
+#        projectName: not_exist
+#    validate:
+#      type: full_check
+#      points:
+#        status_code: 200
+#        body:
+#          code: 103502
+#          message: not_exist project not exist
+#          data:
   - request:
       api: relations-by-id
       method: get
