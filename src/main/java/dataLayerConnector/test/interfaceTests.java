@@ -1,12 +1,17 @@
-package dataLayer.Tests;
+package dataLayerConnector.test;
 
 import java.util.HashMap;
 import java.util.List;
+
+import io.qameta.allure.*;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import dataLayerConnector.model.GetAllEntitiesNameResponse;
+import dataLayerConnector.model.SearchModelSchemaByNameResponse;
 
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -14,24 +19,26 @@ import org.testng.Reporter;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-import apiEngine.endpoint.*;
-import apiEngine.model.*;
-
-public class ConnectorInterfaceTests {
-
+@Epic("Regression Tests")
+@Feature("Connector Rest API Tests")
+public class interfaceTests {
+	
 	@Parameters({"base_url", "port"})
 	@BeforeTest
 	public void beforeTest(@Optional("http://localhost") String base_url, @Optional("9001") String port) {
-	    dlConnector.setBaseUrl(base_url);
-	    dlConnector.setPort(port);
+	    endpoint.setBaseUrl(base_url);
+	    endpoint.setPort(port);
 	}
     
-  @Test
+	@Test (priority = 0, description="Test connector interface: Get All Entities name.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
+	@Story("Connector Interface API design")
 	public void GetAllEntitiesName()
 	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
 		
-	  Response response = dlConnector.getAllEntitiesName();
+	  Response response = endpoint.getAllEntitiesName();
 
 	  Reporter.log("Response status is " + response.getStatusCode());
 		
@@ -43,12 +50,15 @@ public class ConnectorInterfaceTests {
 
 	}
   
-  @Test
+	@Test (priority = 0, description="Test connector interface: Get concept model definition by model name.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a request to SUT to read out the model schema of entity 'Site'.")
+	@Story("Connector Interface API design")
   	public void SearchModelSchemaByName()
   	{
 	  Reporter.log("Send a 'SearchModelSchemaByName' request for entity 'Site'");	
 	  
-	  Response response = dlConnector.searchModelSchemaByName("Site");
+	  Response response = endpoint.searchModelSchemaByName("Site");
 		
 	  Reporter.log("Response status is " + response.getStatusCode());
 		  
@@ -60,12 +70,15 @@ public class ConnectorInterfaceTests {
 		
   	}
   
-  @Test
+	@Test (priority = 0, description="Test connector interface: Get all entities name and then check its concept model.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a request to SUT to get all the available entity names, then read out the model schema of every entity.")
+	@Story("Connector Interface API design")
   	public void SearchModelSchemaForAllEntities()
   	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
 		
-	  Response response = dlConnector.getAllEntitiesName();
+	  Response response = endpoint.getAllEntitiesName();
 	  
 	  Reporter.log("Response status is " + response.getStatusCode());
 	  
@@ -84,7 +97,7 @@ public class ConnectorInterfaceTests {
 	  {
 		  Reporter.log("Send a 'SearchModelSchemaByName' request for entity '" + entityItem + "'");
 		  
-		  response = dlConnector.searchModelSchemaByName(entityItem);
+		  response = endpoint.searchModelSchemaByName(entityItem);
 		  
 		  Reporter.log("Response status is " + response.getStatusCode());
 		  
@@ -92,7 +105,10 @@ public class ConnectorInterfaceTests {
 	  }
   	}
   
-  @Test
+	@Test (priority = 0, description="Test connector interface: Get concept model data by condition.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a request to SUT to read out 10 entities of 'Customer' type.")
+	@Story("Connector Interface API design")
   	public void SearchModelDataByCondition()
   	{
 	  Reporter.log("Send a 'SearchModelDataByCondition' request");
@@ -102,7 +118,7 @@ public class ConnectorInterfaceTests {
 	  queryParameters.put("pageIndex", "1");
 	  queryParameters.put("pageSize", "10");
 		
-	  Response response = dlConnector.getConceptModelDataByCondition(queryParameters);
+	  Response response = endpoint.getConceptModelDataByCondition(queryParameters);
 	  
 	  Reporter.log("Response status is " + response.getStatusCode());
 	  

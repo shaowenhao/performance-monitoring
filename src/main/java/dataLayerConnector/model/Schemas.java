@@ -1,4 +1,4 @@
-package apiEngine.model;
+package dataLayerConnector.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

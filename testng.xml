@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="ConnectorTests">
+<listeners>
+    <listener class-name="org.uncommons.reportng.HTMLReporter" />
+    <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
+</listeners>
   <test thread-count="5" name="ConnectorRestInterfaceTests">
+  <parameter name="base_url" value="http://localhost"/>
+  <parameter name="port" value="9001"/>
     <classes>
-      <class name="dataLayer.Tests.ConnectorInterfaceTests"/>
+      <class name="dataLayerConnector.test.interfaceTests"/>
     </classes>
   </test> <!-- ConnectorRestInterfaceTests -->
 </suite> <!-- ConnectorTests -->

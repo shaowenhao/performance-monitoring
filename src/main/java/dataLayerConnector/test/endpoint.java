@@ -1,4 +1,4 @@
-package apiEngine.endpoint;
+package dataLayerConnector.test;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class dlConnector {
+public class endpoint {
 	
 	private static String BASE_URL = "";
 	
