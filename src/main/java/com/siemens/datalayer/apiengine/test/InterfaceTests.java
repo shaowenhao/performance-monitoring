@@ -4,6 +4,7 @@ import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
 
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
 import io.qameta.allure.*;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -157,4 +158,73 @@ public class InterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with entity with eq condition and verify if correct return.")
+    @Story("Api engine Interface API design")
+    public void getInstanceOfOneEntityWithEqByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql which siid eq 33473");
+
+        String query = "{\n" +
+                "\tAnalog(cond:\"{Siid: {_eq: 33473}}\") {\n" +
+                "\t  Analog_id\n" +
+                "\t  Siid\n" +
+                "\t  aliasName\n" +
+                "\t  description\n" +
+                "\t  deviceId\n" +
+                "\t}\n" +
+                "}";
+
+        Response response = Endpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertEquals(33473, jsonPathEvaluator.getInt("data.Analog[0].Siid"));
+
+    }
+
+
+    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition no result by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with entity with eq condition no result and verify if correct return.")
+    @Story("Api engine Interface API design")
+    public void getInstanceOfOneEntityWithEqNoResultByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql which siid eq 999999");
+
+        String query = "{\n" +
+                "\tAnalog(cond:\"{Siid: {_eq: 999999}}\") {\n" +
+                "\t  Analog_id\n" +
+                "\t  Siid\n" +
+                "\t  aliasName\n" +
+                "\t  description\n" +
+                "\t  deviceId\n" +
+                "\t}\n" +
+                "}";
+
+        Response response = Endpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNull(jsonPathEvaluator.get("data.Analog"));
+
+    }
 }
