@@ -1,4 +1,4 @@
-package dataLayerConnector.model;
+package com.siemens.datalayer.connector.model;
 
 import java.util.HashMap;
 import java.util.List;

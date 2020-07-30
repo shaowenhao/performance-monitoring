@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="ConnectorTests">
-<listeners>
-    <listener class-name="org.uncommons.reportng.HTMLReporter" />
-    <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
-</listeners>
-  <test thread-count="5" name="ConnectorRestInterfaceTests">
-  <parameter name="base_url" value="http://localhost"/>
-  <parameter name="port" value="9001"/>
-    <classes>
-      <class name="dataLayerConnector.test.interfaceTests"/>
-    </classes>
-  </test> <!-- ConnectorRestInterfaceTests -->
-</suite> <!-- ConnectorTests -->
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true"
+          name="C:/Users/apex/workspace/local/siemens/data-layer-automation/src/main/java/com/siemens/datalayer">
+        <classes>
+            <class name="com.siemens.datalayer.apiengine.test.InterfaceTests">
+                <methods>
+                    <include name="getAnalogWithDepth1"/>
+                </methods>
+            </class>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+                <methods>
+                    <include name="GetAllEntitiesName"/>
+                    <include name="SearchModelSchemaByName"/>
+                    <include name="SearchModelSchemaForAllEntities"/>
+                    <include name="SearchModelDataByCondition"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

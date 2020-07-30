@@ -14,3 +14,7 @@ docs/build/
 venv/
 report/
 logs/
+test-output/
+allure-results/
+target/
+

@@ -1,4 +1,4 @@
-package dataLayerConnector.test;
+package com.siemens.datalayer.connector.test;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class endpoint {
+public class Endpoint {
 	
 	private static String BASE_URL = "";
 	
@@ -30,7 +30,7 @@ public class endpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
         
-        Response response = httpRequest.request(Method.GET, "/api/connector/entities");
+        Response response = httpRequest.request(Method.GET, "/api/com.siemens.datalayer.connector/entities");
         
         return response;
 	}
@@ -43,7 +43,7 @@ public class endpoint {
 		RequestSpecification httpRequest = RestAssured.given();
 		
 		Response response = httpRequest.queryParam("name", name) 
-		                   .get("/api/connector/searchModelSchemaByName");
+		                   .get("/api/com.siemens.datalayer.connector/searchModelSchemaByName");
 		
 		return response;
 	}
@@ -56,7 +56,7 @@ public class endpoint {
 		RequestSpecification httpRequest = RestAssured.given();
 
 		Response response = httpRequest.queryParams(parameters) 
-		                   .get("/api/connector/searchData");
+		                   .get("/api/com.siemens.datalayer.connector/searchData");
 		
 		return response;
 	}

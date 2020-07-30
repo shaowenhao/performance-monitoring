@@ -1,4 +1,4 @@
-package dataLayerConnector.model;
+package com.siemens.datalayer.connector.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

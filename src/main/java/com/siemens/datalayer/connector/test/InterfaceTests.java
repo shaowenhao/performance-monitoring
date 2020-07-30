@@ -1,4 +1,4 @@
-package dataLayerConnector.test;
+package com.siemens.datalayer.connector.test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +10,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import dataLayerConnector.model.GetAllEntitiesNameResponse;
-import dataLayerConnector.model.SearchModelSchemaByNameResponse;
+import com.siemens.datalayer.connector.model.GetAllEntitiesNameResponse;
+import com.siemens.datalayer.connector.model.SearchModelSchemaByNameResponse;
 
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -21,16 +21,16 @@ import io.restassured.response.Response;
 
 @Epic("Regression Tests")
 @Feature("Connector Rest API Tests")
-public class interfaceTests {
+public class InterfaceTests {
 	
 	@Parameters({"base_url", "port"})
 	@BeforeTest
 	public void beforeTest(@Optional("http://localhost") String base_url, @Optional("9001") String port) {
-	    endpoint.setBaseUrl(base_url);
-	    endpoint.setPort(port);
+	    Endpoint.setBaseUrl(base_url);
+	    Endpoint.setPort(port);
 	}
     
-	@Test (priority = 0, description="Test connector interface: Get All Entities name.")
+	@Test (priority = 0, description="Test com.siemens.datalayer.connector interface: Get All Entities name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
 	@Story("Connector Interface API design")
@@ -38,7 +38,7 @@ public class interfaceTests {
 	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
 		
-	  Response response = endpoint.getAllEntitiesName();
+	  Response response = Endpoint.getAllEntitiesName();
 
 	  Reporter.log("Response status is " + response.getStatusCode());
 		
@@ -50,7 +50,7 @@ public class interfaceTests {
 
 	}
   
-	@Test (priority = 0, description="Test connector interface: Get concept model definition by model name.")
+	@Test (priority = 0, description="Test com.siemens.datalayer.connector interface: Get concept model definition by model name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to read out the model schema of entity 'Site'.")
 	@Story("Connector Interface API design")
@@ -58,7 +58,7 @@ public class interfaceTests {
   	{
 	  Reporter.log("Send a 'SearchModelSchemaByName' request for entity 'Site'");	
 	  
-	  Response response = endpoint.searchModelSchemaByName("Site");
+	  Response response = Endpoint.searchModelSchemaByName("Site");
 		
 	  Reporter.log("Response status is " + response.getStatusCode());
 		  
@@ -70,7 +70,7 @@ public class interfaceTests {
 		
   	}
   
-	@Test (priority = 0, description="Test connector interface: Get all entities name and then check its concept model.")
+	@Test (priority = 0, description="Test com.siemens.datalayer.connector interface: Get all entities name and then check its concept model.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to get all the available entity names, then read out the model schema of every entity.")
 	@Story("Connector Interface API design")
@@ -78,7 +78,7 @@ public class interfaceTests {
   	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
 		
-	  Response response = endpoint.getAllEntitiesName();
+	  Response response = Endpoint.getAllEntitiesName();
 	  
 	  Reporter.log("Response status is " + response.getStatusCode());
 	  
@@ -97,7 +97,7 @@ public class interfaceTests {
 	  {
 		  Reporter.log("Send a 'SearchModelSchemaByName' request for entity '" + entityItem + "'");
 		  
-		  response = endpoint.searchModelSchemaByName(entityItem);
+		  response = Endpoint.searchModelSchemaByName(entityItem);
 		  
 		  Reporter.log("Response status is " + response.getStatusCode());
 		  
@@ -105,7 +105,7 @@ public class interfaceTests {
 	  }
   	}
   
-	@Test (priority = 0, description="Test connector interface: Get concept model data by condition.")
+	@Test (priority = 0, description="Test com.siemens.datalayer.connector interface: Get concept model data by condition.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to read out 10 entities of 'Customer' type.")
 	@Story("Connector Interface API design")
@@ -118,7 +118,7 @@ public class interfaceTests {
 	  queryParameters.put("pageIndex", "1");
 	  queryParameters.put("pageSize", "10");
 		
-	  Response response = endpoint.getConceptModelDataByCondition(queryParameters);
+	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
 	  Reporter.log("Response status is " + response.getStatusCode());
 	  
