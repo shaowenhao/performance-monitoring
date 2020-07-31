@@ -1,0 +1,1080 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "legal_person": {
+              "type": "string"
+            },
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "legal_person",
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "contact_detail",
+            "project",
+            "is_connected_tx",
+            "actual_controller",
+            "legal_person_id",
+            "small_class",
+            "office_address",
+            "is_gov_fin_customer",
+            "province",
+            "ctype",
+            "contact",
+            "district",
+            "id",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "legal_person": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "project",
+            "is_connected_tx",
+            "legal_person_id",
+            "small_class",
+            "is_gov_fin_customer",
+            "province",
+            "contact",
+            "id",
+            "group",
+            "legal_person",
+            "contact_detail",
+            "actual_controller",
+            "office_address",
+            "ctype",
+            "district",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "legal_person": {
+              "type": "string"
+            },
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "legal_person",
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "contact_detail",
+            "project",
+            "is_connected_tx",
+            "actual_controller",
+            "legal_person_id",
+            "small_class",
+            "office_address",
+            "is_gov_fin_customer",
+            "province",
+            "ctype",
+            "contact",
+            "district",
+            "id",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "legal_person": {
+              "type": "string"
+            },
+            "registered_address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "major_class": {
+              "type": "string"
+            },
+            "cname": {
+              "type": "string"
+            },
+            "enterprise_size": {
+              "type": "string"
+            },
+            "contact_detail": {
+              "type": "string"
+            },
+            "project": {
+              "type": "string"
+            },
+            "is_connected_tx": {
+              "type": "string"
+            },
+            "actual_controller": {
+              "type": "string"
+            },
+            "legal_person_id": {
+              "type": "string"
+            },
+            "small_class": {
+              "type": "string"
+            },
+            "office_address": {
+              "type": "string"
+            },
+            "is_gov_fin_customer": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "ctype": {
+              "type": "string"
+            },
+            "contact": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "is_group_customer": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "middle_class": {
+              "type": "string"
+            },
+            "cid": {
+              "type": "string"
+            },
+            "holding_type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "legal_person",
+            "registered_address",
+            "city",
+            "major_class",
+            "cname",
+            "enterprise_size",
+            "contact_detail",
+            "project",
+            "is_connected_tx",
+            "actual_controller",
+            "legal_person_id",
+            "small_class",
+            "office_address",
+            "is_gov_fin_customer",
+            "province",
+            "ctype",
+            "contact",
+            "district",
+            "id",
+            "is_group_customer",
+            "category",
+            "middle_class",
+            "cid",
+            "holding_type"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

@@ -19,6 +19,9 @@ import org.testng.Reporter;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 @Epic("Regression Tests")
 @Feature("Connector Rest API Tests")
 public class InterfaceTests {
@@ -126,5 +129,6 @@ public class InterfaceTests {
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  
+	  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelShemaForCustomer.JSON"));
   	}
 }
