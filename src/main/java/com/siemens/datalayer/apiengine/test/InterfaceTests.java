@@ -8,7 +8,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.Reporter;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -21,8 +21,8 @@ import java.util.HashMap;
 public class InterfaceTests {
 
     @Parameters({"baseUrl", "port"})
-    @BeforeTest
-    public void beforeTest(@Optional("http://140.231.89.85") String baseUrl, @Optional("31101") String port) {
+    @BeforeClass
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31101") String port) {
         Endpoint.setBaseUrl(baseUrl);
         Endpoint.setPort(port);
     }

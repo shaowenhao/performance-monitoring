@@ -6,7 +6,12 @@
         <classes>
             <class name="com.siemens.datalayer.apiengine.test.InterfaceTests">
                 <methods>
-                    <include name="getAnalogWithDepth1"/>
+                    <include name="getAllInstanceOfOneEntityByRestful"/>
+                    <include name="getAllInstanceOfOneEntityByGraphQL"/>
+                    <include name="getAllInstanceOfOneEntityWithMultipleColumnTypeByGraphQL"/>
+                    <include name="getAllInstanceOfOneEntityNotExistByGraphQL"/>
+                    <include name="getInstanceOfOneEntityWithEqByGraphQL"/>
+                    <include name="getInstanceOfOneEntityWithEqNoResultByGraphQL"/>
                 </methods>
             </class>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">
