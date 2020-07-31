@@ -14,7 +14,10 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @Epic("Regression Tests")
 @Feature("Connector Rest API Tests")
@@ -190,6 +193,18 @@ public class InterfaceTests {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertEquals(33473, jsonPathEvaluator.getInt("data.Analog[0].Siid"));
+        List<String> l = new ArrayList<String>(
+                Arrays.asList(
+                        "Siid",
+                        "aliasName",
+                        "Analog_id",
+                        "description",
+                        "deviceId"
+                )
+        );
+        HashMap m = (HashMap)jsonPathEvaluator.get("data.Analog[0]");
+        List<String> ll = new ArrayList<String>(m.keySet());
+        ll.forEach( key-> Assert.assertTrue(l.contains(key)));
 
     }
 
@@ -227,4 +242,126 @@ public class InterfaceTests {
         Assert.assertNull(jsonPathEvaluator.get("data.Analog"));
 
     }
+
+
+
+    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with entity with invalid condition and verify if correct return.")
+    @Story("Api engine Interface API design")
+    public void getInstanceOfOneEntityWithInvalidFilterGraphQL() {
+        Reporter.log("Send request to graphql api with graphql which invalid condition query");
+
+        String query = "{\n" +
+                "\tAnalog(cond:\"{Siid: {_invalid: 999999}}\") {\n" +
+                "\t  Analog_id\n" +
+                "\t  Siid\n" +
+                "\t  aliasName\n" +
+                "\t  description\n" +
+                "\t  deviceId\n" +
+                "\t}\n" +
+                "}";
+
+        Response response = Endpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Exception while fetching data (/Analog) : can not parse _invalid: 999999", rspBody.getMessage());
+        Assert.assertEquals(101100, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNull(jsonPathEvaluator.get("data"));
+
+    }
+
+
+
+//    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition in relation entity by graphql.")
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Description("Send a request to SUT with entity with eq condition in relation entity and verify if correct return.")
+//    @Story("Api engine Interface API design")
+//    public void getInstanceOfOneEntityWithEqInRelationEntityByGraphQL() {
+//        Reporter.log("Send request to graphql api with graphql which siid eq 34159 in relation entity");
+//
+//        String query = "{\n" +
+//                "\tAnalog {\n" +
+//                "\t  Analog_id\n" +
+//                "\t  Siid\n" +
+//                "\t  aliasName\n" +
+//                "\t  description\n" +
+//                "\t  deviceId\n" +
+//                "\t  generate_SensorData(cond:\"{Siid: {_eq: 34159}}\"){\n" +
+//                "\t\t  Siid\n" +
+//                "\t\t  modelId\n" +
+//                "\t\t  type\n" +
+//                "\t\t  updateTime\n" +
+//                "\t\t  value\n" +
+//                "\t  }\n" +
+//                "\t}\n" +
+//                "}";
+//
+//        Response response = Endpoint.postGraphql(query);
+//
+//        Reporter.log("Response status is " + response.getStatusCode());
+//
+//        Reporter.log("Response Body is =>  " + response.getBody().asString());
+//
+//        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+//
+//        Assert.assertEquals("Successfully", rspBody.getMessage());
+//        Assert.assertEquals(100000, rspBody.getCode());
+//
+//        JsonPath jsonPathEvaluator = response.jsonPath();
+//
+//        Assert.assertNull(jsonPathEvaluator.get("data.Analog"));
+//
+//    }
+
+
+//    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition in relation entity by graphql.")
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Description("Send a request to SUT with entity with invalid condition in relation entity and verify if correct return.")
+//    @Story("Api engine Interface API design")
+//    public void getInstanceOfOneEntityWithInvalidFilterInRelationEntityGraphQL() {
+//        Reporter.log("Send request to graphql api with graphql which invalid condition query in relation entity");
+//
+//        String query = "{\n" +
+//                "\tAnalog(cond:\"{Siid: {_eq: 34159}}\") {\n" +
+//                "\t  Analog_id\n" +
+//                "\t  Siid\n" +
+//                "\t  aliasName\n" +
+//                "\t  description\n" +
+//                "\t  deviceId\n" +
+//                "\t  generate_SensorData(cond:\"{Siid: {_invalid: 34159}}\"){\n" +
+//                "\t\t  Siid\n" +
+//                "\t\t  modelId\n" +
+//                "\t\t  type\n" +
+//                "\t\t  updateTime\n" +
+//                "\t\t  value\n" +
+//                "\t  }\n" +
+//                "\t}\n" +
+//                "}";
+//
+//        Response response = Endpoint.postGraphql(query);
+//
+//        Reporter.log("Response status is " + response.getStatusCode());
+//
+//        Reporter.log("Response Body is =>  " + response.getBody().asString());
+//
+//        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+//
+//        Assert.assertEquals("Exception while fetching data (/Analog) : can not parse _invalid: 999999", rspBody.getMessage());
+//        Assert.assertEquals(101100, rspBody.getCode());
+//
+//        JsonPath jsonPathEvaluator = response.jsonPath();
+//
+//        Assert.assertNull(jsonPathEvaluator.get("data"));
+//
+//    }
+
 }
