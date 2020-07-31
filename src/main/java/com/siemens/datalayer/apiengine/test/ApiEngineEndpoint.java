@@ -6,7 +6,7 @@ import io.restassured.specification.RequestSpecification;
 
 import java.util.HashMap;
 
-public class Endpoint {
+public class ApiEngineEndpoint {
 	
 	private static String BASE_URL = "";
 	
