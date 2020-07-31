@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
+<suite name="data-layer-automation test suite">
 <listeners>
     <listener class-name="org.uncommons.reportng.HTMLReporter" />
     <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
 </listeners>
     <test verbose="2" preserve-order="true"
-          name="C:/Users/apex/workspace/local/siemens/data-layer-automation/src/main/java/com/siemens/datalayer">
+          name="Rest API Tests">
         <classes>
             <class name="com.siemens.datalayer.apiengine.test.InterfaceTests">
             <parameter name="base_url" value="http://140.231.89.85"/>
