@@ -88,6 +88,7 @@ public class ApiServiceEndpoint {
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
 				.post("/datalayer/api/v1/data/getSensorDataByDeviceId");
@@ -101,6 +102,7 @@ public class ApiServiceEndpoint {
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
 				.post("/datalayer/api/v1/data/getSensorDataBySensorId");
@@ -113,6 +115,7 @@ public class ApiServiceEndpoint {
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
 				.post("/datalayer/api/v1/data/subscriptionsByDeviceId");
@@ -125,6 +128,7 @@ public class ApiServiceEndpoint {
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
 				.post("/datalayer/api/v1/data/subscriptionsBySensorId");

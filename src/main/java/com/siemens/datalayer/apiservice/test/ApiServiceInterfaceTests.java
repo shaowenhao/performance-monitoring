@@ -278,27 +278,89 @@ public class ApiServiceInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api service interface: get sensor by invalid format device id.")
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong endtime format.")
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Send a request to SUT and verify if get sensor by invalid format device id return correct.")
+    @Description("Send a request to SUT and verify if get sensor data by device id with wrong endtime format return correct.")
     @Story("Api service Interface API design")
-    public void getSensorByInvalidFormatDeviceId() {
+    public void getSensorDataByDeviceIdWithWrongEndTimeFormat() {
 
-        Reporter.log("Send request to getSensorByDeviceId api with invalid format id");
+        Reporter.log("Send request to getSensorDataByDeviceId api with wrong endtime format");
 
-        HashMap<String, String> q = new HashMap<>();
-        q.put("id", "aaaaaaaaaaaaaaaaaaa");
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000L,\n" +
+                "  \"deviceId\": 34133,\n" +
+                "  \"startTime\": 1594366100000\n" +
+                "}";
 
-        Response response2 = ApiServiceEndpoint.getSensorByDeviceId(q);
+        Response response = ApiServiceEndpoint.getSensorDataByDeviceId(q);
 
-        Reporter.log("Response status is " + response2.getStatusCode());
+        Reporter.log("Response status is " + response.getStatusCode());
 
-        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
 
-        BadRequestResponse rspBody2 = response2.getBody().as(BadRequestResponse.class);
+        BadRequestResponse rspBody = response.getBody().as(BadRequestResponse.class);
 
-        Assert.assertEquals("Bad Request", rspBody2.getError());
-        Assert.assertEquals(400, rspBody2.getStatus());
+        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(400, rspBody.getStatus());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong startTime format.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor data by device id with wrong startTime format return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorDataByDeviceIdWithWrongStartTimeFormat() {
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with wrong startTime format");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": 34133,\n" +
+                "  \"startTime\": 1594366100000L\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getSensorDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        BadRequestResponse rspBody = response.getBody().as(BadRequestResponse.class);
+
+        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(400, rspBody.getStatus());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with invalid device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor data by invalid device id return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorDataByDeviceIdWithInvalidId() {
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with invalid device id");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": 3413399,\n" +
+                "\"startTime\": 2594366200000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getSensorDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Sensor not exist", rspBody.getMessage());
+        Assert.assertEquals(102102, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
 
 
     }
