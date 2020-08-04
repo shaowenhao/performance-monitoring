@@ -1,6 +1,7 @@
 package com.siemens.datalayer.apiservice.test;
 
 import com.siemens.datalayer.apiservice.model.ApiResponse;
+import com.siemens.datalayer.apiservice.model.BadRequestResponse;
 import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
@@ -53,7 +54,7 @@ public class ApiServiceInterfaceTests {
 
         ArrayList<HashMap> data = jsonPathEvaluator.get("data");
         Assert.assertEquals(data.size(), 20);
-        data.forEach( x-> Assert.assertEquals(x.get("deviceType"), "waterPump"));
+        data.forEach(x -> Assert.assertEquals(x.get("deviceType"), "waterPump"));
 
     }
 
@@ -131,7 +132,7 @@ public class ApiServiceInterfaceTests {
 
         ArrayList<HashMap> data = jsonPathEvaluator.get("data");
         Assert.assertEquals(data.size(), 53);
-        data.forEach( x-> Assert.assertEquals(x.get("deviceType"), "waterPump"));
+        data.forEach(x -> Assert.assertEquals(x.get("deviceType"), "waterPump"));
 
     }
 
@@ -174,6 +175,131 @@ public class ApiServiceInterfaceTests {
                 )
         );
         Assert.assertTrue(Utils.equalLists(data, l));
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if can get sensor by device id.")
+    @Story("Api service Interface API design")
+    public void getSensorByDeviceId() {
+
+        Reporter.log("Send request to getDevicesByType api with device_type heatPumpDetail");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+
+        for (HashMap m : data) {
+            Reporter.log("Send request to getSensorByDeviceId api with id");
+
+            HashMap<String, String> q = new HashMap<>();
+            q.put("id", (String) m.get("id"));
+
+            Response response2 = ApiServiceEndpoint.getSensorByDeviceId(q);
+
+            Reporter.log("Response status is " + response2.getStatusCode());
+
+            Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+            ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+            Assert.assertEquals("OK", rspBody2.getMessage());
+            Assert.assertEquals(200, rspBody2.getCode());
+        }
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor by invalid device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor by invalid device id return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorByInvalidDeviceId() {
+
+        Reporter.log("Send request to getSensorByDeviceId api with invalid id");
+
+        HashMap<String, String> q = new HashMap<>();
+        q.put("id", "999999");
+
+        Response response2 = ApiServiceEndpoint.getSensorByDeviceId(q);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Sensor not exist", rspBody2.getMessage());
+        Assert.assertEquals(102102, rspBody2.getCode());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor by invalid format device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor by invalid format device id return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorByInvalidFormatDeviceId() {
+
+        Reporter.log("Send request to getSensorByDeviceId api with invalid format id");
+
+        HashMap<String, String> q = new HashMap<>();
+        q.put("id", "aaaaaaaaaaaaaaaaaaa");
+
+        Response response2 = ApiServiceEndpoint.getSensorByDeviceId(q);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        BadRequestResponse rspBody2 = response2.getBody().as(BadRequestResponse.class);
+
+        Assert.assertEquals("Bad Request", rspBody2.getError());
+        Assert.assertEquals(400, rspBody2.getStatus());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor by invalid format device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor by invalid format device id return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorByInvalidFormatDeviceId() {
+
+        Reporter.log("Send request to getSensorByDeviceId api with invalid format id");
+
+        HashMap<String, String> q = new HashMap<>();
+        q.put("id", "aaaaaaaaaaaaaaaaaaa");
+
+        Response response2 = ApiServiceEndpoint.getSensorByDeviceId(q);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        BadRequestResponse rspBody2 = response2.getBody().as(BadRequestResponse.class);
+
+        Assert.assertEquals("Bad Request", rspBody2.getError());
+        Assert.assertEquals(400, rspBody2.getStatus());
+
 
     }
 
