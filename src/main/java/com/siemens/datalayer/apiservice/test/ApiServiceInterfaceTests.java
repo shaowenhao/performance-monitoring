@@ -6,6 +6,7 @@ import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.ObjectUtils;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
@@ -364,5 +365,108 @@ public class ApiServiceInterfaceTests {
 
 
     }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong endtime format.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor data by device id with wrong endtime format return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorDataBySensorIdWithWrongEndTimeFormat() {
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with wrong endtime format");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000L,\n" +
+                "  \"sensor_list\": [\n" +
+                "    {\n" +
+                "      \"siid\": 12345\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"startTime\": 1594366100000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getSensorDataBySensorId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        BadRequestResponse rspBody = response.getBody().as(BadRequestResponse.class);
+
+        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(400, rspBody.getStatus());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong startTime format.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor data by device id with wrong startTime format return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorDataBySensorIdWithWrongStartTimeFormat() {
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with wrong startTime format");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"sensor_list\": [\n" +
+                "    {\n" +
+                "      \"siid\": 12345\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"startTime\": 1594366100000L\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getSensorDataBySensorId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        BadRequestResponse rspBody = response.getBody().as(BadRequestResponse.class);
+
+        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(400, rspBody.getStatus());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get sensor data by device id with invalid device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get sensor data by invalid device id return correct.")
+    @Story("Api service Interface API design")
+    public void getSensorDataBySensorIdWithInvalidId() {
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with invalid device id");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"sensor_list\": [\n" +
+                "    {\n" +
+                "      \"siid\": 999999\n" +
+                "    }\n" +
+                "  ],\n" +
+                "\"startTime\": 2594366200000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getSensorDataBySensorId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertTrue(Utils.isNullOrEmpty((Collection)jsonPathEvaluator.get("data")));
+
+    }
+
 
 }

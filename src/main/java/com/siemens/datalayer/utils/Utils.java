@@ -1,8 +1,6 @@
 package com.siemens.datalayer.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Utils {
     public static boolean equalLists(List<String> one, List<String> two) {
@@ -24,5 +22,13 @@ public class Utils {
         Collections.sort(one);
         Collections.sort(two);
         return one.equals(two);
+    }
+
+    public static boolean isNullOrEmpty( final Collection< ? > c ) {
+        return c == null || c.isEmpty();
+    }
+
+    public static boolean isNullOrEmpty( final Map< ?, ? > m ) {
+        return m == null || m.isEmpty();
     }
 }
