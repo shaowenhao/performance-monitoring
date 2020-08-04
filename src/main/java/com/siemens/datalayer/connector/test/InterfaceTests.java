@@ -40,40 +40,90 @@ public class InterfaceTests {
 
 	    List<Map<String, String>> listOfQueryParams = new ArrayList<Map<String, String>>();
 	    
-	    Map<String, String> correctQueryParam1 = new HashMap<String, String>();
+	    Map<String, String> goodQuery01 = new HashMap<String, String>();
 
-	    correctQueryParam1.put("description", "correct parameters (name=Customer/ pageIndex=1/ pageSize=10)");
-	    correctQueryParam1.put("name", "Customer");
-	    correctQueryParam1.put("pageIndex", "1");
-	    correctQueryParam1.put("pageSize", "10");
-	    correctQueryParam1.put("isValid", "true");
+	    goodQuery01.put("description", "good request");
+	    goodQuery01.put("name", "Customer");
+	    goodQuery01.put("pageIndex", "1");
+	    goodQuery01.put("pageSize", "10");
 	    
-	    listOfQueryParams.add(correctQueryParam1);	
+	    listOfQueryParams.add(goodQuery01);	
 	    
-	    Map<String, String> correctQueryParam2 = new HashMap<String, String>();
+	    Map<String, String> goodQuery02 = new HashMap<String, String>();
 
-	    correctQueryParam2.put("description", "correct parameters (name=Customer/ pageIndex=2/ pageSize=10)");
-	    correctQueryParam2.put("name", "Customer");
-	    correctQueryParam2.put("pageIndex", "2");
-	    correctQueryParam2.put("pageSize", "10");
-	    correctQueryParam2.put("isValid", "true");
+	    goodQuery02.put("description", "good request");
+	    goodQuery02.put("name", "Customer");
+	    goodQuery02.put("pageIndex", "2");
+	    goodQuery02.put("pageSize", "10");
 	    
-	    listOfQueryParams.add(correctQueryParam2);
+	    listOfQueryParams.add(goodQuery02);
 	    
-	    Map<String, String> incorrectQueryParam1 = new HashMap<String, String>();
+	    Map<String, String> badQuery01 = new HashMap<String, String>();
 	    
-	    incorrectQueryParam1.put("description", "incorrect parameters (name is not present/ pageIndex=1/ pageSize=10)");
-	    incorrectQueryParam1.put("pageIndex", "1");
-	    incorrectQueryParam1.put("pageSize", "10");
-	    incorrectQueryParam1.put("isValid", "false");
-	    incorrectQueryParam1.put("expectCode", "106602");
-	    incorrectQueryParam1.put("expectMessage", "Required String parameter 'name' is not present");
+	    badQuery01.put("description", "bad request (name is empty)");
+	    badQuery01.put("name", "");
+	    badQuery01.put("pageIndex", "1");
+	    badQuery01.put("pageSize", "10");
+	    badQuery01.put("expectCode", "106601");
+	    badQuery01.put("expectMessage", "bad request:name cannot be blank!");
 	    
-	    listOfQueryParams.add(incorrectQueryParam1);
-
+	    listOfQueryParams.add(badQuery01);
+	    
+	    Map<String, String> badQuery02 = new HashMap<String, String>();
+	    
+	    badQuery02.put("description", "bad request (name is not present)");
+	    badQuery02.put("pageIndex", "1");
+	    badQuery02.put("pageSize", "10");
+	    badQuery02.put("expectCode", "106602");
+	    badQuery02.put("expectMessage", "Required String parameter 'name' is not present");
+	    
+	    listOfQueryParams.add(badQuery02);
+	    
+	    Map<String, String> badQuery03 = new HashMap<String, String>();
+	    
+	    badQuery03.put("description", "bad request (name does not exist)");
+	    badQuery03.put("name", "12345678");
+	    badQuery03.put("pageIndex", "1");
+	    badQuery03.put("pageSize", "10");
+	    badQuery03.put("expectCode", "106101");
+	    badQuery03.put("expectMessage", "entity 12345678 not found locally!");
+	    
+	    listOfQueryParams.add(badQuery03);
+	    
+	    Map<String, String> badQuery04 = new HashMap<String, String>();
+	    
+	    badQuery04.put("description", "bad request (name contains strange characters)");
+	    badQuery04.put("name", "！@#￥%……&*（）——+？|");
+	    badQuery04.put("pageIndex", "1");
+	    badQuery04.put("pageSize", "10");
+	    badQuery04.put("expectCode", "106101");
+	    badQuery04.put("expectMessage", "entity ！@#￥%……&*（）——+？| not found locally!");
+	    
+	    listOfQueryParams.add(badQuery04);
+	    
+	    String long_name = "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
+	    				 + "超长字符1024超长字符1024";
+	    
+	    Map<String, String> badQuery05 = new HashMap<String, String>();
+	    
+	    badQuery05.put("description", "bad request (name is too long)");
+	    badQuery05.put("name", long_name);
+	    badQuery05.put("pageIndex", "1");
+	    badQuery05.put("pageSize", "10");
+	    badQuery05.put("expectCode", "106101");
+	    badQuery05.put("expectMessage", "entity " + long_name + " not found locally!");
+	    
+	    listOfQueryParams.add(badQuery05);
+	    
 	    for (Map<String, String> map : listOfQueryParams) {
 	        queryParamCollection.add(new Object[]{map});
-	    }
+	    }   
 
 	    return queryParamCollection.iterator();
 	}
@@ -161,7 +211,7 @@ public class InterfaceTests {
 	@Story("Connector Interface API design")
   	public void SearchModelDataByCondition(Map<String, String> paramMaps)
   	{
-	  Reporter.log("Send a 'SearchModelDataByCondition' request with " + paramMaps.get("description"));
+	  Reporter.log("Send a 'SearchModelDataByCondition' request");
 	  
 	  HashMap<String, String> queryParameters = new HashMap<>();
 	  
@@ -173,6 +223,15 @@ public class InterfaceTests {
 	  
 	  if (paramMaps.containsKey("pageSize"))
 		  queryParameters.put("pageSize", paramMaps.get("pageSize"));
+	  
+	  if (paramMaps.containsKey("condition")) 
+		  queryParameters.put("condition", paramMaps.get("condition"));
+	  
+	  if (paramMaps.containsKey("fields")) 
+		  queryParameters.put("fields", paramMaps.get("fields"));
+	  
+	  if (paramMaps.containsKey("order"))
+		  queryParameters.put("order", paramMaps.get("order"));
 		
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
@@ -180,12 +239,14 @@ public class InterfaceTests {
 	  
 	  Reporter.log("Response Body is =>  " + response.asString());
 	  
-	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
+	  Assert.assertEquals(response.getStatusCode(), 200);
 	  
-	  if (paramMaps.get("isValid")=="true") {
+	  if (paramMaps.get("description").contains("good request")) 
+	  {
 		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelShemaForCustomer.JSON"));
 	  }
-	  else {
+	  else 
+	  {
 		  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
 		  Assert.assertEquals(response.jsonPath().getString("message"), paramMaps.get("expectMessage"));
 		  Assert.assertNull(response.jsonPath().getList("data"));
