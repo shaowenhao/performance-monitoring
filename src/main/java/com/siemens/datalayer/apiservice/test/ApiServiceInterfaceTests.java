@@ -1,6 +1,7 @@
 package com.siemens.datalayer.apiservice.test;
 
 import com.siemens.datalayer.apiservice.model.ApiResponse;
+import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -11,9 +12,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Epic("Regression Tests")
 @Feature("API Service Rest API Tests")
@@ -133,6 +132,48 @@ public class ApiServiceInterfaceTests {
         ArrayList<HashMap> data = jsonPathEvaluator.get("data");
         Assert.assertEquals(data.size(), 53);
         data.forEach( x-> Assert.assertEquals(x.get("deviceType"), "waterPump"));
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: List device type.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if can list device type.")
+    @Story("Api service Interface API design")
+    public void listDeviceTypes() {
+        Reporter.log("Send request to listDeviceTypes api");
+
+        Response response = ApiServiceEndpoint.listDeviceTypes();
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<String> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 8);
+        List<String> l = new ArrayList<String>(
+                Arrays.asList(
+                        "busLine",
+                        "heatPumpDetail",
+                        "load",
+                        "converter",
+                        "valve",
+                        "waterPump",
+                        "heatStorage",
+                        "buyAndSale"
+                )
+        );
+        Assert.assertTrue(Utils.equalLists(data, l));
 
     }
 
