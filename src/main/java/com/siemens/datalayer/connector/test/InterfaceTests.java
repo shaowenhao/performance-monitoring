@@ -1,11 +1,11 @@
 package com.siemens.datalayer.connector.test;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import io.qameta.allure.*;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -32,7 +32,52 @@ public class InterfaceTests {
 	    Endpoint.setBaseUrl(base_url);
 	    Endpoint.setPort(port);
 	}
-    
+	
+	@DataProvider(name = "dataForGetConceptModelDataByCondition")
+	Iterator<Object[]> dataForGetConceptModelDataByCondition() {
+
+	    Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
+
+	    List<Map<String, String>> listOfQueryParams = new ArrayList<Map<String, String>>();
+	    
+	    Map<String, String> correctQueryParam1 = new HashMap<String, String>();
+
+	    correctQueryParam1.put("description", "correct parameters (name=Customer/ pageIndex=1/ pageSize=10)");
+	    correctQueryParam1.put("name", "Customer");
+	    correctQueryParam1.put("pageIndex", "1");
+	    correctQueryParam1.put("pageSize", "10");
+	    correctQueryParam1.put("isValid", "true");
+	    
+	    listOfQueryParams.add(correctQueryParam1);	
+	    
+	    Map<String, String> correctQueryParam2 = new HashMap<String, String>();
+
+	    correctQueryParam2.put("description", "correct parameters (name=Customer/ pageIndex=2/ pageSize=10)");
+	    correctQueryParam2.put("name", "Customer");
+	    correctQueryParam2.put("pageIndex", "2");
+	    correctQueryParam2.put("pageSize", "10");
+	    correctQueryParam2.put("isValid", "true");
+	    
+	    listOfQueryParams.add(correctQueryParam2);
+	    
+	    Map<String, String> incorrectQueryParam1 = new HashMap<String, String>();
+	    
+	    incorrectQueryParam1.put("description", "incorrect parameters (name is not present/ pageIndex=1/ pageSize=10)");
+	    incorrectQueryParam1.put("pageIndex", "1");
+	    incorrectQueryParam1.put("pageSize", "10");
+	    incorrectQueryParam1.put("isValid", "false");
+	    incorrectQueryParam1.put("expectCode", "106602");
+	    incorrectQueryParam1.put("expectMessage", "Required String parameter 'name' is not present");
+	    
+	    listOfQueryParams.add(incorrectQueryParam1);
+
+	    for (Map<String, String> map : listOfQueryParams) {
+	        queryParamCollection.add(new Object[]{map});
+	    }
+
+	    return queryParamCollection.iterator();
+	}
+	 
 	@Test (priority = 0, description="Test connector interface: Get All Entities name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
@@ -108,18 +153,26 @@ public class InterfaceTests {
 	  }
   	}
   
-	@Test (priority = 0, description="Test connector interface: Get concept model data by condition.")
+	@Test (	priority = 0, 
+			description="Test connector interface: Get concept model data by condition.", 
+			dataProvider = "dataForGetConceptModelDataByCondition" )
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a request to SUT to read out 10 entities of 'Customer' type.")
+	@Description("Send a 'SearchModelDataByCondition' request to SUT with specified parameters and check the response message.")
 	@Story("Connector Interface API design")
-  	public void SearchModelDataByCondition()
+  	public void SearchModelDataByCondition(Map<String, String> paramMaps)
   	{
-	  Reporter.log("Send a 'SearchModelDataByCondition' request");
+	  Reporter.log("Send a 'SearchModelDataByCondition' request with " + paramMaps.get("description"));
 	  
 	  HashMap<String, String> queryParameters = new HashMap<>();
-	  queryParameters.put("name", "Customer");
-	  queryParameters.put("pageIndex", "1");
-	  queryParameters.put("pageSize", "10");
+	  
+	  if (paramMaps.containsKey("name")) 
+		  queryParameters.put("name", paramMaps.get("name"));
+	  
+	  if (paramMaps.containsKey("pageIndex")) 
+		  queryParameters.put("pageIndex", paramMaps.get("pageIndex"));
+	  
+	  if (paramMaps.containsKey("pageSize"))
+		  queryParameters.put("pageSize", paramMaps.get("pageSize"));
 		
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
@@ -129,6 +182,14 @@ public class InterfaceTests {
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  
-	  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelShemaForCustomer.JSON"));
+	  if (paramMaps.get("isValid")=="true") {
+		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelShemaForCustomer.JSON"));
+	  }
+	  else {
+		  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
+		  Assert.assertEquals(response.jsonPath().getString("message"), paramMaps.get("expectMessage"));
+		  Assert.assertNull(response.jsonPath().getList("data"));
+	  }
+
   	}
 }
