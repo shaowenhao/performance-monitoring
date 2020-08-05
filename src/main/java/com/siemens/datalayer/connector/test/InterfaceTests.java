@@ -52,9 +52,9 @@ public class InterfaceTests {
 	    Map<String, String> goodQuery02 = new HashMap<String, String>();
 
 	    goodQuery02.put("description", "good request");
-	    goodQuery02.put("name", "Customer");
+	    goodQuery02.put("name", "Site");
 	    goodQuery02.put("pageIndex", "2");
-	    goodQuery02.put("pageSize", "10");
+	    goodQuery02.put("pageSize", "15");
 	    
 	    listOfQueryParams.add(goodQuery02);
 	    
@@ -243,7 +243,9 @@ public class InterfaceTests {
 	  
 	  if (paramMaps.get("description").contains("good request")) 
 	  {
-		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelShemaForCustomer.JSON"));
+		  Assert.assertEquals(response.jsonPath().getString("code"), "0");
+		  Assert.assertEquals(response.jsonPath().getString("message"), "Operate success.");		  
+		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
 	  }
 	  else 
 	  {

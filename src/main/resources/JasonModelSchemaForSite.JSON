@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "power_station": {
+              "type": "string"
+            },
+            "capacity": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "location",
+            "id",
+            "power_station",
+            "capacity"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+  
+}
