@@ -42,7 +42,7 @@ public class InterfaceTests {
 	    
 	    Map<String, String> goodQuery01 = new HashMap<String, String>();
 
-	    goodQuery01.put("description", "good request");
+	    goodQuery01.put("description", "good request, data retrieved");
 	    goodQuery01.put("name", "Customer");
 	    goodQuery01.put("pageIndex", "1");
 	    goodQuery01.put("pageSize", "10");
@@ -51,12 +51,36 @@ public class InterfaceTests {
 	    
 	    Map<String, String> goodQuery02 = new HashMap<String, String>();
 
-	    goodQuery02.put("description", "good request");
+	    goodQuery02.put("description", "good request, data retrieved");
 	    goodQuery02.put("name", "Site");
 	    goodQuery02.put("pageIndex", "2");
 	    goodQuery02.put("pageSize", "15");
 	    
 	    listOfQueryParams.add(goodQuery02);
+	    
+	    Map<String, String> goodQuery03 = new HashMap<String, String>();
+	    
+	    goodQuery03.put("description", "good request, data retrieved");	    
+	    goodQuery03.put("name", "Site");
+	    goodQuery03.put("condition", "id='P000000681'");
+   
+	    listOfQueryParams.add(goodQuery03);
+	    
+	    Map<String, String> goodQuery04 = new HashMap<String, String>();
+	    
+	    goodQuery04.put("description", "good request, data not found");	    
+	    goodQuery04.put("name", "Site");
+	    goodQuery04.put("condition", "id='?????'");
+   
+	    listOfQueryParams.add(goodQuery04);
+	    
+	    Map<String, String> goodQuery05 = new HashMap<String, String>();
+	    
+	    goodQuery05.put("description", "good request, data retrieved");	    
+	    goodQuery05.put("name", "Site");
+	    goodQuery05.put("condition", "capacity>=20");
+   
+	    listOfQueryParams.add(goodQuery05);	    
 	    
 	    Map<String, String> badQuery01 = new HashMap<String, String>();
 	    
@@ -121,7 +145,24 @@ public class InterfaceTests {
 	    
 	    listOfQueryParams.add(badQuery05);
 	    
-	    for (Map<String, String> map : listOfQueryParams) {
+	    Map<String, String> badQuery06 = new HashMap<String, String>();
+	    
+	    badQuery06.put("description", "bad request (incorrect condition)");
+	    badQuery06.put("name", "Site");
+	    badQuery06.put("condition", "id=?????");
+	    badQuery06.put("expectCode", "106119");
+	    badQuery06.put("expectMessage", "cannot parse the sql");
+	    
+	    listOfQueryParams.add(badQuery06);
+	    
+	    for (Map<String, String> map : listOfQueryParams) 
+	    {    		
+	    	if (map.get("description").contains("good request")) 
+	    	{
+	    		map.put("expectCode", "0");
+	    		map.put("expectMessage", "Operate success.");
+	    	}
+	    	
 	        queryParamCollection.add(new Object[]{map});
 	    }   
 
@@ -218,6 +259,9 @@ public class InterfaceTests {
 	  if (paramMaps.containsKey("name")) 
 		  queryParameters.put("name", paramMaps.get("name"));
 	  
+	  if (paramMaps.containsKey("domainName")) 
+		  queryParameters.put("domainName", paramMaps.get("domainName"));
+	  
 	  if (paramMaps.containsKey("pageIndex")) 
 		  queryParameters.put("pageIndex", paramMaps.get("pageIndex"));
 	  
@@ -241,16 +285,18 @@ public class InterfaceTests {
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200);
 	  
+	  if (paramMaps.containsKey("expectCode"))
+		  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
+	  
+	  if (paramMaps.containsKey("expectMessage"))
+		  Assert.assertTrue(response.jsonPath().getString("message").contains(paramMaps.get("expectMessage")));
+	  
 	  if (paramMaps.get("description").contains("good request")) 
-	  {
-		  Assert.assertEquals(response.jsonPath().getString("code"), "0");
-		  Assert.assertEquals(response.jsonPath().getString("message"), "Operate success.");		  
+	  {	  
 		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
 	  }
 	  else 
 	  {
-		  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
-		  Assert.assertEquals(response.jsonPath().getString("message"), paramMaps.get("expectMessage"));
 		  Assert.assertNull(response.jsonPath().getList("data"));
 	  }
 
