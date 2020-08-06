@@ -80,7 +80,23 @@ public class InterfaceTests {
 	    goodQuery05.put("name", "Site");
 	    goodQuery05.put("condition", "capacity>=20");
    
-	    listOfQueryParams.add(goodQuery05);	    
+	    listOfQueryParams.add(goodQuery05);
+	    
+	    Map<String, String> goodQuery06 = new HashMap<String, String>();
+	    
+	    goodQuery06.put("description", "good request, data retrieved");	    
+	    goodQuery06.put("name", "Site");
+	    goodQuery06.put("condition", "id='P000000681' OR capacity>=20");
+   
+	    listOfQueryParams.add(goodQuery06);	
+	    
+	    Map<String, String> goodQuery07 = new HashMap<String, String>();
+	    
+	    goodQuery07.put("description", "good request, data not found");	    
+	    goodQuery07.put("name", "Site");
+	    goodQuery07.put("condition", "id='P000000681' AND capacity>=20");
+   
+	    listOfQueryParams.add(goodQuery07);	    
 	    
 	    Map<String, String> badQuery01 = new HashMap<String, String>();
 	    
@@ -169,7 +185,7 @@ public class InterfaceTests {
 	    return queryParamCollection.iterator();
 	}
 	 
-	@Test (priority = 0, description="Test connector interface: Get All Entities name.")
+	@Test (priority = 0, description = "Test connector interface: Get All Entities name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
 	@Story("Connector Interface API design")
@@ -189,7 +205,7 @@ public class InterfaceTests {
 
 	}
   
-	@Test (priority = 0, description="Test connector interface: Get concept model definition by model name.")
+	@Test (priority = 0, description = "Test connector interface: Get concept model definition by model name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to read out the model schema of entity 'Site'.")
 	@Story("Connector Interface API design")
@@ -209,7 +225,7 @@ public class InterfaceTests {
 		
   	}
   
-	@Test (priority = 0, description="Test connector interface: Get all entities name and then check its concept model.")
+	@Test (priority = 0, description = "Test connector interface: Get all entities name and then check its concept model.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to get all the available entity names, then read out the model schema of every entity.")
 	@Story("Connector Interface API design")
@@ -245,7 +261,7 @@ public class InterfaceTests {
   	}
   
 	@Test (	priority = 0, 
-			description="Test connector interface: Get concept model data by condition.", 
+			description = "Test connector interface: Get concept model data by condition.", 
 			dataProvider = "dataForGetConceptModelDataByCondition" )
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'SearchModelDataByCondition' request to SUT with specified parameters and check the response message.")
@@ -293,7 +309,16 @@ public class InterfaceTests {
 	  
 	  if (paramMaps.get("description").contains("good request")) 
 	  {	  
-		  assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
+		  if (paramMaps.get("description").contains("data not found")) 
+			  Assert.assertTrue(response.jsonPath().getList("data").isEmpty());
+		  
+		  if (paramMaps.get("description").contains("data retrieved")) 
+		  {
+			  Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		  
+			  assertThat(response.getBody().asString(), 
+					  	 matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
+		  }
 	  }
 	  else 
 	  {
