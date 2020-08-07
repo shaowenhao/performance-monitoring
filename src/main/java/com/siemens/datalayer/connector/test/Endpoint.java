@@ -2,8 +2,9 @@ package com.siemens.datalayer.connector.test;
 
 import java.util.HashMap;
 
+import io.qameta.allure.restassured.AllureRestAssured;
+
 import io.restassured.RestAssured;
-import io.restassured.http.Method;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -27,11 +28,13 @@ public class Endpoint {
 	public static Response getAllEntitiesName() {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/connector/entities";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
         
-        Response response = httpRequest.request(Method.GET, "/api/connector/entities");
+        Response response = httpRequest.filter(new AllureRestAssured())
+        							   .get();
         
         return response;
 	}
@@ -41,11 +44,13 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/connector/searchData";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 
 		Response response = httpRequest.queryParams(parameters) 
-		                   .get("/api/connector/searchData");
+									   .filter(new AllureRestAssured())
+									   .get();
 		
 		return response;
 	}	
@@ -55,11 +60,13 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/connector/searchModelSchemaByName";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 		
 		Response response = httpRequest.queryParam("name", name) 
-		                   .get("/api/connector/searchModelSchemaByName");
+									   .filter(new AllureRestAssured())
+									   .get();
 		
 		return response;
 	}
@@ -69,11 +76,13 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/connector/searchPageData";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 
 		Response response = httpRequest.queryParams(parameters) 
-		                   .get("/api/connector/searchPageData");
+									   .filter(new AllureRestAssured())
+									   .get();
 		
 		return response;
 	}
@@ -83,11 +92,12 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/dev-tools/checkSuperMapper";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.request(Method.GET, "/api/dev-tools/checkSuperMapper");
+        Response response = httpRequest.get();
         
         return response;
 	}
@@ -97,11 +107,12 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/dev-tools/clear-caches";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.request(Method.GET, "/api/dev-tools/clear-caches");
+        Response response = httpRequest.get();
         
         return response;
 	}
@@ -111,12 +122,14 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/dev-tools/execute-sql";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
 		Response response = httpRequest.queryParam("name", sql) 
-                .get("/api/dev-tools/execute-sql");
+									   .filter(new AllureRestAssured())
+                					   .get();
         
         return response;
 	}
@@ -126,11 +139,12 @@ public class Endpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
+		RestAssured.basePath = "api/mapper/test";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.request(Method.GET, "/api/mapper/test");
+        Response response = httpRequest.get();
         
         return response;
 	}

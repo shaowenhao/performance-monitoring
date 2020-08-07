@@ -27,7 +27,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class InterfaceTests {
 	
 	@Parameters({"base_url", "port"})
-	@BeforeClass
+	@BeforeClass (description = "Configure host address and communication port for Connector service")
 	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port) {
 	    Endpoint.setBaseUrl(base_url);
 	    Endpoint.setPort(port);
