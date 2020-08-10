@@ -157,6 +157,9 @@
 			<suiteXmlFiles>
 				<suiteXmlFile>testng.xml</suiteXmlFile>
 			</suiteXmlFiles>
+			<argLine>
+                -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+            </argLine>
 			<argLine>-Dfile.encoding=UTF-8</argLine>
 			<argLine>-Xms512m -Xmx1024m</argLine>
 			<workingDirectory>target/</workingDirectory>
