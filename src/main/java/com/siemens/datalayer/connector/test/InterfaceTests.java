@@ -22,8 +22,8 @@ import io.restassured.response.Response;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@Epic("Regression Tests")
-@Feature("Connector Rest API Tests")
+@Epic("Connector Interface")
+@Feature("Rest API")
 public class InterfaceTests {
 	
 	@Parameters({"base_url", "port"})
@@ -188,7 +188,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test connector interface: Get All Entities name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
-	@Story("Connector Interface API design")
+	@Story("Get All Entities name")
 	public void GetAllEntitiesName()
 	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
@@ -208,7 +208,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test connector interface: Get concept model definition by model name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to read out the model schema of entity 'Site'.")
-	@Story("Connector Interface API design")
+	@Story("Search Model Schema by name")
   	public void SearchModelSchemaByName()
   	{
 	  Reporter.log("Send a 'SearchModelSchemaByName' request for entity 'Site'");	
@@ -228,7 +228,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test connector interface: Get all entities name and then check its concept model.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT to get all the available entity names, then read out the model schema of every entity.")
-	@Story("Connector Interface API design")
+	@Story("Search Model Schema by name")
   	public void SearchModelSchemaForAllEntities()
   	{
 	  Reporter.log("Send a 'GetAllEntitiesName' request");
@@ -265,7 +265,7 @@ public class InterfaceTests {
 			dataProvider = "dataForGetConceptModelDataByCondition" )
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'SearchModelDataByCondition' request to SUT with specified parameters and check the response message.")
-	@Story("Connector Interface API design")
+	@Story("Get concept model data by condition")
   	public void SearchModelDataByCondition(Map<String, String> paramMaps)
   	{
 	  Reporter.log("Send a 'SearchModelDataByCondition' request");
