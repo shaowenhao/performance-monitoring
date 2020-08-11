@@ -133,7 +133,6 @@ public class ApiServiceInterfaceTests {
 
         ArrayList<HashMap> data = jsonPathEvaluator.get("data");
         Assert.assertEquals(data.size(), 53);
-        data.forEach(x -> Assert.assertEquals(x.get("deviceType"), "waterPump"));
 
     }
 
