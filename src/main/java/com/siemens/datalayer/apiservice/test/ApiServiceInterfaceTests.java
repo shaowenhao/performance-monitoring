@@ -16,8 +16,8 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 
-@Epic("Regression Tests")
-@Feature("API Service Rest API Tests")
+@Epic("Api Service Interface")
+@Feature("Rest API")
 public class ApiServiceInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
@@ -30,7 +30,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: Get devices by type.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the device type can be read out.")
-    @Story("Api service Interface API design")
+    @Story("Get devices by type")
     public void getDeviceByWaterPumpType() {
         Reporter.log("Send request to getDeviceByType api with waterPump type");
 
@@ -63,7 +63,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: Get devices by invalid type.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if invalid type will return correct message.")
-    @Story("Api service Interface API design")
+    @Story("Get devices by invalid type")
     public void getDeviceByInvalidType() {
         Reporter.log("Send request to getDeviceByType api with invalid type");
 
@@ -87,7 +87,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: Get devices by device type empty.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if not input device type will return correct message.")
-    @Story("Api service Interface API design")
+    @Story("Get devices by device type empty")
     public void getDeviceByNoDeviceType() {
         Reporter.log("Send request to getDeviceByType api without device type");
 
@@ -111,7 +111,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: List all device type.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if can list all device type.")
-    @Story("Api service Interface API design")
+    @Story("List all device type")
     public void listAllDeviceTypes() {
         Reporter.log("Send request to listAllDeviceTypes api");
 
@@ -140,7 +140,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: List device type.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if can list device type.")
-    @Story("Api service Interface API design")
+    @Story("List device type")
     public void listDeviceTypes() {
         Reporter.log("Send request to listDeviceTypes api");
 
@@ -182,7 +182,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor by device id.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if can get sensor by device id.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor by device id")
     public void getSensorByDeviceId() {
 
         Reporter.log("Send request to getDevicesByType api with device_type heatPumpDetail");
@@ -229,7 +229,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor by invalid device id.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor by invalid device id return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor by invalid device id")
     public void getSensorByInvalidDeviceId() {
 
         Reporter.log("Send request to getSensorByDeviceId api with invalid id");
@@ -255,7 +255,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor by invalid format device id.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor by invalid format device id return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor by invalid format device id")
     public void getSensorByInvalidFormatDeviceId() {
 
         Reporter.log("Send request to getSensorByDeviceId api with invalid format id");
@@ -281,7 +281,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong endtime format.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by device id with wrong endtime format return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with wrong endtime format")
     public void getSensorDataByDeviceIdWithWrongEndTimeFormat() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with wrong endtime format");
@@ -310,7 +310,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong startTime format.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by device id with wrong startTime format return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with wrong startTime format")
     public void getSensorDataByDeviceIdWithWrongStartTimeFormat() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with wrong startTime format");
@@ -339,7 +339,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with invalid device id.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by invalid device id return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with invalid device id")
     public void getSensorDataByDeviceIdWithInvalidId() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with invalid device id");
@@ -369,7 +369,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong endtime format.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by device id with wrong endtime format return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with wrong endtime format")
     public void getSensorDataBySensorIdWithWrongEndTimeFormat() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with wrong endtime format");
@@ -402,7 +402,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with wrong startTime format.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by device id with wrong startTime format return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with wrong startTime format")
     public void getSensorDataBySensorIdWithWrongStartTimeFormat() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with wrong startTime format");
@@ -435,7 +435,7 @@ public class ApiServiceInterfaceTests {
     @Test(priority = 0, description = "Test api service interface: get sensor data by device id with invalid device id.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get sensor data by invalid device id return correct.")
-    @Story("Api service Interface API design")
+    @Story("Get sensor data by device id with invalid device id")
     public void getSensorDataBySensorIdWithInvalidId() {
 
         Reporter.log("Send request to getSensorDataByDeviceId api with invalid device id");
