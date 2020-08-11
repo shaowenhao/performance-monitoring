@@ -18,8 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Epic("Regression Tests")
-@Feature("API Engine Rest API Tests")
+@Epic("Api Engine Interface")
+@Feature("Rest API")
 public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
@@ -32,7 +32,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Get Entities without filter.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
-    @Story("Api engine Interface API design")
+    @Story("Get Entities without filter")
     public void getAllInstanceOfOneEntityByRestful() {
         Reporter.log("Send request to entities api with root=Analog depth=1");
 
@@ -57,7 +57,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity by graphql")
     public void getAllInstanceOfOneEntityByGraphQL() {
         Reporter.log("Send request to graphql api with graphql to get all instance of one entity");
 
@@ -88,7 +88,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with multiple column type by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with multiple column type and verify if all the analog entities names can be read out.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity with multiple column type by graphql")
     public void getAllInstanceOfOneEntityWithMultipleColumnTypeByGraphQL() {
         Reporter.log("Send request to graphql api with graphql to get all instance of one entity");
 
@@ -126,7 +126,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity not exist in kg by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity not exist in kg and verify if correct message return.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity not exist in kg by graphql")
     public void getAllInstanceOfOneEntityNotExistByGraphQL() {
         Reporter.log("Send request to graphql api with graphql to with one entity not exist");
 
@@ -164,7 +164,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with eq condition and verify if correct return.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity with eq condition by graphql")
     public void getInstanceOfOneEntityWithEqByGraphQL() {
         Reporter.log("Send request to graphql api with graphql which siid eq 33473");
 
@@ -211,7 +211,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition no result by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with eq condition no result and verify if correct return.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity with eq condition no result by graphql")
     public void getInstanceOfOneEntityWithEqNoResultByGraphQL() {
         Reporter.log("Send request to graphql api with graphql which siid eq 999999");
 
@@ -247,7 +247,7 @@ public class ApiEngineInterfaceTests {
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with invalid condition and verify if correct return.")
-    @Story("Api engine Interface API design")
+    @Story("Query all instance of one entity with invalid condition by graphql")
     public void getInstanceOfOneEntityWithInvalidFilterGraphQL() {
         Reporter.log("Send request to graphql api with graphql which invalid condition query");
 

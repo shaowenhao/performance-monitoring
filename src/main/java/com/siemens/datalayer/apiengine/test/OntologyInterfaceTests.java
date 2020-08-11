@@ -17,8 +17,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-@Epic("Regression Tests")
-@Feature("Ontology Rest API Tests")
+@Epic("Ontology Interface")
+@Feature("Rest API")
 public class OntologyInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
@@ -61,7 +61,7 @@ public class OntologyInterfaceTests {
     @Test(priority = 0, description = "Test ontology interface: Get ontology domains by without entities.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get domains by id without entities return with entities null.")
-    @Story("Ontology Interface API design")
+    @Story("Get ontology domains by without entities")
     public void getOntologyDomainsWithIdWithoutEntities() {
         Reporter.log("Send request to ontology api with withEntities false");
 
@@ -119,7 +119,7 @@ public class OntologyInterfaceTests {
     @Test(priority = 0, description = "Test ontology interface: Get ontology domains by with entities.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if get domains by id with entities return with entities.")
-    @Story("Ontology Interface API design")
+    @Story("Get ontology domains by with entities")
     public void getOntologyDomainsWithIdWithEntities() {
         Reporter.log("Send request to ontology api with withEntities true");
 
