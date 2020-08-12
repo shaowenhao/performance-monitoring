@@ -20,7 +20,11 @@
                     <include name="getInstanceOfOneEntityWithEqNoResultByGraphQL"/>
                 </methods>
             </class>
-            <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+		    <class name="com.siemens.datalayer.apiservice.test.ApiServiceInterfaceTests">
+		    <parameter name="base_url" value="http://140.231.89.85"/>
+  			<parameter name="port" value="9090"/>
+		    </class>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
             <parameter name="base_url" value="http://localhost"/>
   			<parameter name="port" value="9001"/>
                 <methods>

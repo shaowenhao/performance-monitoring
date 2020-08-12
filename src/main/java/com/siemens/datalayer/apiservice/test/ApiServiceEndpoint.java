@@ -1,5 +1,6 @@
 package com.siemens.datalayer.apiservice.test;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -27,7 +28,9 @@ public class ApiServiceEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.queryParams(parameters).get("/datalayer/api/v1/asset/getDevicesByType");
+        Response response = httpRequest.queryParams(parameters)
+        					.filter(new AllureRestAssured())
+        					.get("/datalayer/api/v1/asset/getDevicesByType");
 
         return response;
     }
@@ -40,7 +43,9 @@ public class ApiServiceEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.queryParams(parameters).get("/datalayer/api/v1/asset/getSensorByDeviceId");
+        Response response = httpRequest.queryParams(parameters)
+					        		   .filter(new AllureRestAssured())
+					        		   .get("/datalayer/api/v1/asset/getSensorByDeviceId");
 
         return response;
     }
@@ -53,7 +58,8 @@ public class ApiServiceEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.get("/datalayer/api/v1/asset/listAllDeviceTypes");
+        Response response = httpRequest.filter(new AllureRestAssured())
+        							   .get("/datalayer/api/v1/asset/listAllDeviceTypes");
 
         return response;
     }
@@ -66,7 +72,8 @@ public class ApiServiceEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.get("/datalayer/api/v1/asset/listDeviceTypes");
+        Response response = httpRequest.filter(new AllureRestAssured())
+        							   .get("/datalayer/api/v1/asset/listDeviceTypes");
 
         return response;
     }
@@ -78,6 +85,7 @@ public class ApiServiceEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
 
         Response response = httpRequest
+        		.filter(new AllureRestAssured())
                 .delete("/datalayer/api/v1/data/deleteSubscriptions/" + id);
 
         return response;
@@ -91,6 +99,7 @@ public class ApiServiceEndpoint {
         httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
+				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/getSensorDataByDeviceId");
 
 		return response;
@@ -105,6 +114,7 @@ public class ApiServiceEndpoint {
         httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
+				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/getSensorDataBySensorId");
 
 		return response;
@@ -118,6 +128,7 @@ public class ApiServiceEndpoint {
         httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
+				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/subscriptionsByDeviceId");
 
 		return response;
@@ -131,6 +142,7 @@ public class ApiServiceEndpoint {
         httpRequest.header("Content-Type", "application/json");
 
 		Response response = httpRequest.body(body)
+				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/subscriptionsBySensorId");
 
 		return response;
