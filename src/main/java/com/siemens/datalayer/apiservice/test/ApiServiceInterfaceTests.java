@@ -529,4 +529,41 @@ public class ApiServiceInterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api service interface: Get sensor data by sensor id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if all sensor data belong given sensor id returned.")
+    @Story("Get sensor data by sensor id")
+    public void getSensorDataBySensorId() {
+        Reporter.log("Send request to getSensorDataBySensorId api with sensor id");
+
+        String q = String.format("{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"sensor_list\": [\n" +
+                "    {\n" +
+                "      \"siid\": %s\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"startTime\": 1594366100000\n" +
+                "}", "5040");
+
+        Response response = ApiServiceEndpoint.getSensorDataBySensorId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 3720);
+
+    }
 }
