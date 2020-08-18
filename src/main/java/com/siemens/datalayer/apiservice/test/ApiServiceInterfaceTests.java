@@ -468,4 +468,65 @@ public class ApiServiceInterfaceTests {
     }
 
 
+    @Test(priority = 0, description = "Test api service interface: Get sensor data by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if all sensor data belong given device id returned.")
+    @Story("Get sensor data by device id")
+    public void getSensorDataByDeviceId() {
+        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 6);
+
+        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+
+        Reporter.log("Send request to getSensorDataByDeviceId api with device id");
+
+        String q = String.format("{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": %s,\n" +
+                "\"startTime\": 1594366100000\n" +
+                "}", h.get("id"));
+
+        Response response2 = ApiServiceEndpoint.getSensorDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
+        Assert.assertEquals(data2.size(), 3712);
+
+    }
+
 }
