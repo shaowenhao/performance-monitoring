@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="data-layer-automation test suite">
-<listeners>
-    <listener class-name="org.uncommons.reportng.HTMLReporter" />
-    <listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
-</listeners>
+<!-- <listeners> -->
+<!--     <listener class-name="org.uncommons.reportng.HTMLReporter" /> -->
+<!--     <listener class-name="org.uncommons.reportng.JUnitXMLReporter" /> -->
+<!-- </listeners> -->
     <test verbose="2" preserve-order="true"
-          name="Rest API Tests">
+    	thread-count="5"
+		name="Rest API Tests">
         <classes>
             <class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
             <parameter name="base_url" value="http://140.231.89.85"/>
   			<parameter name="port" value="31101"/>
-                <methods>
-                    <include name="getAllInstanceOfOneEntityByRestful"/>
-                    <include name="getAllInstanceOfOneEntityByGraphQL"/>
-                    <include name="getAllInstanceOfOneEntityWithMultipleColumnTypeByGraphQL"/>
-                    <include name="getAllInstanceOfOneEntityNotExistByGraphQL"/>
-                    <include name="getInstanceOfOneEntityWithEqByGraphQL"/>
-                    <include name="getInstanceOfOneEntityWithEqNoResultByGraphQL"/>
-                </methods>
             </class>
 		    <class name="com.siemens.datalayer.apiservice.test.ApiServiceInterfaceTests">
 		    <parameter name="base_url" value="http://140.231.89.85"/>
   			<parameter name="port" value="9090"/>
 		    </class>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
-            <parameter name="base_url" value="http://localhost"/>
-  			<parameter name="port" value="9001"/>
-                <methods>
-                    <include name="GetAllEntitiesName"/>
-                    <include name="SearchModelSchemaByName"/>
-                    <include name="SearchModelSchemaForAllEntities"/>
-                    <include name="SearchModelDataByCondition"/>
-                </methods>
+            <parameter name="base_url" value="http://140.231.89.85"/>
+  			<parameter name="port" value="31834"/>
             </class>
         </classes>
     </test>
