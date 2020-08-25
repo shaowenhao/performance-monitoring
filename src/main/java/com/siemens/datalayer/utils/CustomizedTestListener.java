@@ -29,13 +29,15 @@ public class CustomizedTestListener implements ITestListener {
 	@Override
 	public void onStart(ITestContext iTestContext) {
 	    System.out.println("Ready to run all the tests in the suite");
-	    iTestContext.setAttribute("WebDriver", WebDriverBaseClass.getDriver());
+	    AllureEnvironmentPropertiesWriter.initializeTestSettings();
+//	    iTestContext.setAttribute("WebDriver", WebDriverBaseClass.getDriver());
 	}
 	
 //	This method is invoked after all tests methods gets executed. This can be used to store information of all the tests that were run.
 	@Override
 	public void onFinish(ITestContext iTestContext) {
-		System.out.println("This is the end of test execution.");
+		System.out.println("This is the end of test execution.");    
+	    AllureEnvironmentPropertiesWriter.writeTestSettings();
 	}
 	
 //	This method is invoked before a specific test method is invoked.
