@@ -21,6 +21,20 @@ public class ApiServiceEndpoint {
         port = comm_port;
     }
 
+    public static Response getDeviceInfo(HashMap<String, String> parameters) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.queryParams(parameters)
+                .filter(new AllureRestAssured())
+                .get("/datalayer/api/v1/asset/getDeviceInfo");
+
+        return response;
+    }
+
     public static Response getDevicesByType(HashMap<String, String> parameters) {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
