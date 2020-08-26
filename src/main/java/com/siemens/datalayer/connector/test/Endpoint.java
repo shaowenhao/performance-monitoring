@@ -2,6 +2,7 @@ package com.siemens.datalayer.connector.test;
 
 import java.util.HashMap;
 
+import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 
 import io.restassured.RestAssured;
@@ -25,6 +26,7 @@ public class Endpoint {
 	}
 	
 	// Connector Interface: Get All Entities name
+	@Step("Send a request of 'Get All Entities Name'")
 	public static Response getAllEntitiesName() {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
@@ -40,6 +42,7 @@ public class Endpoint {
 	}
 	
 	// Connector Interface: Get concept model data by condition
+	@Step("Send a request of 'Get concept model data by condition'")
 	public static Response getConceptModelDataByCondition(HashMap<String, String> parameters)
 	{
 		RestAssured.baseURI = BASE_URL;
@@ -56,6 +59,7 @@ public class Endpoint {
 	}	
 	
 	// Connector Interface: Get concept model definition by model name
+	@Step("Send a request of 'Get concept model definition by model name'")
 	public static Response getConceptModelDefinitionByModelName(String name)
 	{
 		RestAssured.baseURI = BASE_URL;
@@ -72,6 +76,7 @@ public class Endpoint {
 	}
 
 	// Connector Interface: Get concept model data by page condition
+	@Step("Send a request of 'Get concept model data by page condition'")
 	public static Response getConceptModelDataByPageCondition(HashMap<String, String> parameters)
 	{
 		RestAssured.baseURI = BASE_URL;

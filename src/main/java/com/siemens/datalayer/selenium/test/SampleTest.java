@@ -1,10 +1,13 @@
 package com.siemens.datalayer.selenium.test;
 
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CustomizedTestListener;
 import com.siemens.datalayer.utils.WebDriverBaseClass;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -32,6 +35,9 @@ public class SampleTest extends WebDriverBaseClass {
 		driver = bs.initialize_driver();
 		driver.get("https://demo.nopcommerce.com/");
 		driver.manage().window().maximize();
+		
+		Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
+		AllureEnvironmentPropertiesWriter.addEnvironmentItem("Web Browser", caps.getBrowserName() + "driver " + caps.getVersion());
 	}
 	
 	@Test(description="Verify the presence of a Logo on homepage")

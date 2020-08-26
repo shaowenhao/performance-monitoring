@@ -12,9 +12,9 @@ import org.testng.annotations.Test;
 
 import com.siemens.datalayer.connector.model.GetAllEntitiesNameResponse;
 import com.siemens.datalayer.connector.model.SearchModelSchemaByNameResponse;
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 
 import org.testng.Assert;
-import org.testng.Reporter;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -31,6 +31,7 @@ public class InterfaceTests {
 	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port) {
 	    Endpoint.setBaseUrl(base_url);
 	    Endpoint.setPort(port);
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
 	}
 	
 	@DataProvider(name = "dataForGetConceptModelDataByCondition")
@@ -190,14 +191,8 @@ public class InterfaceTests {
 	@Description("Send a request to SUT and verify if all the available entity names can be read out.")
 	@Story("Get All Entities name")
 	public void GetAllEntitiesName()
-	{
-	  Reporter.log("Send a 'GetAllEntitiesName' request");
-		
+	{	
 	  Response response = Endpoint.getAllEntitiesName();
-
-	  Reporter.log("Response status is " + response.getStatusCode());
-		
-	  Reporter.log("Response Body is =>  " + response.getBody().asString());
 		
 	  GetAllEntitiesNameResponse rspBody = response.getBody().as(GetAllEntitiesNameResponse.class);
 		
@@ -211,13 +206,8 @@ public class InterfaceTests {
 	@Story("Search Model Schema by name")
   	public void SearchModelSchemaByName()
   	{
-	  Reporter.log("Send a 'SearchModelSchemaByName' request for entity 'Site'");	
 	  
 	  Response response = Endpoint.getConceptModelDefinitionByModelName("Site");
-		
-	  Reporter.log("Response status is " + response.getStatusCode());
-		  
-	  Reporter.log("Response Body is =>  " + response.asString());
 		
 	  SearchModelSchemaByNameResponse rspBody = response.getBody().as(SearchModelSchemaByNameResponse.class);
 		
@@ -230,12 +220,8 @@ public class InterfaceTests {
 	@Description("Send a request to SUT to get all the available entity names, then read out the model schema of every entity.")
 	@Story("Search Model Schema by name")
   	public void SearchModelSchemaForAllEntities()
-  	{
-	  Reporter.log("Send a 'GetAllEntitiesName' request");
-		
+  	{		
 	  Response response = Endpoint.getAllEntitiesName();
-	  
-	  Reporter.log("Response status is " + response.getStatusCode());
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  
@@ -250,11 +236,7 @@ public class InterfaceTests {
 	  // via 'SearchModelSchemaByName' request 
 	  for(String entityItem : allEntities)
 	  {
-		  Reporter.log("Send a 'SearchModelSchemaByName' request for entity '" + entityItem + "'");
-		  
 		  response = Endpoint.getConceptModelDefinitionByModelName(entityItem);
-		  
-		  Reporter.log("Response status is " + response.getStatusCode());
 		  
 		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  }
@@ -267,9 +249,7 @@ public class InterfaceTests {
 	@Description("Send a 'SearchModelDataByCondition' request to SUT with specified parameters and check the response message.")
 	@Story("Get concept model data by condition")
   	public void SearchModelDataByCondition(Map<String, String> paramMaps)
-  	{
-	  Reporter.log("Send a 'SearchModelDataByCondition' request");
-	  
+  	{  
 	  HashMap<String, String> queryParameters = new HashMap<>();
 	  
 	  if (paramMaps.containsKey("name")) 
@@ -294,10 +274,6 @@ public class InterfaceTests {
 		  queryParameters.put("order", paramMaps.get("order"));
 		
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
-	  
-	  Reporter.log("Response status is " + response.getStatusCode());
-	  
-	  Reporter.log("Response Body is =>  " + response.asString());
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200);
 	  
