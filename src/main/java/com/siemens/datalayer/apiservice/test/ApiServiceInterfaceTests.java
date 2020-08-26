@@ -657,5 +657,88 @@ public class ApiServiceInterfaceTests {
         Assert.assertEquals(147, p.size());
     }
 
+    @Test(priority = 0, description = "Test api service interface: Delete subscriptions by invalid id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if invalid id will return correct message.")
+    @Story("Delete subscriptions by invalid id")
+    public void deleteSubscriptionsWithInvalidId() {
+        Reporter.log("Send request to deleteSubscriptions api with invalid id");
+
+        Response response = ApiServiceEndpoint.deleteSubscriptions("99999");
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+//        Assert.assertEquals("Device not exist", rspBody.getMessage());
+//        Assert.assertEquals(102101, rspBody.getCode());
+//        Assert.assertNull(rspBody.getData());
+        Assert.assertTrue(rspBody.getCode() < 500);
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Get top sensor data by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if getTopSensorDataByDeviceId will return correct message.")
+    @Story("Get top sensor data by device id")
+    public void getTopSensorDataByDeviceId() {
+
+        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 6);
+
+        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+        Reporter.log("Send request to getTopSensorDataByDeviceId api");
+
+        String q = "{\n" +
+                "  \"deviceId\": %s,\n" +
+                "  \"limit\": 5\n" +
+                "}";
+
+        Response response2 = ApiServiceEndpoint.getTopSensorDataByDeviceId(String.format(q, h.get("id")));
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
+        int total = data2.stream().mapToInt(x -> ((HashMap) x.get("SensorData")).size()).sum();
+        Assert.assertEquals(5, total);
+
+    }
 
 }
