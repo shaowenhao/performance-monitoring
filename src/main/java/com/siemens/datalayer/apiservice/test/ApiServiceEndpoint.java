@@ -134,6 +134,20 @@ public class ApiServiceEndpoint {
 		return response;
 	}
 
+    public static Response getTopSensorDataByDeviceId(String body) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/datalayer/api/v1/data/getTopSensorDataByDeviceId");
+
+        return response;
+    }
+
 	public static Response subscriptionsByDeviceId(String body) {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
@@ -161,5 +175,19 @@ public class ApiServiceEndpoint {
 
 		return response;
 	}
+
+    public static Response subscriptionsWithKPIByDeviceId(String body) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/datalayer/api/v1/data/subscriptionsWithKPIByDeviceId");
+
+        return response;
+    }
 
 }

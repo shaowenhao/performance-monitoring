@@ -568,4 +568,94 @@ public class ApiServiceInterfaceTests {
         Assert.assertTrue(data.size() > 0);
 
     }
+
+
+    @Test(priority = 0, description = "Test api service interface: Get device info by invalid id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if invalid id will return correct message.")
+    @Story("Get devices info by invalid id")
+    public void getDeviceInfoWithInvalidId() {
+        Reporter.log("Send request to getDeviceInfo api with invalid id");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("id", "99999");
+
+        Response response = ApiServiceEndpoint.getDeviceInfo(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Device not exist", rspBody.getMessage());
+        Assert.assertEquals(102101, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Get device info with valid id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if valid id will return correct message.")
+    @Story("Get devices info by invalid id")
+    public void getDeviceInfo() {
+        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 6);
+
+        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+
+        Reporter.log("Send request to getDeviceInfo api with device id");
+
+        HashMap<String, String> queryParameters2 = new HashMap<>();
+        queryParameters2.put("id", (String) h.get("id"));
+
+        Response response2 = ApiServiceEndpoint.getDeviceInfo(queryParameters2);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+        Assert.assertNotNull(rspBody2.getData());
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        HashMap data2 = jsonPathEvaluator2.get("data");
+//        Assert.assertEquals(data.size(), 3720);
+        Assert.assertEquals(h.get("id"), String.valueOf(data2.get("id")));
+        Assert.assertEquals("1#制冷机", String.valueOf(data2.get("label")));
+        HashMap p = jsonPathEvaluator2.get("data.properties");
+        Assert.assertEquals(147, p.size());
+    }
+
+
 }
