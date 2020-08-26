@@ -18,9 +18,12 @@ import org.testng.annotations.Test;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Link;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
+import io.qameta.allure.TmsLink;
 
 //@Listeners({TestngListener.class})
 @Listeners({CustomizedTestListener.class})
@@ -57,6 +60,9 @@ public class SampleTest extends WebDriverBaseClass {
 	@Feature("Feature2: Login")
 	@Step("Check the Login function with incorrect password")
 	@Severity(SeverityLevel.CRITICAL)
+	@Link(name = "JIRA task", url = "https://agile.siemens.net/browse/SDL-2209", type = "tms")
+	@TmsLink("test-case-123")
+	@Issue("2209")
 	public void loginTest()
 	{
 		driver.findElement(By.linkText("Log in")).click();

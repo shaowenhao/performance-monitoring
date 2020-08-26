@@ -203,4 +203,13 @@
     </plugins>
   </build>
   
+  <profiles>
+  	<profile>
+		<id>notest</id>
+		<properties>
+			<maven.test.skip>true</maven.test.skip>
+		</properties>
+	</profile>
+  </profiles>
+    
 </project>
