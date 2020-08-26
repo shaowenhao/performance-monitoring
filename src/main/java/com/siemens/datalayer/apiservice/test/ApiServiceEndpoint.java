@@ -148,42 +148,42 @@ public class ApiServiceEndpoint {
         return response;
     }
 
-	public static Response subscriptionsByDeviceId(String body) {
+	public static Response subscriptionsByDeviceId(HashMap<String, String> parameters) {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-		Response response = httpRequest.body(body)
+		Response response = httpRequest.queryParams(parameters)
 				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/subscriptionsByDeviceId");
 
 		return response;
 	}
 
-	public static Response subscriptionsBySensorId(String body) {
+	public static Response subscriptionsBySensorId(HashMap<String, String> parameters) {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
 
 		RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-		Response response = httpRequest.body(body)
+		Response response = httpRequest.queryParams(parameters)
 				.filter(new AllureRestAssured())
 				.post("/datalayer/api/v1/data/subscriptionsBySensorId");
 
 		return response;
 	}
 
-    public static Response subscriptionsWithKPIByDeviceId(String body) {
+    public static Response subscriptionsWithKPIByDeviceId(HashMap<String, String> parameters) {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.body(body)
+        Response response = httpRequest.queryParams(parameters)
                 .filter(new AllureRestAssured())
                 .post("/datalayer/api/v1/data/subscriptionsWithKPIByDeviceId");
 

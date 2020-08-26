@@ -672,10 +672,10 @@ public class ApiServiceInterfaceTests {
 
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
-//        Assert.assertEquals("Device not exist", rspBody.getMessage());
-//        Assert.assertEquals(102101, rspBody.getCode());
-//        Assert.assertNull(rspBody.getData());
-        Assert.assertTrue(rspBody.getCode() < 500);
+        Assert.assertEquals("Subscriptions not exist", rspBody.getMessage());
+        Assert.assertEquals(102105, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+//        Assert.assertTrue(rspBody.getCode() < 500);
 
     }
 
@@ -740,5 +740,31 @@ public class ApiServiceInterfaceTests {
         Assert.assertEquals(5, total);
 
     }
+
+
+    @Test(priority = 0, description = "Test api service interface: subscriptionsByDeviceId by invalid id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if subscriptionsByDeviceId by invalid id will return correct message.")
+    @Story("SubscriptionsByDeviceId by invalid id")
+    public void subscriptionsByDeviceIdWithInvalidId() {
+        Reporter.log("Send request to subscriptionsByDeviceId api with invalid id");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("deviceId", "99999");
+        Response response = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Sensor not exist", rspBody.getMessage());
+        Assert.assertEquals(102102, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+//        Assert.assertTrue(rspBody.getCode() < 500);
+
+    }
+
 
 }
