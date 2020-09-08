@@ -269,10 +269,10 @@ public class ApiServiceInterfaceTests {
 
         Reporter.log("Response Body is =>  " + response2.getBody().asString());
 
-        BadRequestResponse rspBody2 = response2.getBody().as(BadRequestResponse.class);
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
 
-        Assert.assertEquals("Bad Request", rspBody2.getError());
-        Assert.assertEquals(400, rspBody2.getStatus());
+        Assert.assertEquals("Parameter type is not correct!", rspBody2.getMessage());
+        Assert.assertEquals(1001, rspBody2.getCode());
 
 
     }
@@ -736,7 +736,7 @@ public class ApiServiceInterfaceTests {
         Assert.assertNotNull(jsonPathEvaluator2.get("data"));
 
         ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
-        int total = data2.stream().mapToInt(x -> ((HashMap) x.get("SensorData")).size()).sum();
+        int total = data2.stream().mapToInt(x -> ((ArrayList) x.get("SensorData")).size()).sum();
         Assert.assertEquals(5, total);
 
     }
