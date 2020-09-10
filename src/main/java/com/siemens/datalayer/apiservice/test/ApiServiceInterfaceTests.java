@@ -739,23 +739,87 @@ public class ApiServiceInterfaceTests {
         int total = data2.stream().mapToInt(x -> ((ArrayList) x.get("SensorData")).size()).sum();
         Assert.assertEquals(5, total);
         Assert.assertTrue(this.isSortedByDateKey(data2, "updateTime"));
+    }
 
-        q = "{\n" +
-                "  \"deviceId\": %s,\n" +
+    @Test(priority = 0, description = "Test api service interface: Get top sensor data by device id without limit.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if getTopSensorDataByDeviceId without limit will return correct message.")
+    @Story("Get top sensor data by device id without limit")
+    public void getTopSensorDataByDeviceIdWithoutLimit() {
+
+        Reporter.log("Send request to getTopSensorDataByDeviceId api without limit");
+
+        String q = "{\n" +
+                "  \"deviceId\": 46690\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[limit:limit is null]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Get top sensor data by invalid device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if getTopSensorDataByDeviceId with invalid device id will return correct message.")
+    @Story("Get top sensor data by invalid device id")
+    public void getTopSensorDataByDeviceIdWithInvalidId() {
+
+        Reporter.log("Send request to getTopSensorDataByDeviceId api with invalid id");
+
+        String q = "{\n" +
+                "  \"deviceId\": 9999999,\n" +
+                "  \"limit\": 100\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Sensor not exist", rspBody.getMessage());
+        Assert.assertEquals(102102, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Get top sensor data by limit large than 999.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a delete request to SUT and verify if getTopSensorDataByDeviceId with limit large than 999 will return correct message.")
+    @Story("Get top sensor data by limitlarge than 999")
+    public void getTopSensorDataByDeviceIdWithLimitOutRange() {
+
+        Reporter.log("Send request to getTopSensorDataByDeviceId api with limit 1000");
+
+        String q = "{\n" +
+                "  \"deviceId\": 44690,\n" +
                 "  \"limit\": 1000\n" +
                 "}";
 
-        Response response3 = ApiServiceEndpoint.getTopSensorDataByDeviceId(String.format(q, h.get("id")));
+        Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(q);
 
-        Reporter.log("Response status is " + response3.getStatusCode());
+        Reporter.log("Response status is " + response.getStatusCode());
 
-        Reporter.log("Response Body is =>  " + response3.getBody().asString());
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
 
-        ApiResponse rspBody3 = response3.getBody().as(ApiResponse.class);
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
-        Assert.assertEquals("[limit:limit not correct, should be number < 1000]", rspBody3.getMessage());
-        Assert.assertEquals(1001, rspBody3.getCode());
-        Assert.assertNull(rspBody3.getData());
+        Assert.assertEquals("[limit:limit not correct, should be number < 1000]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
 
     }
 
