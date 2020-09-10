@@ -968,20 +968,21 @@ public class ApiServiceInterfaceTests {
 
     }
 
-    public boolean isSortedByDateKey(ArrayList<HashMap> list, String key){
+    public boolean isSortedByDateKey(ArrayList<HashMap> list, String key) {
         boolean sorted = true;
         for (int i = 1; i < list.size(); i++) {
-            if ((long)list.get(i-1).get(key) - (long)list.get(i).get(key) < 0) {
+            if ((long) list.get(i - 1).get(key) - (long) list.get(i).get(key) < 0) {
                 sorted = false;
             }
         }
 
         return sorted;
     }
-    public boolean isSortedByDateStringKey(ArrayList<HashMap> list, String key){
+
+    public boolean isSortedByDateStringKey(ArrayList<HashMap> list, String key) {
         boolean sorted = true;
         for (int i = 1; i < list.size(); i++) {
-            LocalDateTime dt1 = LocalDateTime.parse(list.get(i-1).get(key).toString());
+            LocalDateTime dt1 = LocalDateTime.parse(list.get(i - 1).get(key).toString());
             LocalDateTime dt2 = LocalDateTime.parse(list.get(i).get(key).toString());
             if (dt1.isBefore(dt2)) {
                 sorted = false;
@@ -1016,4 +1017,202 @@ public class ApiServiceInterfaceTests {
     }
 
 
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id with wrong endtime format.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data by device id with wrong endtime format return correct.")
+    @Story("Get kpi data by device id with wrong endtime format")
+    public void getKpiDataByDeviceIdWithWrongEndTimeFormat() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api with wrong endtime format");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000L,\n" +
+                "  \"deviceId\": 34133,\n" +
+                "  \"startTime\": 1594366100000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+//        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(1001, rspBody.getCode());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id with wrong startTime format.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data by device id with wrong startTime format return correct.")
+    @Story("Get kpi data by device id with wrong startTime format")
+    public void getKpiDataByDeviceIdWithWrongStartTimeFormat() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api with wrong startTime format");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": 34133,\n" +
+                "  \"startTime\": 1594366100000L\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+//        Assert.assertEquals("Bad Request", rspBody.getError());
+        Assert.assertEquals(1001, rspBody.getCode());
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id with invalid device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data by invalid device id return correct.")
+    @Story("Get kpi data by device id with invalid device id")
+    public void getKpiDataByDeviceIdWithInvalidId() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api with invalid device id");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": 3413399,\n" +
+                "\"startTime\": 2594366200000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("Device not exist", rspBody.getMessage());
+        Assert.assertEquals(102101, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id without endTime.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data without endTime return correct.")
+    @Story("Get kpi data by device id without endTime")
+    public void getKpiDataByDeviceIdWithoutEndTime() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api without endTime");
+
+        String q = "{\n" +
+                "  \"deviceId\": 3413399,\n" +
+                "\"startTime\": 2594366200000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[endTime:endTime is null]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+
+    }
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id without startTime.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data without endTime return correct.")
+    @Story("Get kpi data by device id without endTime")
+    public void getKpiDataByDeviceIdWithoutStartTime() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api without startTime");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"deviceId\": 3413399\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[startTime:startTime is null]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id without startTime endTime.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data without startTime endTime return correct.")
+    @Story("Get kpi data by device id without endTime")
+    public void getKpiDataByDeviceIdWithoutStartTimeEndTime() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api without startTime endTime");
+
+        String q = "{\n" +
+                "  \"deviceId\": 3413399\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[endTime:endTime is null][startTime:startTime is null]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: get kpi data by device id without deviceId.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if get kpi data without deviceId return correct.")
+    @Story("Get kpi data by device id without deviceId")
+    public void getKpiDataByDeviceIdWithoutDeviceId() {
+
+        Reporter.log("Send request to getKpiDataByDeviceId api without deviceId");
+
+        String q = "{\n" +
+                "  \"endTime\": 2594366300000,\n" +
+                "  \"startTime\": 2594366200000\n" +
+                "}";
+
+        Response response = ApiServiceEndpoint.getKpiDataByDeviceId(q);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[deviceId:deviceId is null]", rspBody.getMessage());
+        Assert.assertEquals(1001, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+
+
+    }
 }

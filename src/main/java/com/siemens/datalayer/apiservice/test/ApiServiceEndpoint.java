@@ -120,7 +120,22 @@ public class ApiServiceEndpoint {
 	}
 
 
-	public static Response getSensorDataBySensorId(String body) {
+    public static Response getKpiDataByDeviceId(String body) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/datalayer/api/v1/data/getKpiDataByDeviceId");
+
+        return response;
+    }
+
+
+    public static Response getSensorDataBySensorId(String body) {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
 
