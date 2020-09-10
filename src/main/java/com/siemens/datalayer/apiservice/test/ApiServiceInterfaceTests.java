@@ -463,7 +463,7 @@ public class ApiServiceInterfaceTests {
 
         JsonPath jsonPathEvaluator = response.jsonPath();
 
-        Assert.assertTrue(Utils.isNullOrEmpty((Collection)jsonPathEvaluator.get("data")));
+        Assert.assertTrue(Utils.isNullOrEmpty((Collection) jsonPathEvaluator.get("data")));
 
     }
 
@@ -738,7 +738,36 @@ public class ApiServiceInterfaceTests {
         ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
         int total = data2.stream().mapToInt(x -> ((ArrayList) x.get("SensorData")).size()).sum();
         Assert.assertEquals(5, total);
+        Assert.assertTrue(this.isSortedByDateKey(data2, "updateTime"));
 
+        q = "{\n" +
+                "  \"deviceId\": %s,\n" +
+                "  \"limit\": 1000\n" +
+                "}";
+
+        Response response3 = ApiServiceEndpoint.getTopSensorDataByDeviceId(String.format(q, h.get("id")));
+
+        Reporter.log("Response status is " + response3.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response3.getBody().asString());
+
+        ApiResponse rspBody3 = response3.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("[limit:limit not correct, should be number < 1000]", rspBody3.getMessage());
+        Assert.assertEquals(1001, rspBody3.getCode());
+        Assert.assertNull(rspBody3.getData());
+
+    }
+
+    public boolean isSortedByDateKey(ArrayList<HashMap> list, String key){
+        boolean sorted = true;
+        for (int i = 1; i < list.size(); i++) {
+            if ((long)list.get(i-1).get(key) - (long)list.get(i).get(key) < 0) {
+                sorted = false;
+            }
+        }
+
+        return sorted;
     }
 
 

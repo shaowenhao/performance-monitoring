@@ -148,6 +148,20 @@ public class ApiServiceEndpoint {
         return response;
     }
 
+    public static Response getTopKPIDataByDeviceId(String body) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/datalayer/api/v1/data/getTopKPIDataByDeviceId");
+
+        return response;
+    }
+
 	public static Response subscriptionsByDeviceId(HashMap<String, String> parameters) {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
