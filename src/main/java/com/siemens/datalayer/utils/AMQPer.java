@@ -11,10 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 public class AMQPer {
     private static Logger logger = Logger.getLogger(AMQPer.class);
@@ -44,6 +41,8 @@ public class AMQPer {
     private boolean autoAck;
     private String messageTTL;
     private String messageExpires;
+    private String message;
+    private String messageRoutingKey;
 
 
     public AMQPer() {
@@ -56,6 +55,23 @@ public class AMQPer {
         queueRedeclare = false;
         this.factory = new ConnectionFactory();
         this.factory.setRequestedHeartbeat(1);
+    }
+
+    public String getMessageRoutingKey() {
+        return messageRoutingKey;
+    }
+
+    public void setMessageRoutingKey(String messageRoutingKey) {
+        this.messageRoutingKey = messageRoutingKey;
+    }
+
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean getQueueDurable() {
@@ -388,7 +404,8 @@ public class AMQPer {
     }
 
 
-    public void consume(){
+    public String consume(int timeout){
+        long startTime = System.currentTimeMillis();
         final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
         try {
             initChannel();
@@ -397,7 +414,7 @@ public class AMQPer {
                 consumer = new DefaultConsumer(channel){
                     @Override
                     public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                        logger.info("get message+++++++++++");
+//                        logger.info("get message+++++++++++");
                         response.offer(new String(body, "UTF-8"));
                     }
                 };
@@ -410,12 +427,65 @@ public class AMQPer {
             logger.error("Failed to initialize channel", ex);
         }
         try {
-            for (int i = 0; i < 1000; i++) {
+            while ((System.currentTimeMillis() - startTime) < timeout * 1000) {
                 String result = response.poll(5000, TimeUnit.MILLISECONDS);
-                logger.info("get message:" + result);
+                if(StringUtils.isEmpty(result)){
+                    Thread.sleep(1000);
+                    continue;
+                } else {
+                    logger.info(String.format("get message: %s \n return result", result));
+                    return result;
+                }
             }
+            throw new TimeoutException(String.format("Consume timeout (%d s) has been exceeded", timeout));
         } catch (Exception ex) {
             logger.error("Failed to initialize channel", ex);
+        }
+        return null;
+    }
+
+    public Boolean getPersistent() {
+        return false;
+    }
+
+    protected AMQP.BasicProperties getProperties() {
+        final AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
+
+        final int deliveryMode = getPersistent() ? 2 : 1;
+        final String contentType = "text/plain";
+
+        builder.contentType(contentType)
+                .deliveryMode(deliveryMode)
+                .priority(0)
+                .build();
+//        if (getMessageId() != null && !getMessageId().isEmpty()) {
+//            builder.messageId(getMessageId());
+//        }
+        return builder.build();
+    }
+
+    private byte[] getMessageBytes() {
+        return getMessage().getBytes();
+    }
+
+    public void produce(int count){
+        try {
+            initChannel();
+        } catch (Exception ex) {
+            logger.error("Failed to initialize channel : ", ex);
+        }
+
+        try {
+            AMQP.BasicProperties messageProperties = getProperties();
+            byte[] messageBytes = getMessageBytes();
+            for (int i = 0; i < count; i++) {
+                channel.basicPublish(getExchange(), getMessageRoutingKey(), messageProperties, messageBytes);
+            }
+        } catch (Exception ex) {
+            logger.debug(ex.getMessage(), ex);
+        }
+        finally {
+            logger.info("finish publish");
         }
     }
 
@@ -433,6 +503,22 @@ public class AMQPer {
         mr.setQueueDurable(true);
         mr.setRoutingKey("c03462b4b4d9aaa56cdb978520d00f26");
         mr.setAutoAck(true);
-        mr.consume();
+
+        mr.setMessageRoutingKey("c03462b4b4d9aaa56cdb978520d00f26");
+        mr.setMessage("hello from test");
+
+        ExecutorService cachedPool = Executors.newCachedThreadPool();
+        cachedPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                mr.consume(20);
+            }
+        });
+        cachedPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                mr.produce(2);
+            }
+        });
     }
 }
