@@ -1,9 +1,13 @@
 package com.siemens.datalayer.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -404,14 +408,14 @@ public class AMQPer {
     }
 
 
-    public String consume(int timeout){
+    public String consume(int timeout) {
         long startTime = System.currentTimeMillis();
         final BlockingQueue<String> response = new ArrayBlockingQueue<String>(1);
         try {
             initChannel();
             if (consumer == null) {
                 logger.info("Creating consumer");
-                consumer = new DefaultConsumer(channel){
+                consumer = new DefaultConsumer(channel) {
                     @Override
                     public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
 //                        logger.info("get message+++++++++++");
@@ -429,7 +433,7 @@ public class AMQPer {
         try {
             while ((System.currentTimeMillis() - startTime) < timeout * 1000) {
                 String result = response.poll(5000, TimeUnit.MILLISECONDS);
-                if(StringUtils.isEmpty(result)){
+                if (StringUtils.isEmpty(result)) {
                     Thread.sleep(1000);
                     continue;
                 } else {
@@ -468,7 +472,7 @@ public class AMQPer {
         return getMessage().getBytes();
     }
 
-    public void produce(int count){
+    public void produce(int count) {
         try {
             initChannel();
         } catch (Exception ex) {
@@ -483,8 +487,7 @@ public class AMQPer {
             }
         } catch (Exception ex) {
             logger.debug(ex.getMessage(), ex);
-        }
-        finally {
+        } finally {
             logger.info("finish publish");
         }
     }
@@ -501,24 +504,38 @@ public class AMQPer {
         mr.setExchangeDurable(true);
         mr.setQueue("iEMS555");
         mr.setQueueDurable(true);
-        mr.setRoutingKey("c03462b4b4d9aaa56cdb978520d00f26");
+        mr.setRoutingKey("721b417b7731b5476c05202de8a9b346");
         mr.setAutoAck(true);
 
-        mr.setMessageRoutingKey("c03462b4b4d9aaa56cdb978520d00f26");
-        mr.setMessage("hello from test");
+        mr.setMessageRoutingKey("721b417b7731b5476c05202de8a9b346");
 
+
+        ObjectMapper objMapper = new ObjectMapper();
         ExecutorService cachedPool = Executors.newCachedThreadPool();
+        try {
+            String jsonFile = "HeapPump.json";
+            JsonNode rootNode = objMapper.readTree(new File(AMQPer.class.getClassLoader().getResource(jsonFile).getPath()));
+            System.out.println("hello");
+            cachedPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    mr.setMessage(rootNode.toPrettyString());
+                    mr.produce(2);
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
         cachedPool.execute(new Runnable() {
             @Override
             public void run() {
                 mr.consume(20);
             }
         });
-        cachedPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                mr.produce(2);
-            }
-        });
+
     }
 }

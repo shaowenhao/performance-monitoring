@@ -1,12 +1,14 @@
 package com.siemens.datalayer.apiservice.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.apiservice.model.ApiResponse;
-import com.siemens.datalayer.apiservice.model.BadRequestResponse;
+import com.siemens.datalayer.utils.AMQPer;
 import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.apache.commons.lang3.ObjectUtils;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
@@ -14,8 +16,12 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Epic("Api Service Interface")
 @Feature("Rest API")
@@ -1076,7 +1082,7 @@ public class ApiServiceInterfaceTests {
 
         ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
 //        Assert.assertEquals(data2.size(), 3712);
-        Assert.assertTrue(data.size() > 0);
+        Assert.assertTrue(data2.size() > 0);
 
 
     }
@@ -1279,5 +1285,240 @@ public class ApiServiceInterfaceTests {
         Assert.assertNull(rspBody.getData());
 
 
+    }
+
+    @Test(priority = 0, description = "Test api service interface: Subscription by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if user can subscribe by device id.")
+    @Story("Subscribe by device id")
+    public void subscriptionsByDeviceId() {
+        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 6);
+
+        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+        Reporter.log("Send request to subscriptionsByDeviceId api with id");
+
+        HashMap<String, String> queryParameters2 = new HashMap<>();
+        queryParameters2.put("deviceId", h.get("id").toString());
+        Response response2 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        HashMap data2 = jsonPathEvaluator2.get("data");
+        String replyTo = data2.get("replyTo").toString();
+
+        this.simulateSp5Produce();
+        String result =this.simulateSp5Consume(replyTo);
+
+
+        Response response3 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
+
+        Reporter.log("Response status is " + response3.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response3.getBody().asString());
+
+        ApiResponse rspBody3 = response3.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody3.getMessage());
+        Assert.assertEquals(200, rspBody3.getCode());
+
+
+        JsonPath jsonPathEvaluator3 = response3.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator3.get("data"));
+
+        HashMap data3 = jsonPathEvaluator3.get("data");
+        String replyTo2 = data2.get("replyTo").toString();
+        Assert.assertEquals(replyTo, replyTo2);
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Subscription kpi data by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
+    @Story("Subscribe kpi data by device id")
+    public void subscriptionsWithKPIByDeviceId() {
+        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody.getMessage());
+        Assert.assertEquals(200, rspBody.getCode());
+
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        Assert.assertEquals(data.size(), 6);
+
+        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+        Reporter.log("Send request to subscriptionsByDeviceId api with id");
+
+        HashMap<String, String> queryParameters2 = new HashMap<>();
+        queryParameters2.put("request", h.get("id").toString());
+        Response response2 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters2);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        HashMap data2 = jsonPathEvaluator2.get("data");
+        String replyTo = data2.get("replyTo").toString();
+
+        this.simulateKPIProduce();
+        String result =this.simulateKPIConsume(replyTo);
+
+
+        Response response3 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters2);
+
+        Reporter.log("Response status is " + response3.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response3.getBody().asString());
+
+        ApiResponse rspBody3 = response3.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody3.getMessage());
+        Assert.assertEquals(200, rspBody3.getCode());
+
+
+        JsonPath jsonPathEvaluator3 = response3.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator3.get("data"));
+
+        HashMap data3 = jsonPathEvaluator3.get("data");
+        String replyTo2 = data2.get("replyTo").toString();
+        Assert.assertEquals(replyTo, replyTo2);
+    }
+
+    public AMQPer initAMQPer(){
+        AMQPer mr = new AMQPer();
+        mr.setHost("140.231.89.94");
+        mr.setVirtualHost("/");
+        mr.setPort("5672");
+        mr.setUsername("guest");
+        mr.setPassword("guest");
+        mr.setExchangeType("topic");
+        mr.setExchangeDurable(true);
+        mr.setQueueDurable(true);
+        mr.setAutoAck(true);
+        return mr;
+    }
+
+
+    public AMQPer initSp5AMQPer(){
+        AMQPer mr = initAMQPer();
+        mr.setHost("140.231.89.85");
+        mr.setPort("30073");
+        return mr;
+    }
+
+    public void simulateKPIProduce(){
+        AMQPer mr = initAMQPer();
+        this.simulateProduce(mr, "simulation_result", "simulation_result", "HeapPump.json");
+    }
+
+    public void simulateSp5Produce(){
+        AMQPer mr = initSp5AMQPer();
+        this.simulateProduce(mr, "sp5_RT", "sp5_RT", "sp5.json");
+    }
+
+    public void simulateProduce(AMQPer mr, String exchange, String routingKey, String jsonFile){
+        mr.setExchange(exchange);
+        mr.setMessageRoutingKey(routingKey);
+
+        ObjectMapper objMapper = new ObjectMapper();
+        ExecutorService cachedPool = Executors.newCachedThreadPool();
+        try {
+            JsonNode rootNode = objMapper.readTree(new File(AMQPer.class.getClassLoader().getResource(jsonFile).getPath()));
+            cachedPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    mr.setMessage(rootNode.toPrettyString());
+                    mr.produce(2);
+                }
+            });
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    public String simulateKPIConsume(String routingKey){
+        return this.simulateConsume("datalayer.exchange.out", "iEMSofKPIAutomation", routingKey);
+    }
+
+    public String simulateSp5Consume(String routingKey){
+        return this.simulateConsume("datalayer.exchange.out", "iEMSofSp5Automation", routingKey);
+    }
+
+    public String simulateConsume(String exchange, String queue, String routingKey){
+        AMQPer mr = initAMQPer();
+        mr.setExchange(exchange);
+        mr.setQueue(queue);
+        mr.setQueueAutoDelete(true);
+        mr.setRoutingKey(routingKey);
+
+        String result = mr.consume(60);
+        return result;
     }
 }
