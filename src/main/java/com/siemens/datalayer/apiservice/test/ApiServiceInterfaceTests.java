@@ -1448,7 +1448,19 @@ public class ApiServiceInterfaceTests {
         Assert.assertEquals(replyTo, replyTo2);
     }
 
-    public AMQPer initAMQPer(){
+
+    @Test(priority = 0, description = "Test api service interface: Subscription kpi data by device id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
+    @Story("Subscribe kpi data by device id")
+    public void subscriptionsTest() {
+
+        this.simulateKPIProduce();
+        String result =this.simulateKPIConsume("2e1660898615bd6666b32e8dd6dda060");
+        System.out.println("finish");
+    }
+
+        public AMQPer initAMQPer(){
         AMQPer mr = new AMQPer();
         mr.setHost("140.231.89.94");
         mr.setVirtualHost("/");
@@ -1456,7 +1468,7 @@ public class ApiServiceInterfaceTests {
         mr.setUsername("guest");
         mr.setPassword("guest");
         mr.setExchangeType("topic");
-        mr.setExchangeDurable(true);
+        mr.setExchangeDurable(false);
         mr.setQueueDurable(true);
         mr.setAutoAck(true);
         return mr;
@@ -1492,7 +1504,7 @@ public class ApiServiceInterfaceTests {
                 @Override
                 public void run() {
                     mr.setMessage(rootNode.toPrettyString());
-                    mr.produce(2);
+                    mr.produce(100);
                 }
             });
         } catch (JsonProcessingException e) {
@@ -1514,6 +1526,7 @@ public class ApiServiceInterfaceTests {
     public String simulateConsume(String exchange, String queue, String routingKey){
         AMQPer mr = initAMQPer();
         mr.setExchange(exchange);
+        mr.setExchangeDurable(true);
         mr.setQueue(queue);
         mr.setQueueAutoDelete(true);
         mr.setRoutingKey(routingKey);
