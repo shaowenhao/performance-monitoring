@@ -480,32 +480,10 @@ public class ApiServiceInterfaceTests {
     @Description("Send a request to SUT and verify if all sensor data belong given device id returned.")
     @Story("Get sensor data by device id")
     public void getSensorDataByDeviceId() {
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
 
         Reporter.log("Send request to getSensorDataByDeviceId api with device id");
@@ -514,7 +492,7 @@ public class ApiServiceInterfaceTests {
                 "  \"endTime\": 2594366300000,\n" +
                 "  \"deviceId\": %s,\n" +
                 "\"startTime\": 1594366100000\n" +
-                "}", h.get("id"));
+                "}", deviceMap.get("1#制冷机"));
 
         Response response2 = ApiServiceEndpoint.getSensorDataByDeviceId(q);
 
@@ -533,7 +511,7 @@ public class ApiServiceInterfaceTests {
 
         ArrayList<HashMap> data2 = jsonPathEvaluator2.get("data");
 //        Assert.assertEquals(data2.size(), 3712);
-        Assert.assertTrue(data.size() > 0);
+        Assert.assertTrue(data2.size() > 0);
 
     }
 
@@ -607,38 +585,16 @@ public class ApiServiceInterfaceTests {
     @Description("Send a request to SUT and verify if valid id will return correct message.")
     @Story("Get devices info by invalid id")
     public void getDeviceInfo() {
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
 
         Reporter.log("Send request to getDeviceInfo api with device id");
 
         HashMap<String, String> queryParameters2 = new HashMap<>();
-        queryParameters2.put("id", (String) h.get("id"));
+        queryParameters2.put("id", deviceMap.get("1#制冷机"));
 
         Response response2 = ApiServiceEndpoint.getDeviceInfo(queryParameters2);
 
@@ -658,7 +614,7 @@ public class ApiServiceInterfaceTests {
 
         HashMap data2 = jsonPathEvaluator2.get("data");
 //        Assert.assertEquals(data.size(), 3720);
-        Assert.assertEquals(h.get("id"), String.valueOf(data2.get("id")));
+        Assert.assertEquals(deviceMap.get("1#制冷机"), String.valueOf(data2.get("id")));
         Assert.assertEquals("1#制冷机", String.valueOf(data2.get("label")));
         HashMap p = jsonPathEvaluator2.get("data.properties");
         Assert.assertEquals(147, p.size());
@@ -693,32 +649,10 @@ public class ApiServiceInterfaceTests {
     @Story("Get top sensor data by device id")
     public void getTopSensorDataByDeviceId() {
 
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
         Reporter.log("Send request to getTopSensorDataByDeviceId api");
 
@@ -727,7 +661,7 @@ public class ApiServiceInterfaceTests {
                 "  \"limit\": 5\n" +
                 "}";
 
-        Response response2 = ApiServiceEndpoint.getTopSensorDataByDeviceId(String.format(q, h.get("id")));
+        Response response2 = ApiServiceEndpoint.getTopSensorDataByDeviceId(String.format(q, deviceMap.get("1#制冷机")));
 
         Reporter.log("Response status is " + response2.getStatusCode());
 
@@ -837,32 +771,10 @@ public class ApiServiceInterfaceTests {
     @Story("Get top kpi data by device id")
     public void getTopKPIDataByDeviceId() {
 
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
         Reporter.log("Send request to getTopKPIDataByDeviceId api");
 
@@ -871,7 +783,7 @@ public class ApiServiceInterfaceTests {
                 "  \"limit\": 100\n" +
                 "}";
 
-        Response response2 = ApiServiceEndpoint.getTopKPIDataByDeviceId(String.format(q, h.get("id")));
+        Response response2 = ApiServiceEndpoint.getTopKPIDataByDeviceId(String.format(q, deviceMap.get("1#制冷机")));
 
         Reporter.log("Response status is " + response2.getStatusCode());
 
@@ -1029,32 +941,10 @@ public class ApiServiceInterfaceTests {
     @Story("Get kpi data by device id")
     public void getKpiDataByDeviceId() {
 
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
 
         Reporter.log("Send request to getKpiDataByDeviceId api with device id");
@@ -1063,7 +953,7 @@ public class ApiServiceInterfaceTests {
                 "  \"endTime\": 2594366300000,\n" +
                 "  \"deviceId\": %s,\n" +
                 "\"startTime\": 1594366100000\n" +
-                "}", h.get("id"));
+                "}", deviceMap.get("1#制冷机"));
 
         Response response2 = ApiServiceEndpoint.getKpiDataByDeviceId(q);
 
@@ -1292,37 +1182,15 @@ public class ApiServiceInterfaceTests {
     @Description("Send a request to SUT and verify if user can subscribe by device id.")
     @Story("Subscribe by device id")
     public void subscriptionsByDeviceId() {
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
         Reporter.log("Send request to subscriptionsByDeviceId api with id");
 
         HashMap<String, String> queryParameters2 = new HashMap<>();
-        queryParameters2.put("deviceId", h.get("id").toString());
+        queryParameters2.put("deviceId", deviceMap.get("1#制冷机"));
         Response response2 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
 
         Reporter.log("Response status is " + response2.getStatusCode());
@@ -1373,37 +1241,15 @@ public class ApiServiceInterfaceTests {
     @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
     @Story("Subscribe kpi data by device id")
     public void subscriptionsWithKPIByDeviceId() {
-        Reporter.log("Send request to getDeviceByType api with heatPumpDetail type");
-
-        HashMap<String, String> queryParameters = new HashMap<>();
-        queryParameters.put("device_type", "heatPumpDetail");
-
-        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-
-        Reporter.log("Response status is " + response.getStatusCode());
-
-        Reporter.log("Response Body is =>  " + response.getBody().asString());
-
-        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
-
-        Assert.assertEquals("OK", rspBody.getMessage());
-        Assert.assertEquals(200, rspBody.getCode());
-
-
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-
-        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
-        Assert.assertEquals(data.size(), 6);
-
-        HashMap h = data.stream().filter(d -> "1#制冷机".equals(d.get("deviceName"))).findAny().orElse(null);
-        Assert.assertFalse(Utils.isNullOrEmpty(h));
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 
         Reporter.log("Send request to subscriptionsByDeviceId api with id");
 
         HashMap<String, String> queryParameters2 = new HashMap<>();
-        queryParameters2.put("request", h.get("id").toString());
+        queryParameters2.put("request", deviceMap.get("1#制冷机"));
         Response response2 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters2);
 
         Reporter.log("Response status is " + response2.getStatusCode());
@@ -1446,6 +1292,33 @@ public class ApiServiceInterfaceTests {
         HashMap data3 = jsonPathEvaluator3.get("data");
         String replyTo2 = data2.get("replyTo").toString();
         Assert.assertEquals(replyTo, replyTo2);
+
+
+        Reporter.log("Send request to subscriptionsByDeviceId api with multiple device id");
+
+        HashMap<String, String> queryParameters4 = new HashMap<>();
+        queryParameters4.put("request", deviceMap.get("1#制冷机")+","+deviceMap.get("3#制冷机"));
+        Response response4 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters4);
+
+        Reporter.log("Response status is " + response4.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response4.getBody().asString());
+
+        ApiResponse rspBody4 = response4.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody4.getMessage());
+        Assert.assertEquals(200, rspBody4.getCode());
+
+
+        JsonPath jsonPathEvaluator4 = response4.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator4.get("data"));
+
+        HashMap data4 = jsonPathEvaluator4.get("data");
+        String replyTo4 = data4.get("replyTo").toString();
+
+        this.simulateKPIProduce();
+        String result4 =this.simulateKPIConsume(replyTo4);
     }
 
 
