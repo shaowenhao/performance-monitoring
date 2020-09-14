@@ -1,0 +1,12 @@
+rabbitmq:
+  host: 140.231.89.97
+  port: 5672
+  virturalHost: /
+  username: guest
+  password: guest
+  exchange: datalayer.exchange.out
+  exchangeType: topic
+  exchangeDurable: true
+  queue: automation
+  queueDurable: true
+  autoAck: true

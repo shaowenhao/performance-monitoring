@@ -1,5 +1,11 @@
 package com.siemens.datalayer.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class Utils {
@@ -31,4 +37,18 @@ public class Utils {
     public static boolean isNullOrEmpty( final Map< ?, ? > m ) {
         return m == null || m.isEmpty();
     }
+
+    public static JsonNode loadTestConfig() throws IOException {
+        String jsonFile = "TestConfig.yml";
+        ObjectMapper objMapper = new ObjectMapper(new YAMLFactory());
+        JsonNode rootNode = objMapper.readTree(new File(Utils.class.getClassLoader().getResource(jsonFile).getPath()));
+        return rootNode;
+    }
+
+    public static RabbitMQ loadRabbitMQConfig() throws IOException {
+        JsonNode rootNode = Utils.loadTestConfig();
+        ObjectMapper objMapper = new ObjectMapper(new YAMLFactory());
+        return objMapper.readValue(rootNode.get("rabbitmq").toString(), RabbitMQ.class);
+    }
+
 }

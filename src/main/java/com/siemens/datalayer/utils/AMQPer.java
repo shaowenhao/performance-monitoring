@@ -61,6 +61,20 @@ public class AMQPer {
         this.factory.setRequestedHeartbeat(1);
     }
 
+    public AMQPer(RabbitMQ mq) {
+        this();
+        host = mq.getHost();
+        virtualHost = mq.getVirturalHost();
+        port = mq.getPort();
+        username = mq.getUsername();
+        password = mq.getPassword();
+        exchange = mq.getExchange();
+        exchangeType = mq.getExchangeType();
+        exchangeDurable = mq.getExchangeDurable();
+        autoAck = mq.getAutoAck();
+        queue = mq.getQueue();
+    }
+
     public String getMessageRoutingKey() {
         return messageRoutingKey;
     }
@@ -75,6 +89,7 @@ public class AMQPer {
     }
 
     public void setMessage(String message) {
+        logger.info(this.message);
         this.message = message;
     }
 

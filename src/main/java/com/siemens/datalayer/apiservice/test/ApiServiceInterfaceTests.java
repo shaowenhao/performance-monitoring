@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.apiservice.model.ApiResponse;
 import com.siemens.datalayer.utils.AMQPer;
+import com.siemens.datalayer.utils.RabbitMQ;
 import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
@@ -29,7 +30,7 @@ public class ApiServiceInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass
-    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("9090") String port) {
+    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("9091") String port) {
         ApiServiceEndpoint.setBaseUrl(baseUrl);
         ApiServiceEndpoint.setPort(port);
     }
@@ -1210,8 +1211,9 @@ public class ApiServiceInterfaceTests {
         HashMap data2 = jsonPathEvaluator2.get("data");
         String replyTo = data2.get("replyTo").toString();
 
-        this.simulateSp5Produce();
-        String result =this.simulateSp5Consume(replyTo);
+        RabbitMQ mq = new RabbitMQ();
+        mq.simulateSp5Produce();
+        String result =mq.simulateSp5Consume(replyTo);
 
 
         Response response3 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
@@ -1269,8 +1271,9 @@ public class ApiServiceInterfaceTests {
         HashMap data2 = jsonPathEvaluator2.get("data");
         String replyTo = data2.get("replyTo").toString();
 
-        this.simulateKPIProduce();
-        String result =this.simulateKPIConsume(replyTo);
+        RabbitMQ mq = new RabbitMQ();
+        mq.simulateKPIProduce();
+        String result =mq.simulateKPIConsume(replyTo);
 
 
         Response response3 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters2);
@@ -1317,8 +1320,8 @@ public class ApiServiceInterfaceTests {
         HashMap data4 = jsonPathEvaluator4.get("data");
         String replyTo4 = data4.get("replyTo").toString();
 
-        this.simulateKPIProduce();
-        String result4 =this.simulateKPIConsume(replyTo4);
+        mq.simulateKPIProduce();
+        String result4 =mq.simulateKPIConsume(replyTo4);
     }
 
 
@@ -1327,84 +1330,12 @@ public class ApiServiceInterfaceTests {
     @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
     @Story("Subscribe kpi data by device id")
     public void subscriptionsTest() {
-
-        this.simulateKPIProduce();
-        String result =this.simulateKPIConsume("2e1660898615bd6666b32e8dd6dda060");
+        RabbitMQ mq = new RabbitMQ();
+        mq.simulateKPIProduce();
+        String result =mq.simulateKPIConsume("2e1660898615bd6666b32e8dd6dda060");
         System.out.println("finish");
     }
 
-        public AMQPer initAMQPer(){
-        AMQPer mr = new AMQPer();
-        mr.setHost("140.231.89.94");
-        mr.setVirtualHost("/");
-        mr.setPort("5672");
-        mr.setUsername("guest");
-        mr.setPassword("guest");
-        mr.setExchangeType("topic");
-        mr.setExchangeDurable(false);
-        mr.setQueueDurable(true);
-        mr.setAutoAck(true);
-        return mr;
-    }
 
 
-    public AMQPer initSp5AMQPer(){
-        AMQPer mr = initAMQPer();
-        mr.setHost("140.231.89.85");
-        mr.setPort("30073");
-        return mr;
-    }
-
-    public void simulateKPIProduce(){
-        AMQPer mr = initAMQPer();
-        this.simulateProduce(mr, "simulation_result", "simulation_result", "HeapPump.json");
-    }
-
-    public void simulateSp5Produce(){
-        AMQPer mr = initSp5AMQPer();
-        this.simulateProduce(mr, "sp5_RT", "sp5_RT", "sp5.json");
-    }
-
-    public void simulateProduce(AMQPer mr, String exchange, String routingKey, String jsonFile){
-        mr.setExchange(exchange);
-        mr.setMessageRoutingKey(routingKey);
-
-        ObjectMapper objMapper = new ObjectMapper();
-        ExecutorService cachedPool = Executors.newCachedThreadPool();
-        try {
-            JsonNode rootNode = objMapper.readTree(new File(AMQPer.class.getClassLoader().getResource(jsonFile).getPath()));
-            cachedPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    mr.setMessage(rootNode.toPrettyString());
-                    mr.produce(100);
-                }
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-
-        }
-    }
-
-    public String simulateKPIConsume(String routingKey){
-        return this.simulateConsume("datalayer.exchange.out", "iEMSofKPIAutomation", routingKey);
-    }
-
-    public String simulateSp5Consume(String routingKey){
-        return this.simulateConsume("datalayer.exchange.out", "iEMSofSp5Automation", routingKey);
-    }
-
-    public String simulateConsume(String exchange, String queue, String routingKey){
-        AMQPer mr = initAMQPer();
-        mr.setExchange(exchange);
-        mr.setExchangeDurable(true);
-        mr.setQueue(queue);
-        mr.setQueueAutoDelete(true);
-        mr.setRoutingKey(routingKey);
-
-        String result = mr.consume(60);
-        return result;
-    }
 }
