@@ -54,7 +54,7 @@ public class AMQPer {
         exchangeAutoDelete = false;
         exchangeRedeclare = false;
         queueAutoDelete = false;
-        queueDurable = false;
+        queueDurable = true;
         queueExclusive = false;
         queueRedeclare = false;
         this.factory = new ConnectionFactory();

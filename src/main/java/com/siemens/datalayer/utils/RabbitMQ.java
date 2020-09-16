@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RabbitMQ {
     private String host;
@@ -148,16 +150,17 @@ public class RabbitMQ {
         mr.setMessageRoutingKey(routingKey);
 
         ObjectMapper objMapper = new ObjectMapper();
-        ExecutorService cachedPool = Executors.newCachedThreadPool();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         try {
             JsonNode rootNode = objMapper.readTree(new File(AMQPer.class.getClassLoader().getResource(jsonFile).getPath()));
-            cachedPool.execute(new Runnable() {
+            executor.schedule(new Runnable() {
                 @Override
                 public void run() {
                     mr.setMessage(rootNode.toPrettyString());
-                    mr.produce(100);
+                    mr.produce(1);
                 }
-            });
+            }, 2, TimeUnit.SECONDS);
+            executor.shutdown();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -169,7 +172,7 @@ public class RabbitMQ {
     public String simulateKPIConsume(String routingKey){
         try {
             AMQPer mr = initKPIAMQPer();
-            return this.simulateConsume(mr, "datalayer.exchange.out", "iEMSofKPIAutomation", routingKey);
+            return this.simulateConsume(mr, "datalayer.exchange.out", "iEMSofKPIAutomation" + System.currentTimeMillis(), routingKey);
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception e) {
@@ -181,7 +184,7 @@ public class RabbitMQ {
     public String simulateSp5Consume(String routingKey){
         try {
             AMQPer mr = initKPIAMQPer();
-            return this.simulateConsume(mr,"datalayer.exchange.out", "iEMSofSp5Automation", routingKey);
+            return this.simulateConsume(mr,"datalayer.exchange.out", "iEMSofSp5Automation"+ System.currentTimeMillis(), routingKey);
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception e) {
@@ -197,7 +200,7 @@ public class RabbitMQ {
         mr.setQueueAutoDelete(true);
         mr.setRoutingKey(routingKey);
 
-        String result = mr.consume(60);
+        String result = mr.consume(300);
         return result;
     }
 }

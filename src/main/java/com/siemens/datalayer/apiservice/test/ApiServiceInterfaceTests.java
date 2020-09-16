@@ -1,15 +1,23 @@
 package com.siemens.datalayer.apiservice.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.siemens.datalayer.apiservice.model.ApiResponse;
+import com.siemens.datalayer.apiservice.model.HeatPumpKpiData;
+import com.siemens.datalayer.apiservice.model.SubscriptionKPIResult;
+import com.siemens.datalayer.apiservice.model.SubscriptionSp5Result;
 import com.siemens.datalayer.utils.AMQPer;
 import com.siemens.datalayer.utils.RabbitMQ;
 import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.codehaus.groovy.ast.tools.BeanUtils;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
@@ -366,7 +374,7 @@ public class ApiServiceInterfaceTests {
 
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
-        Assert.assertEquals("Sensor not exist", rspBody.getMessage());
+        Assert.assertEquals("Device not exist", rspBody.getMessage());
         Assert.assertEquals(102102, rspBody.getCode());
         Assert.assertNull(rspBody.getData());
 
@@ -731,7 +739,7 @@ public class ApiServiceInterfaceTests {
 
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
-        Assert.assertEquals("Sensor not exist", rspBody.getMessage());
+        Assert.assertEquals("Device not exist", rspBody.getMessage());
         Assert.assertEquals(102102, rspBody.getCode());
         Assert.assertNull(rspBody.getData());
 
@@ -1212,8 +1220,20 @@ public class ApiServiceInterfaceTests {
         String replyTo = data2.get("replyTo").toString();
 
         RabbitMQ mq = new RabbitMQ();
+
         mq.simulateSp5Produce();
-        String result =mq.simulateSp5Consume(replyTo);
+        String result = mq.simulateSp5Consume(replyTo);
+        ObjectMapper objMapper = new ObjectMapper();
+        SubscriptionSp5Result subscriptionSp5Result = null;
+        try {
+            subscriptionSp5Result = objMapper.readValue(result, SubscriptionSp5Result.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 60s");
+        Assert.assertEquals("Successfully", subscriptionSp5Result.getMessage());
+        Assert.assertEquals(100000, subscriptionSp5Result.getCode());
+        Assert.assertEquals(20, subscriptionSp5Result.getData().get("SensorData").size());
 
 
         Response response3 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
@@ -1273,8 +1293,51 @@ public class ApiServiceInterfaceTests {
 
         RabbitMQ mq = new RabbitMQ();
         mq.simulateKPIProduce();
-        String result =mq.simulateKPIConsume(replyTo);
+        String result2 =mq.simulateKPIConsume(replyTo);
+        ObjectMapper objMapper = new ObjectMapper();
+        SubscriptionKPIResult result = null;
+        try {
+            result = objMapper.readValue(result2, SubscriptionKPIResult.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(result, "Failed to get message in 300s");
+        Assert.assertEquals("Successfully", result.getMessage());
+        Assert.assertEquals(100000, result.getCode());
+        Assert.assertEquals(1, result.getData().get("HeatPumpKpiData").size());
 
+        String expectJson = "{\n" +
+                "\t\"deviceName\":\"1#制冷机\",\n" +
+                "\t\"updateTime\":\"2020-09-01 06:15:33\",\n" +
+                "\t\"compressor_poly_efficiency\":null,\n" +
+                "\t\"condensor_hot_outlet_pressure\":null,\n" +
+                "\t\"condensor_hot_outlet_temperature\":null,\n" +
+                "\t\"condensor_hot_sat_temperature\":null,\n" +
+                "\t\"condensor_water_inlet_temperature\":null,\n" +
+                "\t\"condensor_water_outlet_temperature\":null,\n" +
+                "\t\"dt_condensor\":null,\n" +
+                "\t\"dt_evaporator\":null,\n" +
+                "\t\"evaporator_cold_inlet_pressure\":null,\n" +
+                "\t\"evaporator_cold_inlet_temperature\":null,\n" +
+                "\t\"evaporator_heat\":null,\n" +
+                "\t\"evaporator_water_back_temperature\":null,\n" +
+                "\t\"evaporator_water_leave_temperature\":null,\n" +
+                "\t\"lubricate_press_diff\":0.0,\n" +
+                "\t\"motor_current_percent\":0.0,\n" +
+                "\t\"motor_work\":null,\n" +
+                "\t\"oil_tank_press_high\":553.7,\n" +
+                "\t\"oil_tank_press_low\":533.1,\n" +
+                "\t\"run_time\":1712.0,\n" +
+                "\t\"start_up_time\":216.0\n" +
+                "}";
+        try {
+            objMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
+            Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson, HeatPumpKpiData.class),result.getData().get("HeatPumpKpiData").get(0)));
+        } catch (JsonProcessingException e) {
+            Assert.fail("Failed to compare 2 json value", e);
+        } catch (Exception e) {
+            Assert.fail("Failed to compare 2 json value", e);
+        }
 
         Response response3 = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters2);
 
@@ -1293,8 +1356,8 @@ public class ApiServiceInterfaceTests {
         Assert.assertNotNull(jsonPathEvaluator3.get("data"));
 
         HashMap data3 = jsonPathEvaluator3.get("data");
-        String replyTo2 = data2.get("replyTo").toString();
-        Assert.assertEquals(replyTo, replyTo2);
+        String replyTo3 = data3.get("replyTo").toString();
+        Assert.assertEquals(replyTo, replyTo3);
 
 
         Reporter.log("Send request to subscriptionsByDeviceId api with multiple device id");
@@ -1320,21 +1383,96 @@ public class ApiServiceInterfaceTests {
         HashMap data4 = jsonPathEvaluator4.get("data");
         String replyTo4 = data4.get("replyTo").toString();
 
-        mq.simulateKPIProduce();
-        String result4 =mq.simulateKPIConsume(replyTo4);
+//        mq.simulateKPIProduce();
+//        String result4 =mq.simulateKPIConsume(replyTo4);
+        RabbitMQ mq2 = new RabbitMQ();
+        mq2.simulateKPIProduce();
+        String result4 =mq2.simulateKPIConsume(replyTo4);
+        try {
+            result = objMapper.readValue(result4, SubscriptionKPIResult.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(result, "Failed to get message in 300s");
+        Assert.assertEquals("Successfully", result.getMessage());
+        Assert.assertEquals(100000, result.getCode());
+        Assert.assertEquals(2, result.getData().get("HeatPumpKpiData").size());
+
+        String expectJson2 = "{\n" +
+                "\t\"deviceName\":\"3#制冷机\",\n" +
+                "\t\"updateTime\":\"2020-09-01 06:15:33\",\n" +
+                "\t\"compressor_poly_efficiency\":null,\n" +
+                "\t\"condensor_hot_outlet_pressure\":null,\n" +
+                "\t\"condensor_hot_outlet_temperature\":null,\n" +
+                "\t\"condensor_hot_sat_temperature\":null,\n" +
+                "\t\"condensor_water_inlet_temperature\":null,\n" +
+                "\t\"condensor_water_outlet_temperature\":null,\n" +
+                "\t\"dt_condensor\":null,\n" +
+                "\t\"dt_evaporator\":null,\n" +
+                "\t\"evaporator_cold_inlet_pressure\":null,\n" +
+                "\t\"evaporator_cold_inlet_temperature\":null,\n" +
+                "\t\"evaporator_heat\":null,\n" +
+                "\t\"evaporator_water_back_temperature\":null,\n" +
+                "\t\"evaporator_water_leave_temperature\":null,\n" +
+                "\t\"lubricate_press_diff\":0.0,\n" +
+                "\t\"motor_current_percent\":0.0,\n" +
+                "\t\"motor_work\":null,\n" +
+                "\t\"oil_tank_press_high\":369.6,\n" +
+                "\t\"oil_tank_press_low\":365.5,\n" +
+                "\t\"run_time\":2036.0,\n" +
+                "\t\"start_up_time\":282.0\n" +
+                "}";
+        try {
+            objMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
+            HeatPumpKpiData device1 = result.getData().get("HeatPumpKpiData").stream().filter(d -> "1#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
+            HeatPumpKpiData device3 = result.getData().get("HeatPumpKpiData").stream().filter(d -> "3#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
+            Reporter.log("Compare HeatPumpKpiData with expect for device 1");
+            Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson, HeatPumpKpiData.class), device1));
+            Reporter.log("Compare HeatPumpKpiData with expect for device 3");
+            Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson2, HeatPumpKpiData.class), device3));
+        } catch (JsonProcessingException e) {
+            Assert.fail("Failed to compare 2 json value with 2 device", e);
+        } catch (Exception e) {
+            Assert.fail("Failed to compare 2 json value with 2 device", e);
+        }
     }
 
 
-    @Test(priority = 0, description = "Test api service interface: Subscription kpi data by device id.")
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
-    @Story("Subscribe kpi data by device id")
-    public void subscriptionsTest() {
-        RabbitMQ mq = new RabbitMQ();
-        mq.simulateKPIProduce();
-        String result =mq.simulateKPIConsume("2e1660898615bd6666b32e8dd6dda060");
-        System.out.println("finish");
-    }
+//    @Test(priority = 0, description = "Test api service interface: Subscription kpi data by device id.")
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Description("Send a request to SUT and verify if user can subscribe kpi data by device id.")
+//    @Story("Subscribe kpi data by device id")
+//    public void subscriptionsTest() {
+//        RabbitMQ mq = new RabbitMQ();
+//        mq.simulateKPIProduce();
+//        String result2 =mq.simulateKPIConsume("2e1660898615bd6666b32e8dd6dda060");
+//        ObjectMapper objMapper = new ObjectMapper();
+//        SubscriptionKPIResult result = null;
+//        try {
+//            result = objMapper.readValue(result2, SubscriptionKPIResult.class);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+//        Assert.assertNotNull(result, "Failed to get message in 60s");
+//        Assert.assertEquals("Successfully", result.getMessage());
+//        Assert.assertEquals(100000, result.getCode());
+//        Assert.assertEquals(1, result.getData().get("HeatPumpKpiData").size());
+//
+////        mq.simulateSp5Produce();
+////        String result2 =mq.simulateSp5Consume("721b417b7731b5476c05202de8a9b346");
+////        ObjectMapper objMapper = new ObjectMapper();
+////        SubscriptionSp5Result result = null;
+////        try {
+////            result = objMapper.readValue(result2, SubscriptionSp5Result.class);
+////        } catch (JsonProcessingException e) {
+////            e.printStackTrace();
+////        }
+////        Assert.assertNotNull(result, "Failed to get message in 60s");
+////        Assert.assertEquals("Successfully", result.getMessage());
+////        Assert.assertEquals(100000, result.getCode());
+////        Assert.assertEquals(20, result.getData().get("SensorData").size());
+//        System.out.println("finish");
+//    }
 
 
 
