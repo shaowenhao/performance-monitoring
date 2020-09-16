@@ -1230,7 +1230,7 @@ public class ApiServiceInterfaceTests {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 60s");
+        Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 300s");
         Assert.assertEquals("Successfully", subscriptionSp5Result.getMessage());
         Assert.assertEquals(100000, subscriptionSp5Result.getCode());
         Assert.assertEquals(20, subscriptionSp5Result.getData().get("SensorData").size());
@@ -1253,7 +1253,83 @@ public class ApiServiceInterfaceTests {
         Assert.assertNotNull(jsonPathEvaluator3.get("data"));
 
         HashMap data3 = jsonPathEvaluator3.get("data");
-        String replyTo2 = data2.get("replyTo").toString();
+        String replyTo2 = data3.get("replyTo").toString();
+        Assert.assertEquals(replyTo, replyTo2);
+    }
+
+
+    @Test(priority = 0, description = "Test api service interface: Subscription by sensor id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if user can subscribe by sensor id.")
+    @Story("Subscribe by sensor id")
+    public void subscriptionsBySensorId() {
+        HashMap<String, String> deviceMap = ApiServiceHelper.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+        }});
+
+        ArrayList<String> sensorList = ApiServiceHelper.getSensorByDeviceId(deviceMap.get("1#制冷机"));
+
+        Random rand = new Random();
+        String randomSensorId = sensorList.get(rand.nextInt(sensorList.size()));
+
+        Reporter.log("Send request to subscriptionsByDeviceId api with id");
+
+        HashMap<String, String> queryParameters2 = new HashMap<>();
+        queryParameters2.put("request", randomSensorId);
+        Response response2 = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters2);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        ApiResponse rspBody2 = response2.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody2.getMessage());
+        Assert.assertEquals(200, rspBody2.getCode());
+
+
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator2.get("data"));
+
+        HashMap data2 = jsonPathEvaluator2.get("data");
+        String replyTo = data2.get("replyTo").toString();
+
+        RabbitMQ mq = new RabbitMQ();
+
+        mq.simulateSp5Produce();
+        String result = mq.simulateSp5Consume(replyTo);
+        ObjectMapper objMapper = new ObjectMapper();
+        SubscriptionSp5Result subscriptionSp5Result = null;
+        try {
+            subscriptionSp5Result = objMapper.readValue(result, SubscriptionSp5Result.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 300s");
+        Assert.assertEquals("Successfully", subscriptionSp5Result.getMessage());
+        Assert.assertEquals(100000, subscriptionSp5Result.getCode());
+        Assert.assertEquals(1, subscriptionSp5Result.getData().get("SensorData").size());
+
+
+        Response response3 = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters2);
+
+        Reporter.log("Response status is " + response3.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response3.getBody().asString());
+
+        ApiResponse rspBody3 = response3.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody3.getMessage());
+        Assert.assertEquals(200, rspBody3.getCode());
+
+
+        JsonPath jsonPathEvaluator3 = response3.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator3.get("data"));
+
+        HashMap data3 = jsonPathEvaluator3.get("data");
+        String replyTo2 = data3.get("replyTo").toString();
         Assert.assertEquals(replyTo, replyTo2);
     }
 
