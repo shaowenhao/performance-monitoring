@@ -1,40 +1,27 @@
 package com.siemens.datalayer.apiservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SubscriptionKPIResult {
-    private int code;
-    private String message;
-    HashMap<String, ArrayList<HeatPumpKpiData>> data;
+    @JsonProperty("HeatPumpKpiData")
+    ArrayList<HeatPumpKpiData> heatPumpKpiData;
 
 
     // Getter Methods
 
-    public int getCode() {
-        return code;
-    }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public HashMap<String, ArrayList<HeatPumpKpiData>> getData() {
-        return data;
+    public ArrayList<HeatPumpKpiData> getHeatPumpKpiData() {
+        return heatPumpKpiData;
     }
 
     // Setter Methods
 
-    public void setCode(int code) {
-        this.code = code;
-    }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setData(HashMap<String, ArrayList<HeatPumpKpiData>> dataObject) {
-        this.data = dataObject;
+    public void setHeatPumpKpiData(ArrayList<HeatPumpKpiData> dataObject) {
+        this.heatPumpKpiData = dataObject;
     }
 }
 

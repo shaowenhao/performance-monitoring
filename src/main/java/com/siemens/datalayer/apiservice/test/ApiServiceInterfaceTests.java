@@ -1,23 +1,17 @@
 package com.siemens.datalayer.apiservice.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.util.BeanUtil;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.siemens.datalayer.apiservice.model.ApiResponse;
 import com.siemens.datalayer.apiservice.model.HeatPumpKpiData;
 import com.siemens.datalayer.apiservice.model.SubscriptionKPIResult;
 import com.siemens.datalayer.apiservice.model.SubscriptionSp5Result;
-import com.siemens.datalayer.utils.AMQPer;
 import com.siemens.datalayer.utils.RabbitMQ;
 import com.siemens.datalayer.utils.Utils;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.codehaus.groovy.ast.tools.BeanUtils;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
@@ -25,12 +19,9 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Epic("Api Service Interface")
 @Feature("Rest API")
@@ -38,7 +29,7 @@ public class ApiServiceInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass
-    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("9091") String port) {
+    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31332") String port) {
         ApiServiceEndpoint.setBaseUrl(baseUrl);
         ApiServiceEndpoint.setPort(port);
     }
@@ -375,7 +366,7 @@ public class ApiServiceInterfaceTests {
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
         Assert.assertEquals("Device not exist", rspBody.getMessage());
-        Assert.assertEquals(102102, rspBody.getCode());
+        Assert.assertEquals(102101, rspBody.getCode());
         Assert.assertNull(rspBody.getData());
 
 
@@ -740,7 +731,7 @@ public class ApiServiceInterfaceTests {
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
         Assert.assertEquals("Device not exist", rspBody.getMessage());
-        Assert.assertEquals(102102, rspBody.getCode());
+        Assert.assertEquals(102101, rspBody.getCode());
         Assert.assertNull(rspBody.getData());
 
     }
@@ -909,8 +900,9 @@ public class ApiServiceInterfaceTests {
     public boolean isSortedByDateStringKey(ArrayList<HashMap> list, String key) {
         boolean sorted = true;
         for (int i = 1; i < list.size(); i++) {
-            LocalDateTime dt1 = LocalDateTime.parse(list.get(i - 1).get(key).toString());
-            LocalDateTime dt2 = LocalDateTime.parse(list.get(i).get(key).toString());
+            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dt1 = LocalDateTime.parse(list.get(i - 1).get(key).toString(), inputFormat);
+            LocalDateTime dt2 = LocalDateTime.parse(list.get(i).get(key).toString(), inputFormat);
             if (dt1.isBefore(dt2)) {
                 sorted = false;
             }
@@ -1151,7 +1143,8 @@ public class ApiServiceInterfaceTests {
 
         ApiResponse rspBody = response.getBody().as(ApiResponse.class);
 
-        Assert.assertEquals("[endTime:endTime is null][startTime:startTime is null]", rspBody.getMessage());
+        Assert.assertTrue(rspBody.getMessage().contains("[endTime:endTime is null]"));
+        Assert.assertTrue(rspBody.getMessage().contains("[startTime:startTime is null]"));
         Assert.assertEquals(1001, rspBody.getCode());
         Assert.assertNull(rspBody.getData());
 
@@ -1231,9 +1224,8 @@ public class ApiServiceInterfaceTests {
             e.printStackTrace();
         }
         Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 300s");
-        Assert.assertEquals("Successfully", subscriptionSp5Result.getMessage());
-        Assert.assertEquals(100000, subscriptionSp5Result.getCode());
-        Assert.assertEquals(20, subscriptionSp5Result.getData().get("SensorData").size());
+
+        Assert.assertEquals(20, subscriptionSp5Result.getSensorData().size());
 
 
         Response response3 = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters2);
@@ -1307,9 +1299,8 @@ public class ApiServiceInterfaceTests {
             e.printStackTrace();
         }
         Assert.assertNotNull(subscriptionSp5Result, "Failed to get message in 300s");
-        Assert.assertEquals("Successfully", subscriptionSp5Result.getMessage());
-        Assert.assertEquals(100000, subscriptionSp5Result.getCode());
-        Assert.assertEquals(1, subscriptionSp5Result.getData().get("SensorData").size());
+
+        Assert.assertEquals(1, subscriptionSp5Result.getSensorData().size());
 
 
         Response response3 = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters2);
@@ -1331,6 +1322,21 @@ public class ApiServiceInterfaceTests {
         HashMap data3 = jsonPathEvaluator3.get("data");
         String replyTo2 = data3.get("replyTo").toString();
         Assert.assertEquals(replyTo, replyTo2);
+
+        Reporter.log("Send request to deleteSubscriptions api with id");
+
+        Response response4 = ApiServiceEndpoint.deleteSubscriptions(replyTo);
+
+
+        Reporter.log("Response status is " + response4.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response4.getBody().asString());
+
+        ApiResponse rspBody4 = response4.getBody().as(ApiResponse.class);
+
+        Assert.assertEquals("OK", rspBody4.getMessage());
+        Assert.assertEquals(200, rspBody4.getCode());
+
     }
 
 
@@ -1378,9 +1384,8 @@ public class ApiServiceInterfaceTests {
             e.printStackTrace();
         }
         Assert.assertNotNull(result, "Failed to get message in 300s");
-        Assert.assertEquals("Successfully", result.getMessage());
-        Assert.assertEquals(100000, result.getCode());
-        Assert.assertEquals(1, result.getData().get("HeatPumpKpiData").size());
+
+        Assert.assertEquals(1, result.getHeatPumpKpiData().size());
 
         String expectJson = "{\n" +
                 "\t\"deviceName\":\"1#制冷机\",\n" +
@@ -1408,7 +1413,7 @@ public class ApiServiceInterfaceTests {
                 "}";
         try {
             objMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
-            Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson, HeatPumpKpiData.class),result.getData().get("HeatPumpKpiData").get(0)));
+            Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson, HeatPumpKpiData.class),result.getHeatPumpKpiData().get(0)));
         } catch (JsonProcessingException e) {
             Assert.fail("Failed to compare 2 json value", e);
         } catch (Exception e) {
@@ -1470,9 +1475,8 @@ public class ApiServiceInterfaceTests {
             e.printStackTrace();
         }
         Assert.assertNotNull(result, "Failed to get message in 300s");
-        Assert.assertEquals("Successfully", result.getMessage());
-        Assert.assertEquals(100000, result.getCode());
-        Assert.assertEquals(2, result.getData().get("HeatPumpKpiData").size());
+
+        Assert.assertEquals(2, result.getHeatPumpKpiData().size());
 
         String expectJson2 = "{\n" +
                 "\t\"deviceName\":\"3#制冷机\",\n" +
@@ -1500,8 +1504,8 @@ public class ApiServiceInterfaceTests {
                 "}";
         try {
             objMapper.setNodeFactory(JsonNodeFactory.withExactBigDecimals(true));
-            HeatPumpKpiData device1 = result.getData().get("HeatPumpKpiData").stream().filter(d -> "1#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
-            HeatPumpKpiData device3 = result.getData().get("HeatPumpKpiData").stream().filter(d -> "3#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
+            HeatPumpKpiData device1 = result.getHeatPumpKpiData().stream().filter(d -> "1#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
+            HeatPumpKpiData device3 = result.getHeatPumpKpiData().stream().filter(d -> "3#制冷机".equals(d.getDeviceName())).findAny().orElse(null);
             Reporter.log("Compare HeatPumpKpiData with expect for device 1");
             Assert.assertTrue(Utils.haveSamePropertyValues(HeatPumpKpiData.class, objMapper.readValue(expectJson, HeatPumpKpiData.class), device1));
             Reporter.log("Compare HeatPumpKpiData with expect for device 3");

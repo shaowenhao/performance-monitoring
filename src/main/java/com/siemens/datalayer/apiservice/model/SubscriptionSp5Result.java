@@ -1,40 +1,26 @@
 package com.siemens.datalayer.apiservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SubscriptionSp5Result {
-    private int code;
-    private String message;
-    HashMap<String, ArrayList<SensorData>> data;
+    @JsonProperty("SensorData")
+    ArrayList<SensorData> SensorData;
 
 
     // Getter Methods
 
-    public int getCode() {
-        return code;
-    }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public HashMap<String, ArrayList<SensorData>> getData() {
-        return data;
+    public ArrayList<SensorData> getSensorData() {
+        return SensorData;
     }
 
     // Setter Methods
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setData(HashMap<String, ArrayList<SensorData>> dataObject) {
-        this.data = dataObject;
+    public void setSensorData(ArrayList<SensorData> dataObject) {
+        this.SensorData = dataObject;
     }
 }
 
