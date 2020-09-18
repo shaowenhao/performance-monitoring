@@ -24,7 +24,7 @@ public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass
-    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31101") String port) {
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30035") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
