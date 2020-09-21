@@ -24,7 +24,7 @@ public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass
-    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30035") String port) {
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("32223") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
@@ -36,7 +36,7 @@ public class ApiEngineInterfaceTests {
     public void getAllInstanceOfOneEntityByRestful() {
         Reporter.log("Send request to entities api with root=Analog depth=1");
 
-        HashMap<String, String> queryParameters = new HashMap<>();
+        HashMap queryParameters = new HashMap<>();
         queryParameters.put("depth", "1");
         queryParameters.put("root", "Analog");
 
@@ -50,6 +50,76 @@ public class ApiEngineInterfaceTests {
 
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
+
+    }
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of given column.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if all the analog entities names can be read out with given column.")
+    @Story("Get Entities with filter of given column")
+    public void getAllInstanceOfOneEntityWithGivenColumnByRestful() {
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", "[Analog][type,Siid]");
+        queryParameters.put("root", "Analog");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        List<String> l = new ArrayList<String>(
+                Arrays.asList(
+                        "Siid",
+                        "type"
+                )
+        );
+        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        for(HashMap m : a){
+            List<String> ll = new ArrayList<String>(m.keySet());
+            ll.forEach( key-> Assert.assertTrue(l.contains(key)));
+            Assert.assertEquals("Analog", m.get("type").toString());
+        }
+
+    }
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of eq condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if eq condition work.")
+    @Story("Test filter of eq")
+    public void filterWithEqConditionByRestful() {
+        int siid = ApiEngineHelper.getOneAnalogSiid();
+
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid][{Siid: {_eq: 36435}}]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", String.format("[Analog][type,Siid][{Siid: {_eq: %d}}]", siid));
+        queryParameters.put("root", "Analog");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        Assert.assertEquals(1, a.size());
+        Assert.assertEquals(a.get(0), new HashMap() {{
+            put("Siid", siid);
+            put("type", "Analog");
+        }});
 
     }
 
