@@ -76,7 +76,7 @@ public class SubscriptionInterfaceTests {
 
         JsonPath jsonPathEvaluator = response.jsonPath();
 
-        HashMap m = (HashMap)jsonPathEvaluator.get("data");
+        HashMap m = (HashMap) jsonPathEvaluator.get("data");
 
         Assert.assertNotNull(m);
         List<String> l = new ArrayList<String>(
@@ -85,9 +85,9 @@ public class SubscriptionInterfaceTests {
                         "Analog"
                 )
         );
-        List<String> ll = (List<String>)m.get("entities");
-        ll.forEach( key-> Assert.assertTrue(l.contains(key)));
-        List<String> l2 = (List<String>)m.get("clients");
+        List<String> ll = (List<String>) m.get("entities");
+        ll.forEach(key -> Assert.assertTrue(l.contains(key)));
+        List<String> l2 = (List<String>) m.get("clients");
         Assert.assertTrue(l2.contains("automation"));
         String id = m.get("id").toString();
 
@@ -166,7 +166,7 @@ public class SubscriptionInterfaceTests {
 
         JsonPath jsonPathEvaluator = response.jsonPath();
 
-        HashMap m = (HashMap)jsonPathEvaluator.get("data");
+        HashMap m = (HashMap) jsonPathEvaluator.get("data");
 
         Assert.assertNotNull(m);
         List<String> l = new ArrayList<String>(
@@ -175,9 +175,9 @@ public class SubscriptionInterfaceTests {
                         "Analog"
                 )
         );
-        List<String> ll = (List<String>)m.get("entities");
-        ll.forEach( key-> Assert.assertTrue(l.contains(key)));
-        List<String> l2 = (List<String>)m.get("clients");
+        List<String> ll = (List<String>) m.get("entities");
+        ll.forEach(key -> Assert.assertTrue(l.contains(key)));
+        List<String> l2 = (List<String>) m.get("clients");
         Assert.assertTrue(l2.contains("automation"));
         String id = m.get("id").toString();
 
@@ -211,5 +211,23 @@ public class SubscriptionInterfaceTests {
 
         Assert.assertTrue(rspBody4.length == 0);
     }
+
+
+    @Test(priority = 0, description = "Test subscriptions interface: delete subscription with invalid id.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if delete subscriptions by invalid id return correct.")
+    @Story("Delete subscriptions by invalid id")
+    public void deleteSubscriptionByInvalidId() {
+        Reporter.log("Delete subscription by invalid id");
+
+        Response response = SubscriptionEndpoint.deleteSubscriptionsById("invalid-id");
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Subscription invalid-id not exists!", rspBody.getMessage());
+        Assert.assertEquals(107002, rspBody.getCode());
+        Assert.assertNull(rspBody.getData());
+    }
+
 
 }

@@ -62,7 +62,9 @@ public class SubscriptionEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        return httpRequest.delete("/subscriptions/%s", id);
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("clientId", "automation");
+        return httpRequest.queryParams(queryParameters).delete("/subscriptions/" + id);
     }
 
 
