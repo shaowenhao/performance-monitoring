@@ -1,6 +1,8 @@
 package com.siemens.datalayer.apiengine.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
+import com.siemens.datalayer.utils.RabbitMQ;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -30,7 +32,7 @@ public class SubscriptionInterfaceTests {
 
     @Test(priority = 0, description = "Test subscriptions interface: Create one subscription and get all subscriptions, at last, delete subscription.")
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Send a request to SUT and verify if get all subscriptions return with entities null.")
+    @Description("Send a request to SUT and verify if get all subscriptions return correct.")
     @Story("Get all subscriptions")
     public void getSubscriptions() {
         Reporter.log("Create one subscription first");
@@ -229,5 +231,54 @@ public class SubscriptionInterfaceTests {
         Assert.assertNull(rspBody.getData());
     }
 
+
+//    @Test(priority = 0, description = "Test subscriptions interface: Create one subscription to subscribe all sensor data.")
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Description("Send a request to SUT and verify if subscribe all sensor data return correctly.")
+//    @Story("Get all subscriptions")
+//    public void subscribeAllSensor() {
+//
+//        Reporter.log("Create one subscription first");
+//
+//        HashMap<String, String> queryParameters = new HashMap<>();
+//
+//        queryParameters.put("clientId", "automation");
+//
+//        String body = "subscription {\n" +
+//                "    SensorData(cond:\"\"){\n" +
+//                "                Siid\n" +
+//                "                modelId\n" +
+//                "                updateTime\n" +
+//                "                value\n" +
+//                "            }\n" +
+//                "    \n" +
+//                "}";
+//
+//        Response response = SubscriptionEndpoint.register(queryParameters, body);
+//
+//        Reporter.log("Response status is " + response.getStatusCode());
+//
+//        Reporter.log("Response Body is =>  " + response.getBody().asString());
+//
+//        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+//
+//        Assert.assertEquals("Successfully", rspBody.getMessage());
+//        Assert.assertEquals(100000, rspBody.getCode());
+//
+//
+//        JsonPath jsonPathEvaluator = response.jsonPath();
+//
+//        HashMap m = (HashMap) jsonPathEvaluator.get("data");
+//
+//        Assert.assertNotNull(m);
+//        String id = m.get("id").toString();
+//
+//        RabbitMQ mq = new RabbitMQ();
+//        mq.simulateSp5Produce();
+//        String result = mq.simulateSp5Consume(id);
+//        ObjectMapper objMapper = new ObjectMapper();
+////        objMapper.readTree(result)
+//
+//    }
 
 }
