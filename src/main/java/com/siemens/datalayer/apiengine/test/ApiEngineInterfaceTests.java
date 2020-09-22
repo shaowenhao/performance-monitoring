@@ -157,6 +157,50 @@ public class ApiEngineInterfaceTests {
     }
 
 
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of in condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if in condition work.")
+    @Story("Test filter of in")
+    public void filterWithInConditionByRestful() {
+        ArrayList<String> a = ApiEngineHelper.getNAnalogSiid(5);
+
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid][{Siid: {_in: [123,234,345]}}][][]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", String.format("[Analog][type,Siid][{Siid: {_in: [%s]}}][][]", String.join(",", a)));
+        queryParameters.put("root", "Analog");
+        queryParameters.put("depth", "1");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a2 = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        HashMap<String, Integer> count = new HashMap<>();
+        for(HashMap m: a2){
+            String id = m.get("Siid").toString();
+            Assert.assertTrue(a.contains(id));
+            if(count.containsKey(id)){
+                count.put(id, count.get(id) + 1);
+            } else {
+                count.put(id, 1);
+            }
+        }
+        for(String s: a){
+            Assert.assertTrue(count.containsKey(s));
+            Assert.assertTrue(count.get(s) >= 1);
+        }
+
+    }
+
     @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of date range condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if date range condition work.")

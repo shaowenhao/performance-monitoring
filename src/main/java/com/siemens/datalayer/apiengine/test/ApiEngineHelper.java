@@ -47,10 +47,23 @@ public class ApiEngineHelper {
         }
         return a;
     }
+
     public static int getOneAnalogSiid() {
         ArrayList<HashMap> list= ApiEngineHelper.getAnalogSiid();
         Random rand = new Random();
         HashMap random = list.get(rand.nextInt(list.size()));
         return Integer.parseInt(random.get("Siid").toString());
+    }
+
+    public static ArrayList<String> getNAnalogSiid(int n) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<HashMap> list= ApiEngineHelper.getAnalogSiid();
+        Random rand = new Random();
+        for (int i = 0; i < n; i++) {
+            HashMap random = list.get(rand.nextInt(list.size()));
+            result.add(random.get("Siid").toString());
+        }
+        return result;
+
     }
 }
