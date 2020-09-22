@@ -156,6 +156,44 @@ public class ApiEngineInterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of date range condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if date range condition work.")
+    @Story("Test filter of date range")
+    public void filterWithDateRangeConditionByRestful() {
+        int siid = ApiEngineHelper.getOneAnalogSiid();
+
+        Reporter.log("Send request to entities api with root=SensorData filter=[SensorData][][{_and: [{updateTime: {_lt: \"2020-07-24 03:00:00\"}},{updateTime: {_gt: \"2019-07-24 03:00:00\"}}]}]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter","[SensorData][][{_and: [{updateTime: {_lt: \"2020-07-24 03:00:00\"}},{updateTime: {_gt: \"2019-07-24 03:00:00\"}}]}]");
+        queryParameters.put("root", "SensorData");
+        queryParameters.put("depth", "1");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.SensorData");
+        DateTimeFormatter inputFormat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter inputFormat2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime dt1 = LocalDateTime.parse("2019-07-24 03:00:00", inputFormat1);
+        LocalDateTime dt2 = LocalDateTime.parse("2020-07-24 03:00:00", inputFormat1);
+        for(HashMap m: a){
+            LocalDateTime dt3 = LocalDateTime.parse(m.get("updateTime").toString(), inputFormat2);
+            Assert.assertTrue(dt3.isBefore(dt2) && dt3.isAfter(dt1));
+        }
+
+    }
+
     @Test(priority = 0, description = "Test api engine interface: Get Entities with filter and pagination.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if pagination work.")
