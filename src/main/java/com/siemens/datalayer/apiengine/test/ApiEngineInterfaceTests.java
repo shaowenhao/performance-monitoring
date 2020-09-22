@@ -201,6 +201,42 @@ public class ApiEngineInterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of nin condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if nin condition work.")
+    @Story("Test filter of nin")
+    public void filterWithNinConditionByRestful() {
+        ArrayList<String> a = ApiEngineHelper.getNAnalogSiid(5);
+
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid][{Siid: {_nin: [123,234,345]}}][][]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", String.format("[Analog][type,Siid][{Siid: {_nin: [%s]}}][][]", String.join(",", a)));
+        queryParameters.put("root", "Analog");
+        queryParameters.put("depth", "1");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a2 = (ArrayList)jsonPathEvaluator.get("data.Analog");
+
+        for(HashMap m: a2){
+            String id = m.get("Siid").toString();
+            Assert.assertFalse(a.contains(id));
+        }
+
+
+    }
+
     @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of date range condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if date range condition work.")
