@@ -3,6 +3,7 @@ package com.siemens.datalayer.apiengine.test;
 import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
 
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -94,7 +95,7 @@ public class ApiEngineInterfaceTests {
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if eq condition work.")
     @Story("Test filter of eq")
-    public void filterWithEqConditionByRestful() {
+    public void filterWithEqNumberConditionByRestful() {
         int siid = ApiEngineHelper.getOneAnalogSiid();
 
         Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid][{Siid: {_eq: 36435}}]");
@@ -123,6 +124,38 @@ public class ApiEngineInterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of eq bool condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if eq bool condition work.")
+    @Story("Test filter of eq")
+    public void filterWithEqBoolConditionByRestful() {
+        int siid = ApiEngineHelper.getOneAnalogSiid();
+
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid,positiveFlowIn][{positiveFlowIn: {_eq: true}}][][]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", "[Analog][type,Siid,positiveFlowIn][{positiveFlowIn: {_eq: true}}][][]");
+        queryParameters.put("root", "Analog");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        for(HashMap m: a){
+            Assert.assertEquals(3, m.size());
+            Assert.assertEquals(true, (boolean)m.get("positiveFlowIn"));
+        }
+
+    }
 
     @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity by graphql.")
     @Severity(SeverityLevel.BLOCKER)
