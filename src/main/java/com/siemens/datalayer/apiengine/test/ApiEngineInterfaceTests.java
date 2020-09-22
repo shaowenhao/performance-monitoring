@@ -127,6 +127,35 @@ public class ApiEngineInterfaceTests {
     }
 
 
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of Neq condition.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if Neq condition work.")
+    @Story("Test filter of eq")
+    public void filterWithNeqNumberConditionByRestful() {
+        int siid = ApiEngineHelper.getOneAnalogSiid();
+
+        Reporter.log("Send request to entities api with root=Analog filter=[Analog][type,Siid][{Siid: {_neq: 36435}}]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", String.format("[Analog][type,Siid][{Siid: {_neq: %d}}]", siid));
+        queryParameters.put("root", "Analog");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        Assert.assertNull(a.stream().filter(d -> Integer.parseInt(d.get("Siid").toString()) == siid).findAny().orElse(null));
+
+    }
+
     @Test(priority = 0, description = "Test api engine interface: Get Entities with filter and pagination.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if pagination work.")
