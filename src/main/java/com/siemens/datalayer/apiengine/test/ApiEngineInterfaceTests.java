@@ -14,6 +14,8 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -124,6 +126,85 @@ public class ApiEngineInterfaceTests {
 
     }
 
+
+    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter and pagination.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT and verify if pagination work.")
+    @Story("Test filter of pagination")
+    public void filterWithPaginationByRestful() {
+        Reporter.log("Send request to entities api with depth=1 root=SensorData filter=[SensorData][][][updateTime asc][1,10]");
+
+        HashMap queryParameters = new HashMap<>();
+        queryParameters.put("filter", "[SensorData][][][updateTime asc][1,10]");
+        queryParameters.put("root", "SensorData");
+        queryParameters.put("depth", "1");
+
+        Response response = ApiEngineEndpoint.getEntities(queryParameters);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        EntitiesApiResponse rspBody = response.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        HashMap h = (HashMap)jsonPathEvaluator.get("data.SensorData");
+        Assert.assertEquals(1, Integer.parseInt(h.get("page").toString()));
+        Assert.assertEquals(10, Integer.parseInt(h.get("pageSize").toString()));
+        ArrayList<HashMap> c = (ArrayList)h.get("content");
+        Assert.assertEquals(10, c.size());
+        Assert.assertTrue(this.isSortedByDateStringKey(c, "updateTime", "asc"));
+
+        Reporter.log("Send request to entities api with depth=1 root=SensorData filter=[SensorData][][][updateTime desc][1,10]");
+
+        HashMap queryParameters2 = new HashMap<>();
+        queryParameters2.put("filter", "[SensorData][][][updateTime desc][1,10]");
+        queryParameters2.put("root", "SensorData");
+        queryParameters2.put("depth", "1");
+
+        Response response2 = ApiEngineEndpoint.getEntities(queryParameters2);
+
+        Reporter.log("Response status is " + response2.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response2.getBody().asString());
+
+        EntitiesApiResponse rspBody2 = response2.getBody().as(EntitiesApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody2.getMessage());
+        Assert.assertEquals(100000, rspBody2.getCode());
+        JsonPath jsonPathEvaluator2 = response2.jsonPath();
+        HashMap h2 = (HashMap)jsonPathEvaluator2.get("data.SensorData");
+        Assert.assertEquals(1, Integer.parseInt(h2.get("page").toString()));
+        Assert.assertEquals(10, Integer.parseInt(h2.get("pageSize").toString()));
+        ArrayList<HashMap> c2 = (ArrayList)h2.get("content");
+        Assert.assertEquals(10, c2.size());
+        Assert.assertTrue(this.isSortedByDateStringKey(c2, "updateTime", "desc"));
+    }
+
+    public boolean isSortedByDateStringKey(ArrayList<HashMap> list, String key, String order) {
+        boolean sorted = true;
+        for (int i = 1; i < list.size(); i++) {
+            DateTimeFormatter inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+            LocalDateTime dt1 = LocalDateTime.parse(list.get(i - 1).get(key).toString(), inputFormat);
+            LocalDateTime dt2 = LocalDateTime.parse(list.get(i).get(key).toString(), inputFormat);
+            switch (order) {
+                case "asc":
+                    if (dt1.isAfter(dt2)) {
+                        sorted = false;
+                    };
+                    break;
+                case "desc":
+                    if (dt1.isBefore(dt2)) {
+                        sorted = false;
+                    };
+                    break;
+            }
+        }
+
+        return sorted;
+    }
 
     @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of eq bool condition.")
     @Severity(SeverityLevel.BLOCKER)
