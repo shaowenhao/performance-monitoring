@@ -1,0 +1,120 @@
+
+
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "integer"
+            },
+            "abnormal": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "type",
+            "normal",
+            "abnormal"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "integer"
+            },
+            "abnormal": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "type",
+            "normal",
+            "abnormal"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "integer"
+            },
+            "abnormal": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "type",
+            "normal",
+            "abnormal"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "integer"
+            },
+            "abnormal": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "type",
+            "normal",
+            "abnormal"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "normal": {
+              "type": "integer"
+            },
+            "abnormal": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "type",
+            "normal",
+            "abnormal"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}
+
