@@ -1,10 +1,8 @@
 package com.siemens.datalayer.selenium.snc;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CustomizedTestListener;
@@ -128,37 +126,37 @@ public class SNCTest extends WebDriverBaseClass {
     }
 
 
-    @Test(description = "Verify the page3 function")
-    @Description("Verify the page3 function")
-    @Epic("SNC UI")
-    @Feature("Feature2: Page3")
-    @Step("Check page3 values")
-    @Severity(SeverityLevel.CRITICAL)
-    public void page3UITest() {
-        this.loginAndCheckSuccess();
-        this.switchToProductDevice();
-        driver.switchTo().frame(0);
-        waitForAjaxToFinish();
-        String actual = driver.findElement(By.id("opproduce")).getText();
-        String plan = driver.findElement(By.id("opplan")).getText();
-        String pattern = "\\d+";
-
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(actual);
-        Assert.assertTrue(countMatchSize(m) == 2);
-        Matcher m2 = r.matcher(plan);
-        Assert.assertTrue(countMatchSize(m2) == 2);
-
-        String text = driver.findElement(By.id("pp")).getText();
-        Assert.assertTrue(text.length() > 10);
-
+//    @Test(description = "Verify the page3 function")
+//    @Description("Verify the page3 function")
+//    @Epic("SNC UI")
+//    @Feature("Feature2: Page3")
+//    @Step("Check page3 values")
+//    @Severity(SeverityLevel.CRITICAL)
+//    public void page3UITest() {
+//        this.loginAndCheckSuccess();
+//        this.switchToProductDevice();
+//        driver.switchTo().frame(0);
+//        waitForAjaxToFinish();
+//        String actual = driver.findElement(By.id("opproduce")).getText();
+//        String plan = driver.findElement(By.id("opplan")).getText();
+//        String pattern = "\\d+";
+//
+//        Pattern r = Pattern.compile(pattern);
+//        Matcher m = r.matcher(actual);
+//        Assert.assertTrue(countMatchSize(m) == 2);
+//        Matcher m2 = r.matcher(plan);
+//        Assert.assertTrue(countMatchSize(m2) == 2);
+//
+//        String text = driver.findElement(By.id("pp")).getText();
+//        Assert.assertTrue(text.length() > 10);
+//
 //        WebElement canvas = driver.findElement(By.cssSelector("#pd canvas"));
 //        Actions builder = new Actions(driver);
 //        builder.moveToElement(canvas,652,250)  // start point
 //                .click()
 //                .perform();
 //        System.out.println("finish");
-    }
+//    }
 
     @Test(description = "Verify the apis used in page1 function")
     @Description("Verify the apis used inpage1 function")
@@ -179,6 +177,17 @@ public class SNCTest extends WebDriverBaseClass {
     @Severity(SeverityLevel.CRITICAL)
     public void page3ApiTest() {
         this.verifySNCDemoBackendOfPage3();
+    }
+
+
+    @Test(description = "Verify the apis used in page3 function")
+    @Description("Verify the apis used in page3 function")
+    @Epic("EP001 Home Page Layout")
+    @Feature("Feature2: Page3")
+    @Step("Check apis used in page3")
+    @Severity(SeverityLevel.CRITICAL)
+    public void page4ApiTest() {
+        this.verifySNCDemoBackendOfPage4();
     }
 
     private int countMatchSize(Matcher m){
@@ -250,7 +259,126 @@ public class SNCTest extends WebDriverBaseClass {
         this.verifySNCAbnormalApi();
     }
 
+    public void verifySNCDemoBackendOfPage4(){
+        List<String> ids = this.getAllDeviceIds();
+        for(String id:ids){
+            this.verifySNCGraphQLApiWithDeviceRelation(id);
+            this.verifySNCGraphQLApiWithDeviceDetail(id);
+        }
+    }
+
+
+    public void verifySNCGraphQLApiWithDeviceRelation(String id){
+        String body = "{\n" +
+                "\tDevice(cond: \"{id:{_eq: %s}}\", order: \"\") {\n" +
+                "\t\tid Connect_To_Work_Position(cond: \"\", order: \"\") {\n" +
+                "\n" +
+                "\t\t\tinvert_Work_Center(cond: \"\", order: \"\") {\n" +
+                "\t\t\t\tname description location id Has_Preactor_OrderConnection(cond: \"\", order: \"start_time DESC\", after: \"0\", first: 1) {\n" +
+                "\t\t\t\t\ttotalElements totalPages pageSize page numberOfElements edges {\n" +
+                "\t\t\t\t\t\tnode {\n" +
+                "\t\t\t\t\t\t\torder_no start_time product work_center comments end_time plan_quantity id Has_Product(cond: \"\", order: \"\") {\n" +
+                "\t\t\t\t\t\t\t\tproduct_no name product_type\n" +
+                "\t\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t\t\tinvert_Product_Order_Process(cond: \"\", order: \"\") {\n" +
+                "\t\t\t\t\t\t\t\tproduct produce_quantity pass_quantity mach_type product_order event_time status\n" +
+                "\t\t\t\t\t\t\t}\n" +
+                "\n" +
+                "\t\t\t\t\t\t}\n" +
+                "\t\t\t\t\t\tcursor\n" +
+                "\t\t\t\t\t}\n" +
+                "\t\t\t\t\tpageInfo {\n" +
+                "\t\t\t\t\t\tendCursor hasNextPage\n" +
+                "\t\t\t\t\t}\n" +
+                "\t\t\t\t}\n" +
+                "\n" +
+                "\t\t\t}\n" +
+                "\t\t\tinvert_Production_Procedure(cond: \"\", order: \"\") {\n" +
+                "\t\t\t\tmach_type\n" +
+                "\t\t\t}\n" +
+                "\n" +
+                "\t\t}\n" +
+                "\n" +
+                "\t}\n" +
+                "}";
+        Response response = this.sncDemoGraphQLApi(String.format(body, id));
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Device");
+
+        Assert.assertEquals(1, data.size());
+//        assertThat(response.getBody().asString(),
+//                matchesJsonSchemaInClasspath("snc-graphql-device-relation-schema.json"));
+    }
+
+
+    public void verifySNCGraphQLApiWithDeviceDetail(String id){
+        String body = "{\n" +
+                "  Device(cond: \"{id:{_eq:%s}}\") {\n" +
+                "\trating\n" +
+                "\tweight\n" +
+                "\tip\n" +
+                "\tframe\n" +
+                "\tserial_no\n" +
+                "\teff_grade\n" +
+                "\tins\n" +
+                "\tdesign\n" +
+                "\trpm\n" +
+                "\tid\n" +
+                "\tpoles\n" +
+                "\tvolts\n" +
+                "\telectric_current\n" +
+                "\ttype\n" +
+                "\teff\n" +
+                "\tsinamics_300\n" +
+                "\tplant\n" +
+                "\thi\n" +
+                "\tamps\n" +
+                "\tmanufacturer\n" +
+                "\tname\n" +
+                "\tbearings\n" +
+                "\tsinamics_300_port\n" +
+                "\toutput\n" +
+                "\tmodel\n" +
+                "\tsf\n" +
+                "  }\n" +
+                "}";
+        Response response = this.sncDemoGraphQLApi(String.format(body, id));
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Device");
+
+        Assert.assertEquals(1, data.size());
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("snc-graphql-device-schema.json"));
+    }
+
     public void verifySNCGraphQLApi(){
+        Response response = this.queryAllDevices();
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Work_Center");
+
+        Assert.assertEquals(3, data.size());
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("snc-graphql-schema.json"));
+    }
+
+    public ArrayList getAllDeviceIds(){
+        Response response = this.queryAllDevices();
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        ArrayList a = (ArrayList) jsonPathEvaluator.get("data.Work_Center.Contains_Work_Position.invert_Device.invert_KPI.device_id");
+        return (ArrayList) Utils.flatten(a);
+//        for(HashMap m : data){
+//            m.get("Contains_Work_Position")
+//        }
+    }
+
+    public Response queryAllDevices(){
         String body = "{\n" +
                 "  Work_Center(cond: \"\", order: \"\") {\n" +
                 "\tname\n" +
@@ -279,15 +407,7 @@ public class SNCTest extends WebDriverBaseClass {
                 "\t}\n" +
                 "  }\n" +
                 "}";
-        Response response = this.sncDemoGraphQLApi(body);
-        JsonPath jsonPathEvaluator = response.jsonPath();
-
-        Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Work_Center");
-
-        Assert.assertEquals(3, data.size());
-        assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath("snc-graphql-schema.json"));
+        return this.sncDemoGraphQLApi(body);
     }
 
     public void verifySNCStatisticApi(){

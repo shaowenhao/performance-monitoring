@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
     private static Logger logger = Logger.getLogger(Utils.class);
@@ -72,6 +74,12 @@ public class Utils {
         JsonNode rootNode = Utils.loadTestConfig();
         ObjectMapper objMapper = new ObjectMapper(new YAMLFactory());
         return objMapper.readValue(rootNode.get("rabbitmq").toString(), RabbitMQ.class);
+    }
+
+    public static List<?> flatten(List<?> list){
+        return list.stream()
+                .flatMap(e -> e instanceof List ? flatten((List) e).stream() : Stream.of(e))
+                .collect(Collectors.toList());
     }
 
 }
