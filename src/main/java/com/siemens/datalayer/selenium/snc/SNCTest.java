@@ -19,6 +19,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
@@ -302,6 +303,9 @@ public class SNCTest extends WebDriverBaseClass {
                 "\t}\n" +
                 "}";
         Response response = this.sncDemoGraphQLApi(String.format(body, id));
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
@@ -345,6 +349,9 @@ public class SNCTest extends WebDriverBaseClass {
                 "  }\n" +
                 "}";
         Response response = this.sncDemoGraphQLApi(String.format(body, id));
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
@@ -357,6 +364,9 @@ public class SNCTest extends WebDriverBaseClass {
 
     public void verifySNCGraphQLApi(){
         Response response = this.queryAllDevices();
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
@@ -412,6 +422,9 @@ public class SNCTest extends WebDriverBaseClass {
 
     public void verifySNCStatisticApi(){
         Response response = this.sncDemoStatisticApi();
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
@@ -425,6 +438,9 @@ public class SNCTest extends WebDriverBaseClass {
 
     public void verifySNCAbnormalApi(){
         Response response = this.sncDemoAbnormalApi();
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
@@ -478,6 +494,10 @@ public class SNCTest extends WebDriverBaseClass {
     public void verifySNCDemoBackendReturnValue(String body, String key){
         Response response = this.sncDemoGraphQLControllerApi(body);
 
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertTrue(Utils.isNullOrEmpty(jsonPathEvaluator.getList("errors")));
@@ -522,7 +542,7 @@ public class SNCTest extends WebDriverBaseClass {
 
     public void waitForAjaxToFinish() {
 
-        WebDriverWait wait = new WebDriverWait(driver, 5000);
+        WebDriverWait wait = new WebDriverWait(driver, 60);
         wait.until(new ExpectedCondition<Boolean>() {
 
             public Boolean apply(WebDriver wdriver) {
