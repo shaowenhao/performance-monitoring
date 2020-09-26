@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "SINAMICS_300_Log": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_speed_smoothed": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_speed_smoothed"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_speed_smoothed": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_speed_smoothed"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_speed_smoothed": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_speed_smoothed"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "SINAMICS_300_Log"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

@@ -1,4 +1,5 @@
 package com.siemens.datalayer.selenium.snc;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,7 +62,7 @@ public class SNCTest extends WebDriverBaseClass {
     @Step("Check the Login function with correct password")
     @Severity(SeverityLevel.CRITICAL)
     public void loginTest() {
-    	this.login();
+        this.login();
         String text = driver.findElement(By.cssSelector(".title")).getText();
 
         Assert.assertEquals(text, "SNC MEtiS DASHBOARD");
@@ -191,7 +192,7 @@ public class SNCTest extends WebDriverBaseClass {
         this.verifySNCDemoBackendOfPage4();
     }
 
-    private int countMatchSize(Matcher m){
+    private int countMatchSize(Matcher m) {
         List<String> allMatches = new ArrayList<String>();
         while (m.find()) {
             allMatches.add(m.group());
@@ -254,22 +255,23 @@ public class SNCTest extends WebDriverBaseClass {
     }
 
 
-    public void verifySNCDemoBackendOfPage3(){
+    public void verifySNCDemoBackendOfPage3() {
         this.verifySNCGraphQLApi();
         this.verifySNCStatisticApi();
         this.verifySNCAbnormalApi();
     }
 
-    public void verifySNCDemoBackendOfPage4(){
+    public void verifySNCDemoBackendOfPage4() {
         List<String> ids = this.getAllDeviceIds();
-        for(String id:ids){
+        for (String id : ids) {
             this.verifySNCGraphQLApiWithDeviceRelation(id);
             this.verifySNCGraphQLApiWithDeviceDetail(id);
         }
+        this.verifySNCGraphQLApiWithSampleDeviceHistoryData();
     }
 
 
-    public void verifySNCGraphQLApiWithDeviceRelation(String id){
+    public void verifySNCGraphQLApiWithDeviceRelation(String id) {
         String body = "{\n" +
                 "\tDevice(cond: \"{id:{_eq: %s}}\", order: \"\") {\n" +
                 "\t\tid Connect_To_Work_Position(cond: \"\", order: \"\") {\n" +
@@ -309,7 +311,7 @@ public class SNCTest extends WebDriverBaseClass {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Device");
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data.Device");
 
         Assert.assertEquals(1, data.size());
 //        assertThat(response.getBody().asString(),
@@ -317,7 +319,7 @@ public class SNCTest extends WebDriverBaseClass {
     }
 
 
-    public void verifySNCGraphQLApiWithDeviceDetail(String id){
+    public void verifySNCGraphQLApiWithDeviceDetail(String id) {
         String body = "{\n" +
                 "  Device(cond: \"{id:{_eq:%s}}\") {\n" +
                 "\trating\n" +
@@ -355,14 +357,31 @@ public class SNCTest extends WebDriverBaseClass {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Device");
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data.Device");
 
         Assert.assertEquals(1, data.size());
         assertThat(response.getBody().asString(),
                 matchesJsonSchemaInClasspath("snc-graphql-device-schema.json"));
     }
 
-    public void verifySNCGraphQLApi(){
+
+    public void verifySNCGraphQLApiWithSampleDeviceHistoryData() {
+        String sampleBody1 = "{SINAMICS_300_Log(cond: \"{update_time:{_gte:\\\"1600510503061\\\", _lte: \\\"1601115303061\\\"},port:{_eq:\\\"4\\\"}, sinamics_300:{_eq:\\\"9d734276-3a63-4bb7-a737-beb63b15e868\\\"}}\") {update_time Actual_speed_smoothed}}";
+        Response response = this.sncDemoGraphQLApi(sampleBody1);
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data.SINAMICS_300_Log");
+
+        Assert.assertTrue(data.size() > 1);
+//        assertThat(response.getBody().asString(),
+//                matchesJsonSchemaInClasspath("snc-graphql-device-history-data-schema.json"));
+    }
+
+    public void verifySNCGraphQLApi() {
         Response response = this.queryAllDevices();
         Reporter.log("Response status is " + response.getStatusCode());
 
@@ -370,14 +389,14 @@ public class SNCTest extends WebDriverBaseClass {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data.Work_Center");
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data.Work_Center");
 
         Assert.assertEquals(3, data.size());
         assertThat(response.getBody().asString(),
                 matchesJsonSchemaInClasspath("snc-graphql-schema.json"));
     }
 
-    public ArrayList getAllDeviceIds(){
+    public ArrayList getAllDeviceIds() {
         Response response = this.queryAllDevices();
         JsonPath jsonPathEvaluator = response.jsonPath();
 
@@ -388,7 +407,7 @@ public class SNCTest extends WebDriverBaseClass {
 //        }
     }
 
-    public Response queryAllDevices(){
+    public Response queryAllDevices() {
         String body = "{\n" +
                 "  Work_Center(cond: \"\", order: \"\") {\n" +
                 "\tname\n" +
@@ -420,7 +439,7 @@ public class SNCTest extends WebDriverBaseClass {
         return this.sncDemoGraphQLApi(body);
     }
 
-    public void verifySNCStatisticApi(){
+    public void verifySNCStatisticApi() {
         Response response = this.sncDemoStatisticApi();
         Reporter.log("Response status is " + response.getStatusCode());
 
@@ -428,7 +447,7 @@ public class SNCTest extends WebDriverBaseClass {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data");
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data");
 
         Assert.assertTrue(data.size() > 0);
         assertThat(response.getBody().asString(),
@@ -436,7 +455,7 @@ public class SNCTest extends WebDriverBaseClass {
     }
 
 
-    public void verifySNCAbnormalApi(){
+    public void verifySNCAbnormalApi() {
         Response response = this.sncDemoAbnormalApi();
         Reporter.log("Response status is " + response.getStatusCode());
 
@@ -444,14 +463,14 @@ public class SNCTest extends WebDriverBaseClass {
         JsonPath jsonPathEvaluator = response.jsonPath();
 
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
-        ArrayList<HashMap> data = (ArrayList)jsonPathEvaluator.get("data");
+        ArrayList<HashMap> data = (ArrayList) jsonPathEvaluator.get("data");
 
 //        Assert.assertTrue(data.size() > 0);
         assertThat(response.getBody().asString(),
                 matchesJsonSchemaInClasspath("snc-abnormal-schema.json"));
     }
 
-    public void verifySNCDemoBackendOfPage1(){
+    public void verifySNCDemoBackendOfPage1() {
         List<String> l = new ArrayList<>(
                 Arrays.asList(
                         "{materialsUsed(DateTimeOverview:\"2018-03-29\"){ProduceQty PassQty MachType RequiredMaterials{RequiredPartNo RequiredQuantity Description ItemClass}}}",
@@ -491,7 +510,7 @@ public class SNCTest extends WebDriverBaseClass {
         }
     }
 
-    public void verifySNCDemoBackendReturnValue(String body, String key){
+    public void verifySNCDemoBackendReturnValue(String body, String key) {
         Response response = this.sncDemoGraphQLControllerApi(body);
 
         Reporter.log("Response status is " + response.getStatusCode());
@@ -505,37 +524,37 @@ public class SNCTest extends WebDriverBaseClass {
         Assert.assertNotNull(jsonPathEvaluator.get("data"));
 
         ArrayList<HashMap> data = jsonPathEvaluator.get(String.format("data.%s", key));
-        Assert.assertTrue(data.size()>0);
+        Assert.assertTrue(data.size() > 0);
     }
 
-    private void loginAndCheckSuccess(){
+    private void loginAndCheckSuccess() {
         this.login();
         String text = driver.findElement(By.cssSelector(".title")).getText();
         Assert.assertEquals(text, "SNC MEtiS DASHBOARD");
     }
 
-    private void login(){
+    private void login() {
         this.login("admin", "ng-alain.com");
     }
 
-    private void login(String user, String pwd){
+    private void login(String user, String pwd) {
         driver.get(this.uiBaseUrl + "/#/passport/login");
         driver.findElement(By.xpath("//input")).sendKeys(user);
         driver.findElement(By.xpath("//input[@type='password']")).sendKeys(pwd);
         driver.findElement(By.cssSelector(".ant-btn")).click();
     }
 
-    private void switchToProductSummary(){
+    private void switchToProductSummary() {
         driver.switchTo().defaultContent();
         driver.findElement(By.id("product")).click();
     }
 
-    private void switchToProductPlan(){
+    private void switchToProductPlan() {
         driver.switchTo().defaultContent();
         driver.findElement(By.id("process")).click();
     }
 
-    private void switchToProductDevice(){
+    private void switchToProductDevice() {
         driver.switchTo().defaultContent();
         driver.findElement(By.id("product-device")).click();
     }
