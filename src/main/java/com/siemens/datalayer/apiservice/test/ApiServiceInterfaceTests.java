@@ -617,7 +617,7 @@ public class ApiServiceInterfaceTests {
         Assert.assertEquals(deviceMap.get("1#制冷机"), String.valueOf(data2.get("id")));
         Assert.assertEquals("1#制冷机", String.valueOf(data2.get("label")));
         HashMap p = jsonPathEvaluator2.get("data.properties");
-        Assert.assertEquals(147, p.size());
+        Assert.assertEquals(146, p.size());
     }
 
     @Test(priority = 0, description = "Test api service interface: Delete subscriptions by invalid id.")
