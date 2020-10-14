@@ -12,10 +12,7 @@ import org.json.JSONException;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.Assert;
 import org.testng.Reporter;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,13 +29,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
-    @BeforeClass
+    @BeforeClass(alwaysRun=true)
     public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31059") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities without filter.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities without filter.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
     @Story("Get Entities without filter")
@@ -62,7 +59,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of given column.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of given column.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out with given column.")
     @Story("Get Entities with filter of given column")
@@ -99,7 +96,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of eq condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of eq condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if eq condition work.")
     @Story("Test filter of eq")
@@ -133,7 +130,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of Neq condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of Neq condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if Neq condition work.")
     @Story("Test filter of eq")
@@ -164,7 +161,7 @@ public class ApiEngineInterfaceTests {
 
 
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of in condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of in condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if in condition work.")
     @Story("Test filter of in")
@@ -208,7 +205,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of nin condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of nin condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if nin condition work.")
     @Story("Test filter of nin")
@@ -243,7 +240,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of date range condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of date range condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if date range condition work.")
     @Story("Test filter of date range")
@@ -280,7 +277,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter and pagination.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter and pagination.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if pagination work.")
     @Story("Test filter of pagination")
@@ -359,7 +356,7 @@ public class ApiEngineInterfaceTests {
         return sorted;
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Get Entities with filter of eq bool condition.")
+    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of eq bool condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if eq bool condition work.")
     @Story("Test filter of eq")
@@ -391,7 +388,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity by graphql.")
+    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
     @Story("Query all instance of one entity by graphql")
@@ -422,7 +419,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with multiple column type by graphql.")
+    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with multiple column type by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with multiple column type and verify if all the analog entities names can be read out.")
     @Story("Query all instance of one entity with multiple column type by graphql")
@@ -460,7 +457,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity not exist in kg by graphql.")
+    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity not exist in kg by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity not exist in kg and verify if correct message return.")
     @Story("Query all instance of one entity not exist in kg by graphql")
@@ -498,7 +495,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
+    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with eq condition and verify if correct return.")
     @Story("Query all instance of one entity with eq condition by graphql")
@@ -545,7 +542,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition no result by graphql.")
+    @Test(groups = "iems", priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition no result by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with eq condition no result and verify if correct return.")
     @Story("Query all instance of one entity with eq condition no result by graphql")
@@ -581,7 +578,7 @@ public class ApiEngineInterfaceTests {
 
 
 
-    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition by graphql.")
+    @Test(groups = "iems", priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with invalid condition and verify if correct return.")
     @Story("Query all instance of one entity with invalid condition by graphql")
@@ -1552,7 +1549,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-//    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with eq condition in relation entity by graphql.")
+//    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with eq condition in relation entity by graphql.")
 //    @Severity(SeverityLevel.BLOCKER)
 //    @Description("Send a request to SUT with entity with eq condition in relation entity and verify if correct return.")
 //    @Story("Api engine Interface API design")
@@ -1594,7 +1591,7 @@ public class ApiEngineInterfaceTests {
 //    }
 
 
-//    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition in relation entity by graphql.")
+//    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with invalid condition in relation entity by graphql.")
 //    @Severity(SeverityLevel.BLOCKER)
 //    @Description("Send a request to SUT with entity with invalid condition in relation entity and verify if correct return.")
 //    @Story("Api engine Interface API design")
@@ -1637,7 +1634,7 @@ public class ApiEngineInterfaceTests {
 
 //
 //
-//    @Test(priority = 0, description = "Test api engine interface: Query all instance of one entity with select column in relation entity by graphql.")
+//    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with select column in relation entity by graphql.")
 //    @Severity(SeverityLevel.BLOCKER)
 //    @Description("Send a request to SUT with entity with  select column in relation entity and verify if correct return.")
 //    @Story("Api engine Interface API design")
