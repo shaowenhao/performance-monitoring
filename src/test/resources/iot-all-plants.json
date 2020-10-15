@@ -1,0 +1,1356 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": ["integer", "number"]
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "Plant_Owner": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "credit_card": {
+                  "type": "string"
+                },
+                "tax_register_org_name": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cellphone": {
+                  "type": "string"
+                },
+                "identification_card": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "org_name": {
+                  "type": "string"
+                },
+                "tax_register_no": {
+                  "type": "string"
+                },
+                "org_no": {
+                  "type": "string"
+                },
+                "registered_capital": {
+                  "type": ["integer", "number"]
+                },
+                "email": {
+                  "type": "string"
+                },
+                "Owner_Plant": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string"
+                        },
+                        "plant_owner": {
+                          "type": "string"
+                        },
+                        "latitude": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "longitude": {
+                          "type": "number"
+                        },
+                        "Has_Device": {
+                          "type": "array",
+                          "items": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "address",
+                        "plant_owner",
+                        "latitude",
+                        "name",
+                        "id",
+                        "longitude",
+                        "Has_Device"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "credit_card",
+                "tax_register_org_name",
+                "name",
+                "cellphone",
+                "identification_card",
+                "id",
+                "org_name",
+                "tax_register_no",
+                "org_no",
+                "registered_capital",
+                "email",
+                "Owner_Plant"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "Plant_Owner"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

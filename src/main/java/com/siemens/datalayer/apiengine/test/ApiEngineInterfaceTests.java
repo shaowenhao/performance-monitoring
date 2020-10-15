@@ -29,13 +29,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
-    @BeforeClass(alwaysRun=true)
+    @BeforeClass(alwaysRun = true)
     public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31059") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities without filter.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities without filter.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
     @Story("Get Entities without filter")
@@ -59,7 +59,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of given column.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of given column.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out with given column.")
     @Story("Get Entities with filter of given column")
@@ -87,16 +87,16 @@ public class ApiEngineInterfaceTests {
                         "type"
                 )
         );
-        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
-        for(HashMap m : a){
+        ArrayList<HashMap> a = (ArrayList) jsonPathEvaluator.get("data.Analog");
+        for (HashMap m : a) {
             List<String> ll = new ArrayList<String>(m.keySet());
-            ll.forEach( key-> Assert.assertTrue(l.contains(key)));
+            ll.forEach(key -> Assert.assertTrue(l.contains(key)));
             Assert.assertEquals("Analog", m.get("type").toString());
         }
 
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of eq condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of eq condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if eq condition work.")
     @Story("Test filter of eq")
@@ -120,7 +120,7 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        ArrayList<HashMap> a = (ArrayList) jsonPathEvaluator.get("data.Analog");
         Assert.assertEquals(1, a.size());
         Assert.assertEquals(a.get(0), new HashMap() {{
             put("Siid", siid);
@@ -130,7 +130,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of Neq condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of Neq condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if Neq condition work.")
     @Story("Test filter of eq")
@@ -154,14 +154,13 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        ArrayList<HashMap> a = (ArrayList) jsonPathEvaluator.get("data.Analog");
         Assert.assertNull(a.stream().filter(d -> Integer.parseInt(d.get("Siid").toString()) == siid).findAny().orElse(null));
 
     }
 
 
-
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of in condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of in condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if in condition work.")
     @Story("Test filter of in")
@@ -186,18 +185,18 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a2 = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        ArrayList<HashMap> a2 = (ArrayList) jsonPathEvaluator.get("data.Analog");
         HashMap<String, Integer> count = new HashMap<>();
-        for(HashMap m: a2){
+        for (HashMap m : a2) {
             String id = m.get("Siid").toString();
             Assert.assertTrue(a.contains(id));
-            if(count.containsKey(id)){
+            if (count.containsKey(id)) {
                 count.put(id, count.get(id) + 1);
             } else {
                 count.put(id, 1);
             }
         }
-        for(String s: a){
+        for (String s : a) {
             Assert.assertTrue(count.containsKey(s));
             Assert.assertTrue(count.get(s) >= 1);
         }
@@ -205,7 +204,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of nin condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of nin condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if nin condition work.")
     @Story("Test filter of nin")
@@ -230,9 +229,9 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a2 = (ArrayList)jsonPathEvaluator.get("data.Analog");
+        ArrayList<HashMap> a2 = (ArrayList) jsonPathEvaluator.get("data.Analog");
 
-        for(HashMap m: a2){
+        for (HashMap m : a2) {
             String id = m.get("Siid").toString();
             Assert.assertFalse(a.contains(id));
         }
@@ -240,7 +239,7 @@ public class ApiEngineInterfaceTests {
 
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of date range condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of date range condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if date range condition work.")
     @Story("Test filter of date range")
@@ -250,7 +249,7 @@ public class ApiEngineInterfaceTests {
         Reporter.log("Send request to entities api with root=SensorData filter=[SensorData][][{_and: [{updateTime: {_lt: \"2020-07-24 03:00:00\"}},{updateTime: {_gt: \"2019-07-24 03:00:00\"}}]}]");
 
         HashMap queryParameters = new HashMap<>();
-        queryParameters.put("filter","[SensorData][][{_and: [{updateTime: {_lt: \"2020-07-24 03:00:00\"}},{updateTime: {_gt: \"2019-07-24 03:00:00\"}}]}]");
+        queryParameters.put("filter", "[SensorData][][{_and: [{updateTime: {_lt: \"2020-07-24 03:00:00\"}},{updateTime: {_gt: \"2019-07-24 03:00:00\"}}]}]");
         queryParameters.put("root", "SensorData");
         queryParameters.put("depth", "1");
 
@@ -265,19 +264,19 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.SensorData");
+        ArrayList<HashMap> a = (ArrayList) jsonPathEvaluator.get("data.SensorData");
         DateTimeFormatter inputFormat1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter inputFormat2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime dt1 = LocalDateTime.parse("2019-07-24 03:00:00", inputFormat1);
         LocalDateTime dt2 = LocalDateTime.parse("2020-07-24 03:00:00", inputFormat1);
-        for(HashMap m: a){
+        for (HashMap m : a) {
             LocalDateTime dt3 = LocalDateTime.parse(m.get("updateTime").toString(), inputFormat2);
             Assert.assertTrue(dt3.isBefore(dt2) && dt3.isAfter(dt1));
         }
 
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter and pagination.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter and pagination.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if pagination work.")
     @Story("Test filter of pagination")
@@ -300,10 +299,10 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        HashMap h = (HashMap)jsonPathEvaluator.get("data.SensorData");
+        HashMap h = (HashMap) jsonPathEvaluator.get("data.SensorData");
         Assert.assertEquals(1, Integer.parseInt(h.get("page").toString()));
         Assert.assertEquals(10, Integer.parseInt(h.get("pageSize").toString()));
-        ArrayList<HashMap> c = (ArrayList)h.get("content");
+        ArrayList<HashMap> c = (ArrayList) h.get("content");
         Assert.assertEquals(10, c.size());
         Assert.assertTrue(this.isSortedByDateStringKey(c, "updateTime", "asc"));
 
@@ -325,10 +324,10 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody2.getMessage());
         Assert.assertEquals(100000, rspBody2.getCode());
         JsonPath jsonPathEvaluator2 = response2.jsonPath();
-        HashMap h2 = (HashMap)jsonPathEvaluator2.get("data.SensorData");
+        HashMap h2 = (HashMap) jsonPathEvaluator2.get("data.SensorData");
         Assert.assertEquals(1, Integer.parseInt(h2.get("page").toString()));
         Assert.assertEquals(10, Integer.parseInt(h2.get("pageSize").toString()));
-        ArrayList<HashMap> c2 = (ArrayList)h2.get("content");
+        ArrayList<HashMap> c2 = (ArrayList) h2.get("content");
         Assert.assertEquals(10, c2.size());
         Assert.assertTrue(this.isSortedByDateStringKey(c2, "updateTime", "desc"));
     }
@@ -343,12 +342,14 @@ public class ApiEngineInterfaceTests {
                 case "asc":
                     if (dt1.isAfter(dt2)) {
                         sorted = false;
-                    };
+                    }
+                    ;
                     break;
                 case "desc":
                     if (dt1.isBefore(dt2)) {
                         sorted = false;
-                    };
+                    }
+                    ;
                     break;
             }
         }
@@ -356,7 +357,7 @@ public class ApiEngineInterfaceTests {
         return sorted;
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Get Entities with filter of eq bool condition.")
+    @Test(groups = "iems", description = "Test api engine interface: Get Entities with filter of eq bool condition.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if eq bool condition work.")
     @Story("Test filter of eq")
@@ -380,15 +381,15 @@ public class ApiEngineInterfaceTests {
         Assert.assertEquals("Successfully", rspBody.getMessage());
         Assert.assertEquals(100000, rspBody.getCode());
         JsonPath jsonPathEvaluator = response.jsonPath();
-        ArrayList<HashMap> a = (ArrayList)jsonPathEvaluator.get("data.Analog");
-        for(HashMap m: a){
+        ArrayList<HashMap> a = (ArrayList) jsonPathEvaluator.get("data.Analog");
+        for (HashMap m : a) {
             Assert.assertEquals(3, m.size());
-            Assert.assertEquals(true, (boolean)m.get("positiveFlowIn"));
+            Assert.assertEquals(true, (boolean) m.get("positiveFlowIn"));
         }
 
     }
 
-    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity by graphql.")
+    @Test(groups = "iems", description = "Test api engine interface: Query all instance of one entity by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT and verify if all the analog entities names can be read out.")
     @Story("Query all instance of one entity by graphql")
@@ -419,7 +420,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with multiple column type by graphql.")
+    @Test(groups = "iems", description = "Test api engine interface: Query all instance of one entity with multiple column type by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with multiple column type and verify if all the analog entities names can be read out.")
     @Story("Query all instance of one entity with multiple column type by graphql")
@@ -457,7 +458,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity not exist in kg by graphql.")
+    @Test(groups = "iems", description = "Test api engine interface: Query all instance of one entity not exist in kg by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity not exist in kg and verify if correct message return.")
     @Story("Query all instance of one entity not exist in kg by graphql")
@@ -495,7 +496,7 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
+    @Test(groups = "iems", description = "Test api engine interface: Query all instance of one entity with eq condition by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with entity with eq condition and verify if correct return.")
     @Story("Query all instance of one entity with eq condition by graphql")
@@ -535,9 +536,9 @@ public class ApiEngineInterfaceTests {
                         "deviceId"
                 )
         );
-        HashMap m = (HashMap)jsonPathEvaluator.get("data.Analog[0]");
+        HashMap m = (HashMap) jsonPathEvaluator.get("data.Analog[0]");
         List<String> ll = new ArrayList<String>(m.keySet());
-        ll.forEach( key-> Assert.assertTrue(l.contains(key)));
+        ll.forEach(key -> Assert.assertTrue(l.contains(key)));
 
     }
 
@@ -575,7 +576,6 @@ public class ApiEngineInterfaceTests {
         Assert.assertNull(jsonPathEvaluator.get("data.Analog"));
 
     }
-
 
 
     @Test(groups = "iems", priority = 0, description = "Test api engine interface: Query all instance of one entity with invalid condition by graphql.")
@@ -735,7 +735,6 @@ public class ApiEngineInterfaceTests {
                 matchesJsonSchemaInClasspath("jinzu-all-projects-graphql-schema.json"));
 
     }
-
 
 
     @Test(groups = "jinzu", description = "Test api engine interface: Query one jinzu power station project by graphql.")
@@ -973,7 +972,6 @@ public class ApiEngineInterfaceTests {
             Assert.fail("Failed to compare result with expect json ", e);
         }
     }
-
 
 
     @Test(groups = "jinzu", description = "Test api engine interface: Query one jinzu project lease by graphql.")
@@ -1549,6 +1547,65 @@ public class ApiEngineInterfaceTests {
     }
 
 
+
+    @Test(groups = "iot", description = "Test api engine interface: Query all plant by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query all iot plant by graphql")
+    public void queryAllIOTPlantByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "      Plant_Owner(cond: \"\", order: \"\") {\n" +
+                "        credit_card\n" +
+                "        tax_register_org_name\n" +
+                "        name\n" +
+                "        cellphone\n" +
+                "        identification_card\n" +
+                "        id\n" +
+                "        org_name\n" +
+                "        tax_register_no\n" +
+                "        org_no\n" +
+                "        registered_capital\n" +
+                "        email\n" +
+                "        Owner_Plant(cond: \"\", order: \"\") {\n" +
+                "          address\n" +
+                "          plant_owner\n" +
+                "          latitude\n" +
+                "          name\n" +
+                "          id\n" +
+                "          longitude\n" +
+                "          Has_Device(cond: \"\", order: \"\") {\n" +
+                "            id\n" +
+                "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }";
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data.Plant_Owner");
+        Assert.assertEquals(data.size(), 6);
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("iot-all-plants.json"));
+
+    }
+
+
 //    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with eq condition in relation entity by graphql.")
 //    @Severity(SeverityLevel.BLOCKER)
 //    @Description("Send a request to SUT with entity with eq condition in relation entity and verify if correct return.")
@@ -1671,8 +1728,6 @@ public class ApiEngineInterfaceTests {
 //        Assert.assertNull(jsonPathEvaluator.get("data"));
 //
 //    }
-
-
 
 
 }
