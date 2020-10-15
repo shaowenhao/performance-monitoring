@@ -1079,7 +1079,7 @@ public class ApiEngineInterfaceTests {
                 "                \"lease_type\": \"2\",\n" +
                 "                \"position\": \"河南省安阳市安阳县马家乡北齐村\",\n" +
                 "                \"id\": \"666\",\n" +
-                "                \"purchase_time\": null,\n" +
+                "                \"purchase_time\": \"2018-07-13T12:00:00\",\n" +
                 "                \"status\": \"online\",\n" +
                 "                \"lease_group\": \"33\",\n" +
                 "                \"product_model\": null,\n" +
@@ -1353,7 +1353,7 @@ public class ApiEngineInterfaceTests {
                 "                \"lease_type\": \"2\",\n" +
                 "                \"position\": \"河南省安阳市安阳县马家乡北齐村\",\n" +
                 "                \"id\": \"666\",\n" +
-                "                \"purchase_time\": null,\n" +
+                "                \"purchase_time\": \"2018-07-13T12:00:00\",\n" +
                 "                \"status\": \"online\",\n" +
                 "                \"lease_group\": \"33\",\n" +
                 "                \"product_model\": null,\n" +
@@ -1578,6 +1578,90 @@ public class ApiEngineInterfaceTests {
                 "          Has_Device(cond: \"\", order: \"\") {\n" +
                 "            id\n" +
                 "          }\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }";
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data.Plant_Owner");
+        Assert.assertEquals(data.size(), 6);
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("iot-all-plants.json"));
+
+    }
+
+
+
+    @Test(groups = "iot", description = "Test api engine interface: Query one plant by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query one iot plant by graphql")
+    public void queryOneIOTPlantByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "      Plant(cond: \"{id:{_eq: 3}}\", order: \"\") {\n" +
+                "        address\n" +
+                "        plant_owner\n" +
+                "        latitude\n" +
+                "        name\n" +
+                "        id\n" +
+                "        longitude\n" +
+                "        invert_Plant_Owner(cond: \"\", order: \"\") {\n" +
+                "          credit_card\n" +
+                "          tax_register_org_name\n" +
+                "          name\n" +
+                "          cellphone\n" +
+                "          identification_card\n" +
+                "          id\n" +
+                "          org_name\n" +
+                "          tax_register_no\n" +
+                "          org_no\n" +
+                "          registered_capital\n" +
+                "          email\n" +
+                "        }\n" +
+                "        Has_Device(cond: \"\", order: \"\") {\n" +
+                "          hi\n" +
+                "          amps\n" +
+                "          bearings\n" +
+                "          rating\n" +
+                "          type\n" +
+                "          eff_grade\n" +
+                "          manufacturer\n" +
+                "          output\n" +
+                "          sf\n" +
+                "          design\n" +
+                "          model\n" +
+                "          id\n" +
+                "          sinamics_300\n" +
+                "          volts\n" +
+                "          eff\n" +
+                "          poles\n" +
+                "          electric_current\n" +
+                "          ip\n" +
+                "          weight\n" +
+                "          rpm\n" +
+                "          ins\n" +
+                "          plant\n" +
+                "          name\n" +
+                "          sinamics_300_port\n" +
+                "          serial_no\n" +
+                "          frame\n" +
                 "        }\n" +
                 "      }\n" +
                 "    }";
