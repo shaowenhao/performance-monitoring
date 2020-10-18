@@ -13,14 +13,12 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.*;
+import org.testng.annotations.Optional;
 
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +29,7 @@ public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass(alwaysRun = true)
-    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31059") String port) {
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30346") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
@@ -2086,6 +2084,88 @@ public class ApiEngineInterfaceTests {
         assertThat(response.getBody().asString(),
                 matchesJsonSchemaInClasspath("iot-device-history-data-page.json"));
 
+
+    }
+
+
+
+    @Test(groups = "iot", description = "Test api engine interface: Query one device one type one day history data page by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query one device one type one day history data page by graphql")
+    public void queryOneIOTDeviceOneDayDataWithTypeByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "  SINAMICS_300_LogConnection(cond: \"{update_time:{_gte:\\\"%s\\\", _lte: \\\"%s\\\"}, port:{_eq:6}, sinamics_300:{_eq:\\\"ddd19ed6-7fb5-4ab0-972a-75a8657a30de\\\"}}\", order: \"update_time DESC\", after: \"0\", first: 1000) {\n" +
+                "\ttotalElements\n" +
+                "\ttotalPages\n" +
+                "\tpageSize\n" +
+                "\tpage\n" +
+                "\tnumberOfElements\n" +
+                "\tedges {\n" +
+                "\t  node {\n" +
+                "\t\tupdate_time %s\n" +
+                "\t  }\n" +
+                "\t  cursor\n" +
+                "\t}\n" +
+                "\tpageInfo {\n" +
+                "\t  endCursor\n" +
+                "\t  hasNextPage\n" +
+                "\t}\n" +
+                "  }\n" +
+                "}";
+
+        long startTime = System.currentTimeMillis() - 24*60*60*1000;
+        long endTime = System.currentTimeMillis();
+
+        List<String> l = new ArrayList<String>(
+                Arrays.asList(
+                        "Act_filtered_rotor_speed Act_filtered_torque",
+                        "Act_filtered_DC_link_volt Rated_motor_current",
+                        "Act_filtered_DC_link_volt",
+                        "Rated_converter_current",
+                        "Rated_motor_current",
+                        "Converter_state",
+                        "CO_Converter_temperature",
+                        "CO_Act_motor_temperature",
+                        "Actual_speed_smoothed"
+                )
+        );
+
+        for (String k:l
+             ) {
+
+            Response response = ApiEngineEndpoint.postGraphql(String.format(query, startTime, endTime, k));
+
+            Reporter.log("Response status is " + response.getStatusCode());
+
+            Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+            GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+            Assert.assertEquals("Successfully", rspBody.getMessage());
+            Assert.assertEquals(100000, rspBody.getCode());
+
+            JsonPath jsonPathEvaluator = response.jsonPath();
+
+            Assert.assertNotNull(jsonPathEvaluator.get("data.SINAMICS_300_LogConnection"));
+
+            HashMap data = jsonPathEvaluator.get("data.SINAMICS_300_LogConnection");
+            Assert.assertTrue(Integer.parseInt(data.get("totalElements").toString()) > 1);
+            Assert.assertTrue(Integer.parseInt(data.get("totalPages").toString()) >= 1);
+            Assert.assertTrue(Integer.parseInt(data.get("pageSize").toString()) == 1000);
+            Assert.assertTrue(Integer.parseInt(data.get("numberOfElements").toString()) > 1);
+            Assert.assertTrue(((List)(data.get("edges"))).size() > 5);
+
+            List<HashMap> values = jsonPathEvaluator.getList("data.SINAMICS_300_LogConnection.edges.node");
+            for (HashMap m: values
+                 ) {
+                Assert.assertTrue(m.values()
+                        .stream()
+                        .allMatch(Objects::nonNull));
+            }
+        }
 
     }
 
