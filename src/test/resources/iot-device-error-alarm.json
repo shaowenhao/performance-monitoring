@@ -1,0 +1,420 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "SINAMICS_300_Log": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "update_time": {
+                  "type": "string"
+                },
+                "Actual_fault_code": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "update_time",
+                "Actual_fault_code"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "SINAMICS_300_Log"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

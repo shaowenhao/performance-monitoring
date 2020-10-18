@@ -1,0 +1,1529 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": ["integer", "number"]
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "SINAMICS_300_LogConnection": {
+          "type": "object",
+          "properties": {
+            "totalElements": {
+              "type": ["integer", "number"]
+            },
+            "totalPages": {
+              "type": ["integer", "number"]
+            },
+            "pageSize": {
+              "type": ["integer", "number"]
+            },
+            "page": {
+              "type": ["integer", "number"]
+            },
+            "numberOfElements": {
+              "type": ["integer", "number"]
+            },
+            "edges": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "node": {
+                      "type": "object",
+                      "properties": {
+                        "outputcurrent_actual_AI0": {
+                          "type": "number"
+                        },
+                        "Braking_status_word": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI0": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_DC_link_volt": {
+                          "type": "number"
+                        },
+                        "Safely_remove_mem_card_status": {
+                          "type": "number"
+                        },
+                        "Actual_speed_smoothed": {
+                          "type": "number"
+                        },
+                        "Motor_utilization_thermal": {
+                          "type": "number"
+                        },
+                        "Number_of_drive_objects": {
+                          "type": "number"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "port1_CO_motor_temperature": {
+                          "type": "number"
+                        },
+                        "Fault_code_6": {
+                          "type": "number"
+                        },
+                        "sinamics_300": {
+                          "type": "string"
+                        },
+                        "Fault_code_5": {
+                          "type": "number"
+                        },
+                        "Fault_code_8": {
+                          "type": "number"
+                        },
+                        "Fault_code_7": {
+                          "type": "number"
+                        },
+                        "Status_word_1": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Mod_min_value": {
+                          "type": "number"
+                        },
+                        "Status_word_2": {
+                          "type": "number"
+                        },
+                        "Digital_in_status_inverted": {
+                          "type": "number"
+                        },
+                        "CO_Act_filtered_current_Isq": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_2": {
+                          "type": "number"
+                        },
+                        "Energy_consumpt_meter": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_1": {
+                          "type": "number"
+                        },
+                        "Converter_state": {
+                          "type": "number"
+                        },
+                        "Device_type_identification": {
+                          "type": "number"
+                        },
+                        "Device_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Analog_inputs_in_percent_AI1": {
+                          "type": "number"
+                        },
+                        "Missing_enable_sig": {
+                          "type": "number"
+                        },
+                        "unit_line_supply_voltage": {
+                          "type": ["integer", "number"]
+                        },
+                        "Speed_setpoint_smoothed": {
+                          "type": "number"
+                        },
+                        "port": {
+                          "type": ["integer", "number"]
+                        },
+                        "Analog_inputs_in_percent_AI0": {
+                          "type": "number"
+                        },
+                        "Firmware_date_year": {
+                          "type": "number"
+                        },
+                        "Firmware_patch_hot_fix": {
+                          "type": "number"
+                        },
+                        "terminal_actual_value": {
+                          "type": ["integer", "number"]
+                        },
+                        "CO_Act_motor_temperature": {
+                          "type": "number"
+                        },
+                        "S6_load_duty_cycle": {
+                          "type": "number"
+                        },
+                        "Company_IDDeviceidentification": {
+                          "type": "number"
+                        },
+                        "Rated_converter_power": {
+                          "type": "number"
+                        },
+                        "Rated_converter_current": {
+                          "type": "number"
+                        },
+                        "Firmware_date_day_month": {
+                          "type": "number"
+                        },
+                        "Abs_actual_current_smoothed": {
+                          "type": "number"
+                        },
+                        "ZSW_seq_ctrlStatuswordsequence": {
+                          "type": "number"
+                        },
+                        "S1_cont_duty_cycle": {
+                          "type": "number"
+                        },
+                        "update_time": {
+                          "type": "string"
+                        },
+                        "Energy_consumption_saved": {
+                          "type": "number"
+                        },
+                        "CU_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Freq_Setpoint_before_RFG": {
+                          "type": "number"
+                        },
+                        "Digital_out_status": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Actual": {
+                          "type": "number"
+                        },
+                        "Fault_code_2": {
+                          "type": "number"
+                        },
+                        "Fault_code_1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_output_voltage": {
+                          "type": "number"
+                        },
+                        "Fault_code_4": {
+                          "type": "number"
+                        },
+                        "Fault_code_3": {
+                          "type": "number"
+                        },
+                        "Act_filtered_frequency": {
+                          "type": "number"
+                        },
+                        "Act_filtered_rotor_speed": {
+                          "type": "number"
+                        },
+                        "Digital_in_status": {
+                          "type": "number"
+                        },
+                        "Act_filtered_torque": {
+                          "type": "number"
+                        },
+                        "output_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Actual_alarm_code": {
+                          "type": "number"
+                        },
+                        "Act_filtered_powerDisplays": {
+                          "type": "number"
+                        },
+                        "Rated_motor_current": {
+                          "type": "number"
+                        },
+                        "CO_Converter_temperature": {
+                          "type": "number"
+                        },
+                        "Control_word_faults_alarms": {
+                          "type": "number"
+                        },
+                        "Actual_fault_code": {
+                          "type": "number"
+                        },
+                        "Control_word_1": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "outputcurrent_actual_AI0",
+                        "Braking_status_word",
+                        "input_current_actual_AI0",
+                        "input_current_actual_AI1",
+                        "Act_filtered_DC_link_volt",
+                        "Safely_remove_mem_card_status",
+                        "Actual_speed_smoothed",
+                        "Motor_utilization_thermal",
+                        "Number_of_drive_objects",
+                        "id",
+                        "port1_CO_motor_temperature",
+                        "Fault_code_6",
+                        "sinamics_300",
+                        "Fault_code_5",
+                        "Fault_code_8",
+                        "Fault_code_7",
+                        "Status_word_1",
+                        "Pulse_frequency_Mod_min_value",
+                        "Status_word_2",
+                        "Digital_in_status_inverted",
+                        "CO_Act_filtered_current_Isq",
+                        "Status_word_faults_alarms_2",
+                        "Energy_consumpt_meter",
+                        "Status_word_faults_alarms_1",
+                        "Converter_state",
+                        "Device_type_identification",
+                        "Device_Firmware_version",
+                        "Analog_inputs_in_percent_AI1",
+                        "Missing_enable_sig",
+                        "unit_line_supply_voltage",
+                        "Speed_setpoint_smoothed",
+                        "port",
+                        "Analog_inputs_in_percent_AI0",
+                        "Firmware_date_year",
+                        "Firmware_patch_hot_fix",
+                        "terminal_actual_value",
+                        "CO_Act_motor_temperature",
+                        "S6_load_duty_cycle",
+                        "Company_IDDeviceidentification",
+                        "Rated_converter_power",
+                        "Rated_converter_current",
+                        "Firmware_date_day_month",
+                        "Abs_actual_current_smoothed",
+                        "ZSW_seq_ctrlStatuswordsequence",
+                        "S1_cont_duty_cycle",
+                        "update_time",
+                        "Energy_consumption_saved",
+                        "CU_Firmware_version",
+                        "Freq_Setpoint_before_RFG",
+                        "Digital_out_status",
+                        "Pulse_frequency_Actual",
+                        "Fault_code_2",
+                        "Fault_code_1",
+                        "Act_filtered_output_voltage",
+                        "Fault_code_4",
+                        "Fault_code_3",
+                        "Act_filtered_frequency",
+                        "Act_filtered_rotor_speed",
+                        "Digital_in_status",
+                        "Act_filtered_torque",
+                        "output_current_actual_AI1",
+                        "Actual_alarm_code",
+                        "Act_filtered_powerDisplays",
+                        "Rated_motor_current",
+                        "CO_Converter_temperature",
+                        "Control_word_faults_alarms",
+                        "Actual_fault_code",
+                        "Control_word_1"
+                      ]
+                    },
+                    "cursor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "node",
+                    "cursor"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "node": {
+                      "type": "object",
+                      "properties": {
+                        "outputcurrent_actual_AI0": {
+                          "type": "number"
+                        },
+                        "Braking_status_word": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI0": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_DC_link_volt": {
+                          "type": "number"
+                        },
+                        "Safely_remove_mem_card_status": {
+                          "type": "number"
+                        },
+                        "Actual_speed_smoothed": {
+                          "type": "number"
+                        },
+                        "Motor_utilization_thermal": {
+                          "type": "number"
+                        },
+                        "Number_of_drive_objects": {
+                          "type": "number"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "port1_CO_motor_temperature": {
+                          "type": "number"
+                        },
+                        "Fault_code_6": {
+                          "type": "number"
+                        },
+                        "sinamics_300": {
+                          "type": "string"
+                        },
+                        "Fault_code_5": {
+                          "type": "number"
+                        },
+                        "Fault_code_8": {
+                          "type": "number"
+                        },
+                        "Fault_code_7": {
+                          "type": "number"
+                        },
+                        "Status_word_1": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Mod_min_value": {
+                          "type": "number"
+                        },
+                        "Status_word_2": {
+                          "type": "number"
+                        },
+                        "Digital_in_status_inverted": {
+                          "type": "number"
+                        },
+                        "CO_Act_filtered_current_Isq": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_2": {
+                          "type": "number"
+                        },
+                        "Energy_consumpt_meter": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_1": {
+                          "type": "number"
+                        },
+                        "Converter_state": {
+                          "type": "number"
+                        },
+                        "Device_type_identification": {
+                          "type": "number"
+                        },
+                        "Device_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Analog_inputs_in_percent_AI1": {
+                          "type": "number"
+                        },
+                        "Missing_enable_sig": {
+                          "type": "number"
+                        },
+                        "unit_line_supply_voltage": {
+                          "type": ["integer", "number"]
+                        },
+                        "Speed_setpoint_smoothed": {
+                          "type": "number"
+                        },
+                        "port": {
+                          "type": ["integer", "number"]
+                        },
+                        "Analog_inputs_in_percent_AI0": {
+                          "type": "number"
+                        },
+                        "Firmware_date_year": {
+                          "type": "number"
+                        },
+                        "Firmware_patch_hot_fix": {
+                          "type": "number"
+                        },
+                        "terminal_actual_value": {
+                          "type": ["integer", "number"]
+                        },
+                        "CO_Act_motor_temperature": {
+                          "type": "number"
+                        },
+                        "S6_load_duty_cycle": {
+                          "type": "number"
+                        },
+                        "Company_IDDeviceidentification": {
+                          "type": "number"
+                        },
+                        "Rated_converter_power": {
+                          "type": "number"
+                        },
+                        "Rated_converter_current": {
+                          "type": "number"
+                        },
+                        "Firmware_date_day_month": {
+                          "type": "number"
+                        },
+                        "Abs_actual_current_smoothed": {
+                          "type": "number"
+                        },
+                        "ZSW_seq_ctrlStatuswordsequence": {
+                          "type": "number"
+                        },
+                        "S1_cont_duty_cycle": {
+                          "type": "number"
+                        },
+                        "update_time": {
+                          "type": "string"
+                        },
+                        "Energy_consumption_saved": {
+                          "type": "number"
+                        },
+                        "CU_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Freq_Setpoint_before_RFG": {
+                          "type": "number"
+                        },
+                        "Digital_out_status": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Actual": {
+                          "type": "number"
+                        },
+                        "Fault_code_2": {
+                          "type": "number"
+                        },
+                        "Fault_code_1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_output_voltage": {
+                          "type": "number"
+                        },
+                        "Fault_code_4": {
+                          "type": "number"
+                        },
+                        "Fault_code_3": {
+                          "type": "number"
+                        },
+                        "Act_filtered_frequency": {
+                          "type": "number"
+                        },
+                        "Act_filtered_rotor_speed": {
+                          "type": "number"
+                        },
+                        "Digital_in_status": {
+                          "type": "number"
+                        },
+                        "Act_filtered_torque": {
+                          "type": "number"
+                        },
+                        "output_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Actual_alarm_code": {
+                          "type": "number"
+                        },
+                        "Act_filtered_powerDisplays": {
+                          "type": "number"
+                        },
+                        "Rated_motor_current": {
+                          "type": "number"
+                        },
+                        "CO_Converter_temperature": {
+                          "type": "number"
+                        },
+                        "Control_word_faults_alarms": {
+                          "type": "number"
+                        },
+                        "Actual_fault_code": {
+                          "type": "number"
+                        },
+                        "Control_word_1": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "outputcurrent_actual_AI0",
+                        "Braking_status_word",
+                        "input_current_actual_AI0",
+                        "input_current_actual_AI1",
+                        "Act_filtered_DC_link_volt",
+                        "Safely_remove_mem_card_status",
+                        "Actual_speed_smoothed",
+                        "Motor_utilization_thermal",
+                        "Number_of_drive_objects",
+                        "id",
+                        "port1_CO_motor_temperature",
+                        "Fault_code_6",
+                        "sinamics_300",
+                        "Fault_code_5",
+                        "Fault_code_8",
+                        "Fault_code_7",
+                        "Status_word_1",
+                        "Pulse_frequency_Mod_min_value",
+                        "Status_word_2",
+                        "Digital_in_status_inverted",
+                        "CO_Act_filtered_current_Isq",
+                        "Status_word_faults_alarms_2",
+                        "Energy_consumpt_meter",
+                        "Status_word_faults_alarms_1",
+                        "Converter_state",
+                        "Device_type_identification",
+                        "Device_Firmware_version",
+                        "Analog_inputs_in_percent_AI1",
+                        "Missing_enable_sig",
+                        "unit_line_supply_voltage",
+                        "Speed_setpoint_smoothed",
+                        "port",
+                        "Analog_inputs_in_percent_AI0",
+                        "Firmware_date_year",
+                        "Firmware_patch_hot_fix",
+                        "terminal_actual_value",
+                        "CO_Act_motor_temperature",
+                        "S6_load_duty_cycle",
+                        "Company_IDDeviceidentification",
+                        "Rated_converter_power",
+                        "Rated_converter_current",
+                        "Firmware_date_day_month",
+                        "Abs_actual_current_smoothed",
+                        "ZSW_seq_ctrlStatuswordsequence",
+                        "S1_cont_duty_cycle",
+                        "update_time",
+                        "Energy_consumption_saved",
+                        "CU_Firmware_version",
+                        "Freq_Setpoint_before_RFG",
+                        "Digital_out_status",
+                        "Pulse_frequency_Actual",
+                        "Fault_code_2",
+                        "Fault_code_1",
+                        "Act_filtered_output_voltage",
+                        "Fault_code_4",
+                        "Fault_code_3",
+                        "Act_filtered_frequency",
+                        "Act_filtered_rotor_speed",
+                        "Digital_in_status",
+                        "Act_filtered_torque",
+                        "output_current_actual_AI1",
+                        "Actual_alarm_code",
+                        "Act_filtered_powerDisplays",
+                        "Rated_motor_current",
+                        "CO_Converter_temperature",
+                        "Control_word_faults_alarms",
+                        "Actual_fault_code",
+                        "Control_word_1"
+                      ]
+                    },
+                    "cursor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "node",
+                    "cursor"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "node": {
+                      "type": "object",
+                      "properties": {
+                        "outputcurrent_actual_AI0": {
+                          "type": "number"
+                        },
+                        "Braking_status_word": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI0": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_DC_link_volt": {
+                          "type": "number"
+                        },
+                        "Safely_remove_mem_card_status": {
+                          "type": "number"
+                        },
+                        "Actual_speed_smoothed": {
+                          "type": "number"
+                        },
+                        "Motor_utilization_thermal": {
+                          "type": "number"
+                        },
+                        "Number_of_drive_objects": {
+                          "type": "number"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "port1_CO_motor_temperature": {
+                          "type": "number"
+                        },
+                        "Fault_code_6": {
+                          "type": "number"
+                        },
+                        "sinamics_300": {
+                          "type": "string"
+                        },
+                        "Fault_code_5": {
+                          "type": "number"
+                        },
+                        "Fault_code_8": {
+                          "type": "number"
+                        },
+                        "Fault_code_7": {
+                          "type": "number"
+                        },
+                        "Status_word_1": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Mod_min_value": {
+                          "type": "number"
+                        },
+                        "Status_word_2": {
+                          "type": "number"
+                        },
+                        "Digital_in_status_inverted": {
+                          "type": "number"
+                        },
+                        "CO_Act_filtered_current_Isq": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_2": {
+                          "type": "number"
+                        },
+                        "Energy_consumpt_meter": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_1": {
+                          "type": "number"
+                        },
+                        "Converter_state": {
+                          "type": "number"
+                        },
+                        "Device_type_identification": {
+                          "type": "number"
+                        },
+                        "Device_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Analog_inputs_in_percent_AI1": {
+                          "type": "number"
+                        },
+                        "Missing_enable_sig": {
+                          "type": "number"
+                        },
+                        "unit_line_supply_voltage": {
+                          "type": ["integer", "number"]
+                        },
+                        "Speed_setpoint_smoothed": {
+                          "type": "number"
+                        },
+                        "port": {
+                          "type": ["integer", "number"]
+                        },
+                        "Analog_inputs_in_percent_AI0": {
+                          "type": "number"
+                        },
+                        "Firmware_date_year": {
+                          "type": "number"
+                        },
+                        "Firmware_patch_hot_fix": {
+                          "type": "number"
+                        },
+                        "terminal_actual_value": {
+                          "type": ["integer", "number"]
+                        },
+                        "CO_Act_motor_temperature": {
+                          "type": "number"
+                        },
+                        "S6_load_duty_cycle": {
+                          "type": "number"
+                        },
+                        "Company_IDDeviceidentification": {
+                          "type": "number"
+                        },
+                        "Rated_converter_power": {
+                          "type": "number"
+                        },
+                        "Rated_converter_current": {
+                          "type": "number"
+                        },
+                        "Firmware_date_day_month": {
+                          "type": "number"
+                        },
+                        "Abs_actual_current_smoothed": {
+                          "type": "number"
+                        },
+                        "ZSW_seq_ctrlStatuswordsequence": {
+                          "type": "number"
+                        },
+                        "S1_cont_duty_cycle": {
+                          "type": "number"
+                        },
+                        "update_time": {
+                          "type": "string"
+                        },
+                        "Energy_consumption_saved": {
+                          "type": "number"
+                        },
+                        "CU_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Freq_Setpoint_before_RFG": {
+                          "type": "number"
+                        },
+                        "Digital_out_status": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Actual": {
+                          "type": "number"
+                        },
+                        "Fault_code_2": {
+                          "type": "number"
+                        },
+                        "Fault_code_1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_output_voltage": {
+                          "type": "number"
+                        },
+                        "Fault_code_4": {
+                          "type": "number"
+                        },
+                        "Fault_code_3": {
+                          "type": "number"
+                        },
+                        "Act_filtered_frequency": {
+                          "type": "number"
+                        },
+                        "Act_filtered_rotor_speed": {
+                          "type": "number"
+                        },
+                        "Digital_in_status": {
+                          "type": "number"
+                        },
+                        "Act_filtered_torque": {
+                          "type": "number"
+                        },
+                        "output_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Actual_alarm_code": {
+                          "type": "number"
+                        },
+                        "Act_filtered_powerDisplays": {
+                          "type": "number"
+                        },
+                        "Rated_motor_current": {
+                          "type": "number"
+                        },
+                        "CO_Converter_temperature": {
+                          "type": "number"
+                        },
+                        "Control_word_faults_alarms": {
+                          "type": "number"
+                        },
+                        "Actual_fault_code": {
+                          "type": "number"
+                        },
+                        "Control_word_1": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "outputcurrent_actual_AI0",
+                        "Braking_status_word",
+                        "input_current_actual_AI0",
+                        "input_current_actual_AI1",
+                        "Act_filtered_DC_link_volt",
+                        "Safely_remove_mem_card_status",
+                        "Actual_speed_smoothed",
+                        "Motor_utilization_thermal",
+                        "Number_of_drive_objects",
+                        "id",
+                        "port1_CO_motor_temperature",
+                        "Fault_code_6",
+                        "sinamics_300",
+                        "Fault_code_5",
+                        "Fault_code_8",
+                        "Fault_code_7",
+                        "Status_word_1",
+                        "Pulse_frequency_Mod_min_value",
+                        "Status_word_2",
+                        "Digital_in_status_inverted",
+                        "CO_Act_filtered_current_Isq",
+                        "Status_word_faults_alarms_2",
+                        "Energy_consumpt_meter",
+                        "Status_word_faults_alarms_1",
+                        "Converter_state",
+                        "Device_type_identification",
+                        "Device_Firmware_version",
+                        "Analog_inputs_in_percent_AI1",
+                        "Missing_enable_sig",
+                        "unit_line_supply_voltage",
+                        "Speed_setpoint_smoothed",
+                        "port",
+                        "Analog_inputs_in_percent_AI0",
+                        "Firmware_date_year",
+                        "Firmware_patch_hot_fix",
+                        "terminal_actual_value",
+                        "CO_Act_motor_temperature",
+                        "S6_load_duty_cycle",
+                        "Company_IDDeviceidentification",
+                        "Rated_converter_power",
+                        "Rated_converter_current",
+                        "Firmware_date_day_month",
+                        "Abs_actual_current_smoothed",
+                        "ZSW_seq_ctrlStatuswordsequence",
+                        "S1_cont_duty_cycle",
+                        "update_time",
+                        "Energy_consumption_saved",
+                        "CU_Firmware_version",
+                        "Freq_Setpoint_before_RFG",
+                        "Digital_out_status",
+                        "Pulse_frequency_Actual",
+                        "Fault_code_2",
+                        "Fault_code_1",
+                        "Act_filtered_output_voltage",
+                        "Fault_code_4",
+                        "Fault_code_3",
+                        "Act_filtered_frequency",
+                        "Act_filtered_rotor_speed",
+                        "Digital_in_status",
+                        "Act_filtered_torque",
+                        "output_current_actual_AI1",
+                        "Actual_alarm_code",
+                        "Act_filtered_powerDisplays",
+                        "Rated_motor_current",
+                        "CO_Converter_temperature",
+                        "Control_word_faults_alarms",
+                        "Actual_fault_code",
+                        "Control_word_1"
+                      ]
+                    },
+                    "cursor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "node",
+                    "cursor"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "node": {
+                      "type": "object",
+                      "properties": {
+                        "outputcurrent_actual_AI0": {
+                          "type": "number"
+                        },
+                        "Braking_status_word": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI0": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_DC_link_volt": {
+                          "type": "number"
+                        },
+                        "Safely_remove_mem_card_status": {
+                          "type": "number"
+                        },
+                        "Actual_speed_smoothed": {
+                          "type": "number"
+                        },
+                        "Motor_utilization_thermal": {
+                          "type": "number"
+                        },
+                        "Number_of_drive_objects": {
+                          "type": "number"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "port1_CO_motor_temperature": {
+                          "type": "number"
+                        },
+                        "Fault_code_6": {
+                          "type": "number"
+                        },
+                        "sinamics_300": {
+                          "type": "string"
+                        },
+                        "Fault_code_5": {
+                          "type": "number"
+                        },
+                        "Fault_code_8": {
+                          "type": "number"
+                        },
+                        "Fault_code_7": {
+                          "type": "number"
+                        },
+                        "Status_word_1": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Mod_min_value": {
+                          "type": "number"
+                        },
+                        "Status_word_2": {
+                          "type": "number"
+                        },
+                        "Digital_in_status_inverted": {
+                          "type": "number"
+                        },
+                        "CO_Act_filtered_current_Isq": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_2": {
+                          "type": "number"
+                        },
+                        "Energy_consumpt_meter": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_1": {
+                          "type": "number"
+                        },
+                        "Converter_state": {
+                          "type": "number"
+                        },
+                        "Device_type_identification": {
+                          "type": "number"
+                        },
+                        "Device_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Analog_inputs_in_percent_AI1": {
+                          "type": "number"
+                        },
+                        "Missing_enable_sig": {
+                          "type": "number"
+                        },
+                        "unit_line_supply_voltage": {
+                          "type": ["integer", "number"]
+                        },
+                        "Speed_setpoint_smoothed": {
+                          "type": "number"
+                        },
+                        "port": {
+                          "type": ["integer", "number"]
+                        },
+                        "Analog_inputs_in_percent_AI0": {
+                          "type": "number"
+                        },
+                        "Firmware_date_year": {
+                          "type": "number"
+                        },
+                        "Firmware_patch_hot_fix": {
+                          "type": "number"
+                        },
+                        "terminal_actual_value": {
+                          "type": ["integer", "number"]
+                        },
+                        "CO_Act_motor_temperature": {
+                          "type": "number"
+                        },
+                        "S6_load_duty_cycle": {
+                          "type": "number"
+                        },
+                        "Company_IDDeviceidentification": {
+                          "type": "number"
+                        },
+                        "Rated_converter_power": {
+                          "type": "number"
+                        },
+                        "Rated_converter_current": {
+                          "type": "number"
+                        },
+                        "Firmware_date_day_month": {
+                          "type": "number"
+                        },
+                        "Abs_actual_current_smoothed": {
+                          "type": "number"
+                        },
+                        "ZSW_seq_ctrlStatuswordsequence": {
+                          "type": "number"
+                        },
+                        "S1_cont_duty_cycle": {
+                          "type": "number"
+                        },
+                        "update_time": {
+                          "type": "string"
+                        },
+                        "Energy_consumption_saved": {
+                          "type": "number"
+                        },
+                        "CU_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Freq_Setpoint_before_RFG": {
+                          "type": "number"
+                        },
+                        "Digital_out_status": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Actual": {
+                          "type": "number"
+                        },
+                        "Fault_code_2": {
+                          "type": "number"
+                        },
+                        "Fault_code_1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_output_voltage": {
+                          "type": "number"
+                        },
+                        "Fault_code_4": {
+                          "type": "number"
+                        },
+                        "Fault_code_3": {
+                          "type": "number"
+                        },
+                        "Act_filtered_frequency": {
+                          "type": "number"
+                        },
+                        "Act_filtered_rotor_speed": {
+                          "type": "number"
+                        },
+                        "Digital_in_status": {
+                          "type": "number"
+                        },
+                        "Act_filtered_torque": {
+                          "type": "number"
+                        },
+                        "output_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Actual_alarm_code": {
+                          "type": "number"
+                        },
+                        "Act_filtered_powerDisplays": {
+                          "type": "number"
+                        },
+                        "Rated_motor_current": {
+                          "type": "number"
+                        },
+                        "CO_Converter_temperature": {
+                          "type": "number"
+                        },
+                        "Control_word_faults_alarms": {
+                          "type": "number"
+                        },
+                        "Actual_fault_code": {
+                          "type": "number"
+                        },
+                        "Control_word_1": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "outputcurrent_actual_AI0",
+                        "Braking_status_word",
+                        "input_current_actual_AI0",
+                        "input_current_actual_AI1",
+                        "Act_filtered_DC_link_volt",
+                        "Safely_remove_mem_card_status",
+                        "Actual_speed_smoothed",
+                        "Motor_utilization_thermal",
+                        "Number_of_drive_objects",
+                        "id",
+                        "port1_CO_motor_temperature",
+                        "Fault_code_6",
+                        "sinamics_300",
+                        "Fault_code_5",
+                        "Fault_code_8",
+                        "Fault_code_7",
+                        "Status_word_1",
+                        "Pulse_frequency_Mod_min_value",
+                        "Status_word_2",
+                        "Digital_in_status_inverted",
+                        "CO_Act_filtered_current_Isq",
+                        "Status_word_faults_alarms_2",
+                        "Energy_consumpt_meter",
+                        "Status_word_faults_alarms_1",
+                        "Converter_state",
+                        "Device_type_identification",
+                        "Device_Firmware_version",
+                        "Analog_inputs_in_percent_AI1",
+                        "Missing_enable_sig",
+                        "unit_line_supply_voltage",
+                        "Speed_setpoint_smoothed",
+                        "port",
+                        "Analog_inputs_in_percent_AI0",
+                        "Firmware_date_year",
+                        "Firmware_patch_hot_fix",
+                        "terminal_actual_value",
+                        "CO_Act_motor_temperature",
+                        "S6_load_duty_cycle",
+                        "Company_IDDeviceidentification",
+                        "Rated_converter_power",
+                        "Rated_converter_current",
+                        "Firmware_date_day_month",
+                        "Abs_actual_current_smoothed",
+                        "ZSW_seq_ctrlStatuswordsequence",
+                        "S1_cont_duty_cycle",
+                        "update_time",
+                        "Energy_consumption_saved",
+                        "CU_Firmware_version",
+                        "Freq_Setpoint_before_RFG",
+                        "Digital_out_status",
+                        "Pulse_frequency_Actual",
+                        "Fault_code_2",
+                        "Fault_code_1",
+                        "Act_filtered_output_voltage",
+                        "Fault_code_4",
+                        "Fault_code_3",
+                        "Act_filtered_frequency",
+                        "Act_filtered_rotor_speed",
+                        "Digital_in_status",
+                        "Act_filtered_torque",
+                        "output_current_actual_AI1",
+                        "Actual_alarm_code",
+                        "Act_filtered_powerDisplays",
+                        "Rated_motor_current",
+                        "CO_Converter_temperature",
+                        "Control_word_faults_alarms",
+                        "Actual_fault_code",
+                        "Control_word_1"
+                      ]
+                    },
+                    "cursor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "node",
+                    "cursor"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "node": {
+                      "type": "object",
+                      "properties": {
+                        "outputcurrent_actual_AI0": {
+                          "type": "number"
+                        },
+                        "Braking_status_word": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI0": {
+                          "type": "number"
+                        },
+                        "input_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_DC_link_volt": {
+                          "type": "number"
+                        },
+                        "Safely_remove_mem_card_status": {
+                          "type": "number"
+                        },
+                        "Actual_speed_smoothed": {
+                          "type": "number"
+                        },
+                        "Motor_utilization_thermal": {
+                          "type": "number"
+                        },
+                        "Number_of_drive_objects": {
+                          "type": "number"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "port1_CO_motor_temperature": {
+                          "type": "number"
+                        },
+                        "Fault_code_6": {
+                          "type": "number"
+                        },
+                        "sinamics_300": {
+                          "type": "string"
+                        },
+                        "Fault_code_5": {
+                          "type": "number"
+                        },
+                        "Fault_code_8": {
+                          "type": "number"
+                        },
+                        "Fault_code_7": {
+                          "type": "number"
+                        },
+                        "Status_word_1": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Mod_min_value": {
+                          "type": "number"
+                        },
+                        "Status_word_2": {
+                          "type": "number"
+                        },
+                        "Digital_in_status_inverted": {
+                          "type": "number"
+                        },
+                        "CO_Act_filtered_current_Isq": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_2": {
+                          "type": "number"
+                        },
+                        "Energy_consumpt_meter": {
+                          "type": "number"
+                        },
+                        "Status_word_faults_alarms_1": {
+                          "type": "number"
+                        },
+                        "Converter_state": {
+                          "type": "number"
+                        },
+                        "Device_type_identification": {
+                          "type": "number"
+                        },
+                        "Device_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Analog_inputs_in_percent_AI1": {
+                          "type": "number"
+                        },
+                        "Missing_enable_sig": {
+                          "type": "number"
+                        },
+                        "unit_line_supply_voltage": {
+                          "type": ["integer", "number"]
+                        },
+                        "Speed_setpoint_smoothed": {
+                          "type": "number"
+                        },
+                        "port": {
+                          "type": ["integer", "number"]
+                        },
+                        "Analog_inputs_in_percent_AI0": {
+                          "type": "number"
+                        },
+                        "Firmware_date_year": {
+                          "type": "number"
+                        },
+                        "Firmware_patch_hot_fix": {
+                          "type": "number"
+                        },
+                        "terminal_actual_value": {
+                          "type": ["integer", "number"]
+                        },
+                        "CO_Act_motor_temperature": {
+                          "type": "number"
+                        },
+                        "S6_load_duty_cycle": {
+                          "type": "number"
+                        },
+                        "Company_IDDeviceidentification": {
+                          "type": "number"
+                        },
+                        "Rated_converter_power": {
+                          "type": "number"
+                        },
+                        "Rated_converter_current": {
+                          "type": "number"
+                        },
+                        "Firmware_date_day_month": {
+                          "type": "number"
+                        },
+                        "Abs_actual_current_smoothed": {
+                          "type": "number"
+                        },
+                        "ZSW_seq_ctrlStatuswordsequence": {
+                          "type": "number"
+                        },
+                        "S1_cont_duty_cycle": {
+                          "type": "number"
+                        },
+                        "update_time": {
+                          "type": "string"
+                        },
+                        "Energy_consumption_saved": {
+                          "type": "number"
+                        },
+                        "CU_Firmware_version": {
+                          "type": "number"
+                        },
+                        "Freq_Setpoint_before_RFG": {
+                          "type": "number"
+                        },
+                        "Digital_out_status": {
+                          "type": "number"
+                        },
+                        "Pulse_frequency_Actual": {
+                          "type": "number"
+                        },
+                        "Fault_code_2": {
+                          "type": "number"
+                        },
+                        "Fault_code_1": {
+                          "type": "number"
+                        },
+                        "Act_filtered_output_voltage": {
+                          "type": "number"
+                        },
+                        "Fault_code_4": {
+                          "type": "number"
+                        },
+                        "Fault_code_3": {
+                          "type": "number"
+                        },
+                        "Act_filtered_frequency": {
+                          "type": "number"
+                        },
+                        "Act_filtered_rotor_speed": {
+                          "type": "number"
+                        },
+                        "Digital_in_status": {
+                          "type": "number"
+                        },
+                        "Act_filtered_torque": {
+                          "type": "number"
+                        },
+                        "output_current_actual_AI1": {
+                          "type": "number"
+                        },
+                        "Actual_alarm_code": {
+                          "type": "number"
+                        },
+                        "Act_filtered_powerDisplays": {
+                          "type": "number"
+                        },
+                        "Rated_motor_current": {
+                          "type": "number"
+                        },
+                        "CO_Converter_temperature": {
+                          "type": "number"
+                        },
+                        "Control_word_faults_alarms": {
+                          "type": "number"
+                        },
+                        "Actual_fault_code": {
+                          "type": "number"
+                        },
+                        "Control_word_1": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "outputcurrent_actual_AI0",
+                        "Braking_status_word",
+                        "input_current_actual_AI0",
+                        "input_current_actual_AI1",
+                        "Act_filtered_DC_link_volt",
+                        "Safely_remove_mem_card_status",
+                        "Actual_speed_smoothed",
+                        "Motor_utilization_thermal",
+                        "Number_of_drive_objects",
+                        "id",
+                        "port1_CO_motor_temperature",
+                        "Fault_code_6",
+                        "sinamics_300",
+                        "Fault_code_5",
+                        "Fault_code_8",
+                        "Fault_code_7",
+                        "Status_word_1",
+                        "Pulse_frequency_Mod_min_value",
+                        "Status_word_2",
+                        "Digital_in_status_inverted",
+                        "CO_Act_filtered_current_Isq",
+                        "Status_word_faults_alarms_2",
+                        "Energy_consumpt_meter",
+                        "Status_word_faults_alarms_1",
+                        "Converter_state",
+                        "Device_type_identification",
+                        "Device_Firmware_version",
+                        "Analog_inputs_in_percent_AI1",
+                        "Missing_enable_sig",
+                        "unit_line_supply_voltage",
+                        "Speed_setpoint_smoothed",
+                        "port",
+                        "Analog_inputs_in_percent_AI0",
+                        "Firmware_date_year",
+                        "Firmware_patch_hot_fix",
+                        "terminal_actual_value",
+                        "CO_Act_motor_temperature",
+                        "S6_load_duty_cycle",
+                        "Company_IDDeviceidentification",
+                        "Rated_converter_power",
+                        "Rated_converter_current",
+                        "Firmware_date_day_month",
+                        "Abs_actual_current_smoothed",
+                        "ZSW_seq_ctrlStatuswordsequence",
+                        "S1_cont_duty_cycle",
+                        "update_time",
+                        "Energy_consumption_saved",
+                        "CU_Firmware_version",
+                        "Freq_Setpoint_before_RFG",
+                        "Digital_out_status",
+                        "Pulse_frequency_Actual",
+                        "Fault_code_2",
+                        "Fault_code_1",
+                        "Act_filtered_output_voltage",
+                        "Fault_code_4",
+                        "Fault_code_3",
+                        "Act_filtered_frequency",
+                        "Act_filtered_rotor_speed",
+                        "Digital_in_status",
+                        "Act_filtered_torque",
+                        "output_current_actual_AI1",
+                        "Actual_alarm_code",
+                        "Act_filtered_powerDisplays",
+                        "Rated_motor_current",
+                        "CO_Converter_temperature",
+                        "Control_word_faults_alarms",
+                        "Actual_fault_code",
+                        "Control_word_1"
+                      ]
+                    },
+                    "cursor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "node",
+                    "cursor"
+                  ]
+                }
+              ]
+            },
+            "pageInfo": {
+              "type": "object",
+              "properties": {
+                "endCursor": {
+                  "type": "string"
+                },
+                "hasNextPage": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "endCursor",
+                "hasNextPage"
+              ]
+            }
+          },
+          "required": [
+            "totalElements",
+            "totalPages",
+            "pageSize",
+            "page",
+            "numberOfElements",
+            "edges",
+            "pageInfo"
+          ]
+        }
+      },
+      "required": [
+        "SINAMICS_300_LogConnection"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}
