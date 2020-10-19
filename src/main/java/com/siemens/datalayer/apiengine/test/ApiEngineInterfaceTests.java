@@ -29,7 +29,7 @@ public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass(alwaysRun = true)
-    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30346") String port) {
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31059") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
@@ -736,6 +736,55 @@ public class ApiEngineInterfaceTests {
     }
 
 
+
+    @Test(groups = "jinzu", description = "Test api engine interface: Query jinzu mix source by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query all jinzu jinzu mix source by graphql")
+    public void queryAllJinzuMixSourceByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "\tSite(cond:\"{id:{_eq:\\\"P000000666\\\"}}\",order:\"\"){ \n" +
+                "\t\tid\n" +
+                "\t\tlocation\n" +
+                "\t\tcommissioning_date\n" +
+                "\t\tstate\n" +
+                "\t\tpower_station\n" +
+                "\t\tHas_Device_Inverter{\n" +
+                "\t\tsite\n" +
+                "\t\tpr\n" +
+                "\t\tproduction\n" +
+                "\t\tname\n" +
+                "\t\ttype\n" +
+                "\t\tfull_generation_hours}\n" +
+                "\t}\n" +
+                "}\n";
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals("Successfully", rspBody.getMessage());
+        Assert.assertEquals(100000, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data.Site");
+        Assert.assertEquals(data.size(), 1);
+
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("jinzu-mix-source-schema.json"));
+
+    }
+
     @Test(groups = "jinzu", description = "Test api engine interface: Query one jinzu power station project by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
@@ -897,7 +946,7 @@ public class ApiEngineInterfaceTests {
                 "                    \"classification_level\": \"正常\",\n" +
                 "                    \"credit_amount\": 50000000,\n" +
                 "                    \"detail_address\": null,\n" +
-                "                    \"discount_ratio\": 0.72558635,\n" +
+                "                    \"discount_ratio\": 0.5131579,\n" +
                 "                    \"expire_date\": null,\n" +
                 "                    \"guarantee_type\": \"质押\",\n" +
                 "                    \"id\": \"33\",\n" +
@@ -912,7 +961,7 @@ public class ApiEngineInterfaceTests {
                 "                    \"Refer_To_Lease_Group\": {\n" +
                 "                        \"asset_type\": \"动产\",\n" +
                 "                        \"count\": 1,\n" +
-                "                        \"discount_ratio\": 0.72558635,\n" +
+                "                        \"discount_ratio\": 0.5131579,\n" +
                 "                        \"id\": \"33\",\n" +
                 "                        \"lease_net_val\": 9.7435896E7,\n" +
                 "                        \"lease_type\": \"2\",\n" +
@@ -944,9 +993,9 @@ public class ApiEngineInterfaceTests {
                 "                    \"group\": \"江苏中利集团股份有限公司\",\n" +
                 "                    \"holding_type\": \"私人控股企业\",\n" +
                 "                    \"id\": \"28\",\n" +
-                "                    \"is_connected_tx\": false,\n" +
+                "                    \"is_connected_tx\": true,\n" +
                 "                    \"is_gov_fin_customer\": false,\n" +
-                "                    \"is_group_customer\": false,\n" +
+                "                    \"is_group_customer\": true,\n" +
                 "                    \"legal_person_id\": \"412328198306074537\",\n" +
                 "                    \"legal_person\": \"王庆杰\",\n" +
                 "                    \"major_class\": \"电力、热力生产和供应业\",\n" +
@@ -961,7 +1010,7 @@ public class ApiEngineInterfaceTests {
                 "        ]\n" +
                 "    }\n" +
                 "}";
-//        System.out.println(response.getBody().asString());
+//        System.out.println(response.getBody().prettyPrint());
 //        assertThat(response.getBody().asString(),
 //                matchesJsonSchemaInClasspath("jinzu-all-projects-graphql-schema.json"));
         try {
@@ -1368,7 +1417,7 @@ public class ApiEngineInterfaceTests {
                 "                    \"id\": \"33\",\n" +
                 "                    \"lease_type\": \"2\",\n" +
                 "                    \"unit_price\": 1.02564104E8,\n" +
-                "                    \"discount_ratio\": 0.72558635,\n" +
+                "                    \"discount_ratio\": 0.5131579,\n" +
                 "                    \"invert_Project\": {\n" +
                 "                        \"no\": \"20180651\",\n" +
                 "                        \"rent_type\": \"融资租赁/回租\",\n" +
@@ -1381,7 +1430,7 @@ public class ApiEngineInterfaceTests {
                 "                        \"risk_mgr\": \"朱金龙\",\n" +
                 "                        \"is_manufacture_leasing\": false,\n" +
                 "                        \"business_unit\": \"业务三部\",\n" +
-                "                        \"discount_ratio\": 0.72558635,\n" +
+                "                        \"discount_ratio\": 0.5131579,\n" +
                 "                        \"class_level\": \"正常\",\n" +
                 "                        \"manufacture\": \"瑞龙电气厂\",\n" +
                 "                        \"business_mgr\": \"沈忱宜\",\n" +
@@ -1399,7 +1448,7 @@ public class ApiEngineInterfaceTests {
                 "                            \"cname\": \"安阳县中晖光伏发电有限公司\",\n" +
                 "                            \"enterprise_size\": \"微型\",\n" +
                 "                            \"project\": \"33\",\n" +
-                "                            \"is_connected_tx\": false,\n" +
+                "                            \"is_connected_tx\": true,\n" +
                 "                            \"legal_person_id\": \"412328198306074537\",\n" +
                 "                            \"small_class\": \"太阳能发电\",\n" +
                 "                            \"province\": \"河南省\",\n" +
@@ -1413,7 +1462,7 @@ public class ApiEngineInterfaceTests {
                 "                            \"office_address\": \"河南省安阳市安阳县马家乡北齐村\",\n" +
                 "                            \"ctype\": \"企业法人\",\n" +
                 "                            \"district\": \"安阳县\",\n" +
-                "                            \"is_group_customer\": false,\n" +
+                "                            \"is_group_customer\": true,\n" +
                 "                            \"middle_class\": \"电力生产\",\n" +
                 "                            \"category\": \"电力、热力、燃气及水的生产和供应业\",\n" +
                 "                            \"cid\": \"91410522MA3X5R1H97\",\n" +
