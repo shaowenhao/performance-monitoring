@@ -1,0 +1,653 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "code": 200,
+            "message": "OK",
+            "data": [
+                {
+                    "id": "40",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#溴机冷冻水二次泵"
+                },
+                {
+                    "id": "111",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV4"
+                },
+                {
+                    "id": "153",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄放冷泵出口母管"
+                },
+                {
+                    "id": "222",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#溴机冷冻水二次泵"
+                },
+                {
+                    "id": "236",
+                    "deviceType": "waterPump",
+                    "deviceName": "6#冷冻水二次泵"
+                },
+                {
+                    "id": "249",
+                    "deviceType": "converter",
+                    "deviceName": "#1热水烟气溴化锂机组"
+                },
+                {
+                    "id": "412",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水供水母管1"
+                },
+                {
+                    "id": "469",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#蓄/放冷泵"
+                },
+                {
+                    "id": "511",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#蓄/放冷泵"
+                },
+                {
+                    "id": "537",
+                    "deviceType": "buyAndSale",
+                    "deviceName": "电网"
+                },
+                {
+                    "id": "726",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "764",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "776",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "6#制冷机"
+                },
+                {
+                    "id": "801",
+                    "deviceType": "heatStorage",
+                    "deviceName": "2#储冷、热水罐"
+                },
+                {
+                    "id": "846",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "2#制冷机"
+                },
+                {
+                    "id": "851",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV5"
+                },
+                {
+                    "id": "932",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV3"
+                },
+                {
+                    "id": "944",
+                    "deviceType": "busLine",
+                    "deviceName": "空调冷冻水送水母管"
+                },
+                {
+                    "id": "997",
+                    "deviceType": "heatStorage",
+                    "deviceName": "1#储冷、热水罐"
+                },
+                {
+                    "id": "1049",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV6"
+                },
+                {
+                    "id": "1116",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水一次泵(溴机)"
+                },
+                {
+                    "id": "1197",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#蓄/放冷泵"
+                },
+                {
+                    "id": "1212",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV1"
+                },
+                {
+                    "id": "1254",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水一次泵(溴机)"
+                },
+                {
+                    "id": "1480",
+                    "deviceType": "heatStorage",
+                    "deviceName": "1#储冷水池"
+                },
+                {
+                    "id": "1533",
+                    "deviceType": "waterPump",
+                    "deviceName": "4#冷冻水二次泵"
+                },
+                {
+                    "id": "1680",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄放冷泵入口母管"
+                },
+                {
+                    "id": "1722",
+                    "deviceType": "waterPump",
+                    "deviceName": "4#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "1744",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "1#制冷机"
+                },
+                {
+                    "id": "1748",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1"
+                },
+                {
+                    "id": "1751",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "3#制冷机"
+                },
+                {
+                    "id": "1894",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄冷回水母管"
+                },
+                {
+                    "id": "1895",
+                    "deviceType": "converter",
+                    "deviceName": "用户站热转换器"
+                },
+                {
+                    "id": "1959",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "2026",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水回水母管"
+                },
+                {
+                    "id": "2038",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水供水母管2"
+                },
+                {
+                    "id": "2178",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "4#制冷机"
+                },
+                {
+                    "id": "2234",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水二次泵"
+                },
+                {
+                    "id": "2455",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "5#制冷机"
+                },
+                {
+                    "id": "2475",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-2"
+                },
+                {
+                    "id": "2486",
+                    "deviceType": "heatStorage",
+                    "deviceName": "2#储冷水池"
+                },
+                {
+                    "id": "2492",
+                    "deviceType": "load",
+                    "deviceName": "用户站总用冷负荷"
+                },
+                {
+                    "id": "2516",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV2"
+                },
+                {
+                    "id": "2536",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-1"
+                },
+                {
+                    "id": "2537",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水二次泵"
+                },
+                {
+                    "id": "2613",
+                    "deviceType": "waterPump",
+                    "deviceName": "5#冷冻水二次泵"
+                },
+                {
+                    "id": "2635",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄冷供水母管"
+                },
+                {
+                    "id": "2693",
+                    "deviceType": "waterPump",
+                    "deviceName": "6#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "2700",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#冷冻水二次泵"
+                },
+                {
+                    "id": "2745",
+                    "deviceType": "converter",
+                    "deviceName": "#2热水烟气溴化锂机组"
+                },
+                {
+                    "id": "2769",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-3"
+                },
+                {
+                    "id": "2907",
+                    "deviceType": "waterPump",
+                    "deviceName": "5#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "2911",
+                    "deviceType": "waterPump",
+                    "deviceName": "7#冷冻水二次泵"
+                },
+                {
+                    "id": "2995",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#溴机冷冻水二次泵"
+                },
+                {
+                    "id": "3066",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV4"
+                },
+                {
+                    "id": "3108",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄放冷泵出口母管"
+                },
+                {
+                    "id": "3177",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#溴机冷冻水二次泵"
+                },
+                {
+                    "id": "3191",
+                    "deviceType": "waterPump",
+                    "deviceName": "6#冷冻水二次泵"
+                },
+                {
+                    "id": "3204",
+                    "deviceType": "converter",
+                    "deviceName": "#1热水烟气溴化锂机组"
+                },
+                {
+                    "id": "3367",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水供水母管1"
+                },
+                {
+                    "id": "3424",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#蓄/放冷泵"
+                },
+                {
+                    "id": "3466",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#蓄/放冷泵"
+                },
+                {
+                    "id": "3492",
+                    "deviceType": "buyAndSale",
+                    "deviceName": "电网"
+                },
+                {
+                    "id": "3681",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "3719",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "3731",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "6#制冷机"
+                },
+                {
+                    "id": "3756",
+                    "deviceType": "heatStorage",
+                    "deviceName": "2#储冷、热水罐"
+                },
+                {
+                    "id": "3801",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "2#制冷机"
+                },
+                {
+                    "id": "3806",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV5"
+                },
+                {
+                    "id": "3887",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV3"
+                },
+                {
+                    "id": "3899",
+                    "deviceType": "busLine",
+                    "deviceName": "空调冷冻水送水母管"
+                },
+                {
+                    "id": "3952",
+                    "deviceType": "heatStorage",
+                    "deviceName": "1#储冷、热水罐"
+                },
+                {
+                    "id": "4004",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV6"
+                },
+                {
+                    "id": "4071",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水一次泵(溴机)"
+                },
+                {
+                    "id": "4152",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#蓄/放冷泵"
+                },
+                {
+                    "id": "4167",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV1"
+                },
+                {
+                    "id": "4209",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水一次泵(溴机)"
+                },
+                {
+                    "id": "4435",
+                    "deviceType": "heatStorage",
+                    "deviceName": "1#储冷水池"
+                },
+                {
+                    "id": "4488",
+                    "deviceType": "waterPump",
+                    "deviceName": "4#冷冻水二次泵"
+                },
+                {
+                    "id": "4635",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄放冷泵入口母管"
+                },
+                {
+                    "id": "4677",
+                    "deviceType": "waterPump",
+                    "deviceName": "4#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "4699",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "1#制冷机"
+                },
+                {
+                    "id": "4703",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1"
+                },
+                {
+                    "id": "4706",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "3#制冷机"
+                },
+                {
+                    "id": "4849",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄冷回水母管"
+                },
+                {
+                    "id": "4850",
+                    "deviceType": "converter",
+                    "deviceName": "用户站热转换器"
+                },
+                {
+                    "id": "4914",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "4981",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水回水母管"
+                },
+                {
+                    "id": "4993",
+                    "deviceType": "busLine",
+                    "deviceName": "冷水供水母管2"
+                },
+                {
+                    "id": "5133",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "4#制冷机"
+                },
+                {
+                    "id": "5189",
+                    "deviceType": "waterPump",
+                    "deviceName": "1#冷冻水二次泵"
+                },
+                {
+                    "id": "5410",
+                    "deviceType": "heatPumpDetail",
+                    "deviceName": "5#制冷机"
+                },
+                {
+                    "id": "5430",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-2"
+                },
+                {
+                    "id": "5441",
+                    "deviceType": "heatStorage",
+                    "deviceName": "2#储冷水池"
+                },
+                {
+                    "id": "5447",
+                    "deviceType": "load",
+                    "deviceName": "用户站总用冷负荷"
+                },
+                {
+                    "id": "5471",
+                    "deviceType": "valve",
+                    "deviceName": "开关阀DV2"
+                },
+                {
+                    "id": "5491",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-1"
+                },
+                {
+                    "id": "5492",
+                    "deviceType": "waterPump",
+                    "deviceName": "2#冷冻水二次泵"
+                },
+                {
+                    "id": "5568",
+                    "deviceType": "waterPump",
+                    "deviceName": "5#冷冻水二次泵"
+                },
+                {
+                    "id": "5590",
+                    "deviceType": "busLine",
+                    "deviceName": "蓄冷供水母管"
+                },
+                {
+                    "id": "5648",
+                    "deviceType": "waterPump",
+                    "deviceName": "6#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "5655",
+                    "deviceType": "waterPump",
+                    "deviceName": "3#冷冻水二次泵"
+                },
+                {
+                    "id": "5700",
+                    "deviceType": "converter",
+                    "deviceName": "#2热水烟气溴化锂机组"
+                },
+                {
+                    "id": "5724",
+                    "deviceType": "busLine",
+                    "deviceName": "电网母线1-3"
+                },
+                {
+                    "id": "5862",
+                    "deviceType": "waterPump",
+                    "deviceName": "5#冷冻水一次泵(电制冷)"
+                },
+                {
+                    "id": "5866",
+                    "deviceType": "waterPump",
+                    "deviceName": "7#冷冻水二次泵"
+                }
+            ]
+        }
+    ],
+    "required": [
+        "code",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                200
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "OK"
+            ]
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "array",
+            "title": "The data schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "id": "40",
+                        "deviceType": "waterPump",
+                        "deviceName": "2#溴机冷冻水二次泵"
+                    },
+                    {
+                        "id": "111",
+                        "deviceType": "valve",
+                        "deviceName": "开关阀DV4"
+                    }
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/data/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/data/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                            {
+                                "id": "40",
+                                "deviceType": "waterPump",
+                                "deviceName": "2#溴机冷冻水二次泵"
+                            }
+                        ],
+                        "required": [
+                            "id",
+                            "deviceType",
+                            "deviceName"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/id",
+                                "type": "string",
+                                "title": "The id schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "40"
+                                ]
+                            },
+                            "deviceType": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/deviceType",
+                                "type": "string",
+                                "title": "The deviceType schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "waterPump"
+                                ]
+                            },
+                            "deviceName": {
+                                "$id": "#/properties/data/items/anyOf/0/properties/deviceName",
+                                "type": "string",
+                                "title": "The deviceName schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "2#溴机冷冻水二次泵"
+                                ]
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": true
+}

@@ -29,7 +29,7 @@ public class ApiServiceInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass
-    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31332") String port) {
+    public void setApiserviceEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30684") String port) {
         ApiServiceEndpoint.setBaseUrl(baseUrl);
         ApiServiceEndpoint.setPort(port);
     }

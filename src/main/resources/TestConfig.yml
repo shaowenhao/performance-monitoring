@@ -1,6 +1,6 @@
 rabbitmq:
   host: 140.231.89.85
-  port: 30952
+  port: 30248
   virturalHost: /
   username: guest
   password: guest

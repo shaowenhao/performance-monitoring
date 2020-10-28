@@ -8,7 +8,7 @@
     	thread-count="5"
 		name="Rest API Tests">
         <classes>
-            <class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
+            <!--<class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
             <parameter name="base_url" value="http://140.231.89.85"/>
   			<parameter name="port" value="31101"/>
             </class>
@@ -19,7 +19,13 @@
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
             <parameter name="base_url" value="http://140.231.89.85"/>
   			<parameter name="port" value="31834"/>
-            </class>
+            </class>-->
+            <class name="com.siemens.datalayer.iems.test.InterfaceTests">
+			    <parameter name="base_url" value="http://140.231.89.85" />
+	  			<parameter name="port" value="30684"/>
+	  			<parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
+	  			<parameter name="pre_data" value="/datalayer/api/v1/data/"/>
+		    </class>
 <!-- 			<class name="com.siemens.datalayer.selenium.test.SampleTest"/> -->
         </classes>
     </test>

@@ -1,0 +1,182 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "code": 200,
+            "message": "OK",
+            "data": {
+                "clients": [
+                    "iEMS"
+                ],
+                "entities": [
+                    "SensorData"
+                ],
+                "replyTo": "5adce67b8f41888700812fee58d6cf8e",
+                "active": true,
+                "id": "5adce67b8f41888700812fee58d6cf8e",
+                "subSentence": "subscription { SensorData (cond: \"{Siid:{_in:[34155,34159,34155]}}\") {Siid updateTime value } }"
+            }
+        }
+    ],
+    "required": [
+        "code",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                200
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "OK"
+            ]
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "object",
+            "title": "The data schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "clients": [
+                        "iEMS"
+                    ],
+                    "entities": [
+                        "SensorData"
+                    ],
+                    "replyTo": "5adce67b8f41888700812fee58d6cf8e",
+                    "active": true,
+                    "id": "5adce67b8f41888700812fee58d6cf8e",
+                    "subSentence": "subscription { SensorData (cond: \"{Siid:{_in:[34155,34159,34155]}}\") {Siid updateTime value } }"
+                }
+            ],
+            "required": [
+                "clients",
+                "entities",
+                "replyTo",
+                "active",
+                "id",
+                "subSentence"
+            ],
+            "properties": {
+                "clients": {
+                    "$id": "#/properties/data/properties/clients",
+                    "type": "array",
+                    "title": "The clients schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            "iEMS"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/data/properties/clients/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/data/properties/clients/items/anyOf/0",
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "iEMS"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "entities": {
+                    "$id": "#/properties/data/properties/entities",
+                    "type": "array",
+                    "title": "The entities schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            "SensorData"
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/data/properties/entities/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/data/properties/entities/items/anyOf/0",
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "SensorData"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "replyTo": {
+                    "$id": "#/properties/data/properties/replyTo",
+                    "type": "string",
+                    "title": "The replyTo schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "5adce67b8f41888700812fee58d6cf8e"
+                    ]
+                },
+                "active": {
+                    "$id": "#/properties/data/properties/active",
+                    "type": "boolean",
+                    "title": "The active schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "id": {
+                    "$id": "#/properties/data/properties/id",
+                    "type": "string",
+                    "title": "The id schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "5adce67b8f41888700812fee58d6cf8e"
+                    ]
+                },
+                "subSentence": {
+                    "$id": "#/properties/data/properties/subSentence",
+                    "type": "string",
+                    "title": "The subSentence schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "subscription { SensorData (cond: \"{Siid:{_in:[34155,34159,34155]}}\") {Siid updateTime value } }"
+                    ]
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
