@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.testng.annotations.DataProvider;
 
+import com.siemens.datalayer.apiservice.test.ApiServiceHelper;
+import com.siemens.datalayer.iems.test.Endpoint;
+
 public class AssetDataPro {
 
 	@DataProvider(name = "dataForGetDevicesByType")
@@ -57,7 +60,11 @@ public class AssetDataPro {
 
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		goodQuery01.put("description", "good request, data retrieved");
-		goodQuery01.put("id", 1744);
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
+		goodQuery01.put("id", Integer.parseInt(deviceMap.get("1#制冷机")));
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();

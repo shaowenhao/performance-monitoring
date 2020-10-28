@@ -1,15 +1,20 @@
 package com.siemens.datalayer.iems.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.siemens.datalayer.iems.model.RestConstants;
+import org.testng.Assert;
+import org.testng.Reporter;
 
-import bsh.StringUtil;
-import groovyjarjarantlr.StringUtils;
+import com.siemens.datalayer.apiservice.model.ApiResponse;
+import com.siemens.datalayer.iems.model.RestConstants;
+import com.siemens.datalayer.utils.Utils;
+
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -107,7 +112,7 @@ public class Endpoint {
     }
 	
 //	Asset Data
-	@Step("Device type: {parameters}")
+//	@Step("Device type: {parameters}")
 	public static Response getDevicesByType(HashMap<String, Object> parameters) {
         return getResponseByParameters(PRE_ASSET + RestConstants.GETDEVICESBYTYPE, parameters);
     }
@@ -180,5 +185,27 @@ public class Endpoint {
 	public static Response deleteSubscriptions(String id) {
 		return deleteResponseById(PRE_DATA + RestConstants.DELETESUBSCRIPTIONS + "/" +id);
 	}
+	
+	
+	public static HashMap<String, String> getDeviceIdByName(ArrayList<String> deviceNames){
+        HashMap<String, String> results = new HashMap<>();
+        HashMap<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put("device_type", "heatPumpDetail");
+
+        Response response = getDevicesByType(queryParameters);
+        ApiResponse rspBody = response.getBody().as(ApiResponse.class);
+        Assert.assertEquals(200, rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        ArrayList<HashMap> data = jsonPathEvaluator.get("data");
+        for (String name: deviceNames) {
+            HashMap h = data.stream().filter(d -> name.equals(d.get("deviceName"))).findAny().orElse(null);
+            Assert.assertFalse(Utils.isNullOrEmpty(h));
+            results.put(name, h.get("id").toString());
+        }
+
+        return results;
+    }
 
 }

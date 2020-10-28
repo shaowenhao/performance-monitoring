@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.testng.annotations.DataProvider;
 
+import com.siemens.datalayer.iems.test.Endpoint;
+
+
 public class SubscriptionsRequestDataPro {
 	@DataProvider(name = "dataForSubscriptionBySensorId")
 	Iterator<Object[]> dataForSubscriptionBySensorId() {
@@ -55,12 +58,16 @@ public class SubscriptionsRequestDataPro {
 	
 	@DataProvider(name = "dataForSubscriptionsByDeviceId")
 	Iterator<Object[]> dataForSubscriptionsByDeviceId() {
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		goodQuery01.put("description", "good request, data retrieved");
-		goodQuery01.put("deviceId", 1744);
+		goodQuery01.put("deviceId", Integer.parseInt(deviceMap.get("1#制冷机")));
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();
@@ -91,12 +98,16 @@ public class SubscriptionsRequestDataPro {
 	
 	@DataProvider(name = "dataForSubscriptionsWithKPIByDeviceId")
 	Iterator<Object[]> dataForSubscriptionsWithKPIByDeviceId() {
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		goodQuery01.put("description", "good request, data retrieved");
-		goodQuery01.put("request", "1744,1751");
+		goodQuery01.put("request", deviceMap.get("1#制冷机")+","+deviceMap.get("3#制冷机"));
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();
@@ -114,7 +125,7 @@ public class SubscriptionsRequestDataPro {
 		
 		Map<String, Object> badQuery03 = new HashMap<>();
 		badQuery03.put("description", "bad request, request need to be separated by commas");
-		badQuery03.put("request", "1744;1751");
+		badQuery03.put("request", deviceMap.get("1#制冷机")+";"+deviceMap.get("3#制冷机"));
 		badQuery03.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery03.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery03);

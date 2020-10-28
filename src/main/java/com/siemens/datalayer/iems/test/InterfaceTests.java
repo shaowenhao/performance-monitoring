@@ -290,8 +290,12 @@ public class InterfaceTests {
 	@Feature("Get subscription data API")
 	@Story("Delete subscription by id")
 	public void deleteSubscriptionsSuccess() {
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 		HashMap<String, Object> queryParameters = new HashMap<>();
-		queryParameters.put("request", 1744);
+		queryParameters.put("request", Integer.parseInt(deviceMap.get("1#制冷机")));
 		Response responsePro = Endpoint.subscriptionsWithKPIByDeviceId(queryParameters);
 		Assert.assertEquals(responsePro.getStatusCode(), 200);
 		JsonPath jsonPathEvaluator = responsePro.jsonPath();

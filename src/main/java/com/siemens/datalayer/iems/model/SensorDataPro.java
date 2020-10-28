@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.testng.annotations.DataProvider;
 
+import com.siemens.datalayer.iems.test.Endpoint;
+
 public class SensorDataPro {
 
 	@DataProvider(name = "dataForGetSensorDataBySensorId")
@@ -99,11 +101,15 @@ public class SensorDataPro {
 	
 	@DataProvider(name = "dataForGetSensorDataByDeviceId")
 	Iterator<Object[]> dataForGetSensorDataByDeviceId() {
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		String good1 = String.format("{\r\n" + 
-				"  \"deviceId\": 1744,\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
 				"  \"endTime\": 1601519153000,\r\n" + 
 				"  \"startTime\": 1593570353000\r\n" + 
 				"}");
@@ -113,7 +119,7 @@ public class SensorDataPro {
 
 		Map<String, Object> badQuery01 = new HashMap<>();
 		String bad1 = String.format("{\r\n" + 
-				"  \"deviceId\": 1744,\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
 				"  \"startTime\": 1593570353000\r\n" + 
 				"}");
 		badQuery01.put("description", "bad request, endTime is null");
@@ -124,7 +130,7 @@ public class SensorDataPro {
 		
 		Map<String, Object> badQuery02 = new HashMap<>();
 		String bad2 = String.format("{\r\n" + 
-				"  \"deviceId\": 1744,\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
 				"  \"endTime\": 1601519153000\r\n" + 
 				"}");
 		badQuery02.put("description", "bad request, startTime is null");
@@ -160,12 +166,16 @@ public class SensorDataPro {
 	
 	@DataProvider(name = "getTopSensorDataByDeviceId")
 	Iterator<Object[]> getTopSensorDataByDeviceId() {
+		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+            add("1#制冷机");
+            add("3#制冷机");
+        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		String good1 = String.format("{\r\n" + 
 				"  \"limit\": 2,\r\n" + 
-				"  \"deviceId\": 1744\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
 				"}");
 		goodQuery01.put("description", "good request, data retrieved");
 		goodQuery01.put("body", good1);
@@ -173,7 +183,7 @@ public class SensorDataPro {
 
 		Map<String, Object> badQuery01 = new HashMap<>();
 		String bad1 = String.format("{\r\n" + 
-				"  \"deviceId\": 1744\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
 				"}");
 		badQuery01.put("description", "bad request, limit is null");
 		badQuery01.put("body", bad1);
@@ -194,7 +204,7 @@ public class SensorDataPro {
 		Map<String, Object> badQuery03 = new HashMap<>();
 		String bad3 = String.format("{\r\n" + 
 				"  \"limit\": 1000,\r\n" + 
-				"  \"deviceId\": 1744\r\n" + 
+				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
 				"}");
 		badQuery03.put("description", "bad request, limit not correct, should be number < 1000");
 		badQuery03.put("body", bad3);
