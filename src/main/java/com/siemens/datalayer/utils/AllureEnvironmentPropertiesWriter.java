@@ -23,6 +23,7 @@ public class AllureEnvironmentPropertiesWriter {
 	}
 	
 	public static void addEnvironmentItem(String itemKey, String itemValue) {
+	    if (EnvironmentItems==null) initializeTestSettings();
 		EnvironmentItems.put(itemKey, itemValue);
 	}
 	
