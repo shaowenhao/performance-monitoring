@@ -2297,6 +2297,64 @@ public class ApiEngineInterfaceTests {
 
     }
 
+
+    @Test(groups = "snc", description = "Test api engine interface: Query material by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query material by graphql")
+    public void queryMaterialByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "        Material(cond: \"{ ITEM_NO:{_in:[\\\"A5Ehh00001\\\", \\\"A5Ehh00002\\\", \\\"A5Ehh00003\\\", \\\"A5Ehh00004\\\", \\\"A5Ehh00005\\\"]} }\") {\n" +
+                "            DESCRIPTION\n" +
+                "            ITEM_NO\n" +
+                "            contains_BOM {\n" +
+                "                PartNo\n" +
+                "                RequiredPartNo\n" +
+                "                RequiredQuantity\n" +
+                "                invert_Product{\n" +
+                "                    product_no\n" +
+                "                    invert_Preactor_Order {\n" +
+                "                        product\n" +
+                "                        order_no\n" +
+                "                        invert_Product_Order_Process(cond: \"{ mach_type:{_eq:\\\"MPM******\\\"} }\") {\n" +
+                "                            mach_type\n" +
+                "                            pass_quantity\n" +
+                "                            produce_quantity\n" +
+                "                            product_order\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }";
+
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getMessage(), rspBody.getMessage());
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getCode(), rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data.Material"));
+
+        ArrayList data = jsonPathEvaluator.get("data.Material");
+        Assert.assertTrue(data.size() == 5);
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("snc-material.json"));
+
+
+    }
+
 //    @Test(groups = "iems",  description = "Test api engine interface: Query all instance of one entity with eq condition in relation entity by graphql.")
 //    @Severity(SeverityLevel.BLOCKER)
 //    @Description("Send a request to SUT with entity with eq condition in relation entity and verify if correct return.")
