@@ -3,6 +3,7 @@ package com.siemens.datalayer.apiengine.test;
 import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
 
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
+import com.siemens.datalayer.apiengine.model.ResponseCode;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.qameta.allure.*;
 import io.restassured.internal.path.json.JSONAssertion;
@@ -29,7 +30,7 @@ public class ApiEngineInterfaceTests {
 
     @Parameters({"baseUrl", "port"})
     @BeforeClass(alwaysRun = true)
-    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("31059") String port) {
+    public void setApiengineEndpoint(@Optional("http://140.231.89.85") String baseUrl, @Optional("30169") String port) {
         ApiEngineEndpoint.setBaseUrl(baseUrl);
         ApiEngineEndpoint.setPort(port);
     }
@@ -2215,6 +2216,45 @@ public class ApiEngineInterfaceTests {
                         .allMatch(Objects::nonNull));
             }
         }
+
+    }
+
+
+
+    @Test(groups = "snc", description = "Test api engine interface: Query product order by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query one device one type one day history data page by graphql")
+    public void queryProductOrderByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "    Product_Order(cond: \"{ demand_date:{_gte: \\\"2020-10-01 00:00:00\\\"} }\"){\n" +
+                "        insert_time\n" +
+                "        demand_date\n" +
+                "        sales_order\n" +
+                "    }\n" +
+                "}";
+
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getMessage(), rspBody.getMessage());
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getCode(), rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data.Product_Order"));
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("snc-product-order.json"));
+
 
     }
 
