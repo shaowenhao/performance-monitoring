@@ -1,0 +1,881 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "code": 100000,
+            "message": "Successfully",
+            "data": {
+                "Product_Order": [
+                    {
+                        "demand_date": "2020-10-15T07:23:55",
+                        "insert_time": "2020-10-01T08:23:55",
+                        "product": "A5E03262691",
+                        "sales_order": "800014035899",
+                        "invert_Product": {
+                            "product_no": "A5E03262691",
+                            "invert_Preactor_Order": [
+                                {
+                                    "order_no": "800014035899",
+                                    "product": "A5E03262691",
+                                    "plan_quantity": "5",
+                                    "invert_Product_Order_Process": [
+                                        {
+                                            "product_order": "800014035899",
+                                            "product": "A5E03262691",
+                                            "pass_quantity": "4",
+                                            "produce_quantity": "4"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "produced_Product_Qualification": [
+                                {
+                                    "test_result": "P",
+                                    "product": "A5E03262691",
+                                    "mach_type": "MPM******",
+                                    "event_time": "2020-10-01T12:00:00",
+                                    "fid": "SZVH0YJF000151",
+                                    "invert_Production_Procedure": {
+                                        "Work_On_Work_Position": {
+                                            "work_center_id": "70000"
+                                        }
+                                    }
+                                },
+                                {
+                                    "test_result": "P",
+                                    "product": "A5E03262691",
+                                    "mach_type": "MPM******",
+                                    "event_time": "2020-10-01T12:10:00",
+                                    "fid": "SZVH0YJF000152",
+                                    "invert_Production_Procedure": {
+                                        "Work_On_Work_Position": {
+                                            "work_center_id": "70000"
+                                        }
+                                    }
+                                },
+                                {
+                                    "test_result": "P",
+                                    "product": "A5E03262691",
+                                    "mach_type": "MPM******",
+                                    "event_time": "2020-10-01T12:20:00",
+                                    "fid": "SZVH0YJF000153",
+                                    "invert_Production_Procedure": {
+                                        "Work_On_Work_Position": {
+                                            "work_center_id": "70000"
+                                        }
+                                    }
+                                },
+                                {
+                                    "test_result": "P",
+                                    "product": "A5E03262691",
+                                    "mach_type": "MPM******",
+                                    "event_time": "2020-10-01T12:30:00",
+                                    "fid": "SZVH0YJF000154",
+                                    "invert_Production_Procedure": {
+                                        "Work_On_Work_Position": {
+                                            "work_center_id": "70000"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "required": [
+        "code",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                100000
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Successfully"
+            ]
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "object",
+            "title": "The data schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "Product_Order": [
+                        {
+                            "demand_date": "2020-10-15T07:23:55",
+                            "insert_time": "2020-10-01T08:23:55",
+                            "product": "A5E03262691",
+                            "sales_order": "800014035899",
+                            "invert_Product": {
+                                "product_no": "A5E03262691",
+                                "invert_Preactor_Order": [
+                                    {
+                                        "order_no": "800014035899",
+                                        "product": "A5E03262691",
+                                        "plan_quantity": "5",
+                                        "invert_Product_Order_Process": [
+                                            {
+                                                "product_order": "800014035899",
+                                                "product": "A5E03262691",
+                                                "pass_quantity": "4",
+                                                "produce_quantity": "4"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "produced_Product_Qualification": [
+                                    {
+                                        "test_result": "P",
+                                        "product": "A5E03262691",
+                                        "mach_type": "MPM******",
+                                        "event_time": "2020-10-01T12:00:00",
+                                        "fid": "SZVH0YJF000151",
+                                        "invert_Production_Procedure": {
+                                            "Work_On_Work_Position": {
+                                                "work_center_id": "70000"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "test_result": "P",
+                                        "product": "A5E03262691",
+                                        "mach_type": "MPM******",
+                                        "event_time": "2020-10-01T12:10:00",
+                                        "fid": "SZVH0YJF000152",
+                                        "invert_Production_Procedure": {
+                                            "Work_On_Work_Position": {
+                                                "work_center_id": "70000"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "test_result": "P",
+                                        "product": "A5E03262691",
+                                        "mach_type": "MPM******",
+                                        "event_time": "2020-10-01T12:20:00",
+                                        "fid": "SZVH0YJF000153",
+                                        "invert_Production_Procedure": {
+                                            "Work_On_Work_Position": {
+                                                "work_center_id": "70000"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "test_result": "P",
+                                        "product": "A5E03262691",
+                                        "mach_type": "MPM******",
+                                        "event_time": "2020-10-01T12:30:00",
+                                        "fid": "SZVH0YJF000154",
+                                        "invert_Production_Procedure": {
+                                            "Work_On_Work_Position": {
+                                                "work_center_id": "70000"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "Product_Order"
+            ],
+            "properties": {
+                "Product_Order": {
+                    "$id": "#/properties/data/properties/Product_Order",
+                    "type": "array",
+                    "title": "The Product_Order schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            {
+                                "demand_date": "2020-10-15T07:23:55",
+                                "insert_time": "2020-10-01T08:23:55",
+                                "product": "A5E03262691",
+                                "sales_order": "800014035899",
+                                "invert_Product": {
+                                    "product_no": "A5E03262691",
+                                    "invert_Preactor_Order": [
+                                        {
+                                            "order_no": "800014035899",
+                                            "product": "A5E03262691",
+                                            "plan_quantity": "5",
+                                            "invert_Product_Order_Process": [
+                                                {
+                                                    "product_order": "800014035899",
+                                                    "product": "A5E03262691",
+                                                    "pass_quantity": "4",
+                                                    "produce_quantity": "4"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "produced_Product_Qualification": [
+                                        {
+                                            "test_result": "P",
+                                            "product": "A5E03262691",
+                                            "mach_type": "MPM******",
+                                            "event_time": "2020-10-01T12:00:00",
+                                            "fid": "SZVH0YJF000151",
+                                            "invert_Production_Procedure": {
+                                                "Work_On_Work_Position": {
+                                                    "work_center_id": "70000"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "test_result": "P",
+                                            "product": "A5E03262691",
+                                            "mach_type": "MPM******",
+                                            "event_time": "2020-10-01T12:10:00",
+                                            "fid": "SZVH0YJF000152",
+                                            "invert_Production_Procedure": {
+                                                "Work_On_Work_Position": {
+                                                    "work_center_id": "70000"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "test_result": "P",
+                                            "product": "A5E03262691",
+                                            "mach_type": "MPM******",
+                                            "event_time": "2020-10-01T12:20:00",
+                                            "fid": "SZVH0YJF000153",
+                                            "invert_Production_Procedure": {
+                                                "Work_On_Work_Position": {
+                                                    "work_center_id": "70000"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "test_result": "P",
+                                            "product": "A5E03262691",
+                                            "mach_type": "MPM******",
+                                            "event_time": "2020-10-01T12:30:00",
+                                            "fid": "SZVH0YJF000154",
+                                            "invert_Production_Procedure": {
+                                                "Work_On_Work_Position": {
+                                                    "work_center_id": "70000"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/data/properties/Product_Order/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0",
+                                "type": "object",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "examples": [
+                                    {
+                                        "demand_date": "2020-10-15T07:23:55",
+                                        "insert_time": "2020-10-01T08:23:55",
+                                        "product": "A5E03262691",
+                                        "sales_order": "800014035899",
+                                        "invert_Product": {
+                                            "product_no": "A5E03262691",
+                                            "invert_Preactor_Order": [
+                                                {
+                                                    "order_no": "800014035899",
+                                                    "product": "A5E03262691",
+                                                    "plan_quantity": "5",
+                                                    "invert_Product_Order_Process": [
+                                                        {
+                                                            "product_order": "800014035899",
+                                                            "product": "A5E03262691",
+                                                            "pass_quantity": "4",
+                                                            "produce_quantity": "4"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "produced_Product_Qualification": [
+                                                {
+                                                    "test_result": "P",
+                                                    "product": "A5E03262691",
+                                                    "mach_type": "MPM******",
+                                                    "event_time": "2020-10-01T12:00:00",
+                                                    "fid": "SZVH0YJF000151",
+                                                    "invert_Production_Procedure": {
+                                                        "Work_On_Work_Position": {
+                                                            "work_center_id": "70000"
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "test_result": "P",
+                                                    "product": "A5E03262691",
+                                                    "mach_type": "MPM******",
+                                                    "event_time": "2020-10-01T12:10:00",
+                                                    "fid": "SZVH0YJF000152",
+                                                    "invert_Production_Procedure": {
+                                                        "Work_On_Work_Position": {
+                                                            "work_center_id": "70000"
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "test_result": "P",
+                                                    "product": "A5E03262691",
+                                                    "mach_type": "MPM******",
+                                                    "event_time": "2020-10-01T12:20:00",
+                                                    "fid": "SZVH0YJF000153",
+                                                    "invert_Production_Procedure": {
+                                                        "Work_On_Work_Position": {
+                                                            "work_center_id": "70000"
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "test_result": "P",
+                                                    "product": "A5E03262691",
+                                                    "mach_type": "MPM******",
+                                                    "event_time": "2020-10-01T12:30:00",
+                                                    "fid": "SZVH0YJF000154",
+                                                    "invert_Production_Procedure": {
+                                                        "Work_On_Work_Position": {
+                                                            "work_center_id": "70000"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "required": [
+                                    "demand_date",
+                                    "insert_time",
+                                    "product",
+                                    "sales_order",
+                                    "invert_Product"
+                                ],
+                                "properties": {
+                                    "demand_date": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/demand_date",
+                                        "type": "string",
+                                        "title": "The demand_date schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "2020-10-15T07:23:55"
+                                        ]
+                                    },
+                                    "insert_time": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/insert_time",
+                                        "type": "string",
+                                        "title": "The insert_time schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "2020-10-01T08:23:55"
+                                        ]
+                                    },
+                                    "product": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/product",
+                                        "type": "string",
+                                        "title": "The product schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "A5E03262691"
+                                        ]
+                                    },
+                                    "sales_order": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/sales_order",
+                                        "type": "string",
+                                        "title": "The sales_order schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "800014035899"
+                                        ]
+                                    },
+                                    "invert_Product": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product",
+                                        "type": "object",
+                                        "title": "The invert_Product schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": {},
+                                        "examples": [
+                                            {
+                                                "product_no": "A5E03262691",
+                                                "invert_Preactor_Order": [
+                                                    {
+                                                        "order_no": "800014035899",
+                                                        "product": "A5E03262691",
+                                                        "plan_quantity": "5",
+                                                        "invert_Product_Order_Process": [
+                                                            {
+                                                                "product_order": "800014035899",
+                                                                "product": "A5E03262691",
+                                                                "pass_quantity": "4",
+                                                                "produce_quantity": "4"
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "produced_Product_Qualification": [
+                                                    {
+                                                        "test_result": "P",
+                                                        "product": "A5E03262691",
+                                                        "mach_type": "MPM******",
+                                                        "event_time": "2020-10-01T12:00:00",
+                                                        "fid": "SZVH0YJF000151",
+                                                        "invert_Production_Procedure": {
+                                                            "Work_On_Work_Position": {
+                                                                "work_center_id": "70000"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "test_result": "P",
+                                                        "product": "A5E03262691",
+                                                        "mach_type": "MPM******",
+                                                        "event_time": "2020-10-01T12:10:00",
+                                                        "fid": "SZVH0YJF000152",
+                                                        "invert_Production_Procedure": {
+                                                            "Work_On_Work_Position": {
+                                                                "work_center_id": "70000"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "test_result": "P",
+                                                        "product": "A5E03262691",
+                                                        "mach_type": "MPM******",
+                                                        "event_time": "2020-10-01T12:20:00",
+                                                        "fid": "SZVH0YJF000153",
+                                                        "invert_Production_Procedure": {
+                                                            "Work_On_Work_Position": {
+                                                                "work_center_id": "70000"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "test_result": "P",
+                                                        "product": "A5E03262691",
+                                                        "mach_type": "MPM******",
+                                                        "event_time": "2020-10-01T12:30:00",
+                                                        "fid": "SZVH0YJF000154",
+                                                        "invert_Production_Procedure": {
+                                                            "Work_On_Work_Position": {
+                                                                "work_center_id": "70000"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "required": [
+                                            "product_no",
+                                            "invert_Preactor_Order",
+                                            "produced_Product_Qualification"
+                                        ],
+                                        "properties": {
+                                            "product_no": {
+                                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/product_no",
+                                                "type": "string",
+                                                "title": "The product_no schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": "",
+                                                "examples": [
+                                                    "A5E03262691"
+                                                ]
+                                            },
+                                            "invert_Preactor_Order": {
+                                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order",
+                                                "type": "array",
+                                                "title": "The invert_Preactor_Order schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": [],
+                                                "examples": [
+                                                    [
+                                                        {
+                                                            "order_no": "800014035899",
+                                                            "product": "A5E03262691",
+                                                            "plan_quantity": "5",
+                                                            "invert_Product_Order_Process": [
+                                                                {
+                                                                    "product_order": "800014035899",
+                                                                    "product": "A5E03262691",
+                                                                    "pass_quantity": "4",
+                                                                    "produce_quantity": "4"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                ],
+                                                "additionalItems": true,
+                                                "items": {
+                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items",
+                                                    "anyOf": [
+                                                        {
+                                                            "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0",
+                                                            "type": "object",
+                                                            "title": "The first anyOf schema",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": {},
+                                                            "examples": [
+                                                                {
+                                                                    "order_no": "800014035899",
+                                                                    "product": "A5E03262691",
+                                                                    "plan_quantity": "5",
+                                                                    "invert_Product_Order_Process": [
+                                                                        {
+                                                                            "product_order": "800014035899",
+                                                                            "product": "A5E03262691",
+                                                                            "pass_quantity": "4",
+                                                                            "produce_quantity": "4"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            "required": [
+                                                                "order_no",
+                                                                "product",
+                                                                "plan_quantity",
+                                                                "invert_Product_Order_Process"
+                                                            ],
+                                                            "properties": {
+                                                                "order_no": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/order_no",
+                                                                    "type": "string",
+                                                                    "title": "The order_no schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "800014035899"
+                                                                    ]
+                                                                },
+                                                                "product": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/product",
+                                                                    "type": "string",
+                                                                    "title": "The product schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "A5E03262691"
+                                                                    ]
+                                                                },
+                                                                "plan_quantity": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/plan_quantity",
+                                                                    "type": "string",
+                                                                    "title": "The plan_quantity schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "5"
+                                                                    ]
+                                                                },
+                                                                "invert_Product_Order_Process": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process",
+                                                                    "type": "array",
+                                                                    "title": "The invert_Product_Order_Process schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": [],
+                                                                    "examples": [
+                                                                        [
+                                                                            {
+                                                                                "product_order": "800014035899",
+                                                                                "product": "A5E03262691",
+                                                                                "pass_quantity": "4",
+                                                                                "produce_quantity": "4"
+                                                                            }
+                                                                        ]
+                                                                    ],
+                                                                    "additionalItems": true,
+                                                                    "items": {
+                                                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items",
+                                                                        "anyOf": [
+                                                                            {
+                                                                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items/anyOf/0",
+                                                                                "type": "object",
+                                                                                "title": "The first anyOf schema",
+                                                                                "description": "An explanation about the purpose of this instance.",
+                                                                                "default": {},
+                                                                                "examples": [
+                                                                                    {
+                                                                                        "product_order": "800014035899",
+                                                                                        "product": "A5E03262691",
+                                                                                        "pass_quantity": "4",
+                                                                                        "produce_quantity": "4"
+                                                                                    }
+                                                                                ],
+                                                                                "required": [
+                                                                                    "product_order",
+                                                                                    "product",
+                                                                                    "pass_quantity",
+                                                                                    "produce_quantity"
+                                                                                ],
+                                                                                "properties": {
+                                                                                    "product_order": {
+                                                                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items/anyOf/0/properties/product_order",
+                                                                                        "type": "string",
+                                                                                        "title": "The product_order schema",
+                                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                                        "default": "",
+                                                                                        "examples": [
+                                                                                            "800014035899"
+                                                                                        ]
+                                                                                    },
+                                                                                    "product": {
+                                                                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items/anyOf/0/properties/product",
+                                                                                        "type": "string",
+                                                                                        "title": "The product schema",
+                                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                                        "default": "",
+                                                                                        "examples": [
+                                                                                            "A5E03262691"
+                                                                                        ]
+                                                                                    },
+                                                                                    "pass_quantity": {
+                                                                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items/anyOf/0/properties/pass_quantity",
+                                                                                        "type": "string",
+                                                                                        "title": "The pass_quantity schema",
+                                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                                        "default": "",
+                                                                                        "examples": [
+                                                                                            "4"
+                                                                                        ]
+                                                                                    },
+                                                                                    "produce_quantity": {
+                                                                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/invert_Preactor_Order/items/anyOf/0/properties/invert_Product_Order_Process/items/anyOf/0/properties/produce_quantity",
+                                                                                        "type": "string",
+                                                                                        "title": "The produce_quantity schema",
+                                                                                        "description": "An explanation about the purpose of this instance.",
+                                                                                        "default": "",
+                                                                                        "examples": [
+                                                                                            "4"
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                "additionalProperties": true
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            },
+                                                            "additionalProperties": true
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "produced_Product_Qualification": {
+                                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification",
+                                                "type": "array",
+                                                "title": "The produced_Product_Qualification schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": [],
+                                                "examples": [
+                                                    [
+                                                        {
+                                                            "test_result": "P",
+                                                            "product": "A5E03262691",
+                                                            "mach_type": "MPM******",
+                                                            "event_time": "2020-10-01T12:00:00",
+                                                            "fid": "SZVH0YJF000151",
+                                                            "invert_Production_Procedure": {
+                                                                "Work_On_Work_Position": {
+                                                                    "work_center_id": "70000"
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "test_result": "P",
+                                                            "product": "A5E03262691",
+                                                            "mach_type": "MPM******",
+                                                            "event_time": "2020-10-01T12:10:00",
+                                                            "fid": "SZVH0YJF000152",
+                                                            "invert_Production_Procedure": {
+                                                                "Work_On_Work_Position": {
+                                                                    "work_center_id": "70000"
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                ],
+                                                "additionalItems": true,
+                                                "items": {
+                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items",
+                                                    "anyOf": [
+                                                        {
+                                                            "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0",
+                                                            "type": "object",
+                                                            "title": "The first anyOf schema",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": {},
+                                                            "examples": [
+                                                                {
+                                                                    "test_result": "P",
+                                                                    "product": "A5E03262691",
+                                                                    "mach_type": "MPM******",
+                                                                    "event_time": "2020-10-01T12:00:00",
+                                                                    "fid": "SZVH0YJF000151",
+                                                                    "invert_Production_Procedure": {
+                                                                        "Work_On_Work_Position": {
+                                                                            "work_center_id": "70000"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "required": [
+                                                                "test_result",
+                                                                "product",
+                                                                "mach_type",
+                                                                "event_time",
+                                                                "fid",
+                                                                "invert_Production_Procedure"
+                                                            ],
+                                                            "properties": {
+                                                                "test_result": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/test_result",
+                                                                    "type": "string",
+                                                                    "title": "The test_result schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "P"
+                                                                    ]
+                                                                },
+                                                                "product": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/product",
+                                                                    "type": "string",
+                                                                    "title": "The product schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "A5E03262691"
+                                                                    ]
+                                                                },
+                                                                "mach_type": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/mach_type",
+                                                                    "type": "string",
+                                                                    "title": "The mach_type schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "MPM******"
+                                                                    ]
+                                                                },
+                                                                "event_time": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/event_time",
+                                                                    "type": "string",
+                                                                    "title": "The event_time schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "2020-10-01T12:00:00"
+                                                                    ]
+                                                                },
+                                                                "fid": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/fid",
+                                                                    "type": "string",
+                                                                    "title": "The fid schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": "",
+                                                                    "examples": [
+                                                                        "SZVH0YJF000151"
+                                                                    ]
+                                                                },
+                                                                "invert_Production_Procedure": {
+                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/invert_Production_Procedure",
+                                                                    "type": "object",
+                                                                    "title": "The invert_Production_Procedure schema",
+                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                    "default": {},
+                                                                    "examples": [
+                                                                        {
+                                                                            "Work_On_Work_Position": {
+                                                                                "work_center_id": "70000"
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "required": [
+                                                                        "Work_On_Work_Position"
+                                                                    ],
+                                                                    "properties": {
+                                                                        "Work_On_Work_Position": {
+                                                                            "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/invert_Production_Procedure/properties/Work_On_Work_Position",
+                                                                            "type": "object",
+                                                                            "title": "The Work_On_Work_Position schema",
+                                                                            "description": "An explanation about the purpose of this instance.",
+                                                                            "default": {},
+                                                                            "examples": [
+                                                                                {
+                                                                                    "work_center_id": "70000"
+                                                                                }
+                                                                            ],
+                                                                            "required": [
+                                                                                "work_center_id"
+                                                                            ],
+                                                                            "properties": {
+                                                                                "work_center_id": {
+                                                                                    "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/produced_Product_Qualification/items/anyOf/0/properties/invert_Production_Procedure/properties/Work_On_Work_Position/properties/work_center_id",
+                                                                                    "type": "string",
+                                                                                    "title": "The work_center_id schema",
+                                                                                    "description": "An explanation about the purpose of this instance.",
+                                                                                    "default": "",
+                                                                                    "examples": [
+                                                                                        "70000"
+                                                                                    ]
+                                                                                }
+                                                                            },
+                                                                            "additionalProperties": true
+                                                                        }
+                                                                    },
+                                                                    "additionalProperties": true
+                                                                }
+                                                            },
+                                                            "additionalProperties": true
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

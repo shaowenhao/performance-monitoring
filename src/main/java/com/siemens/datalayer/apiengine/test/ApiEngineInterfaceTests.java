@@ -4,6 +4,8 @@ import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
 
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
 import com.siemens.datalayer.apiengine.model.ResponseCode;
+import com.siemens.datalayer.apiengine.model.SNCDataPro;
+import com.siemens.datalayer.iems.model.AssetDataPro;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.qameta.allure.*;
 import io.restassured.internal.path.json.JSONAssertion;
@@ -2221,20 +2223,14 @@ public class ApiEngineInterfaceTests {
 
 
 
-    @Test(groups = "snc", description = "Test api engine interface: Query product order by graphql.")
+    @Test(groups = "snc", description = "Test api engine interface: Query product order by graphql.", dataProviderClass = SNCDataPro.class, dataProvider = "dataForSNCProjectOrder")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
     @Story("Query product order by graphql")
-    public void queryProductOrderByGraphQL() {
+    public void queryProductOrderByGraphQL(Map<String, String> paramMaps) {
         Reporter.log("Send request to graphql api with graphql");
 
-        String query = "{\n" +
-                "    Product_Order(cond: \"{ demand_date:{_gte: \\\"2020-10-01 00:00:00\\\"} }\"){\n" +
-                "        insert_time\n" +
-                "        demand_date\n" +
-                "        sales_order\n" +
-                "    }\n" +
-                "}";
+        String query = paramMaps.get("query");
 
 
         Response response = ApiEngineEndpoint.postGraphql(query);
@@ -2250,10 +2246,10 @@ public class ApiEngineInterfaceTests {
 
         JsonPath jsonPathEvaluator = response.jsonPath();
 
-        Assert.assertNotNull(jsonPathEvaluator.get("data.Product_Order"));
+        Assert.assertNotNull(jsonPathEvaluator.get(paramMaps.get("jsonpath")));
 
         assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath("snc-product-order.json"));
+                matchesJsonSchemaInClasspath(paramMaps.get("schema")));
 
 
     }

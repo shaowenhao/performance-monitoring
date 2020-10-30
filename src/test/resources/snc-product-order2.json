@@ -1,0 +1,160 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "code": 100000,
+            "message": "Successfully",
+            "data": {
+                "Product_Order": [
+                    {
+                        "sales_order": "800014035899",
+                        "invert_Product": {
+                            "product_no": "A5E03262691"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "required": [
+        "code",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                100000
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Successfully"
+            ]
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "object",
+            "title": "The data schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "Product_Order": [
+                        {
+                            "sales_order": "800014035899",
+                            "invert_Product": {
+                                "product_no": "A5E03262691"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "Product_Order"
+            ],
+            "properties": {
+                "Product_Order": {
+                    "$id": "#/properties/data/properties/Product_Order",
+                    "type": "array",
+                    "title": "The Product_Order schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            {
+                                "sales_order": "800014035899",
+                                "invert_Product": {
+                                    "product_no": "A5E03262691"
+                                }
+                            }
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/data/properties/Product_Order/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0",
+                                "type": "object",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "examples": [
+                                    {
+                                        "sales_order": "800014035899",
+                                        "invert_Product": {
+                                            "product_no": "A5E03262691"
+                                        }
+                                    }
+                                ],
+                                "required": [
+                                    "sales_order",
+                                    "invert_Product"
+                                ],
+                                "properties": {
+                                    "sales_order": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/sales_order",
+                                        "type": "string",
+                                        "title": "The sales_order schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "800014035899"
+                                        ]
+                                    },
+                                    "invert_Product": {
+                                        "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product",
+                                        "type": "object",
+                                        "title": "The invert_Product schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": {},
+                                        "examples": [
+                                            {
+                                                "product_no": "A5E03262691"
+                                            }
+                                        ],
+                                        "required": [
+                                            "product_no"
+                                        ],
+                                        "properties": {
+                                            "product_no": {
+                                                "$id": "#/properties/data/properties/Product_Order/items/anyOf/0/properties/invert_Product/properties/product_no",
+                                                "type": "string",
+                                                "title": "The product_no schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": "",
+                                                "examples": [
+                                                    "A5E03262691"
+                                                ]
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
