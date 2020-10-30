@@ -2224,7 +2224,7 @@ public class ApiEngineInterfaceTests {
     @Test(groups = "snc", description = "Test api engine interface: Query product order by graphql.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
-    @Story("Query one device one type one day history data page by graphql")
+    @Story("Query product order by graphql")
     public void queryProductOrderByGraphQL() {
         Reporter.log("Send request to graphql api with graphql");
 
@@ -2254,6 +2254,45 @@ public class ApiEngineInterfaceTests {
 
         assertThat(response.getBody().asString(),
                 matchesJsonSchemaInClasspath("snc-product-order.json"));
+
+
+    }
+
+
+    @Test(groups = "snc", description = "Test api engine interface: Query product by graphql.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a request to SUT with graphql and verify if correct return.")
+    @Story("Query product by graphql")
+    public void queryProductByGraphQL() {
+        Reporter.log("Send request to graphql api with graphql");
+
+        String query = "{\n" +
+                "    Product {\n" +
+                "        product_no\n" +
+                "    }\n" +
+                "}";
+
+
+        Response response = ApiEngineEndpoint.postGraphql(query);
+
+        Reporter.log("Response status is " + response.getStatusCode());
+
+        Reporter.log("Response Body is =>  " + response.getBody().asString());
+
+        GraphqlApiResponse rspBody = response.getBody().as(GraphqlApiResponse.class);
+
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getMessage(), rspBody.getMessage());
+        Assert.assertEquals(ResponseCode.SDL_SUCCESS.getCode(), rspBody.getCode());
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+
+        Assert.assertNotNull(jsonPathEvaluator.get("data.Product"));
+
+        ArrayList data = jsonPathEvaluator.get("data.Product");
+        Assert.assertTrue(data.size() > 1);
+
+        assertThat(response.getBody().asString(),
+                matchesJsonSchemaInClasspath("snc-product.json"));
 
 
     }
