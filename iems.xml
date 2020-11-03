@@ -13,6 +13,14 @@
 	  			<parameter name="port" value="30684"/>
 	  			<parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
 	  			<parameter name="pre_data" value="/datalayer/api/v1/data/"/>
+	  			
+	  			<parameter name="rabbitmq_host" value="140.231.89.85" />
+	  			<parameter name="rabbitmq_port" value="30248"/>
+	  			<parameter name="rabbitmq_username" value="guest"/>
+	  			<parameter name="rabbitmq_password" value="guest"/>
+	  			<parameter name="rabbitmq_virtual_host" value="/"/>
+	  			<parameter name="rabbitmq_timeout" value="30"/>
+	  			<parameter name="rabbitmq_exchange" value="datalayer.exchange.out"/>
 		    </class>
 <!-- 			<class name="com.siemens.datalayer.selenium.test.SampleTest"/> -->
         </classes>

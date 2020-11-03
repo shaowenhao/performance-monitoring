@@ -15,6 +15,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import com.siemens.datalayer.iems.model.SensorDataPro;
 import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -32,24 +33,55 @@ import io.restassured.response.Response;
 @Epic("iEMS Interface")
 public class InterfaceTests {
 	
-	private Properties properties;
+//	private Properties properties;
 	private String bodystr = "";
 	private Connection connection;
     private Channel channel;
-    private String exchange;
     private String queue;
     private int timeout;
+    private String mqHost;
+    private String mqPort;
+    private String mqUsername;
+    private String mqPassword;
+    private String mqVirtualhost;
+    private String mqTimeout;
+    private String mqExchange;
 
-	@Parameters({ "base_url", "port", "pre_asset", "pre_data" })
+	@Parameters({ "base_url", "port", "pre_asset", "pre_data" ,
+		"rabbitmq_host", "rabbitmq_port", "rabbitmq_username", "rabbitmq_password", "rabbitmq_virtual_host", "rabbitmq_timeout", "rabbitmq_exchange"})
 	@BeforeClass(description = "Configure host address and communication port for Connector service")
-	public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30684") String port,
-			@Optional("/datalayer/api/v1/asset/") String pre_asset, @Optional("/datalayer/api/v1/data/") String pre_data) throws IOException, TimeoutException {
+	public void setConnectorEndpoint(
+			@Optional("http://140.231.89.85") String base_url, 
+			@Optional("30684") String port,
+			@Optional("/datalayer/api/v1/asset/") String pre_asset, 
+			@Optional("/datalayer/api/v1/data/") String pre_data,
+			@Optional("140.231.89.85") String rabbitmq_host, 
+			@Optional("30248") String rabbitmq_port,
+			@Optional("guest") String rabbitmq_username, 
+			@Optional("guest") String rabbitmq_password, 
+			@Optional("/") String rabbitmq_virtual_host,
+			@Optional("30") String rabbitmq_timeout,
+			@Optional("datalayer.exchange.out") String rabbitmq_exchange)
+					throws IOException, TimeoutException {
 		Endpoint.setBaseUrl(base_url);
 		Endpoint.setPort(port);
 		Endpoint.setPreAsset(pre_asset);
 		Endpoint.setPreData(pre_data);
-		properties = readProperties();
-//	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
+		
+		mqHost = rabbitmq_host;
+		mqPort = rabbitmq_port;
+		mqUsername = rabbitmq_username;
+		mqPassword = rabbitmq_password;
+		mqVirtualhost = rabbitmq_virtual_host;
+		mqTimeout = rabbitmq_timeout;
+		mqExchange = rabbitmq_exchange;
+		
+//		properties = readProperties();
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("REST API for asset", base_url + ":" + port + pre_asset );
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("REST API for data", base_url + ":" + port + pre_data );
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("RabbitMQ_url", mqHost + ":" + mqPort );
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("RabbitMQ_Timeout", mqTimeout );
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("RabbitMQ_exchange", mqExchange );
 	}
 
 	public void deleteSubscription(Response response){
@@ -77,21 +109,20 @@ public class InterfaceTests {
     public boolean initRabbitMQ() throws IOException, TimeoutException {
     	// 创建连接工厂
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername(properties.getProperty("rabbitmq.username"));
-        factory.setPassword(properties.getProperty("rabbitmq.password"));
+        factory.setUsername(mqUsername);
+        factory.setPassword(mqPassword);
         // 设置RabbitMQ地址
-        factory.setHost(properties.getProperty("rabbitmq.host"));
-        factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
-        factory.setVirtualHost(properties.getProperty("rabbitmq.virtual-host"));
-        timeout = Integer.parseInt(properties.getProperty("rabbitmq.timeout"));
+        factory.setHost(mqHost);
+        factory.setPort(Integer.parseInt(mqPort));
+        factory.setVirtualHost(mqVirtualhost);
+        timeout = Integer.parseInt(mqTimeout);
         
         // 建立到代理服务器连接
 		connection = factory.newConnection();
 		// 创建信道
         channel = connection.createChannel();
         // 声明交换器
-        exchange = properties.getProperty("rabbitmq.exchange");
-        channel.exchangeDeclare(exchange, "topic", true);
+        channel.exchangeDeclare(mqExchange, "topic", true);
         // 声明队列
         queue = channel.queueDeclare().getQueue();
 		boolean isConnected = connection.isOpen();
@@ -428,7 +459,7 @@ public class InterfaceTests {
 		String replyTo = data.get("replyTo").toString();
 		String routingKey = replyTo;
         // 绑定队列
-        channel.queueBind(queue, exchange, routingKey);
+        channel.queueBind(queue, mqExchange, routingKey);
         System.out.println("RabbitMQ consumer start ...");
         long t1 = System.currentTimeMillis();
         while (true) {
