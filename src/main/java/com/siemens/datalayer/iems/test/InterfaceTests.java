@@ -3,39 +3,103 @@ package com.siemens.datalayer.iems.test;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
+
 import io.qameta.allure.*;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import com.siemens.datalayer.iems.model.SensorDataPro;
 import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.siemens.datalayer.iems.model.AssetDataPro;
-import com.siemens.datalayer.iems.model.ResponseCode;
 import com.siemens.datalayer.iems.model.RestConstants;
 
+import org.jsoup.internal.StringUtil;
 import org.testng.Assert;
-
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
 @Epic("iEMS Interface")
 public class InterfaceTests {
+	
+	private Properties properties;
+	private String bodystr = "";
+	private Connection connection;
+    private Channel channel;
+    private String exchange;
+    private String queue;
+    private int timeout;
 
 	@Parameters({ "base_url", "port", "pre_asset", "pre_data" })
 	@BeforeClass(description = "Configure host address and communication port for Connector service")
 	public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30684") String port,
-			@Optional("/datalayer/api/v1/asset/") String pre_asset, @Optional("/datalayer/api/v1/data/") String pre_data) {
+			@Optional("/datalayer/api/v1/asset/") String pre_asset, @Optional("/datalayer/api/v1/data/") String pre_data) throws IOException, TimeoutException {
 		Endpoint.setBaseUrl(base_url);
 		Endpoint.setPort(port);
 		Endpoint.setPreAsset(pre_asset);
 		Endpoint.setPreData(pre_data);
+		properties = readProperties();
 //	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
 	}
 
+	public void deleteSubscription(Response response){
+    	JsonPath jsonPathEvaluator = response.jsonPath();
+		HashMap data = jsonPathEvaluator.get("data");
+		String replyTo = data.get("replyTo").toString();
+    	Response responseDelete = Endpoint.deleteSubscriptions(replyTo);
+		Assert.assertEquals(responseDelete.getStatusCode(), 200);
+		System.out.println("Delete subscription : "+ replyTo +" success.");
+    }
+    
+    public Properties readProperties(){
+        //创建对象
+        Properties pro = new Properties();
+        //读取properties文件到缓存[获取src/main/resources下文件的绝对路径]
+        try {
+            BufferedInputStream in = (BufferedInputStream) this.getClass().getResourceAsStream("/mq.properties");
+            pro.load(in);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pro;
+    }
+    
+    public boolean initRabbitMQ() throws IOException, TimeoutException {
+    	// 创建连接工厂
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setUsername(properties.getProperty("rabbitmq.username"));
+        factory.setPassword(properties.getProperty("rabbitmq.password"));
+        // 设置RabbitMQ地址
+        factory.setHost(properties.getProperty("rabbitmq.host"));
+        factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
+        factory.setVirtualHost(properties.getProperty("rabbitmq.virtual-host"));
+        timeout = Integer.parseInt(properties.getProperty("rabbitmq.timeout"));
+        
+        // 建立到代理服务器连接
+		connection = factory.newConnection();
+		// 创建信道
+        channel = connection.createChannel();
+        // 声明交换器
+        exchange = properties.getProperty("rabbitmq.exchange");
+        channel.exchangeDeclare(exchange, "topic", true);
+        // 声明队列
+        queue = channel.queueDeclare().getQueue();
+		boolean isConnected = connection.isOpen();
+        boolean isChannelOpen = channel.isOpen();
+        System.out.println("is connected " + isConnected + ", is channel open " + isChannelOpen);
+        return connection.isOpen() && channel.isOpen();
+    }
+    
 	@Test(priority = 0, description = RestConstants.LISTDEVICETYPES)
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT and verify if all the available device type can be read out.")
@@ -223,13 +287,14 @@ public class InterfaceTests {
 		}
 	}
 	
+	
 //	Subscription Data
 	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSBYSENSORID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionBySensorId")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with sensor ids and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription sensor data by sensor ids")
-	public void subscriptionsBySensorId(Map<String, String> paramMaps) {
+	public void subscriptionsBySensorId(Map<String, String> paramMaps) throws IOException, TimeoutException {
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("request"))
 			queryParameters.put("request", paramMaps.get("request").toString());
@@ -239,9 +304,17 @@ public class InterfaceTests {
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			assertThat(response.getBody().asString(),
 					matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON"));
+			boolean flag = validMQData(response);
+			if(flag) {
+				System.out.println("Get sensor data by sensor ids success.");
+			}else {
+				Assert.fail("Get MQ data fail.");
+			}
+			deleteSubscription(response);
 		} else {
 			Assert.assertNull(response.jsonPath().getString("data"));
 		}
+		
 	}
 	
 	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONBYDEVICEID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionsByDeviceId")
@@ -249,7 +322,7 @@ public class InterfaceTests {
 	@Description("Send a request to SUT with device id and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription sensor data by device id")
-	public void subscriptionsByDeviceId(Map<String, String> paramMaps) {
+	public void subscriptionsByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException {
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("deviceId"))
 			queryParameters.put("deviceId", paramMaps.get("deviceId"));
@@ -259,9 +332,18 @@ public class InterfaceTests {
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			assertThat(response.getBody().asString(),
 					matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON"));
+			
+			boolean flag = validMQData(response);
+			if(flag) {
+				System.out.println("Get sensor data by device id success.");
+			}else {
+				Assert.fail("Get MQ data fail.");
+			}
+			deleteSubscription(response);
 		} else {
 			Assert.assertNull(response.jsonPath().getString("data"));
 		}
+		
 	}
 	
 	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSWITHKPIBYDEVICEID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionsWithKPIByDeviceId")
@@ -269,7 +351,7 @@ public class InterfaceTests {
 	@Description("Send a request to SUT with device ids and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription kpi data by device ids")
-	public void subscriptionsWithKPIByDeviceId(Map<String, String> paramMaps) {
+	public void subscriptionsWithKPIByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException {
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("request"))
 			queryParameters.put("request", paramMaps.get("request").toString());
@@ -279,9 +361,17 @@ public class InterfaceTests {
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			assertThat(response.getBody().asString(),
 					matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON"));
+			boolean flag = validMQData(response);
+			if(flag) {
+				System.out.println("Get kpi data by device ids success.");
+			}else {
+				Assert.fail("Get MQ data fail.");
+			}
+			deleteSubscription(response);
 		} else {
 			Assert.assertNull(response.jsonPath().getString("data"));
 		}
+		
 	}
 	
 	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS)
@@ -325,5 +415,103 @@ public class InterfaceTests {
 			Assert.assertNull(response.jsonPath().getString("data"));
 		}
 	}
+    
+	
+	public boolean validMQData(Response response) throws IOException, TimeoutException {
+		boolean flag = false;
+		boolean isConnected = initRabbitMQ();
+		if(!isConnected) {
+			return false;
+		}
+        JsonPath jsonPathEvaluator = response.jsonPath();
+		HashMap data = jsonPathEvaluator.get("data");
+		String replyTo = data.get("replyTo").toString();
+		String routingKey = replyTo;
+        // 绑定队列
+        channel.queueBind(queue, exchange, routingKey);
+        System.out.println("RabbitMQ consumer start ...");
+        long t1 = System.currentTimeMillis();
+        while (true) {
+        	long t2 = System.currentTimeMillis();
+            if(t2-t1 > timeout*1000){
+                break;
+            }else{
+	            // 消费消息
+	            boolean autoAck = false;
+	            String consumerTag = "";
+	            channel.basicConsume(queue, autoAck, consumerTag, new DefaultConsumer(channel) {
+	                @Override
+	                public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties,
+	                        byte[] body) throws IOException {
+	                    super.handleDelivery(consumerTag, envelope, properties, body);
+	                    String routingKey = envelope.getRoutingKey();
+	                    String contentType = properties.getContentType();
+	                    System.out.println("routingKey: " + routingKey);
+//	                    System.out.println("消费的内容类型 contentType: " + contentType);
+	
+	                    long deliveryTag = envelope.getDeliveryTag();
+	                    channel.basicAck(deliveryTag, false);
+	                    bodystr = new String(body, "UTF-8");
+	                    System.out.println("bodystr: " + bodystr);
+	                }
+	            });
+            }
+        }
+        if(!StringUtil.isBlank(bodystr)) {
+        	flag = true;
+        }else {
+        	flag = false;
+        }
+        return flag;
+    }
+	
+	
+//  /***
+//  * 客户端重连
+//  *
+//  * 测试步骤：
+//  * 1. 设置 RECONNECT_INTERVAL_SECONDS(default 10s) 和 RECONNECT_TIMES(default 3)
+//  * 2. 执行单元测试方法 
+//  * 3. 手动关闭 RabbitMQ Server 进程
+//  * 4. 等待几秒钟后重启 RabbitMQ Server， 不能超过30秒(RabbitMQ 启动需要5-6秒)
+//  * 5. 查看打印，是否重新连接成功
+//  *
+//  * 提示：封装客户端的时候，继承Closeable接口
+//  *
+//  * @throws InterruptedException
+//  */
+// @Test(priority = 0, description = RestConstants.SUBSCRIPTIONBYDEVICEID)
+//	@Severity(SeverityLevel.BLOCKER)
+//	@Description("Client connect to RabbitMQ.")
+// @Feature("Get subscription data API")
+//	@Story("Connect to RabbitMQ")
+// public void validRabbitMQConnection() throws InterruptedException {
+// 		boolean reconnected = false;
+//         int retry = 0;
+//         do {
+//             try {
+//                 reconnected = initRabbitMQ();
+//             } catch (IOException e) {
+//                 e.printStackTrace();
+//             } catch (TimeoutException e) {
+//                 e.printStackTrace();
+//             }
+//             if (reconnected) {
+//                 System.out.println("rabbitmq connected, retry times is " + retry);
+//                 break;
+//             }
+//             retry++;
+//             System.out.println("reconnect after " + RECONNECT_INTERVAL_SECONDS + "s, retry is " + retry);
+//             try {
+//                 TimeUnit.SECONDS.sleep(RECONNECT_INTERVAL_SECONDS);
+//             } catch (InterruptedException e) {
+//                 e.printStackTrace();
+//             }
+//         } while (retry < RECONNECT_TIMES && !stop);
+//
+//         Assert.assertTrue(reconnected);
+//
+//     TimeUnit.MINUTES.sleep(1);
+// }
 
 }
