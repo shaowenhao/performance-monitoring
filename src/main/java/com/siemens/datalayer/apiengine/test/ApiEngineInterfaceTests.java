@@ -5,10 +5,7 @@ import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
 import com.siemens.datalayer.apiengine.model.ResponseCode;
 import com.siemens.datalayer.apiengine.model.SNCDataPro;
-import com.siemens.datalayer.iems.model.AssetDataPro;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.qameta.allure.*;
-import io.restassured.internal.path.json.JSONAssertion;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.json.JSONException;
@@ -919,18 +916,18 @@ public class ApiEngineInterfaceTests {
                 "    \"data\": {\n" +
                 "        \"Contract\": [\n" +
                 "            {\n" +
-                "                \"accumulated_amount\": 5.0E7,\n" +
+                "                \"accumulated_amount\": 50000000,\n" +
                 "                \"charge_frequency\": 3,\n" +
-                "                \"contract_amount\": 5.0E7,\n" +
+                "                \"contract_amount\": 50000000,\n" +
                 "                \"customer\": \"28\",\n" +
                 "                \"grant_loan_frequency\": \"一次投放\",\n" +
                 "                \"id\": \"苏州租赁(2018)回字第1810099号\",\n" +
-                "                \"lease_balance\": 4.4168744E7,\n" +
+                "                \"lease_balance\": 44168744.88,\n" +
                 "                \"lease_end_time\": \"2026-07-15 00:00:00\",\n" +
                 "                \"lease_num\": 96.0,\n" +
                 "                \"lease_start_time\": \"2018-07-25 00:00:00\",\n" +
                 "                \"lease_unit\": null,\n" +
-                "                \"leasing_principal\": 5.0E7,\n" +
+                "                \"leasing_principal\": 50000000,\n" +
                 "                \"make_loan_day\": \"2018-07-25 00:00:00\",\n" +
                 "                \"overdue_amount\": 0.0,\n" +
                 "                \"overdue_days\": 0,\n" +
@@ -949,7 +946,7 @@ public class ApiEngineInterfaceTests {
                 "                    \"classification_level\": \"正常\",\n" +
                 "                    \"credit_amount\": 50000000,\n" +
                 "                    \"detail_address\": null,\n" +
-                "                    \"discount_ratio\": 0.5131579,\n" +
+                "                    \"discount_ratio\": 0.513157894609903,\n" +
                 "                    \"expire_date\": null,\n" +
                 "                    \"guarantee_type\": \"质押\",\n" +
                 "                    \"id\": \"33\",\n" +
@@ -964,16 +961,16 @@ public class ApiEngineInterfaceTests {
                 "                    \"Refer_To_Lease_Group\": {\n" +
                 "                        \"asset_type\": \"动产\",\n" +
                 "                        \"count\": 1,\n" +
-                "                        \"discount_ratio\": 0.5131579,\n" +
+                "                        \"discount_ratio\": 0.513157894609903,\n" +
                 "                        \"id\": \"33\",\n" +
-                "                        \"lease_net_val\": 9.7435896E7,\n" +
+                "                        \"lease_net_val\": 97435897.46,\n" +
                 "                        \"lease_type\": \"2\",\n" +
                 "                        \"lease_type_gb\": \"其他电力工业专用设备\",\n" +
                 "                        \"lease_type_yj\": \"电力设备\",\n" +
                 "                        \"nominal_cost\": 1000.0,\n" +
                 "                        \"project\": \"33\",\n" +
-                "                        \"transfer_price\": 5.0E7,\n" +
-                "                        \"unit_price\": 1.02564104E8,\n" +
+                "                        \"transfer_price\": 50000000,\n" +
+                "                        \"unit_price\": 102564102,\n" +
                 "                        \"Refer_To_Power_Station_Properties\": {\n" +
                 "                            \"ps_type\": \"光伏电站\",\n" +
                 "                            \"structure\": \"集中式\",\n" +
@@ -1120,10 +1117,10 @@ public class ApiEngineInterfaceTests {
                 "                \"brand_name\": \"中利新能源\",\n" +
                 "                \"unit_price\": 0.0,\n" +
                 "                \"serial_num\": null,\n" +
-                "                \"discount_ratio\": 0.5131579,\n" +
-                "                \"transfer_price\": 5.0E7,\n" +
-                "                \"lease_net_val\": 9.7435896E7,\n" +
-                "                \"nominal_cost\": 1.02564104E8,\n" +
+                "                \"discount_ratio\": 0.513157894609903,\n" +
+                "                \"transfer_price\": 50000000,\n" +
+                "                \"lease_net_val\": 97435897.46,\n" +
+                "                \"nominal_cost\": 102564102,\n" +
                 "                \"supplier\": \"瑞龙电气厂\",\n" +
                 "                \"asset_type\": \"动产\",\n" +
                 "                \"name\": \"河南安阳中晖\",\n" +
@@ -1392,12 +1389,12 @@ public class ApiEngineInterfaceTests {
                 "                \"project\": \"33\",\n" +
                 "                \"lease_type_yj\": \"电力设备\",\n" +
                 "                \"brand_name\": \"中利新能源\",\n" +
-                "                \"unit_price\": 0.0,\n" +
+                "                \"unit_price\": 0,\n" +
                 "                \"serial_num\": null,\n" +
-                "                \"discount_ratio\": 0.5131579,\n" +
-                "                \"transfer_price\": 5.0E7,\n" +
-                "                \"lease_net_val\": 9.7435896E7,\n" +
-                "                \"nominal_cost\": 1.02564104E8,\n" +
+                "                \"discount_ratio\": 0.513157894609903,\n" +
+                "                \"transfer_price\": 50000000,\n" +
+                "                \"lease_net_val\": 97435897.46,\n" +
+                "                \"nominal_cost\": 102564102,\n" +
                 "                \"supplier\": \"瑞龙电气厂\",\n" +
                 "                \"asset_type\": \"动产\",\n" +
                 "                \"name\": \"河南安阳中晖\",\n" +
@@ -1409,18 +1406,18 @@ public class ApiEngineInterfaceTests {
                 "                \"lease_group\": \"33\",\n" +
                 "                \"product_model\": null,\n" +
                 "                \"invert_Lease_Group\": {\n" +
-                "                    \"lease_net_val\": 9.7435896E7,\n" +
-                "                    \"transfer_price\": 5.0E7,\n" +
+                "                    \"lease_net_val\": 97435897.46,\n" +
+                "                    \"transfer_price\": 50000000,\n" +
                 "                    \"lease_type_gb\": \"其他电力工业专用设备\",\n" +
-                "                    \"nominal_cost\": 1000.0,\n" +
+                "                    \"nominal_cost\": 1000,\n" +
                 "                    \"count\": 1,\n" +
                 "                    \"asset_type\": \"动产\",\n" +
                 "                    \"project\": \"33\",\n" +
                 "                    \"lease_type_yj\": \"电力设备\",\n" +
                 "                    \"id\": \"33\",\n" +
                 "                    \"lease_type\": \"2\",\n" +
-                "                    \"unit_price\": 1.02564104E8,\n" +
-                "                    \"discount_ratio\": 0.5131579,\n" +
+                "                    \"unit_price\": 102564102,\n" +
+                "                    \"discount_ratio\": 0.513157894609903,\n" +
                 "                    \"invert_Project\": {\n" +
                 "                        \"no\": \"20180651\",\n" +
                 "                        \"rent_type\": \"融资租赁/回租\",\n" +
@@ -1433,7 +1430,7 @@ public class ApiEngineInterfaceTests {
                 "                        \"risk_mgr\": \"朱金龙\",\n" +
                 "                        \"is_manufacture_leasing\": false,\n" +
                 "                        \"business_unit\": \"业务三部\",\n" +
-                "                        \"discount_ratio\": 0.5131579,\n" +
+                "                        \"discount_ratio\": 0.513157894609903,\n" +
                 "                        \"class_level\": \"正常\",\n" +
                 "                        \"manufacture\": \"瑞龙电气厂\",\n" +
                 "                        \"business_mgr\": \"沈忱宜\",\n" +
@@ -1473,7 +1470,7 @@ public class ApiEngineInterfaceTests {
                 "                        }\n" +
                 "                    },\n" +
                 "                    \"Refer_To_Power_Station_Properties\": {\n" +
-                "                        \"avg_annual_eq_hours\": 1115.0,\n" +
+                "                        \"avg_annual_eq_hours\": 1115,\n" +
                 "                        \"lease_group\": \"33\",\n" +
                 "                        \"ps_type\": \"光伏电站\",\n" +
                 "                        \"structure\": \"集中式\",\n" +
