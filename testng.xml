@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="data-layer-automation test suite">
-<listeners>
-    <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener" />
-</listeners>
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
     <test verbose="2" preserve-order="true"
-    	thread-count="5"
-		name="Rest API Tests">
+          thread-count="5"
+          name="Rest API Tests">
         <classes>
             <!--<class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
             <parameter name="base_url" value="http://140.231.89.85"/>
@@ -21,13 +21,18 @@
             
   			<parameter name="port" value="31834"/>
             </class>-->
-            <class name="com.siemens.datalayer.iems.test.InterfaceTests">
-			    <parameter name="base_url" value="http://140.231.89.85" />
-	  			<parameter name="port" value="30684"/>
-	  			<parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
-	  			<parameter name="pre_data" value="/datalayer/api/v1/data/"/>
-		    </class>
-<!-- 			<class name="com.siemens.datalayer.selenium.test.SampleTest"/> -->
+            <!--
+           <class name="com.siemens.datalayer.iems.test.InterfaceTests">
+               <parameter name="base_url" value="http://140.231.89.85"/>
+               <parameter name="port" value="30684"/>
+               <parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
+               <parameter name="pre_data" value="/datalayer/api/v1/data/"/>
+           </class>
+                  <class name="com.siemens.datalayer.selenium.test.SampleTest"/> -->
+            <class name="com.siemens.datalayer.jinzu.test.JinzuTests">
+                <parameter name="base_url" value="http://140.231.89.85/"/>
+                <parameter name="port" value="31059"/>
+            </class>
         </classes>
     </test>
 </suite>
