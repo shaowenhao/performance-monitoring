@@ -5,7 +5,6 @@ import java.util.*;
 import io.qameta.allure.*;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -32,158 +31,6 @@ public class InterfaceTests {
 	    Endpoint.setBaseUrl(base_url);
 	    Endpoint.setPort(port);
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
-	}
-	
-	@DataProvider(name = "dataForGetConceptModelDataByCondition")
-	Iterator<Object[]> dataForGetConceptModelDataByCondition() {
-
-	    Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
-
-	    List<Map<String, String>> listOfQueryParams = new ArrayList<Map<String, String>>();
-	    
-	    Map<String, String> goodQuery01 = new HashMap<String, String>();
-
-	    goodQuery01.put("description", "good request, data retrieved");
-	    goodQuery01.put("name", "Customer");
-	    goodQuery01.put("pageIndex", "1");
-	    goodQuery01.put("pageSize", "10");
-	    
-	    listOfQueryParams.add(goodQuery01);	
-	    
-	    Map<String, String> goodQuery02 = new HashMap<String, String>();
-
-	    goodQuery02.put("description", "good request, data retrieved");
-	    goodQuery02.put("name", "Site");
-	    goodQuery02.put("pageIndex", "2");
-	    goodQuery02.put("pageSize", "15");
-	    
-	    listOfQueryParams.add(goodQuery02);
-	    
-	    Map<String, String> goodQuery03 = new HashMap<String, String>();
-	    
-	    goodQuery03.put("description", "good request, data retrieved");	    
-	    goodQuery03.put("name", "Site");
-	    goodQuery03.put("condition", "id='P000000681'");
-   
-	    listOfQueryParams.add(goodQuery03);
-	    
-	    Map<String, String> goodQuery04 = new HashMap<String, String>();
-	    
-	    goodQuery04.put("description", "good request, data not found");	    
-	    goodQuery04.put("name", "Site");
-	    goodQuery04.put("condition", "id='?????'");
-   
-	    listOfQueryParams.add(goodQuery04);
-	    
-	    Map<String, String> goodQuery05 = new HashMap<String, String>();
-	    
-	    goodQuery05.put("description", "good request, data retrieved");	    
-	    goodQuery05.put("name", "Site");
-	    goodQuery05.put("condition", "capacity>=20");
-   
-	    listOfQueryParams.add(goodQuery05);
-	    
-	    Map<String, String> goodQuery06 = new HashMap<String, String>();
-	    
-	    goodQuery06.put("description", "good request, data retrieved");	    
-	    goodQuery06.put("name", "Site");
-	    goodQuery06.put("condition", "id='P000000681' OR capacity>=20");
-   
-	    listOfQueryParams.add(goodQuery06);	
-	    
-	    Map<String, String> goodQuery07 = new HashMap<String, String>();
-	    
-	    goodQuery07.put("description", "good request, data not found");	    
-	    goodQuery07.put("name", "Site");
-	    goodQuery07.put("condition", "id='P000000681' AND capacity>=20");
-   
-	    listOfQueryParams.add(goodQuery07);	    
-	    
-	    Map<String, String> badQuery01 = new HashMap<String, String>();
-	    
-	    badQuery01.put("description", "bad request (name is empty)");
-	    badQuery01.put("name", "");
-	    badQuery01.put("pageIndex", "1");
-	    badQuery01.put("pageSize", "10");
-	    badQuery01.put("expectCode", "106601");
-	    badQuery01.put("expectMessage", "bad request:name cannot be blank!");
-	    
-	    listOfQueryParams.add(badQuery01);
-	    
-	    Map<String, String> badQuery02 = new HashMap<String, String>();
-	    
-	    badQuery02.put("description", "bad request (name is not present)");
-	    badQuery02.put("pageIndex", "1");
-	    badQuery02.put("pageSize", "10");
-	    badQuery02.put("expectCode", "106602");
-	    badQuery02.put("expectMessage", "Required String parameter 'name' is not present");
-	    
-	    listOfQueryParams.add(badQuery02);
-	    
-	    Map<String, String> badQuery03 = new HashMap<String, String>();
-	    
-	    badQuery03.put("description", "bad request (name does not exist)");
-	    badQuery03.put("name", "12345678");
-	    badQuery03.put("pageIndex", "1");
-	    badQuery03.put("pageSize", "10");
-	    badQuery03.put("expectCode", "106101");
-	    badQuery03.put("expectMessage", "entity 12345678 not found locally!");
-	    
-	    listOfQueryParams.add(badQuery03);
-	    
-	    Map<String, String> badQuery04 = new HashMap<String, String>();
-	    
-	    badQuery04.put("description", "bad request (name contains strange characters)");
-	    badQuery04.put("name", "！@#￥%……&*（）——+？|");
-	    badQuery04.put("pageIndex", "1");
-	    badQuery04.put("pageSize", "10");
-	    badQuery04.put("expectCode", "106101");
-	    badQuery04.put("expectMessage", "entity ！@#￥%……&*（）——+？| not found locally!");
-	    
-	    listOfQueryParams.add(badQuery04);
-	    
-	    String long_name = "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024超长字符1024"
-	    				 + "超长字符1024超长字符1024";
-	    
-	    Map<String, String> badQuery05 = new HashMap<String, String>();
-	    
-	    badQuery05.put("description", "bad request (name is too long)");
-	    badQuery05.put("name", long_name);
-	    badQuery05.put("pageIndex", "1");
-	    badQuery05.put("pageSize", "10");
-	    badQuery05.put("expectCode", "106101");
-	    badQuery05.put("expectMessage", "entity " + long_name + " not found locally!");
-	    
-	    listOfQueryParams.add(badQuery05);
-	    
-	    Map<String, String> badQuery06 = new HashMap<String, String>();
-	    
-	    badQuery06.put("description", "bad request (incorrect condition)");
-	    badQuery06.put("name", "Site");
-	    badQuery06.put("condition", "id=?????");
-	    badQuery06.put("expectCode", "106119");
-	    badQuery06.put("expectMessage", "cannot parse the sql");
-	    
-	    listOfQueryParams.add(badQuery06);
-	    
-	    for (Map<String, String> map : listOfQueryParams) 
-	    {    		
-	    	if (map.get("description").contains("good request")) 
-	    	{
-	    		map.put("expectCode", "0");
-	    		map.put("expectMessage", "Operate success.");
-	    	}
-	    	
-	        queryParamCollection.add(new Object[]{map});
-	    }   
-
-	    return queryParamCollection.iterator();
 	}
 	 
 	@Test (priority = 0, description = "Test connector interface: Get All Entities name.")
@@ -244,7 +91,8 @@ public class InterfaceTests {
   
 	@Test (	priority = 0, 
 			description = "Test connector interface: Get concept model data by condition.", 
-			dataProvider = "dataForGetConceptModelDataByCondition" )
+			dataProvider = "connector-test-data-provider", 
+			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'SearchModelDataByCondition' request to SUT with specified parameters and check the response message.")
 	@Story("Get concept model data by condition")

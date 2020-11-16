@@ -1,6 +1,7 @@
 *.egg-info/
 *__pycache__/
 *.pyc
+*.log
 .cache/
 .coverage
 .eggs/
@@ -18,4 +19,5 @@ logs/
 test-output/
 allure-results/
 target/
+snapshot/
 

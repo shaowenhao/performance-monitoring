@@ -78,7 +78,7 @@ public class Utils {
 
     public static List<?> flatten(List<?> list){
         return list.stream()
-                .flatMap(e -> e instanceof List ? flatten((List) e).stream() : Stream.of(e))
+                .flatMap(e -> e instanceof List ? flatten((List<?>) e).stream() : Stream.of(e))
                 .collect(Collectors.toList());
     }
 
