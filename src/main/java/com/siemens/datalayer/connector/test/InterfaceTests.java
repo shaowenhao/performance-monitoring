@@ -25,11 +25,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Feature("Rest API")
 public class InterfaceTests {
 	
-	@Parameters({"base_url", "port"})
+	@Parameters({"base_url", "port", "domain_name"})
 	@BeforeClass (description = "Configure host address and communication port for Connector service")
-	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port) {
+	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name) {
 	    Endpoint.setBaseUrl(base_url);
 	    Endpoint.setPort(port);
+	    Endpoint.setDomain(domain_name);
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
 	}
 	 
@@ -54,7 +55,7 @@ public class InterfaceTests {
   	public void SearchModelSchemaByName()
   	{
 	  
-	  Response response = Endpoint.getConceptModelDefinitionByModelName("Site");
+	  Response response = Endpoint.getConceptModelDefinitionByModelName("default", "Site");
 		
 	  SearchModelSchemaByNameResponse rspBody = response.getBody().as(SearchModelSchemaByNameResponse.class);
 		
@@ -83,7 +84,7 @@ public class InterfaceTests {
 	  // via 'SearchModelSchemaByName' request 
 	  for(String entityItem : allEntities)
 	  {
-		  response = Endpoint.getConceptModelDefinitionByModelName(entityItem);
+		  response = Endpoint.getConceptModelDefinitionByModelName("iEMS", entityItem);
 		  
 		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  }
@@ -123,7 +124,14 @@ public class InterfaceTests {
 		
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
-	  Assert.assertEquals(response.getStatusCode(), 200);
+	  if (paramMaps.containsKey("statusCode")) 
+	  {
+		  Assert.assertEquals(response.getStatusCode(), Integer.valueOf(paramMaps.get("statusCode")).intValue());
+	  } 
+	  else 
+	  {
+		  Assert.assertEquals(response.getStatusCode(), 200);
+	  }
 	  
 	  if (paramMaps.containsKey("expectCode"))
 		  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
@@ -131,15 +139,18 @@ public class InterfaceTests {
 	  if (paramMaps.containsKey("expectMessage"))
 		  Assert.assertTrue(response.jsonPath().getString("message").contains(paramMaps.get("expectMessage")));
 	  
-	  if (paramMaps.get("description").contains("good request")) 
+	  if ((paramMaps.get("description").contains("good request")) &&
+		  (paramMaps.get("description").contains("data retrieved")))
 	  {	  
-		  if (paramMaps.get("description").contains("data not found")) 
-			  Assert.assertTrue(response.jsonPath().getList("data").isEmpty());
-		  
-		  if (paramMaps.get("description").contains("data retrieved")) 
+		  if (response.getBody().asString().contains("totalPages")) // If data returned in pagination format
 		  {
-			  Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-		  
+			  Assert.assertTrue(response.jsonPath().getList("data.data").size() > 0);
+			  assertThat(response.getBody().asString(), 
+					  	 matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + "P.JSON"));
+		  }
+		  else
+		  {
+			  Assert.assertTrue(response.jsonPath().getList("data").size() > 0);			  
 			  assertThat(response.getBody().asString(), 
 					  	 matchesJsonSchemaInClasspath("JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
 		  }

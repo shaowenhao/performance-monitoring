@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 "city",
 "voltage_degree",
 "commissioning_date",
-"system_engaged_date",
 "type",
 "power_station",
 "capacity",
 "avg_annual_eq_hours",
+"sys_engaged_date",
 "name",
-"grid_inject_production",
 "irradiance",
+"grid_inject_production",
 "location",
 "id",
 "state"
@@ -32,8 +32,6 @@ private String city;
 private String voltageDegree;
 @JsonProperty("commissioning_date")
 private String commissioningDate;
-@JsonProperty("system_engaged_date")
-private String systemEngagedDate;
 @JsonProperty("type")
 private String type;
 @JsonProperty("power_station")
@@ -42,12 +40,14 @@ private String powerStation;
 private String capacity;
 @JsonProperty("avg_annual_eq_hours")
 private String avgAnnualEqHours;
+@JsonProperty("sys_engaged_date")
+private String sysEngagedDate;
 @JsonProperty("name")
 private String name;
-@JsonProperty("grid_inject_production")
-private String gridInjectProduction;
 @JsonProperty("irradiance")
 private String irradiance;
+@JsonProperty("grid_inject_production")
+private String gridInjectProduction;
 @JsonProperty("location")
 private String location;
 @JsonProperty("id")
@@ -95,16 +95,6 @@ public void setCommissioningDate(String commissioningDate) {
 this.commissioningDate = commissioningDate;
 }
 
-@JsonProperty("system_engaged_date")
-public String getSystemEngagedDate() {
-return systemEngagedDate;
-}
-
-@JsonProperty("system_engaged_date")
-public void setSystemEngagedDate(String systemEngagedDate) {
-this.systemEngagedDate = systemEngagedDate;
-}
-
 @JsonProperty("type")
 public String getType() {
 return type;
@@ -145,6 +135,16 @@ public void setAvgAnnualEqHours(String avgAnnualEqHours) {
 this.avgAnnualEqHours = avgAnnualEqHours;
 }
 
+@JsonProperty("sys_engaged_date")
+public String getSysEngagedDate() {
+return sysEngagedDate;
+}
+
+@JsonProperty("sys_engaged_date")
+public void setSysEngagedDate(String sysEngagedDate) {
+this.sysEngagedDate = sysEngagedDate;
+}
+
 @JsonProperty("name")
 public String getName() {
 return name;
@@ -155,16 +155,6 @@ public void setName(String name) {
 this.name = name;
 }
 
-@JsonProperty("grid_inject_production")
-public String getGridInjectProduction() {
-return gridInjectProduction;
-}
-
-@JsonProperty("grid_inject_production")
-public void setGridInjectProduction(String gridInjectProduction) {
-this.gridInjectProduction = gridInjectProduction;
-}
-
 @JsonProperty("irradiance")
 public String getIrradiance() {
 return irradiance;
@@ -173,6 +163,16 @@ return irradiance;
 @JsonProperty("irradiance")
 public void setIrradiance(String irradiance) {
 this.irradiance = irradiance;
+}
+
+@JsonProperty("grid_inject_production")
+public String getGridInjectProduction() {
+return gridInjectProduction;
+}
+
+@JsonProperty("grid_inject_production")
+public void setGridInjectProduction(String gridInjectProduction) {
+this.gridInjectProduction = gridInjectProduction;
 }
 
 @JsonProperty("location")

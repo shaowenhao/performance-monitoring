@@ -15,6 +15,8 @@ public class Endpoint {
 	
 	private static String port = "";
 	
+	private static String domain_name = "";
+	
 	public static void setBaseUrl(String base_url)
 	{
 		BASE_URL = base_url;
@@ -23,6 +25,11 @@ public class Endpoint {
 	public static void setPort(String comm_port)
 	{
 		port = comm_port;
+	}
+	
+	public static void setDomain(String domainName)
+	{
+		domain_name = domainName;
 	}
 	
 	// Connector Interface: Get All Entities name
@@ -58,17 +65,28 @@ public class Endpoint {
 		return response;
 	}	
 	
-	// Connector Interface: Get concept model definition by model name
+	// Entity Interface: Get concept model definition by model name
 	@Step("Send a request of 'Get concept model definition by model name'")
-	public static Response getConceptModelDefinitionByModelName(String name)
+	public static Response getConceptModelDefinitionByModelName(String domain, String name)
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/connector/searchModelSchemaByName";
+		RestAssured.basePath = "api/v1/entity/searchModelSchemaByName";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 		
-		Response response = httpRequest.queryParam("name", name) 
+		HashMap<String, String> parameters = new HashMap<>();
+		
+		if (domain.equals("default")) {
+			parameters.put("domainName", domain_name);
+		}
+		else if (!domain.isEmpty()) {
+			parameters.put("domainName", domain);
+		}
+		
+		if (!name.isEmpty()) parameters.put("name", name);
+		
+		Response response = httpRequest.queryParams(parameters)
 									   .filter(new AllureRestAssured())
 									   .get();
 		

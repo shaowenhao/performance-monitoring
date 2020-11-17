@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "commissioning_date": {
+                  "type": "integer"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "power_station": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location",
+                "id",
+                "commissioning_date",
+                "state",
+                "power_station"
+              ]
+            }
+          ]
+        },
+        "totalCount": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "pageIndex": {
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "data",
+        "totalCount",
+        "pageSize",
+        "pageIndex",
+        "totalPages",
+        "first",
+        "last"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}
