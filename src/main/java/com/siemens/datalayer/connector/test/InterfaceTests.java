@@ -84,7 +84,7 @@ public class InterfaceTests {
 	  // via 'SearchModelSchemaByName' request 
 	  for(String entityItem : allEntities)
 	  {
-		  response = Endpoint.getConceptModelDefinitionByModelName("iEMS", entityItem);
+		  response = Endpoint.getConceptModelDefinitionByModelName("default", entityItem);
 		  
 		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  }
