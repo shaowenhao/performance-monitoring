@@ -32,6 +32,23 @@ public class Endpoint {
 		domain_name = domainName;
 	}
 	
+	public static String getResourcePath()
+	{
+		String resourcePath;
+		
+		switch (domain_name)
+		{
+			case "iEMS":
+				resourcePath = "json-model-schema/iems/";
+				break;
+				
+			default:
+				resourcePath = "";
+		}
+		
+		return resourcePath;
+	}
+	
 	// Connector Interface: Get All Entities name
 	@Step("Send a request of 'Get All Entities Name'")
 	public static Response getAllEntitiesName() {
@@ -65,9 +82,9 @@ public class Endpoint {
 		return response;
 	}	
 	
-	// Entity Interface: Get concept model definition by model name
-	@Step("Send a request of 'Get concept model definition by model name'")
-	public static Response getConceptModelDefinitionByModelName(String domain, String name)
+	// Entity Interface: searchModelSchemaByName
+	@Step("Send a request of 'searchModelSchemaByName'")
+	public static Response searchModelSchemaByName(String domain, String name)
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
@@ -87,23 +104,6 @@ public class Endpoint {
 		if (!name.isEmpty()) parameters.put("name", name);
 		
 		Response response = httpRequest.queryParams(parameters)
-									   .filter(new AllureRestAssured())
-									   .get();
-		
-		return response;
-	}
-
-	// Connector Interface: Get concept model data by page condition
-	@Step("Send a request of 'Get concept model data by page condition'")
-	public static Response getConceptModelDataByPageCondition(HashMap<String, String> parameters)
-	{
-		RestAssured.baseURI = BASE_URL;
-		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/connector/searchPageData";
-		
-		RequestSpecification httpRequest = RestAssured.given();
-
-		Response response = httpRequest.queryParams(parameters) 
 									   .filter(new AllureRestAssured())
 									   .get();
 		

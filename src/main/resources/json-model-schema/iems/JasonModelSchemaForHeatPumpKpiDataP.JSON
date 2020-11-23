@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "motor_current_percent": {
+                  "type": "number"
+                },
+                "condensor_water_inlet_temperature": {
+                  "type": "number"
+                },
+                "evaporator_cold_inlet_temperature": {
+                  "type": "number"
+                },
+                "condensor_water_outlet_temperature": {
+                  "type": "number"
+                },
+                "dt_condensor": {
+                  "type": "number"
+                },
+                "updateTime": {
+                  "type": "string"
+                },
+                "deviceName": {
+                  "type": "string"
+                },
+                "evaporator_water_leave_temperature": {
+                  "type": "number"
+                },
+                "oil_tank_press_high": {
+                  "type": "number"
+                },
+                "oil_tank_press_low": {
+                  "type": "number"
+                },
+                "condensor_hot_outlet_pressure": {
+                  "type": "number"
+                },
+                "dt_evaporator": {
+                  "type": "number"
+                },
+                "motor_work": {
+                  "type": "number"
+                },
+                "evaporator_heat": {
+                  "type": "number"
+                },
+                "compressor_poly_efficiency": {
+                  "type": "number"
+                },
+                "evaporator_cold_inlet_pressure": {
+                  "type": "number"
+                },
+                "condensor_hot_sat_temperature": {
+                  "type": "number"
+                },
+                "condensor_hot_outlet_temperature": {
+                  "type": "number"
+                },
+                "evaporator_water_back_temperature": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "motor_current_percent",
+                "condensor_water_inlet_temperature",
+                "evaporator_cold_inlet_temperature",
+                "condensor_water_outlet_temperature",
+                "dt_condensor",
+                "updateTime",
+                "deviceName",
+                "evaporator_water_leave_temperature",
+                "oil_tank_press_high",
+                "oil_tank_press_low",
+                "condensor_hot_outlet_pressure",
+                "dt_evaporator",
+                "motor_work",
+                "evaporator_heat",
+                "compressor_poly_efficiency",
+                "evaporator_cold_inlet_pressure",
+                "condensor_hot_sat_temperature",
+                "condensor_hot_outlet_temperature",
+                "evaporator_water_back_temperature"
+              ]
+            }
+                      ]
+        },
+        "totalCount": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "pageIndex": {
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        },
+        "last": {
+          "type": "boolean"
+        },
+        "first": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "data",
+        "totalCount",
+        "pageSize",
+        "pageIndex",
+        "totalPages",
+        "last",
+        "first"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

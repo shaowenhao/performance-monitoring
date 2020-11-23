@@ -5,7 +5,7 @@
         <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
     </listeners>
     
-    <parameter name="dataFileForConnectorTest" value="sampleTestData.xlsx" />
+    <parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
@@ -21,7 +21,7 @@
 <!-- 		    </class> -->
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
             <parameter name="base_url" value="http://140.231.89.85"/>            
-  			<parameter name="port" value="32710"/>
+  			<parameter name="port" value="32230"/>
   			<parameter name="domain_name" value="iEMS"/>
             </class>
             

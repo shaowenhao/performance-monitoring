@@ -48,7 +48,7 @@ public class IoTPortalTest extends WebDriverBaseClass {
 	{
 		WebDriverBaseClass bs = new WebDriverBaseClass();
 		driver = bs.initialize_driver();
-		driver.get("http://localhost:4500/#/overview");
+		driver.get("http://140.231.89.85:32189");
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		
