@@ -142,6 +142,11 @@ public class InterfaceTests {
 		  {
 			  Assert.assertTrue(checkDataIsSorted(paramMaps.get("order"), rspDataList));
 		  }
+		  
+		  String pageIndex = "noInput", pageSize = "noInput";
+		  if (paramMaps.containsKey("pageIndex")) pageIndex = String.valueOf(paramMaps.get("pageIndex"));
+		  if (paramMaps.containsKey("pageSize")) pageSize = String.valueOf(paramMaps.get("pageSize"));
+		  checkPaginationFormat(pageIndex, pageSize, response);
 	  }
 	  else 
 	  {
@@ -307,8 +312,8 @@ public class InterfaceTests {
 			  
 			if (rspDataList.toString().contains(keyForOrder))
 			{
-				System.out.println("Check if the field '" + keyForOrder + "' is used for ordering");
-				System.out.println("Sort order is " + sortOrder);
+//				System.out.println("Check if the field '" + keyForOrder + "' is used for ordering");
+//				System.out.println("Sort order is " + sortOrder);
 
 				result = isMapSortedByKey(rspDataList, keyForOrder, sortOrder);
 				break; // only check the 1st valid order parameter
@@ -320,4 +325,62 @@ public class InterfaceTests {
 		return result;
 	}
 	
+	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
+	{
+		if (((pageIndex.equals("noInput")) && (pageSize.equals("noInput")))	||
+			((pageIndex.equals("noInput")) && (pageSize.equals("0"))) 	 	||	
+			((pageIndex.equals("0")) && (pageSize.equals("noInput")))	 	||
+			((pageIndex.equals("0")) && (pageSize.equals("0"))))
+		{
+			// Data is not in pagination format
+			Assert.assertTrue((response.getBody().asString().contains("totalPages"))==false, "Data pagination is not used");
+		}
+		else 
+		{
+			Assert.assertTrue(response.getBody().asString().contains("totalPages"), "Data is in pagination format");
+			
+			int pageIndexInput=0, pageSizeInput=0;
+			
+			if ((!pageIndex.equals("noInput")) && (isIntegerStr(pageIndex)))
+			{
+				pageIndexInput = Integer.parseInt(pageIndex);
+				if (pageIndexInput<=0) pageIndexInput = 1;
+				if (pageSize.equals("noInput")) pageSizeInput = 20;
+			}
+			
+			if ((!pageSize.equals("noInput")) && (isIntegerStr(pageSize)))
+			{
+				pageSizeInput = Integer.parseInt(pageSize);
+				if (pageSizeInput<=0) pageSizeInput = 20;
+				if (pageIndex.equals("noInput")) pageIndexInput = 1;
+			}
+			
+//			System.out.println("Check pagination format: pageIndex=" + pageIndexInput + ", pageSize=" + pageSizeInput);
+			checkPageIndexAndPageSize(pageIndexInput, pageSizeInput, response);
+		}
+	}
+	
+	public static void checkPageIndexAndPageSize(int expPageIndex, int expPageSize, Response response)
+	{
+		int actualPageIndex = response.jsonPath().get("data.pageIndex");
+		int actualPageSize = response.jsonPath().get("data.pageSize");
+//		System.out.println("Actual pagination format: pageIndex=" + actualPageIndex + ", pageSize=" + actualPageSize);
+		
+		Assert.assertTrue(actualPageIndex==expPageIndex, "The page index is correct.");
+		Assert.assertTrue(actualPageSize==expPageSize, "The page size is correct.");
+		
+		boolean isFirstPage = response.jsonPath().get("data.first");
+		boolean isLastPage = response.jsonPath().get("data.last");
+		
+		if (expPageIndex==1) 
+			Assert.assertTrue(isFirstPage, "The mark of first page is set.");
+		else
+			Assert.assertTrue(!isFirstPage, "The mark of first page is not set.");
+		
+		if (expPageIndex==response.jsonPath().getShort("data.totalPages")) 
+			Assert.assertTrue(isLastPage, "The mark of last page is set.");
+		else
+			Assert.assertTrue(!isLastPage, "The mark of last page is not set.");
+	}
 }
+
