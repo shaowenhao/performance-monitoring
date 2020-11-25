@@ -334,7 +334,6 @@ public class InterfaceTests {
 		return result;
 	}
 	
-	@Step("Verify if the data pagination format is correct")
 	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
 	{
 		if (((pageIndex.equals("noInput")) && (pageSize.equals("noInput")))	||
@@ -370,24 +369,25 @@ public class InterfaceTests {
 		}
 	}
 	
-	public static void checkPageIndexAndPageSize(int expPageIndex, int expPageSize, Response response)
+	@Step("Verify if the data pagination format is correct")
+	public static void checkPageIndexAndPageSize(int expectPageIndex, int expectPageSize, Response response)
 	{
 		int actualPageIndex = response.jsonPath().get("data.pageIndex");
 		int actualPageSize = response.jsonPath().get("data.pageSize");
 //		System.out.println("Actual pagination format: pageIndex=" + actualPageIndex + ", pageSize=" + actualPageSize);
 		
-		Assert.assertTrue(actualPageIndex==expPageIndex, "The page index is correct.");
-		Assert.assertTrue(actualPageSize==expPageSize, "The page size is correct.");
+		Assert.assertTrue(actualPageIndex==expectPageIndex, "The page index is correct.");
+		Assert.assertTrue(actualPageSize==expectPageSize, "The page size is correct.");
 		
 		boolean isFirstPage = response.jsonPath().get("data.first");
 		boolean isLastPage = response.jsonPath().get("data.last");
 		
-		if (expPageIndex==1) 
+		if (expectPageIndex==1) 
 			Assert.assertTrue(isFirstPage, "The mark of first page is set.");
 		else
 			Assert.assertTrue(!isFirstPage, "The mark of first page is not set.");
 		
-		if (expPageIndex==response.jsonPath().getShort("data.totalPages")) 
+		if (expectPageIndex==response.jsonPath().getShort("data.totalPages")) 
 			Assert.assertTrue(isLastPage, "The mark of last page is set.");
 		else
 			Assert.assertTrue(!isLastPage, "The mark of last page is not set.");
