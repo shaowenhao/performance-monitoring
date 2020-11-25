@@ -1,6 +1,7 @@
 package com.siemens.datalayer.connector.test;
 
 import java.util.*;
+import java.util.Scanner;
 
 import io.qameta.allure.*;
 
@@ -19,6 +20,7 @@ import io.restassured.response.Response;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 @Epic("SDL Connector")
 @Feature("Rest API")
@@ -115,24 +117,30 @@ public class InterfaceTests {
 	  
 	  if (paramMaps.get("description").contains("data retrieved"))
 	  {	  
-		  if (paramMaps.containsKey("fields"))
+		  List<HashMap<String, String>> rspDataList;
+		  
+		  if (response.getBody().asString().contains("totalPages"))
+			  rspDataList = response.jsonPath().getList("data.data");
+		  else
+			  rspDataList = response.jsonPath().getList("data");
+		  
+		  Assert.assertTrue(rspDataList.size() > 0);
+		  
+		  if (paramMaps.containsKey("fields")) 
 		  {
-			  // TBD: add fields check here
+			  if (paramMaps.get("fields").contains("*"))
+				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+			  else
+				  checkDataContainsSpecifiedFields(paramMaps.get("fields"), rspDataList);
 		  }
 		  else
 		  {
-			  if (response.getBody().asString().contains("totalPages")) // If data returned in pagination format
-			  {
-				  Assert.assertTrue(response.jsonPath().getList("data.data").size() > 0);
-				  assertThat(response.getBody().asString(), 
-						  	 matchesJsonSchemaInClasspath(Endpoint.getResourcePath() + "JasonModelSchemaFor" + paramMaps.get("name") + "P.JSON"));
-			  }
-			  else
-			  {
-				  Assert.assertTrue(response.jsonPath().getList("data").size() > 0);			  
-				  assertThat(response.getBody().asString(), 
-						  	 matchesJsonSchemaInClasspath(Endpoint.getResourcePath() + "JasonModelSchemaFor" + paramMaps.get("name") + ".JSON"));
-			  }
+			  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+		  }
+		  
+		  if (paramMaps.containsKey("order"))
+		  {
+			  Assert.assertTrue(checkDataIsSorted(paramMaps.get("order"), rspDataList));
 		  }
 	  }
 	  else 
@@ -172,4 +180,144 @@ public class InterfaceTests {
 				  System.out.println("No response message is specified for test case： " + paramMaps.get("test-id"));
 		  }
 	}
+	
+	public void checkDataContainsSpecifiedFields(String fieldsContent, List<HashMap<String, String>> rspDataList)
+	{	  
+		Scanner scanner = new Scanner(fieldsContent);
+		scanner.useDelimiter(",");
+		  
+		while (scanner.hasNext())
+		{
+			String keyToCompare = scanner.next();
+			  
+			for (HashMap<String, String> rspDataItem: rspDataList)
+			{
+				assertThat(rspDataItem, hasKey(keyToCompare));
+			}	
+		}	
+		  
+		scanner.close();
+	}
+	
+	public void checkDataFollowsModelSchema(String schemaName, Response response)
+	{
+		String schemaTemplateFile = Endpoint.getResourcePath() + "JasonModelSchemaFor" + schemaName;
+		
+		// If data is returned in pagination format
+		if (response.getBody().asString().contains("totalPages")) schemaTemplateFile += "P";
+		schemaTemplateFile += ".JSON";
+		
+		assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath(schemaTemplateFile));
+	}
+	
+	public static boolean isIntegerStr(String input) 
+	{
+	    try 
+	    {
+	        Integer.parseInt(input);
+	        return true;
+	    }
+	    catch(Exception e) 
+	    {
+	        return false;
+	    }
+	}
+	
+	public static boolean isFloatStr(String input) 
+	{
+	    try 
+	    {
+	        Float.parseFloat(input);
+	        return true;
+	    }
+	    catch(Exception e) 
+	    {
+	        return false;
+	    }
+	}
+	
+	public static boolean compareOrderFieldValue(String valueShouldBeSmall, String valueShouldBeLarge)
+	{       
+		if (isIntegerStr(valueShouldBeSmall)) // Compare integer values
+		{
+			if (Integer.parseInt(valueShouldBeSmall) > Integer.parseInt(valueShouldBeLarge)) return false;
+		}
+		else if (isFloatStr(valueShouldBeSmall)) // Compare float values
+		{
+			if (Float.parseFloat(valueShouldBeSmall) > Float.parseFloat(valueShouldBeLarge)) return false;
+		}
+		else // Compare string in alphabetical order
+		{
+			if (valueShouldBeLarge.compareTo(valueShouldBeSmall) < 0) return false;
+		}
+			
+		return true;        	
+	}
+	
+	public static boolean isMapSortedByKey(List<HashMap<String, String>> listOfHashMaps, String key, String order) 
+	{
+	    if (listOfHashMaps.isEmpty() || listOfHashMaps.size() == 1) return true;
+	 
+	    Iterator<HashMap<String, String>> iter = listOfHashMaps.iterator();
+	    HashMap<String, String> current, previous = iter.next();
+	    
+	    while (iter.hasNext()) 
+	    {
+	        current = iter.next();
+	        
+	        String valueShouldBeSmall, valueShouldBeLarge;
+	        if (order.equals("ascending"))
+	        {
+	        	valueShouldBeSmall = String.valueOf(previous.get(key));
+	        	valueShouldBeLarge = String.valueOf(current.get(key));
+	        }
+	        else
+	        {
+	        	valueShouldBeSmall = String.valueOf(current.get(key));
+	        	valueShouldBeLarge = String.valueOf(previous.get(key));
+	        }
+	        
+	        if (!compareOrderFieldValue(valueShouldBeSmall, valueShouldBeLarge)) return false;
+
+	        previous = current;
+	    }
+	    
+	    return true;
+	}
+	
+	public static boolean checkDataIsSorted(String orderContent, List<HashMap<String, String>> rspDataList)
+	{
+		Scanner scanner = new Scanner(orderContent);
+		scanner.useDelimiter(",");
+		
+		boolean result = true;
+		  
+		while (scanner.hasNext())
+		{
+			String keyForOrder = scanner.next();
+			String sortOrder = "ascending";
+			
+			if (keyForOrder.contains("+")) keyForOrder = keyForOrder.replace("+", "");
+			
+			if (keyForOrder.contains("-"))
+			{
+				keyForOrder = keyForOrder.replace("-", "");
+				sortOrder = "descending";
+			}
+			  
+			if (rspDataList.toString().contains(keyForOrder))
+			{
+				System.out.println("Check if the field '" + keyForOrder + "' is used for ordering");
+				System.out.println("Sort order is " + sortOrder);
+
+				result = isMapSortedByKey(rspDataList, keyForOrder, sortOrder);
+				break; // only check the 1st valid order parameter
+			}
+		}	
+		  
+		scanner.close();
+		
+		return result;
+	}
+	
 }
