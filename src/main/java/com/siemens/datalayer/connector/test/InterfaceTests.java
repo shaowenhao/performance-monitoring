@@ -113,7 +113,7 @@ public class InterfaceTests {
 	  
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
-	  checkResponseCode(paramMaps, response);  
+	  checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
 	  
 	  if (paramMaps.get("description").contains("data retrieved"))
 	  {	  
@@ -155,47 +155,49 @@ public class InterfaceTests {
 
   	}
 	
-	public void checkResponseCode(Map<String, String> paramMaps, Response response)
+	@Step("Verify the response code and message")
+	public void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
 	{
 		  int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
-		  if (paramMaps.containsKey("rspStatus")) expStatusCode = Integer.valueOf(paramMaps.get("rspStatus")).intValue();
-		  Assert.assertEquals(response.getStatusCode(), expStatusCode, "The status code in response message matches the expected value.");
+		  if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
+		  Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
 		  
-		  if ((paramMaps.containsKey("rspCode")))
+		  if ((requestParameters.containsKey("rspCode")))
 		  {
-			  Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("rspCode"));
+			  Assert.assertEquals(actualCode, requestParameters.get("rspCode"));
 		  }
 		  else
 		  {
-			  if (paramMaps.get("description").contains("good request")) 
-				  Assert.assertEquals(response.jsonPath().getString("code"), "0");
+			  if (requestParameters.get("description").contains("good request")) 
+				  Assert.assertEquals(actualCode, "0");
 			  else
-				  System.out.println("No error code is specified for test case： " + paramMaps.get("test-id"));
+				  System.out.println("No error code is specified for test case： " + requestParameters.get("test-id"));
 		  }		  
 		  
-		  if (paramMaps.containsKey("rspMessage"))
+		  if (requestParameters.containsKey("rspMessage"))
 		  {
-			  Assert.assertTrue(response.jsonPath().getString("message").contains(paramMaps.get("rspMessage")));
+			  Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")));
 		  }
 		  else
 		  {
-			  if (paramMaps.get("description").contains("good request")) 
-				  Assert.assertEquals(response.jsonPath().getString("message"), "Operate success.");
+			  if (requestParameters.get("description").contains("good request")) 
+				  Assert.assertEquals(actualMessage, "Operate success.");
 			  else
-				  System.out.println("No response message is specified for test case： " + paramMaps.get("test-id"));
+				  System.out.println("No response message is specified for test case： " + requestParameters.get("test-id"));
 		  }
 	}
 	
-	public void checkDataContainsSpecifiedFields(String fieldsContent, List<HashMap<String, String>> rspDataList)
+	@Step("Verify if the response contains the required data fields")
+	public void checkDataContainsSpecifiedFields(String fields, List<HashMap<String, String>> responseData)
 	{	  
-		Scanner scanner = new Scanner(fieldsContent);
+		Scanner scanner = new Scanner(fields);
 		scanner.useDelimiter(",");
 		  
 		while (scanner.hasNext())
 		{
 			String keyToCompare = scanner.next();
 			  
-			for (HashMap<String, String> rspDataItem: rspDataList)
+			for (HashMap<String, String> rspDataItem: responseData)
 			{
 				assertThat(rspDataItem, hasKey(keyToCompare));
 			}	
@@ -212,6 +214,12 @@ public class InterfaceTests {
 		if (response.getBody().asString().contains("totalPages")) schemaTemplateFile += "P";
 		schemaTemplateFile += ".JSON";
 		
+		verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response);
+	}
+	
+	@Step("Verify if the data in response message matches the correct model schema")
+	public void verifyIfDataMatchesJsonSchemaTemplate(String schemaTemplateFile, Response response)
+	{
 		assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath(schemaTemplateFile));
 	}
 	
@@ -290,9 +298,10 @@ public class InterfaceTests {
 	    return true;
 	}
 	
-	public static boolean checkDataIsSorted(String orderContent, List<HashMap<String, String>> rspDataList)
+	@Step("Verify if the data list in response message is sorted by the specified order parameters")
+	public static boolean checkDataIsSorted(String inputOrderParameters, List<HashMap<String, String>> rspDataList)
 	{
-		Scanner scanner = new Scanner(orderContent);
+		Scanner scanner = new Scanner(inputOrderParameters);
 		scanner.useDelimiter(",");
 		
 		boolean result = true;
@@ -325,6 +334,7 @@ public class InterfaceTests {
 		return result;
 	}
 	
+	@Step("Verify if the data pagination format is correct")
 	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
 	{
 		if (((pageIndex.equals("noInput")) && (pageSize.equals("noInput")))	||
