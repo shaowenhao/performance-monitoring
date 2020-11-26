@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+    
+    <parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx" />
+
+    <test verbose="2" preserve-order="true"
+          thread-count="5"
+          name="Rest API Tests">
+        <classes>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
+            <parameter name="base_url" value="http://140.231.89.85"/>            
+  			<parameter name="port" value="32230"/>
+  			<parameter name="domain_name" value="iEMS"/>
+            </class>
+        </classes>
+    </test>
+</suite>

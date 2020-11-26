@@ -42,6 +42,18 @@ public class Endpoint {
 				resourcePath = "json-model-schema/iems/";
 				break;
 				
+			case "JinZu":
+				resourcePath = "json-model-schema/jinzu/";
+				break;
+				
+			case "SNC":
+				resourcePath = "json-model-schema/snc/";
+				break;
+				
+			case "IoT":
+				resourcePath = "json-model-schema/iot/";
+				break;
+				
 			default:
 				resourcePath = "";
 		}
