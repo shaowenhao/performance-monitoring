@@ -30,8 +30,8 @@ import org.testng.Assert;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-@Epic("iEMS Interface")
-public class InterfaceTests {
+@Epic("iEMS API Test")
+public class ApiServiceTests {
 	
 //	private Properties properties;
 	private String bodystr = "";

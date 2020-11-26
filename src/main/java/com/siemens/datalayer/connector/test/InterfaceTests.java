@@ -1,7 +1,6 @@
 package com.siemens.datalayer.connector.test;
 
 import java.util.*;
-import java.util.Scanner;
 
 import io.qameta.allure.*;
 
@@ -12,15 +11,12 @@ import org.testng.annotations.Test;
 
 import com.siemens.datalayer.connector.model.*;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
 
 import org.testng.Assert;
 
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 @Epic("SDL Connector")
 @Feature("Rest API")
@@ -113,7 +109,7 @@ public class InterfaceTests {
 	  
 	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
 	  
-	  checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
+	  CommonCheckFunctions.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
 	  
 	  if (paramMaps.get("description").contains("data retrieved"))
 	  {	  
@@ -124,6 +120,7 @@ public class InterfaceTests {
 		  else
 			  rspDataList = response.jsonPath().getList("data");
 		  
+		  // Check if the returned data list is not empty
 		  Assert.assertTrue(rspDataList.size() > 0);
 		  
 		  if (paramMaps.containsKey("fields")) 
@@ -131,21 +128,26 @@ public class InterfaceTests {
 			  if (paramMaps.get("fields").contains("*"))
 				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
 			  else
-				  checkDataContainsSpecifiedFields(paramMaps.get("fields"), rspDataList);
+				  // Check if data contains the required fields
+				  CommonCheckFunctions.checkDataContainsSpecifiedFields(paramMaps.get("fields"), rspDataList);
 		  }
 		  else
 		  {
+			  // Check if data entry matches the model schema
 			  checkDataFollowsModelSchema(paramMaps.get("name"), response);
 		  }
 		  
 		  if (paramMaps.containsKey("order"))
 		  {
-			  Assert.assertTrue(checkDataIsSorted(paramMaps.get("order"), rspDataList));
+			  // Check if the returned data list is sorted by specified order parameters
+			  Assert.assertTrue(CommonCheckFunctions.checkDataIsSorted(paramMaps.get("order"), rspDataList));
 		  }
 		  
 		  String pageIndex = "noInput", pageSize = "noInput";
 		  if (paramMaps.containsKey("pageIndex")) pageIndex = String.valueOf(paramMaps.get("pageIndex"));
 		  if (paramMaps.containsKey("pageSize")) pageSize = String.valueOf(paramMaps.get("pageSize"));
+		  
+		  // Check if the pagination format is correct
 		  checkPaginationFormat(pageIndex, pageSize, response);
 	  }
 	  else 
@@ -155,57 +157,6 @@ public class InterfaceTests {
 
   	}
 	
-	@Step("Verify the response code and message")
-	public void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
-	{
-		  int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
-		  if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
-		  Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
-		  
-		  if ((requestParameters.containsKey("rspCode")))
-		  {
-			  Assert.assertEquals(actualCode, requestParameters.get("rspCode"));
-		  }
-		  else
-		  {
-			  if (requestParameters.get("description").contains("good request")) 
-				  Assert.assertEquals(actualCode, "0");
-			  else
-				  System.out.println("No error code is specified for test case： " + requestParameters.get("test-id"));
-		  }		  
-		  
-		  if (requestParameters.containsKey("rspMessage"))
-		  {
-			  Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")));
-		  }
-		  else
-		  {
-			  if (requestParameters.get("description").contains("good request")) 
-				  Assert.assertEquals(actualMessage, "Operate success.");
-			  else
-				  System.out.println("No response message is specified for test case： " + requestParameters.get("test-id"));
-		  }
-	}
-	
-	@Step("Verify if the response contains the required data fields")
-	public void checkDataContainsSpecifiedFields(String fields, List<HashMap<String, String>> responseData)
-	{	  
-		Scanner scanner = new Scanner(fields);
-		scanner.useDelimiter(",");
-		  
-		while (scanner.hasNext())
-		{
-			String keyToCompare = scanner.next();
-			  
-			for (HashMap<String, String> rspDataItem: responseData)
-			{
-				assertThat(rspDataItem, hasKey(keyToCompare));
-			}	
-		}	
-		  
-		scanner.close();
-	}
-	
 	public void checkDataFollowsModelSchema(String schemaName, Response response)
 	{
 		String schemaTemplateFile = Endpoint.getResourcePath() + "JasonModelSchemaFor" + schemaName;
@@ -214,124 +165,7 @@ public class InterfaceTests {
 		if (response.getBody().asString().contains("totalPages")) schemaTemplateFile += "P";
 		schemaTemplateFile += ".JSON";
 		
-		verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response);
-	}
-	
-	@Step("Verify if the data in response message matches the correct model schema")
-	public void verifyIfDataMatchesJsonSchemaTemplate(String schemaTemplateFile, Response response)
-	{
-		assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath(schemaTemplateFile));
-	}
-	
-	public static boolean isIntegerStr(String input) 
-	{
-	    try 
-	    {
-	        Integer.parseInt(input);
-	        return true;
-	    }
-	    catch(Exception e) 
-	    {
-	        return false;
-	    }
-	}
-	
-	public static boolean isFloatStr(String input) 
-	{
-	    try 
-	    {
-	        Float.parseFloat(input);
-	        return true;
-	    }
-	    catch(Exception e) 
-	    {
-	        return false;
-	    }
-	}
-	
-	public static boolean compareOrderFieldValue(String valueShouldBeSmall, String valueShouldBeLarge)
-	{       
-		if (isIntegerStr(valueShouldBeSmall)) // Compare integer values
-		{
-			if (Integer.parseInt(valueShouldBeSmall) > Integer.parseInt(valueShouldBeLarge)) return false;
-		}
-		else if (isFloatStr(valueShouldBeSmall)) // Compare float values
-		{
-			if (Float.parseFloat(valueShouldBeSmall) > Float.parseFloat(valueShouldBeLarge)) return false;
-		}
-		else // Compare string in alphabetical order
-		{
-			if (valueShouldBeLarge.compareTo(valueShouldBeSmall) < 0) return false;
-		}
-			
-		return true;        	
-	}
-	
-	public static boolean isMapSortedByKey(List<HashMap<String, String>> listOfHashMaps, String key, String order) 
-	{
-	    if (listOfHashMaps.isEmpty() || listOfHashMaps.size() == 1) return true;
-	 
-	    Iterator<HashMap<String, String>> iter = listOfHashMaps.iterator();
-	    HashMap<String, String> current, previous = iter.next();
-	    
-	    while (iter.hasNext()) 
-	    {
-	        current = iter.next();
-	        
-	        String valueShouldBeSmall, valueShouldBeLarge;
-	        if (order.equals("ascending"))
-	        {
-	        	valueShouldBeSmall = String.valueOf(previous.get(key));
-	        	valueShouldBeLarge = String.valueOf(current.get(key));
-	        }
-	        else
-	        {
-	        	valueShouldBeSmall = String.valueOf(current.get(key));
-	        	valueShouldBeLarge = String.valueOf(previous.get(key));
-	        }
-	        
-	        if (!compareOrderFieldValue(valueShouldBeSmall, valueShouldBeLarge)) return false;
-
-	        previous = current;
-	    }
-	    
-	    return true;
-	}
-	
-	@Step("Verify if the data list in response message is sorted by the specified order parameters")
-	public static boolean checkDataIsSorted(String inputOrderParameters, List<HashMap<String, String>> rspDataList)
-	{
-		Scanner scanner = new Scanner(inputOrderParameters);
-		scanner.useDelimiter(",");
-		
-		boolean result = true;
-		  
-		while (scanner.hasNext())
-		{
-			String keyForOrder = scanner.next();
-			String sortOrder = "ascending";
-			
-			if (keyForOrder.contains("+")) keyForOrder = keyForOrder.replace("+", "");
-			
-			if (keyForOrder.contains("-"))
-			{
-				keyForOrder = keyForOrder.replace("-", "");
-				sortOrder = "descending";
-			}
-			  
-			if (rspDataList.toString().contains(keyForOrder))
-			{
-//				System.out.println("Check if the field '" + keyForOrder + "' is used for ordering");
-//				System.out.println("Sort order is " + sortOrder);
-
-				result = isMapSortedByKey(rspDataList, keyForOrder, sortOrder);
-				break; // only check the 1st valid order parameter
-			}
-		}	
-		  
-		scanner.close();
-		
-		return result;
+		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
 	}
 	
 	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
@@ -350,21 +184,20 @@ public class InterfaceTests {
 			
 			int pageIndexInput=0, pageSizeInput=0;
 			
-			if ((!pageIndex.equals("noInput")) && (isIntegerStr(pageIndex)))
+			if ((!pageIndex.equals("noInput")) && (CommonCheckFunctions.isIntegerStr(pageIndex)))
 			{
 				pageIndexInput = Integer.parseInt(pageIndex);
 				if (pageIndexInput<=0) pageIndexInput = 1;
 				if (pageSize.equals("noInput")) pageSizeInput = 20;
 			}
 			
-			if ((!pageSize.equals("noInput")) && (isIntegerStr(pageSize)))
+			if ((!pageSize.equals("noInput")) && (CommonCheckFunctions.isIntegerStr(pageSize)))
 			{
 				pageSizeInput = Integer.parseInt(pageSize);
 				if (pageSizeInput<=0) pageSizeInput = 20;
 				if (pageIndex.equals("noInput")) pageIndexInput = 1;
 			}
 			
-//			System.out.println("Check pagination format: pageIndex=" + pageIndexInput + ", pageSize=" + pageSizeInput);
 			checkPageIndexAndPageSize(pageIndexInput, pageSizeInput, response);
 		}
 	}
@@ -374,7 +207,6 @@ public class InterfaceTests {
 	{
 		int actualPageIndex = response.jsonPath().get("data.pageIndex");
 		int actualPageSize = response.jsonPath().get("data.pageSize");
-//		System.out.println("Actual pagination format: pageIndex=" + actualPageIndex + ", pageSize=" + actualPageSize);
 		
 		Assert.assertTrue(actualPageIndex==expectPageIndex, "The page index is correct.");
 		Assert.assertTrue(actualPageSize==expectPageSize, "The page size is correct.");
