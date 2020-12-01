@@ -23,7 +23,7 @@ public class ExcelFileReaderClass {
 
 	            DataFormatter dataFormatter = new DataFormatter();
 	            
-	            if (sheet.getLastRowNum()>1) {
+	            if (sheet.getLastRowNum() > 0) {
 	            	
 		            Row headLine = sheet.getRow(0);
 		            

@@ -9,7 +9,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class Endpoint {
+public class ConnectorEndpoint {
 	
 	private static String BASE_URL = "";
 	

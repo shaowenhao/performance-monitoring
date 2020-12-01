@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import com.siemens.datalayer.connector.model.*;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
+import com.siemens.datalayer.utils.ExcelDataProviderClass;
 
 import org.testng.Assert;
 
@@ -23,12 +24,12 @@ import io.restassured.response.Response;
 public class InterfaceTests {
 	
 	@Parameters({"base_url", "port", "domain_name"})
-	@BeforeClass (description = "Configure the host address and communication port of Connector Interface")
+	@BeforeClass (description = "Configure the host address and communication port of data-layer-connector")
 	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name) {
-	    Endpoint.setBaseUrl(base_url);
-	    Endpoint.setPort(port);
-	    Endpoint.setDomain(domain_name);
-	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("Connector Address", base_url + ":" + port);
+	    ConnectorEndpoint.setBaseUrl(base_url);
+	    ConnectorEndpoint.setPort(port);
+	    ConnectorEndpoint.setDomain(domain_name);
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector", base_url + ":" + port);
 	}
 	 
 	@Test (priority = 0, description = "Test connector interface: Get All Entities name.")
@@ -37,7 +38,7 @@ public class InterfaceTests {
 	@Story("Connctor Interface: Get all entities name")
 	public void GetAllEntitiesName()
 	{	
-	  Response response = Endpoint.getAllEntitiesName();
+	  Response response = ConnectorEndpoint.getAllEntitiesName();
 	  
 	  // This is an example of processing the response message via POJO  
 	  GetAllEntitiesNameResponse rspBody = response.getBody().as(GetAllEntitiesNameResponse.class);
@@ -52,13 +53,13 @@ public class InterfaceTests {
 	@Story("Entity Interface: Search model schema by name")
   	public void SearchModelSchemaByName()
   	{
-	  Response response = Endpoint.getAllEntitiesName();
+	  Response response = ConnectorEndpoint.getAllEntitiesName();
 
 	  JsonPath jsonPathEvaluator = response.jsonPath();
 	 
 	  List<String> allEntities = jsonPathEvaluator.getList("data");
 		  
-	  response = Endpoint.searchModelSchemaByName("default", allEntities.get(0));
+	  response = ConnectorEndpoint.searchModelSchemaByName("default", allEntities.get(0));
 	
 	  // This is an example of extracting information from the response message via Json path  
 	  Assert.assertEquals("Operate success.", response.jsonPath().getString("message"));
@@ -71,7 +72,7 @@ public class InterfaceTests {
 	@Story("Entity Interface: Search model schema by name")
   	public void SearchModelSchemaForAllEntities()
   	{		
-	  Response response = Endpoint.getAllEntitiesName();
+	  Response response = ConnectorEndpoint.getAllEntitiesName();
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  
@@ -81,7 +82,7 @@ public class InterfaceTests {
 	  
 	  for(String entityItem : allEntities)
 	  {
-		  response = Endpoint.searchModelSchemaByName("default", entityItem);
+		  response = ConnectorEndpoint.searchModelSchemaByName("default", entityItem);
 		  
 		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  }
@@ -107,9 +108,9 @@ public class InterfaceTests {
 	  if (paramMaps.containsKey("pageSize")) 		queryParameters.put("pageSize", paramMaps.get("pageSize"));
 	  if (paramMaps.containsKey("timeout")) 		queryParameters.put("pageSize", paramMaps.get("timeout")); 
 	  
-	  Response response = Endpoint.getConceptModelDataByCondition(queryParameters);
+	  Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
 	  
-	  CommonCheckFunctions.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
+	  checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
 	  
 	  if (paramMaps.get("description").contains("data retrieved"))
 	  {	  
@@ -157,9 +158,41 @@ public class InterfaceTests {
 
   	}
 	
+	@Step("Verify the status code, operation code, and message")
+	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
+	{
+		  int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
+		  if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
+		  Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
+		  
+		  if ((requestParameters.containsKey("rspCode")))
+		  {
+			  Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");
+		  }
+		  else
+		  {
+			  if (requestParameters.get("description").contains("good request")) 
+				  Assert.assertEquals(actualCode, "0", "The operation code in response message matches the expected value.");
+			  else
+				  System.out.println("Operation code is not specified for test case： " + requestParameters.get("test-id"));
+		  }		  
+		  
+		  if (requestParameters.containsKey("rspMessage"))
+		  {
+			  Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
+		  }
+		  else
+		  {
+			  if (requestParameters.get("description").contains("good request")) 
+				  Assert.assertEquals(actualMessage, "Operate success.", "The message of 'operation success' is returned.");
+			  else
+				  System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
+		  }
+	}
+	
 	public void checkDataFollowsModelSchema(String schemaName, Response response)
 	{
-		String schemaTemplateFile = Endpoint.getResourcePath() + "JasonModelSchemaFor" + schemaName;
+		String schemaTemplateFile = ConnectorEndpoint.getResourcePath() + "JasonModelSchemaFor" + schemaName;
 		
 		// If data is returned in pagination format
 		if (response.getBody().asString().contains("totalPages")) schemaTemplateFile += "P";
