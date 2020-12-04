@@ -66,13 +66,13 @@ public class ConnectorEndpoint {
 	public static Response getAllEntitiesName() {
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/connector/entities";
+//		RestAssured.basePath = "api/connector/entities";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
         
         Response response = httpRequest.filter(new AllureRestAssured())
-        							   .get();
+        							   .get("api/connector/entities");
         
         return response;
 	}
@@ -83,13 +83,13 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/connector/searchData";
+//		RestAssured.basePath = "api/connector/searchData";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 
 		Response response = httpRequest.queryParams(parameters) 
 									   .filter(new AllureRestAssured())
-									   .get();
+									   .get("api/connector/searchData");
 		
 		return response;
 	}	
@@ -100,7 +100,7 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/v1/entity/searchModelSchemaByName";
+//		RestAssured.basePath = "api/v1/entity/searchModelSchemaByName";
 		
 		RequestSpecification httpRequest = RestAssured.given();
 		
@@ -117,7 +117,7 @@ public class ConnectorEndpoint {
 		
 		Response response = httpRequest.queryParams(parameters)
 									   .filter(new AllureRestAssured())
-									   .get();
+									   .get("api/v1/entity/searchModelSchemaByName");
 		
 		return response;
 	}
@@ -127,12 +127,12 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/dev-tools/checkSuperMapper";
+//		RestAssured.basePath = "api/dev-tools/checkSuperMapper";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.get();
+        Response response = httpRequest.get("api/dev-tools/checkSuperMapper");
         
         return response;
 	}
@@ -142,12 +142,12 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/dev-tools/clear-caches";
+//		RestAssured.basePath = "api/dev-tools/clear-caches";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.get();
+        Response response = httpRequest.get("api/dev-tools/clear-caches");
         
         return response;
 	}
@@ -157,14 +157,14 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/dev-tools/execute-sql";
+//		RestAssured.basePath = "api/dev-tools/execute-sql";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
 		Response response = httpRequest.queryParam("name", sql) 
 									   .filter(new AllureRestAssured())
-                					   .get();
+                					   .get("api/dev-tools/execute-sql");
         
         return response;
 	}
@@ -174,12 +174,12 @@ public class ConnectorEndpoint {
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-		RestAssured.basePath = "api/mapper/test";
+//		RestAssured.basePath = "api/mapper/test";
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("accept", "*/*");
         
-        Response response = httpRequest.get();
+        Response response = httpRequest.get("api/mapper/test");
         
         return response;
 	}

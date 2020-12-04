@@ -6,6 +6,7 @@
     </listeners>
     
     <parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="iems-api-engine-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
@@ -17,6 +18,12 @@
 	  			<parameter name="port" value="32577"/>
 	  			<parameter name="domain_name" value="iEMS"/>
             </class>
+            
+			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- iems-dev: 32510 / iems-test: 32223 / iems-prod: 30035 -->
+	  			<parameter name="port" value="30035"/>
+            </class>         
             
             <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
             	<parameter name="base_url" value="http://140.231.89.85" />

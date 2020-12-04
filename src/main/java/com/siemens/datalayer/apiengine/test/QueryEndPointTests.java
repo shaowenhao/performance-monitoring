@@ -70,7 +70,7 @@ public class QueryEndPointTests {
 				  
 				if (response.body().asString().contains("\"" + entityName + "\":null"))
 				{
-					System.out.println("No data entry found in the response message.");
+					Assert.assertFalse(paramMaps.get("description").contains("data retrieved"), "The response message does not contain any data entries.");
 				}
 				else
 				{
@@ -110,6 +110,43 @@ public class QueryEndPointTests {
 		Response response = ApiEngineEndpoint.postGraphql(paramMaps.get("query"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("good request"))
+		{
+			HashMap<String, String> queryParameters = new HashMap<>();
+			parseQueryString(paramMaps.get("query"), queryParameters);
+			
+			Assert.assertTrue(response.getBody().asString().contains(queryParameters.get("entity")));
+			
+			String entityListPath = "data." + queryParameters.get("entity");
+			
+			if (paramMaps.get("description").contains("data retrieved"))
+			{
+				List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
+
+				if (queryParameters.containsKey("condition"))
+				{
+					Assert.assertTrue(verifySingleCondition(queryParameters.get("condition"), entityList));
+				}
+				
+				if (queryParameters.containsKey("field"))
+				{				
+					Scanner scanner = new Scanner(queryParameters.get("field"));
+					
+					while (scanner.hasNext())
+					{
+						String fieldStr = scanner.next();						 
+						CommonCheckFunctions.checkDataContainsSpecifiedFields(fieldStr, entityList);
+					}	
+					  
+					scanner.close();
+				}
+			}
+			else
+			{
+				Assert.assertNull(response.jsonPath().get(entityListPath), "The response message does not contain any data.");
+			}
+		}
 	}
 	
 	@Step("Verify the status code, operation code, and message")
@@ -190,6 +227,37 @@ public class QueryEndPointTests {
 		scanner.close();
 	}
 	
+	public static void parseQueryString(String queryString, HashMap<String, String> queryParameters)
+	{
+		Scanner scanner = new Scanner(queryString);
+		
+		String pattern = "\s\\{";
+		if (queryString.contains("(cond:")) pattern = "\\(cond:";
+
+		scanner.useDelimiter(pattern);
+		String entityStr = scanner.next();
+		entityStr = entityStr.replaceFirst("\\{", "");
+		queryParameters.put("entity", entityStr.trim());
+		
+		if (queryString.contains("(cond:"))
+		{
+			scanner.reset();
+			pattern = "\\)";
+			scanner.useDelimiter(pattern);
+			
+			String conditionStr = scanner.next();
+			conditionStr = conditionStr.replace("(cond:", "");
+			queryParameters.put("condition", conditionStr.trim());
+		}
+		
+		String fieldStr = scanner.next();
+		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
+		fieldStr = fieldStr.replace("}", "");
+		queryParameters.put("field", fieldStr);
+		
+		scanner.close();
+	}
+	
 	public static void checkOrder(String orderStr, List<HashMap<String, String>> dataList)
 	{
 		Scanner scanner = new Scanner(orderStr);
@@ -264,6 +332,7 @@ public class QueryEndPointTests {
 		String compareField = condition.substring(condition.indexOf('{')+1, condition.indexOf(':'));
 		
 		String equationStr = condition.substring(condition.indexOf('_'), condition.length()-2);
+		equationStr = equationStr.replace("}", "");
 		
 		String compareType = equationStr.substring(equationStr.indexOf('_')+1, equationStr.indexOf(':'));
 		
