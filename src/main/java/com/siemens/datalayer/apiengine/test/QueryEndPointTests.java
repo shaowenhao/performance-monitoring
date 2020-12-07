@@ -83,10 +83,12 @@ public class QueryEndPointTests {
 					if (filterParameters.containsKey("field"))
 						CommonCheckFunctions.checkDataContainsSpecifiedFields(filterParameters.get("field"), entityList);
 					  
-					if (filterParameters.containsKey("condition")) checkCondition(filterParameters.get("condition"), entityList);
+					if (filterParameters.containsKey("condition")) 
+						checkCondition(filterParameters.get("condition"), entityList);
 					  
 					// Check if the data in response message is sorted by the specified order parameters
-					if (filterParameters.containsKey("order")) checkOrder(filterParameters.get("order"), entityList);
+					if (filterParameters.containsKey("order")) 
+						checkOrder(filterParameters.get("order"), entityList);
 					  
 					// Check if the data is returned in correct pagination format 
 					if (filterParameters.containsKey("pagination"))

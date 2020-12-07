@@ -233,9 +233,9 @@ public class CommonCheckFunctions {
 	{
 		Boolean result = true;
 		
-		try
+		try 
 		{
-			switch (compareType)
+			switch (compareType) // Reference: https://hasura.io/docs/1.0/graphql/core/queries/query-filters.html#comparision-operators
 			{
 				case "eq":
 					result = ifFieldValueEqualsTo(valueStr, valueToCompare);
@@ -252,8 +252,25 @@ public class CommonCheckFunctions {
 				case "lt":
 					result = ifFieldValueLessThan(valueStr, valueToCompare);
 					break;
+					
+				case "gte":
+					result = ifFieldValueGreaterThan(valueStr, valueToCompare) || ifFieldValueEqualsTo(valueStr, valueToCompare);
+					break;
+					
+				case "lte":
+					result = ifFieldValueLessThan(valueStr, valueToCompare) || ifFieldValueEqualsTo(valueStr, valueToCompare);
+					break;
+					
+				case "in":
+					result = ifFieldValueInTheList(valueStr, valueToCompare);
+					break;
+					
+				case "nin":
+					result = !ifFieldValueInTheList(valueStr, valueToCompare);
+					break;
 			}
-		} catch (ParseException e) 
+		} 
+		catch (ParseException e) 
 		{
 			System.out.println("Error: data parse operation failed");
 	    }
@@ -370,5 +387,39 @@ public class CommonCheckFunctions {
 		}
 			
 		return true; 
+	}
+	
+	public static boolean ifFieldValueInTheList(String valueStr, String valueListToCompare)
+	{
+		Boolean result = false;
+		
+		valueListToCompare = valueListToCompare.replace("[", "");
+		valueListToCompare = valueListToCompare.replace("]", "");
+		
+		Scanner scanner = new Scanner(valueListToCompare);
+		scanner.useDelimiter(",");
+		  
+		while (scanner.hasNext())
+		{
+			String valueToCompare = scanner.next();
+			
+			try 
+			{
+				if (ifFieldValueEqualsTo(valueStr, valueToCompare)) 
+				{
+					result = true; 
+					break;
+				}
+				
+			} 
+			catch (ParseException e) 
+			{
+				System.out.println("Error: data parse operation failed");
+		    }
+		}	
+		  
+		scanner.close();
+		
+		return result;	
 	}
 }
