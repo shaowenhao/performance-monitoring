@@ -60,11 +60,11 @@ public class AssetDataPro {
 
 		Map<String, Object> goodQuery01 = new HashMap<>();
 		goodQuery01.put("description", "good request, data retrieved");
-		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
-            add("1#制冷机");
-            add("3#制冷机");
-        }});
-		goodQuery01.put("id", Integer.parseInt(deviceMap.get("1#制冷机")));
+//		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+//            add("1#制冷机");
+//            add("3#制冷机");
+//        }});
+		goodQuery01.put("deviceName", "1#制冷机");
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();

@@ -101,51 +101,60 @@ public class SensorDataPro {
 	
 	@DataProvider(name = "dataForGetSensorDataByDeviceId")
 	Iterator<Object[]> dataForGetSensorDataByDeviceId() {
-		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
-            add("1#制冷机");
-            add("3#制冷机");
-        }});
+//		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+//            add("1#制冷机");
+//            add("3#制冷机");
+//        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 		Map<String, Object> goodQuery01 = new HashMap<>();
-		String good1 = String.format("{\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
-				"  \"endTime\": 1601519153000,\r\n" + 
-				"  \"startTime\": 1593570353000\r\n" + 
-				"}");
+//		String good1 = String.format("{\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
+//				"  \"endTime\": 1601519153000,\r\n" + 
+//				"  \"startTime\": 1593570353000\r\n" + 
+//				"}");
 		goodQuery01.put("description", "good request, data retrieved");
-		goodQuery01.put("body", good1);
+		goodQuery01.put("deviceName", "1#制冷机");
+		goodQuery01.put("endTime", "1601519153000");
+		goodQuery01.put("startTime", "1593570353000");
+//		goodQuery01.put("body", good1);
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();
-		String bad1 = String.format("{\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
-				"  \"startTime\": 1593570353000\r\n" + 
-				"}");
+//		String bad1 = String.format("{\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
+//				"  \"startTime\": 1593570353000\r\n" + 
+//				"}");
 		badQuery01.put("description", "bad request, endTime is null");
-		badQuery01.put("body", bad1);
+		badQuery01.put("deviceName", "1#制冷机");
+		badQuery01.put("startTime", "1593570353000");
+//		badQuery01.put("body", bad1);
 		badQuery01.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery01.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery01);
 		
 		Map<String, Object> badQuery02 = new HashMap<>();
-		String bad2 = String.format("{\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
-				"  \"endTime\": 1601519153000\r\n" + 
-				"}");
+//		String bad2 = String.format("{\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+",\r\n" + 
+//				"  \"endTime\": 1601519153000\r\n" + 
+//				"}");
 		badQuery02.put("description", "bad request, startTime is null");
-		badQuery02.put("body", bad2);
+		badQuery02.put("deviceName", "1#制冷机");
+		badQuery02.put("endTime", "1601519153000");
+//		badQuery02.put("body", bad2);
 		badQuery02.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery02.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery02);
 		
 		Map<String, Object> badQuery03 = new HashMap<>();
-		String bad3 = String.format("{\r\n" + 
-				"  \"endTime\": 1601519153000,\r\n" + 
-				"  \"startTime\": 1593570353000\r\n" + 
-				"}");
+//		String bad3 = String.format("{\r\n" + 
+//				"  \"endTime\": 1601519153000,\r\n" + 
+//				"  \"startTime\": 1593570353000\r\n" + 
+//				"}");
 		badQuery03.put("description", "bad request, deviceId is null");
-		badQuery03.put("body", bad3);
+		badQuery03.put("endTime", "1601519153000");
+		badQuery03.put("startTime", "1593570353000");
+//		badQuery03.put("body", bad3);
 		badQuery03.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery03.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery03);
@@ -166,27 +175,30 @@ public class SensorDataPro {
 	
 	@DataProvider(name = "getTopSensorDataByDeviceId")
 	Iterator<Object[]> getTopSensorDataByDeviceId() {
-		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
-            add("1#制冷机");
-            add("3#制冷机");
-        }});
+//		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{
+//            add("1#制冷机");
+//            add("3#制冷机");
+//        }});
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 		List<Map<String, Object>> listOfQueryParams = new ArrayList<>();
 		Map<String, Object> goodQuery01 = new HashMap<>();
-		String good1 = String.format("{\r\n" + 
-				"  \"limit\": 2,\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
-				"}");
+//		String good1 = String.format("{\r\n" + 
+//				"  \"limit\": 2,\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
+//				"}");
 		goodQuery01.put("description", "good request, data retrieved");
-		goodQuery01.put("body", good1);
+		goodQuery01.put("limit", "2");
+		goodQuery01.put("deviceName", "1#制冷机");
+//		goodQuery01.put("body", good1);
 		listOfQueryParams.add(goodQuery01);
 
 		Map<String, Object> badQuery01 = new HashMap<>();
-		String bad1 = String.format("{\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
-				"}");
+//		String bad1 = String.format("{\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
+//				"}");
 		badQuery01.put("description", "bad request, limit is null");
-		badQuery01.put("body", bad1);
+		badQuery01.put("deviceName", "1#制冷机");
+//		badQuery01.put("body", bad1);
 		badQuery01.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery01.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery01);
@@ -196,18 +208,21 @@ public class SensorDataPro {
 				"  \"limit\": 2\r\n" + 
 				"}");
 		badQuery02.put("description", "bad request, deviceId is null");
+		badQuery02.put("limit", "2");
 		badQuery02.put("body", bad2);
 		badQuery02.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery02.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery02);
 		
 		Map<String, Object> badQuery03 = new HashMap<>();
-		String bad3 = String.format("{\r\n" + 
-				"  \"limit\": 1000,\r\n" + 
-				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
-				"}");
+//		String bad3 = String.format("{\r\n" + 
+//				"  \"limit\": 1000,\r\n" + 
+//				"  \"deviceId\": "+deviceMap.get("1#制冷机")+"\r\n" + 
+//				"}");
 		badQuery03.put("description", "bad request, limit not correct, should be number < 1000");
-		badQuery03.put("body", bad3);
+		badQuery03.put("limit", "1000");
+		badQuery03.put("deviceName", "1#制冷机");
+//		badQuery03.put("body", bad3);
 		badQuery03.put("expectCode", ResponseCode.SDL_PARAM_ERROR.getCode());
 		badQuery03.put("expectMessage", ResponseCode.SDL_PARAM_ERROR.getMessage());
 		listOfQueryParams.add(badQuery03);
