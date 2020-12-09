@@ -17,7 +17,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
-public class Endpoint {
+public class ApiServiceEndpoint {
 	
 	private static String BASE_URL = "";	
 	private static String PORT = "";	
@@ -134,7 +134,7 @@ public class Endpoint {
 		return getResponseByParameters(PRE_ASSET + RestConstants.LISTALLDEVICETYPES, null);
 	}
 	
-	@Step("id: {parameters}")
+	@Step("Send a request of 'getDeviceInfo': {parameters}")
 	public static Response getDeviceInfo(HashMap<String, Object> parameters) 
 	{
 		return getResponseByParameters(PRE_ASSET + RestConstants.GETDEVICEINFO, parameters);

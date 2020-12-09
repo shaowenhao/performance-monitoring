@@ -45,5 +45,24 @@ public class ExcelDataProviderClass {
 		
 		return queryParamCollection.iterator();
 	}
+	
+	@DataProvider(name = "api-service-test-data-provider")
+	public static Iterator<Object[]> apiServiceTestDataProvider(Method m, ITestContext iTestContext)
+	{
+	    Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
+	    
+	    String methodName = m.getName();
+		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForApiServiceTest");
+//		String dataFileName = "iems-api-service-test-data.xlsx";
+	    
+		try {
+			ExcelFileReaderClass.readParamFromExcelFile(dataFileName, methodName, queryParamCollection);
+		} 
+		catch (Exception e) {
+			System.out.println("Error occurs when try to open the excel file： " + e.getMessage());
+		}
+		
+		return queryParamCollection.iterator();
+	}
 
 }

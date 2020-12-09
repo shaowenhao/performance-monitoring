@@ -1,7 +1,7 @@
 package com.siemens.datalayer.apiengine.model;
 
 import com.siemens.datalayer.iems.model.ResponseCode;
-import com.siemens.datalayer.iems.test.Endpoint;
+import com.siemens.datalayer.iems.test.ApiServiceEndpoint;
 import org.testng.annotations.DataProvider;
 
 import java.util.*;

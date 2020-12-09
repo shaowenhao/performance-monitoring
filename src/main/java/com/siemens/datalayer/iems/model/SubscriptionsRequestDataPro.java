@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.testng.annotations.DataProvider;
 
-import com.siemens.datalayer.iems.test.Endpoint;
+import com.siemens.datalayer.iems.test.ApiServiceEndpoint;
 
 
 public class SubscriptionsRequestDataPro {

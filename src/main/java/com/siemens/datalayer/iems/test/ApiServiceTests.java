@@ -14,13 +14,15 @@ import com.siemens.datalayer.iems.model.SensorDataPro;
 import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
+import com.siemens.datalayer.utils.ExcelDataProviderClass;
+import com.siemens.datalayer.utils.Utils;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.siemens.datalayer.iems.model.AssetDataPro;
+import com.siemens.datalayer.apiservice.model.ApiResponse;
 import com.siemens.datalayer.iems.model.RestConstants;
 
 import org.jsoup.internal.StringUtil;
@@ -57,10 +59,10 @@ public class ApiServiceTests {
 			@Optional("/") String rabbitmq_virtual_host,			@Optional("30") String rabbitmq_timeout, 				
 			@Optional("datalayer.exchange.out") String rabbitmq_exchange) throws IOException, TimeoutException 
 	{		
-		Endpoint.setBaseUrl(base_url);
-		Endpoint.setPort(port);
-		Endpoint.setPreAsset(pre_asset);
-		Endpoint.setPreData(pre_data);
+		ApiServiceEndpoint.setBaseUrl(base_url);
+		ApiServiceEndpoint.setPort(port);
+		ApiServiceEndpoint.setPreAsset(pre_asset);
+		ApiServiceEndpoint.setPreData(pre_data);
 		
 		mqHost = rabbitmq_host;
 		mqPort = rabbitmq_port;
@@ -82,7 +84,7 @@ public class ApiServiceTests {
     	JsonPath jsonPathEvaluator = response.jsonPath();
 		HashMap<Object, Object> data = jsonPathEvaluator.get("data");
 		String replyTo = data.get("replyTo").toString();
-    	Response responseDelete = Endpoint.deleteSubscriptions(replyTo);
+    	Response responseDelete = ApiServiceEndpoint.deleteSubscriptions(replyTo);
 		Assert.assertEquals(responseDelete.getStatusCode(), 200);
 		System.out.println("Delete subscription : "+ replyTo +" success.");
     }
@@ -138,7 +140,7 @@ public class ApiServiceTests {
 	@Story("Get All device type") 
 	public void listDeviceTypes() 
 	{ 		
-		Response response = Endpoint.listDeviceTypes();
+		Response response = ApiServiceEndpoint.listDeviceTypes();
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
 		checkDataFollowsModelSchema(RestConstants.LISTDEVICETYPES, response);
@@ -151,69 +153,77 @@ public class ApiServiceTests {
 	@Story("Get All device type contain id and type") 
 	public void listAllDeviceTypes() 
 	{ 		
-		Response response = Endpoint.listAllDeviceTypes();
+		Response response = ApiServiceEndpoint.listAllDeviceTypes();
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
 		checkDataFollowsModelSchema(RestConstants.LISTALLDEVICETYPES, response);
 	}
 	  
-	@Test(priority = 0, description = RestConstants.GETDEVICESBYTYPE, dataProviderClass = AssetDataPro.class, dataProvider = "dataForGetDevicesByType")
+	@Test(priority = 0, description = RestConstants.GETDEVICESBYTYPE, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with specified parameters and check the response message.")
 	@Feature("Get asset data API")
 	@Story("Get devices by type") 
-	public void getDevicesByType(Map<String, String> paramMaps) { 
-		
+	public void getDevicesByType(Map<String, String> paramMaps) 
+	{ 		
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("deviceType")) queryParameters.put("device_type", paramMaps.get("deviceType"));
 		
-		Response response = Endpoint.getDevicesByType(queryParameters);
+		Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
 		Assert.assertEquals(response.getStatusCode(), 200);
 	  
-		if (paramMaps.containsKey("expectCode")) 
-			Assert.assertEquals(response.jsonPath().getString("code"), paramMaps.get("expectCode"));
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 	  
-		if (paramMaps.containsKey("expectMessage"))
-			Assert.assertTrue(response.jsonPath().getString("message").contains(paramMaps.get("expectMessage")));
-	  
-		if (paramMaps.get("description").contains("good request")) { 
+		if (paramMaps.get("description").contains("good request")) 
+		{ 
 			if (paramMaps.get("description").contains("data not found"))
 				Assert.assertTrue(response.jsonPath().getList("data").isEmpty());
 	  
-			if (paramMaps.get("description").contains("data retrieved")) {
+			if (paramMaps.get("description").contains("data retrieved")) 
+			{
 				Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
 				checkDataFollowsModelSchema(RestConstants.LISTALLDEVICETYPES, response);
 			} 
 		} 
-		else { 
+		else 
+		{ 
 			Assert.assertNull(response.jsonPath().getList("data"));
 		} 
 	}
 	  
-	@Test(priority = 0, description = RestConstants.GETDEVICEINFO, dataProviderClass = AssetDataPro.class, dataProvider = "dataForDeviceId")
+	@Test(priority = 0, description = RestConstants.GETDEVICEINFO,
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with specified parameters and check the response message.")
 	@Feature("Get asset data API")
 	@Story("Get device infomation") 
-	public void getDeviceInfo(Map<String, String> paramMaps) { 
-		
+	public void getDeviceInfoByID(Map<String, String> paramMaps) 
+	{ 		
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
-		if (paramMaps.containsKey("deviceName")) { 
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机");	add("3#制冷机"); }}); 
-			queryParameters.put("id", Integer.parseInt(deviceMap.get(paramMaps.get("deviceName")))); }
+		
+		readDeviceIdParameter(paramMaps, queryParameters);
 	  
-		Response response = Endpoint.getDeviceInfo(queryParameters); 
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		Response response = ApiServiceEndpoint.getDeviceInfo(queryParameters); 
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("data retrieved")) 
+		{
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			checkDataFollowsModelSchema(RestConstants.GETDEVICEINFO, response);
 		} 
-		else { 
+		else 
+		{ 
 			Assert.assertNull(response.jsonPath().getString("data"));
 		} 
 	}
 	  
-	@Test(priority = 0, description = RestConstants.GETSENSORBYDEVICEID, dataProviderClass = AssetDataPro.class, dataProvider = "dataForDeviceId")
+	@Test(priority = 0, description = RestConstants.GETSENSORBYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with specified parameters and check the response message.")
 	@Feature("Get asset data API")
@@ -221,14 +231,15 @@ public class ApiServiceTests {
 	public void getSensorByDeviceId(Map<String, String> paramMaps) { 
 		
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
-		if (paramMaps.containsKey("deviceName")) { 
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }}); 
-			queryParameters.put("id", Integer.parseInt(deviceMap.get(paramMaps.get("deviceName")))); 
-		}
+
+		readDeviceIdParameter(paramMaps, queryParameters);
 	  
-		Response response = Endpoint.getSensorByDeviceId(queryParameters); 
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		Response response = ApiServiceEndpoint.getSensorByDeviceId(queryParameters); 
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("good request")) 
+		{
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0); 
 		} 
 		else {
@@ -244,7 +255,7 @@ public class ApiServiceTests {
 	@Story("Get sensor data by sensor ids") 
 	public void getSensorDataBySensorId(Map<String, Object> paramMaps) { 
 		
-		Response response = Endpoint.getSensorDataBySensorId( paramMaps.get("body").toString()); 
+		Response response = ApiServiceEndpoint.getSensorDataBySensorId( paramMaps.get("body").toString()); 
 		
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -265,7 +276,7 @@ public class ApiServiceTests {
 		
 		String body = "{";		
 		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
 			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
 		}
 		
@@ -277,7 +288,7 @@ public class ApiServiceTests {
 		if (paramMaps.containsKey("startTime"))	body += ",\r\n  \"startTime\": "+paramMaps.get("startTime");	
 		body += "\r\n}";
 		
-		Response response = Endpoint.getSensorDataByDeviceId(body.toString());
+		Response response = ApiServiceEndpoint.getSensorDataByDeviceId(body.toString());
 		
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -302,13 +313,13 @@ public class ApiServiceTests {
 		
 		if (paramMaps.containsKey("deviceName")) {
 			if (paramMaps.containsKey("limit")) body += ",";
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
 			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
 		}
 		
 		body += "\r\n}";
 		
-		Response response = Endpoint.getTopSensorDataByDeviceId(body);
+		Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(body);
 		
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -330,7 +341,7 @@ public class ApiServiceTests {
 		String body = "{";
 		
 		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
 			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
 		}
 		
@@ -342,7 +353,7 @@ public class ApiServiceTests {
 		if (paramMaps.containsKey("startTime")) body += ",\r\n  \"startTime\": "+paramMaps.get("startTime");		
 		body += "\r\n}";
 		
-		Response response = Endpoint.getKpiDataByDeviceId(body.toString());
+		Response response = ApiServiceEndpoint.getKpiDataByDeviceId(body.toString());
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
@@ -366,13 +377,13 @@ public class ApiServiceTests {
 			
 		if (paramMaps.containsKey("deviceName")) {
 			if (paramMaps.containsKey("limit")) body += ",";
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
 			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
 		}
 			
 		body += "\r\n}";
 			
-		Response response = Endpoint.getTopKPIDataByDeviceId( body.toString()); 
+		Response response = ApiServiceEndpoint.getTopKPIDataByDeviceId( body.toString()); 
 		
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -396,7 +407,7 @@ public class ApiServiceTests {
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request").toString()); 
 		
-		Response response = Endpoint.subscriptionsBySensorId(queryParameters); 
+		Response response = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters); 
 		
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -426,14 +437,14 @@ public class ApiServiceTests {
 	public void subscriptionsByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException { 
 		
 		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
 			paramMaps.put("deviceId", deviceMap.get(paramMaps.get("deviceName")));
 		}
 		
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("deviceId")) queryParameters.put("deviceId", paramMaps.get("deviceId")); 
 		
-		Response response = Endpoint.subscriptionsByDeviceId(queryParameters); 
+		Response response = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters); 
 		
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -460,14 +471,14 @@ public class ApiServiceTests {
 	public void subscriptionsWithKPIByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException { 
 		
 		if (paramMaps.containsKey("separator")) {
-			HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
+			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
 			paramMaps.put("request", deviceMap.get("1#制冷机")+paramMaps.get("separator")+deviceMap.get("3#制冷机"));
 		}
 		
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
 		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request").toString()); 
 		  
-		Response response = Endpoint.subscriptionsWithKPIByDeviceId(queryParameters); 
+		Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters); 
 		  
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -496,11 +507,11 @@ public class ApiServiceTests {
 	@Story("Delete subscription by id") 
 	public void deleteSubscriptionsSuccess() { 
 		  
-		HashMap<String, String> deviceMap = Endpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }}); 
+		HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }}); 
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
 		queryParameters.put("request", Integer.parseInt(deviceMap.get("1#制冷机"))); 
 		  
-		Response responsePro = Endpoint.subscriptionsWithKPIByDeviceId(queryParameters);		  
+		Response responsePro = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters);		  
 		Assert.assertEquals(responsePro.getStatusCode(), 200); 
 		  
 		JsonPath jsonPathEvaluator = responsePro.jsonPath();
@@ -508,7 +519,7 @@ public class ApiServiceTests {
 		  
 		HashMap data = jsonPathEvaluator.get("data"); 
 		String replyTo = data.get("replyTo").toString(); 
-		Response response = Endpoint.deleteSubscriptions(replyTo);
+		Response response = ApiServiceEndpoint.deleteSubscriptions(replyTo);
 		  
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertNotNull(response.jsonPath().getString("data"));
@@ -522,7 +533,7 @@ public class ApiServiceTests {
 	@Story("Delete subscription by id") 
 	public void deleteSubscriptions(Map<String, String> paramMaps) { 
 		  
-		Response response = Endpoint.deleteSubscriptions(paramMaps.get("id")); 
+		Response response = ApiServiceEndpoint.deleteSubscriptions(paramMaps.get("id")); 
 		  
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
@@ -594,6 +605,75 @@ public class ApiServiceTests {
         return flag;
     }
 
+	public static void readDeviceIdParameter(Map<String, String> paramMaps, HashMap<String, Object> queryParameters)
+	{
+		if (paramMaps.containsKey("deviceName")) 
+		{ 
+			if (paramMaps.containsKey("deviceType")) // if both device type and name are specified, get the corresponding id
+			{
+				String deviceId = getDeviceId(paramMaps.get("deviceType"), paramMaps.get("deviceName"));
+				queryParameters.put("id", Integer.parseInt(deviceId)); 
+			}
+			else // if only device name is specified, directly use its value as id
+			{
+				if (paramMaps.get("deviceName").contains("null")) 
+					queryParameters.put("id", "");
+				else 
+					queryParameters.put("id", paramMaps.get("deviceName")); 
+			}
+		}
+	}
+	
+	public static String getDeviceId(String deviceType, String deviceName)
+	{
+        HashMap<String, Object> queryParameters = new HashMap<>();
+        
+        queryParameters.put("device_type", deviceType);
+        Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
+
+        JsonPath jsonPathEvaluator = response.jsonPath();
+        Assert.assertNotNull(jsonPathEvaluator.get("data"));
+        
+        ArrayList<HashMap<Object, Object>> data = jsonPathEvaluator.get("data");
+        
+        HashMap<Object, Object> h = data.stream().filter(d -> deviceName.equals(d.get("deviceName"))).findAny().orElse(null);
+        Assert.assertFalse(Utils.isNullOrEmpty(h));
+
+        return h.get("id").toString();
+    }
+	
+	@Step("Verify the status code, operation code, and message")
+	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
+	{
+		int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
+		if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
+		Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
+		  
+		if ((requestParameters.containsKey("rspCode")))
+		{
+			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");
+		}
+		else
+		{
+			if (requestParameters.get("description").contains("good request")) 
+				Assert.assertEquals(actualCode, "200", "The operation code in response message matches the expected value.");
+			else
+				System.out.println("Operation code is not specified for test case： " + requestParameters.get("test-id"));
+		}		  
+		  
+		if (requestParameters.containsKey("rspMessage"))
+		{
+			Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
+		}
+		else
+		{
+			if (requestParameters.get("description").contains("good request")) 
+				Assert.assertEquals(actualMessage, "OK", "The 'OK' message is returned.");
+			else
+				System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
+		}
+	}
+	
 	public void checkDataFollowsModelSchema(String schemaName, Response response)
 	{
 		String schemaTemplateFile = "json-model-schema/iems/" + schemaName + ".JSON";	
