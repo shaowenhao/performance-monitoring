@@ -1,8 +1,5 @@
 package com.siemens.datalayer.iems.test;
 
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.*;
@@ -16,6 +13,7 @@ import org.testng.annotations.Test;
 import com.siemens.datalayer.iems.model.SensorDataPro;
 import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -47,14 +45,18 @@ public class ApiServiceTests {
     private String mqTimeout;
     private String mqExchange;
 
-	@Parameters({ "base_url", "port", "pre_asset", "pre_data", "rabbitmq_host", "rabbitmq_port", "rabbitmq_username", "rabbitmq_password", "rabbitmq_virtual_host", "rabbitmq_timeout", "rabbitmq_exchange"})
-	@BeforeClass(description = "Configure host address and communication port for Connector service")
+	@Parameters({"base_url", 				"port", 					"pre_asset", 					"pre_data", 	
+				 "rabbitmq_host", 			"rabbitmq_port", 			"rabbitmq_username", 			"rabbitmq_password", 	
+				 "rabbitmq_virtual_host", 	"rabbitmq_timeout", 		"rabbitmq_exchange"})
+	@BeforeClass(description = "Configure host address and communication port for data-layer-api-service")
 	public void setConnectorEndpoint(
-			@Optional("http://140.231.89.85") String base_url,  @Optional("30684") String port, @Optional("/datalayer/api/v1/asset/") String pre_asset, 
-			@Optional("/datalayer/api/v1/data/") String pre_data, @Optional("140.231.89.85") String rabbitmq_host,  @Optional("30248") String rabbitmq_port,
-			@Optional("guest") String rabbitmq_username,  @Optional("guest") String rabbitmq_password,  @Optional("/") String rabbitmq_virtual_host,
-			@Optional("30") String rabbitmq_timeout, @Optional("datalayer.exchange.out") String rabbitmq_exchange) throws IOException, TimeoutException {
-		
+			@Optional("http://140.231.89.85") String base_url,  	@Optional("30684") String port, 	
+			@Optional("/datalayer/api/v1/asset/") String pre_asset, @Optional("/datalayer/api/v1/data/") String pre_data, 	
+			@Optional("140.231.89.85") String rabbitmq_host,  		@Optional("30248") String rabbitmq_port,				
+			@Optional("guest") String rabbitmq_username,			@Optional("guest") String rabbitmq_password,  			
+			@Optional("/") String rabbitmq_virtual_host,			@Optional("30") String rabbitmq_timeout, 				
+			@Optional("datalayer.exchange.out") String rabbitmq_exchange) throws IOException, TimeoutException 
+	{		
 		Endpoint.setBaseUrl(base_url);
 		Endpoint.setPort(port);
 		Endpoint.setPreAsset(pre_asset);
@@ -68,7 +70,6 @@ public class ApiServiceTests {
 		mqTimeout = rabbitmq_timeout;
 		mqExchange = rabbitmq_exchange;
 		
-//		properties = readProperties();
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("REST API for asset", base_url + ":" + port + pre_asset );
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("REST API for data", base_url + ":" + port + pre_data );
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("RabbitMQ_url", mqHost + ":" + mqPort );
@@ -76,9 +77,10 @@ public class ApiServiceTests {
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("RabbitMQ_exchange", mqExchange );
 	}
 
-	public void deleteSubscription(Response response){
+	public void deleteSubscription(Response response)
+	{
     	JsonPath jsonPathEvaluator = response.jsonPath();
-		HashMap data = jsonPathEvaluator.get("data");
+		HashMap<Object, Object> data = jsonPathEvaluator.get("data");
 		String replyTo = data.get("replyTo").toString();
     	Response responseDelete = Endpoint.deleteSubscriptions(replyTo);
 		Assert.assertEquals(responseDelete.getStatusCode(), 200);
@@ -92,7 +94,8 @@ public class ApiServiceTests {
         try {
             BufferedInputStream in = (BufferedInputStream) this.getClass().getResourceAsStream("/mq.properties");
             pro.load(in);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
         }
         return pro;
@@ -103,6 +106,7 @@ public class ApiServiceTests {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername(mqUsername);
         factory.setPassword(mqPassword);
+        
         // 设置RabbitMQ地址
         factory.setHost(mqHost);
         factory.setPort(Integer.parseInt(mqPort));
@@ -117,9 +121,13 @@ public class ApiServiceTests {
         channel.exchangeDeclare(mqExchange, "topic", true);
         // 声明队列
         queue = channel.queueDeclare().getQueue();
+        
 		boolean isConnected = connection.isOpen();
         boolean isChannelOpen = channel.isOpen();
-        System.out.println("is connected " + isConnected + ", is channel open " + isChannelOpen);
+        
+        if ((isConnected)&&(isConnected)==false)
+        	System.out.println("RabbitMQ communication error: isConnected = " + isConnected + ", isChannelOpen = " + isChannelOpen);
+        
         return connection.isOpen() && channel.isOpen();
     }
 	
@@ -128,12 +136,12 @@ public class ApiServiceTests {
 	@Description("Send a request to SUT and verify if all the available device type can be read out.")	  
 	@Feature("Get asset data API")	  
 	@Story("Get All device type") 
-	public void listDeviceTypes() { 
-		
+	public void listDeviceTypes() 
+	{ 		
 		Response response = Endpoint.listDeviceTypes();
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-		assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.LISTDEVICETYPES + ".JSON")); 
+		checkDataFollowsModelSchema(RestConstants.LISTDEVICETYPES, response);
 	}
 	  
 	@Test(priority = 0, description = RestConstants.LISTALLDEVICETYPES)
@@ -141,12 +149,12 @@ public class ApiServiceTests {
 	@Description("Send a request to SUT and verify if all the available device id and type can be read out.")
 	@Feature("Get asset data API")
 	@Story("Get All device type contain id and type") 
-	public void listAllDeviceTypes() { 
-		
+	public void listAllDeviceTypes() 
+	{ 		
 		Response response = Endpoint.listAllDeviceTypes();
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-		assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.LISTALLDEVICETYPES + ".JSON")); 
+		checkDataFollowsModelSchema(RestConstants.LISTALLDEVICETYPES, response);
 	}
 	  
 	@Test(priority = 0, description = RestConstants.GETDEVICESBYTYPE, dataProviderClass = AssetDataPro.class, dataProvider = "dataForGetDevicesByType")
@@ -174,7 +182,7 @@ public class ApiServiceTests {
 	  
 			if (paramMaps.get("description").contains("data retrieved")) {
 				Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-				assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.LISTALLDEVICETYPES + ".JSON")); 
+				checkDataFollowsModelSchema(RestConstants.LISTALLDEVICETYPES, response);
 			} 
 		} 
 		else { 
@@ -198,7 +206,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertNotNull(response.jsonPath().getString("data"));
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.GETDEVICEINFO + ".JSON")); 
+			checkDataFollowsModelSchema(RestConstants.GETDEVICEINFO, response);
 		} 
 		else { 
 			Assert.assertNull(response.jsonPath().getString("data"));
@@ -241,7 +249,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SENSORDATA + ".JSON"));
+			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		}
 		else { 
 			Assert.assertNull(response.jsonPath().getList("data")); 
@@ -274,7 +282,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SENSORDATA + ".JSON"));
+			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		} 
 		else {
 			Assert.assertNull(response.jsonPath().getList("data"));
@@ -305,7 +313,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SENSORDATA + ".JSON"));
+			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		} 
 		else {
 			Assert.assertNull(response.jsonPath().getList("data"));
@@ -338,7 +346,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.KPIDATA + ".JSON"));
+			checkDataFollowsModelSchema(RestConstants.KPIDATA, response);
 		} 
 		else {
 			Assert.assertNull(response.jsonPath().getList("data"));
@@ -369,7 +377,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").toString().contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.KPIDATA + ".JSON")); 
+			checkDataFollowsModelSchema(RestConstants.KPIDATA, response);
 		}
 		else { 
 			Assert.assertNull(response.jsonPath().getList("data")); 
@@ -393,7 +401,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertNotNull(response.jsonPath().getString("data"));
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON")); 
+			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 			
 			boolean flag = validMQData(response); 
 			if (flag) {
@@ -430,7 +438,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertNotNull(response.jsonPath().getString("data"));
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON"));
+			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 	  
 			boolean flag = validMQData(response); 
 			if(flag) {
@@ -464,7 +472,7 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertNotNull(response.jsonPath().getString("data"));
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.SUBSCRIPTIONDATA + ".JSON")); 
+			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 			  
 			boolean flag = validMQData(response); 
 			if(flag) {
@@ -504,7 +512,7 @@ public class ApiServiceTests {
 		  
 		Assert.assertEquals(response.getStatusCode(), 200);
 		Assert.assertNotNull(response.jsonPath().getString("data"));
-		assertThat(response.getBody().asString(),matchesJsonSchemaInClasspath("iems/" + RestConstants.DELETESUBSCRIPTION + ".JSON")); 
+		checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
 	}
 	  
 	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForDeleteSubscriptions")
@@ -519,43 +527,50 @@ public class ApiServiceTests {
 		if (paramMaps.get("description").contains("good request")) {
 			Assert.assertEquals(response.getStatusCode(), 200);
 			Assert.assertNotNull(response.jsonPath().getString("data"));
-			assertThat(response.getBody().asString(), matchesJsonSchemaInClasspath("iems/" + RestConstants.DELETESUBSCRIPTION + ".JSON")); 
+			checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
 		} 
 		else { 
 			Assert.assertNull(response.jsonPath().getString("data"));
 		} 
 	}
 	
-	public boolean validMQData(Response response) throws IOException, TimeoutException {
+	public boolean validMQData(Response response) throws IOException, TimeoutException 
+	{
 		boolean flag = false;
-		boolean isConnected = initRabbitMQ();
-		if(!isConnected) {
-			return false;
-		}
+		boolean isConnected = initRabbitMQ();		
+		if(!isConnected) return false;
+		
         JsonPath jsonPathEvaluator = response.jsonPath();
-		HashMap data = jsonPathEvaluator.get("data");
+		HashMap<Object, Object> data = jsonPathEvaluator.get("data");
 		String replyTo = data.get("replyTo").toString();
 		String routingKey = replyTo;
+		
         // 绑定队列
         channel.queueBind(queue, mqExchange, routingKey);
         System.out.println("RabbitMQ consumer start ...");
+        
         long t1 = System.currentTimeMillis();
-        while (true) {
+        while (true) 
+        {
         	long t2 = System.currentTimeMillis();
-            if(t2-t1 > timeout*1000){
+            if(t2-t1 > timeout*1000) 
+            {
                 break;
-            }else{
+            }
+            else 
+            {
 	            // 消费消息
 	            boolean autoAck = false;
 	            String consumerTag = "";
-	            channel.basicConsume(queue, autoAck, consumerTag, new DefaultConsumer(channel) {
+	            channel.basicConsume(queue, autoAck, consumerTag, new DefaultConsumer(channel) 
+	            {
 	                @Override
-	                public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties,
-	                        byte[] body) throws IOException {
+	                public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body) throws IOException 
+	                {
 	                    super.handleDelivery(consumerTag, envelope, properties, body);
 	                    String routingKey = envelope.getRoutingKey();
-	                    String contentType = properties.getContentType();
 	                    System.out.println("routingKey: " + routingKey);
+//	                    String contentType = properties.getContentType();
 //	                    System.out.println("消费的内容类型 contentType: " + contentType);
 	
 	                    long deliveryTag = envelope.getDeliveryTag();
@@ -566,61 +581,22 @@ public class ApiServiceTests {
 	            });
             }
         }
-        if(!StringUtil.isBlank(bodystr)) {
+        
+        if(!StringUtil.isBlank(bodystr)) 
+        {
         	flag = true;
-        }else {
+        }
+        else 
+        {
         	flag = false;
         }
+        
         return flag;
     }
-	
-	
-//  /***
-//  * 客户端重连
-//  *
-//  * 测试步骤：
-//  * 1. 设置 RECONNECT_INTERVAL_SECONDS(default 10s) 和 RECONNECT_TIMES(default 3)
-//  * 2. 执行单元测试方法 
-//  * 3. 手动关闭 RabbitMQ Server 进程
-//  * 4. 等待几秒钟后重启 RabbitMQ Server， 不能超过30秒(RabbitMQ 启动需要5-6秒)
-//  * 5. 查看打印，是否重新连接成功
-//  *
-//  * 提示：封装客户端的时候，继承Closeable接口
-//  *
-//  * @throws InterruptedException
-//  */
-// @Test(priority = 0, description = RestConstants.SUBSCRIPTIONBYDEVICEID)
-//	@Severity(SeverityLevel.BLOCKER)
-//	@Description("Client connect to RabbitMQ.")
-// @Feature("Get subscription data API")
-//	@Story("Connect to RabbitMQ")
-// public void validRabbitMQConnection() throws InterruptedException {
-// 		boolean reconnected = false;
-//         int retry = 0;
-//         do {
-//             try {
-//                 reconnected = initRabbitMQ();
-//             } catch (IOException e) {
-//                 e.printStackTrace();
-//             } catch (TimeoutException e) {
-//                 e.printStackTrace();
-//             }
-//             if (reconnected) {
-//                 System.out.println("rabbitmq connected, retry times is " + retry);
-//                 break;
-//             }
-//             retry++;
-//             System.out.println("reconnect after " + RECONNECT_INTERVAL_SECONDS + "s, retry is " + retry);
-//             try {
-//                 TimeUnit.SECONDS.sleep(RECONNECT_INTERVAL_SECONDS);
-//             } catch (InterruptedException e) {
-//                 e.printStackTrace();
-//             }
-//         } while (retry < RECONNECT_TIMES && !stop);
-//
-//         Assert.assertTrue(reconnected);
-//
-//     TimeUnit.MINUTES.sleep(1);
-// }
 
+	public void checkDataFollowsModelSchema(String schemaName, Response response)
+	{
+		String schemaTemplateFile = "json-model-schema/iems/" + schemaName + ".JSON";	
+		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+	}
 }

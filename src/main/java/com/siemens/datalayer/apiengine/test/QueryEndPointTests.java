@@ -154,33 +154,33 @@ public class QueryEndPointTests {
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
 	{
-		  int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
-		  if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
-		  Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
+		int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
+		if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
+		Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
 		  
-		  if ((requestParameters.containsKey("rspCode")))
-		  {
-			  Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");
-		  }
-		  else
-		  {
-			  if (requestParameters.get("description").contains("good request")) 
-				  Assert.assertEquals(actualCode, "100000", "The operation code in response message matches the expected value.");
-			  else
-				  System.out.println("Operation code is not specified for test case： " + requestParameters.get("test-id"));
-		  }		  
+		if ((requestParameters.containsKey("rspCode")))
+		{
+			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");
+		}
+		else
+		{
+			if (requestParameters.get("description").contains("good request")) 
+				Assert.assertEquals(actualCode, "100000", "The operation code in response message matches the expected value.");
+			else
+				System.out.println("Operation code is not specified for test case： " + requestParameters.get("test-id"));
+		}		  
 		  
-		  if (requestParameters.containsKey("rspMessage"))
-		  {
-			  Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
-		  }
-		  else
-		  {
-			  if (requestParameters.get("description").contains("good request")) 
-				  Assert.assertEquals(actualMessage, "Successfully", "The message of 'operation success' is returned.");
-			  else
-				  System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
-		  }
+		if (requestParameters.containsKey("rspMessage"))
+		{
+			Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
+		}
+		else
+		{
+			if (requestParameters.get("description").contains("good request")) 
+				Assert.assertEquals(actualMessage, "Successfully", "The message of 'operation success' is returned.");
+			else
+				System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
+		}
 	}
 	
 	public static void parseFilterParameters(String filterStr, HashMap<String, String> filterParameters)
