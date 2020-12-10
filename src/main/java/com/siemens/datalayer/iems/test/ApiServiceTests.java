@@ -10,7 +10,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import com.siemens.datalayer.iems.model.SensorDataPro;
 import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
@@ -22,7 +21,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.siemens.datalayer.apiservice.model.ApiResponse;
 import com.siemens.datalayer.iems.model.RestConstants;
 
 import org.jsoup.internal.StringUtil;
@@ -212,7 +210,7 @@ public class ApiServiceTests {
 		
 		if (paramMaps.get("description").contains("data retrieved")) 
 		{
-			Assert.assertNotNull(response.jsonPath().getString("data"));
+			Assert.assertNotNull(response.jsonPath().getString("data"), "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.GETDEVICEINFO, response);
 		} 
 		else 
@@ -240,161 +238,248 @@ public class ApiServiceTests {
 		
 		if (paramMaps.get("description").contains("good request")) 
 		{
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0); 
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned."); 
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getList("data")); 
 		} 
 	}
 	  
 	// Get Sensor Data API
-	@Test(priority = 0, description = RestConstants.GETSENSORDATABYSENSORID, dataProviderClass = SensorDataPro.class, dataProvider = "dataForGetSensorDataBySensorId")
+	@Test(priority = 0, description = RestConstants.GETSENSORDATABYSENSORID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get sensor data API")
 	@Story("Get sensor data by sensor ids") 
-	public void getSensorDataBySensorId(Map<String, Object> paramMaps) { 
+	public void getSensorDataBySensorId(Map<String, String> paramMaps) 
+	{ 
+		Boolean isFirstParam = true;		
+		String body = "{";	
 		
-		Response response = ApiServiceEndpoint.getSensorDataBySensorId( paramMaps.get("body").toString()); 
+		if (paramMaps.containsKey("endTime")) 
+		{
+			body += "\r\n" + CommonCheckFunctions.addTimeStampField(paramMaps.get("endTime"), "endTime");
+			isFirstParam = false;
+		}
 		
-		if (paramMaps.get("description").toString().contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		if (paramMaps.containsKey("sensor_id_list")) 
+		{
+			if (isFirstParam==false) body += ",\r\n";
+			body += CommonCheckFunctions.addListField(paramMaps.get("sensor_id_list"), "sensor_list", "siid");				
+			if (isFirstParam) isFirstParam = false;
+		}
+		
+		if (paramMaps.containsKey("startTime"))	
+		{ 
+			if (isFirstParam==false) body += ",\r\n";	
+			body += CommonCheckFunctions.addTimeStampField(paramMaps.get("startTime"), "startTime");	
+		}
+		
+		body += "\r\n}";
+		
+		Response response = ApiServiceEndpoint.getSensorDataBySensorId(body); 
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").toString().contains("data retrieved")) 
+		{
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		}
-		else { 
+		else 
+		{ 
 			Assert.assertNull(response.jsonPath().getList("data")); 
 		} 
 	}
 	
-	@Test(priority = 0, description = RestConstants.GETSENSORDATABYDEVICEID, dataProviderClass = SensorDataPro.class, dataProvider = "dataForGetSensorDataByDeviceId")
+	@Test(priority = 0, description = RestConstants.GETSENSORDATABYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get sensor data API")
 	@Story("Get sensor data by device id")
-	public void getSensorDataByDeviceId(Map<String, Object> paramMaps) {
+	public void getSensorDataByDeviceId(Map<String, String> paramMaps) {
 		
-		String body = "{";		
-		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
-			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
+		Boolean isFirstParam = true;		
+		String body = "{";	
+		
+		if (paramMaps.containsKey("deviceName")) 
+		{				
+			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			readDeviceIdParameter(paramMaps, queryParameters);			
+			body += CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
+			isFirstParam = false;
 		}
 		
-		if (paramMaps.containsKey("endTime")) {
-			if (paramMaps.containsKey("deviceName")) body += ",";
-			body += "\r\n  \"endTime\": "+paramMaps.get("endTime");
+		if (paramMaps.containsKey("endTime")) 
+		{
+			if (isFirstParam==false) body += ",\r\n";
+			body += CommonCheckFunctions.addTimeStampField(paramMaps.get("endTime"), "endTime");
+			isFirstParam = false;
 		}
 		
-		if (paramMaps.containsKey("startTime"))	body += ",\r\n  \"startTime\": "+paramMaps.get("startTime");	
+		if (paramMaps.containsKey("startTime"))	
+		{ 
+			if (isFirstParam==false) body += ",\r\n";	
+			body += CommonCheckFunctions.addTimeStampField(paramMaps.get("startTime"), "startTime");	
+		}
+		
 		body += "\r\n}";
 		
 		Response response = ApiServiceEndpoint.getSensorDataByDeviceId(body.toString());
 		
-		if (paramMaps.get("description").toString().contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").toString().contains("data retrieved")) 
+		{
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getList("data"));
 		}
 	}
 	
-	
-	@Test(priority = 0, description = RestConstants.GETTOPSENSORDATABYDEVICEID, dataProviderClass = SensorDataPro.class, dataProvider = "getTopSensorDataByDeviceId")
+	@Test(priority = 0, description = RestConstants.GETTOPSENSORDATABYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get sensor data API")
 	@Story("Get top n sensor data by device id")
-	public void getTopSensorDataByDeviceId(Map<String, Object> paramMaps) {
+	public void getTopSensorDataByDeviceId(Map<String, String> paramMaps) 
+	{
+		Boolean isFirstParam = true;
+		String body = "{";	
 		
-		String body = "{";		
-		if (paramMaps.containsKey("limit")) body += "\r\n  \"limit\": "+paramMaps.get("limit");
-		
-		if (paramMaps.containsKey("deviceName")) {
-			if (paramMaps.containsKey("limit")) body += ",";
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
-			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
+		if (paramMaps.containsKey("deviceName")) 
+		{				
+			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			readDeviceIdParameter(paramMaps, queryParameters);			
+			body += "\r\n" + CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
+			isFirstParam = false;
 		}
 		
+		if (paramMaps.containsKey("limit"))	
+		{ 
+			if (isFirstParam==false) body += ",";	
+			body += "\r\n" + CommonCheckFunctions.addStringField(paramMaps.get("limit"), "limit");	
+		}
+				
 		body += "\r\n}";
 		
 		Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(body);
 		
-		if (paramMaps.get("description").toString().contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").toString().contains("data retrieved")) 
+		{
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.SENSORDATA, response);
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getList("data"));
 		}
 	}
 	
-	@Test(priority = 0, description = RestConstants.GETKPIDATABYDEVICEID, dataProviderClass = SensorDataPro.class, dataProvider = "dataForGetSensorDataByDeviceId")
+	@Test(priority = 0, description = RestConstants.GETKPIDATABYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get kpi data API")
 	@Story("Get kpi data by device id")
-	public void getKpiDataByDeviceId(Map<String, Object> paramMaps) {
+	public void getKpiDataByDeviceId(Map<String, String> paramMaps) 
+	{
+		Boolean isFirstParam = true;		
+		String body = "{";	
 		
-		String body = "{";
-		
-		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
-			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
+		if (paramMaps.containsKey("deviceName")) 
+		{				
+			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			readDeviceIdParameter(paramMaps, queryParameters);			
+			body += CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
+			isFirstParam = false;
 		}
 		
-		if (paramMaps.containsKey("endTime")) {
-			if (paramMaps.containsKey("deviceName")) body += ",";
-			body += "\r\n  \"endTime\": "+paramMaps.get("endTime");
+		if (paramMaps.containsKey("endTime")) 
+		{
+			if (isFirstParam==false) body += ",\r\n";
+			body += CommonCheckFunctions.addTimeStampField(paramMaps.get("endTime"), "endTime");
+			isFirstParam = false;
 		}
 		
-		if (paramMaps.containsKey("startTime")) body += ",\r\n  \"startTime\": "+paramMaps.get("startTime");		
+		if (paramMaps.containsKey("startTime"))	
+		{ 
+			if (isFirstParam==false) body += ",\r\n";	
+			body += CommonCheckFunctions.addTimeStampField(paramMaps.get("startTime"), "startTime");	
+		}
+		
 		body += "\r\n}";
 		
 		Response response = ApiServiceEndpoint.getKpiDataByDeviceId(body.toString());
-		if (paramMaps.get("description").toString().contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").toString().contains("good request")) 
+		{
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.KPIDATA, response);
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getList("data"));
 		}
 	}
 	
-	
-	@Test(priority = 0, description = RestConstants.GETTOPKPIDATABYDEVICEID, dataProviderClass = SensorDataPro.class, dataProvider = "getTopSensorDataByDeviceId")
+	@Test(priority = 0, description = RestConstants.GETTOPKPIDATABYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get kpi data API")
 	@Story("Get top n kpi data by device id") 
-	public void getTopKPIDataByDeviceId(Map<String, Object> paramMaps) { 
-
-		String body = "{";
-		if (paramMaps.containsKey("limit"))	body += "\r\n  \"limit\": "+paramMaps.get("limit");
-			
-		if (paramMaps.containsKey("deviceName")) {
-			if (paramMaps.containsKey("limit")) body += ",";
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
-			body += "\r\n  \"deviceId\": "+deviceMap.get(paramMaps.get("deviceName"));
+	public void getTopKPIDataByDeviceId(Map<String, String> paramMaps) 
+	{ 
+		Boolean isFirstParam = true;
+		String body = "{";	
+		
+		if (paramMaps.containsKey("deviceName")) 
+		{				
+			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			readDeviceIdParameter(paramMaps, queryParameters);			
+			body += "\r\n" + CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
+			isFirstParam = false;
 		}
-			
+		
+		if (paramMaps.containsKey("limit"))	
+		{ 
+			if (isFirstParam==false) body += ",";	
+			body += "\r\n" + CommonCheckFunctions.addStringField(paramMaps.get("limit"), "limit");	
+		}
+				
 		body += "\r\n}";
 			
-		Response response = ApiServiceEndpoint.getTopKPIDataByDeviceId( body.toString()); 
+		Response response = ApiServiceEndpoint.getTopKPIDataByDeviceId(body); 
 		
-		if (paramMaps.get("description").toString().contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
-			Assert.assertTrue(response.jsonPath().getList("data").size() > 0);
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").toString().contains("data retrieved")) 
+		{
+			Assert.assertTrue(response.jsonPath().getList("data").size() > 0, "The required data is returned.");
 			checkDataFollowsModelSchema(RestConstants.KPIDATA, response);
 		}
-		else { 
+		else 
+		{ 
 			Assert.assertNull(response.jsonPath().getList("data")); 
 		} 
-	}
-	  
+	}	  
 	  
 	// Subscription Data
 	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSBYSENSORID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionBySensorId")

@@ -422,4 +422,68 @@ public class CommonCheckFunctions {
 		
 		return result;	
 	}
+	
+	public static String addStringField(String value, String key)
+	{
+		String result = "  \"" + key + "\": " + value;	
+		return result;
+	}
+	
+	public static String addTimeStampField(String timeStr, String key)
+	{
+		String result = "";
+ 
+		try
+		{				
+			SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			Date date = format.parse(timeStr);
+			long timeStamp = date.getTime();
+			
+			result += "  \"" + key + "\": " + String.valueOf(timeStamp);
+		}
+		catch (ParseException e) 
+		{
+			System.out.println("Error: time parse operation failed");
+	    }
+		
+		return result;
+	}
+	
+	public static String timeStampToDate(String s)
+	{		
+		long timeStamp = new Long(s);
+		
+		Date date = new Date(timeStamp);
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		String result = simpleDateFormat.format(date); 
+		
+		return result;
+	}
+	
+	public static String addListField(String list, String listName, String entryName)
+	{
+		String result = "  \"" + listName + "\": [\r\n";
+		
+		Scanner scanner = new Scanner(list);
+		scanner.useDelimiter(",");
+		
+		boolean isFirst = true;
+		while (scanner.hasNext())
+		{
+			if (!isFirst) result += ", \r\n";
+				
+			String entryValue = scanner.next();					  
+			result += "    {" + " \"" + entryName + "\": " + entryValue + " }";
+			
+			if (isFirst) isFirst = false;
+		}	
+
+		if (!isFirst) result += "\r\n  ]";
+		
+		scanner.close();
+		
+		return result;
+	}
 }

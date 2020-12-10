@@ -134,7 +134,7 @@ public class ApiServiceEndpoint {
 		return getResponseByParameters(PRE_ASSET + RestConstants.LISTALLDEVICETYPES, null);
 	}
 	
-	@Step("Send a request of 'getDeviceInfo': {parameters}")
+	@Step("Send a request of 'getDeviceInfo'")
 	public static Response getDeviceInfo(HashMap<String, Object> parameters) 
 	{
 		return getResponseByParameters(PRE_ASSET + RestConstants.GETDEVICEINFO, parameters);
@@ -148,32 +148,32 @@ public class ApiServiceEndpoint {
 	
 	
 //	Sensor Data
-	@Step("body: {body}")
+	@Step("Send a request of 'getSensorDataBySensorId'")
 	public static Response getSensorDataBySensorId(String body) 
 	{
 		return postResponseByBody(PRE_DATA + RestConstants.GETSENSORDATABYSENSORID, body);
 	}
 	
-	@Step("body: {body}")
+	@Step("Send a request of 'getSensorDataByDeviceId'")
 	public static Response getSensorDataByDeviceId(String body) 
 	{
 		return postResponseByBody(PRE_DATA + RestConstants.GETSENSORDATABYDEVICEID, body);
 	}
 	
-	@Step("body: {body}")
+	@Step("Send a request of 'getTopSensorDataByDeviceId'")
 	public static Response getTopSensorDataByDeviceId(String body) 
 	{
 		return postResponseByBody(PRE_DATA + RestConstants.GETTOPSENSORDATABYDEVICEID, body);
 	}
 	
 //	Kpi Data
-	@Step("body: {body}")
+	@Step("Send a request of 'getKpiDataByDeviceId'")
 	public static Response getKpiDataByDeviceId(String body) 
 	{
 		return postResponseByBody(PRE_DATA + RestConstants.GETKPIDATABYDEVICEID, body);
 	}
 	
-	@Step("body: {body}")
+	@Step("Send a request of 'getTopKPIDataByDeviceId'")
 	public static Response getTopKPIDataByDeviceId(String body) 
 	{
 		return postResponseByBody(PRE_DATA + RestConstants.GETTOPKPIDATABYDEVICEID, body);
