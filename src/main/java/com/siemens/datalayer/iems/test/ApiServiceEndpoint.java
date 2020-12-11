@@ -180,25 +180,25 @@ public class ApiServiceEndpoint {
 	}
 	
 //	Subscription Data
-	@Step("request: {parameters}")
+	@Step("Send a request of 'subscriptionsBySensorId'")
 	public static Response subscriptionsBySensorId(HashMap<String, Object> parameters) 
 	{
 		return postResponseByParameters(PRE_DATA + RestConstants.SUBSCRIPTIONSBYSENSORID, parameters);
 	}
 	
-	@Step("request: {parameters}")
+	@Step("Send a request of 'subscriptionsByDeviceId'")
 	public static Response subscriptionsByDeviceId(HashMap<String, Object> parameters) 
 	{
 		return postResponseByParameters(PRE_DATA + RestConstants.SUBSCRIPTIONBYDEVICEID, parameters);
 	}
 	
-	@Step("request: {parameters}")
+	@Step("Send a request of 'subscriptionsWithKPIByDeviceId'")
 	public static Response subscriptionsWithKPIByDeviceId(HashMap<String, Object> parameters) 
 	{
 		return postResponseByParameters(PRE_DATA + RestConstants.SUBSCRIPTIONSWITHKPIBYDEVICEID, parameters);
 	}
 	
-	@Step("id: {id}")
+	@Step("Send a request of 'deleteResponseById'")
 	public static Response deleteSubscriptions(String id) 
 	{
 		return deleteResponseById(PRE_DATA + RestConstants.DELETESUBSCRIPTIONS + "/" +id);

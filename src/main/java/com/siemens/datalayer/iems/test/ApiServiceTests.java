@@ -6,11 +6,17 @@ import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 import io.qameta.allure.*;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import com.siemens.datalayer.iems.model.SubscriptionsRequestDataPro;
+import org.testng.Assert;
+
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+
+import com.siemens.datalayer.iems.model.RestConstants;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
@@ -21,12 +27,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import com.rabbitmq.client.AMQP.BasicProperties;
-import com.siemens.datalayer.iems.model.RestConstants;
 
 import org.jsoup.internal.StringUtil;
-import org.testng.Assert;
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 
 @Epic("iEMS API Test")
 public class ApiServiceTests {
@@ -309,7 +311,7 @@ public class ApiServiceTests {
 		
 		if (paramMaps.containsKey("deviceName")) 
 		{				
-			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			HashMap<String, Object> queryParameters = new HashMap<>();
 			readDeviceIdParameter(paramMaps, queryParameters);			
 			body += CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
 			isFirstParam = false;
@@ -359,7 +361,7 @@ public class ApiServiceTests {
 		
 		if (paramMaps.containsKey("deviceName")) 
 		{				
-			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			HashMap<String, Object> queryParameters = new HashMap<>();
 			readDeviceIdParameter(paramMaps, queryParameters);			
 			body += "\r\n" + CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
 			isFirstParam = false;
@@ -402,7 +404,7 @@ public class ApiServiceTests {
 		
 		if (paramMaps.containsKey("deviceName")) 
 		{				
-			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			HashMap<String, Object> queryParameters = new HashMap<>();
 			readDeviceIdParameter(paramMaps, queryParameters);			
 			body += CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
 			isFirstParam = false;
@@ -452,7 +454,7 @@ public class ApiServiceTests {
 		
 		if (paramMaps.containsKey("deviceName")) 
 		{				
-			HashMap<String, Object> queryParameters = new HashMap<String, Object>();
+			HashMap<String, Object> queryParameters = new HashMap<>();
 			readDeviceIdParameter(paramMaps, queryParameters);			
 			body += "\r\n" + CommonCheckFunctions.addStringField(queryParameters.get("id").toString(), "deviceId");				
 			isFirstParam = false;
@@ -482,150 +484,143 @@ public class ApiServiceTests {
 	}	  
 	  
 	// Subscription Data
-	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSBYSENSORID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionBySensorId")
+	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSBYSENSORID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with sensor ids and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription sensor data by sensor ids") 
-	public void subscriptionsBySensorId(Map<String, String> paramMaps) throws IOException, TimeoutException { 
-		
+	public void subscriptionsBySensorId(Map<String, String> paramMaps) throws IOException, TimeoutException 
+	{ 
 		HashMap<String, Object> queryParameters = new HashMap<>();
 		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request").toString()); 
 		
 		Response response = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters); 
 		
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("good request")) 
+		{
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 			
-			boolean flag = validMQData(response); 
-			if (flag) {
+			if (validMQData(response)) 
 				System.out.println("Get sensor data by sensor ids success."); 
-			}
-			else {
+			else 
 				Assert.fail("Get MQ data fail."); 
-			} 
 			
 			deleteSubscription(response); 
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getString("data")); 
 		}
 	}
 	  
-	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONBYDEVICEID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionsByDeviceId")
+	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONBYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with device id and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription sensor data by device id") 
-	public void subscriptionsByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException { 
-		
-		if (paramMaps.containsKey("deviceName")) {
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{add("1#制冷机"); add("3#制冷机"); }});
-			paramMaps.put("deviceId", deviceMap.get(paramMaps.get("deviceName")));
-		}
-		
+	public void subscriptionsByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException 
+	{ 		
 		HashMap<String, Object> queryParameters = new HashMap<>();
-		if (paramMaps.containsKey("deviceId")) queryParameters.put("deviceId", paramMaps.get("deviceId")); 
+		
+		readDeviceIdParameter(paramMaps, queryParameters);	
+		
+		if (queryParameters.containsKey("id"))
+			queryParameters.put("deviceId", queryParameters.get("id"));
 		
 		Response response = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters); 
 		
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("good request")) 
+		{
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 	  
-			boolean flag = validMQData(response); 
-			if(flag) {
+			if(validMQData(response))
 				System.out.println("Get sensor data by device id success."); 
-			}
-			else {
-				Assert.fail("Get MQ data fail."); } deleteSubscription(response); 
-			} 
-		else {
+			else 
+				Assert.fail("Get MQ data fail."); 
+			
+			deleteSubscription(response); 
+		} 
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getString("data")); 
 		}
 	}
 	 
-	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSWITHKPIBYDEVICEID, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForSubscriptionsWithKPIByDeviceId")
+	@Test(priority = 0, description = RestConstants.SUBSCRIPTIONSWITHKPIBYDEVICEID, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with device ids and subscription the response message.")
 	@Feature("Get subscription data API")
 	@Story("Get subscription kpi data by device ids") 
-	public void subscriptionsWithKPIByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException { 
-		
-		if (paramMaps.containsKey("separator")) {
-			HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }});
-			paramMaps.put("request", deviceMap.get("1#制冷机")+paramMaps.get("separator")+deviceMap.get("3#制冷机"));
-		}
-		
+	public void subscriptionsWithKPIByDeviceId(Map<String, String> paramMaps) throws IOException, TimeoutException 
+	{ 
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
-		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request").toString()); 
+		if (paramMaps.containsKey("deviceList")) readDeviceList(paramMaps, queryParameters);
 		  
 		Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters); 
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		  
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		if (paramMaps.get("description").contains("good request")) 
+		{
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			checkDataFollowsModelSchema(RestConstants.SUBSCRIPTIONDATA, response);
 			  
-			boolean flag = validMQData(response); 
-			if(flag) {
-				System.out.println("Get kpi data by device ids success."); 
-			}
-			else {
-				Assert.fail("Get MQ data fail."); 
-			} 
+			if(validMQData(response)) System.out.println("Get kpi data by device ids success."); 
+			else Assert.fail("Get MQ data fail."); 
 			  
 			deleteSubscription(response); 
 		} 
-		else {
+		else 
+		{
 			Assert.assertNull(response.jsonPath().getString("data")); 
 		}
 	}
-	  
-	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS)
+ 
+	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS, 
+		  dataProviderClass = ExcelDataProviderClass.class, 
+		  dataProvider = "api-service-test-data-provider")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a request to SUT with id and delete subscription.")
 	@Feature("Get subscription data API")
 	@Story("Delete subscription by id") 
-	public void deleteSubscriptionsSuccess() { 
+	public void deleteSubscriptions(Map<String, String> paramMaps) 
+	{ 		
+		if (paramMaps.containsKey("deviceList"))
+		{
+			HashMap<String, Object> queryParameters = new HashMap<>(); 
+			readDeviceList(paramMaps, queryParameters);
+			
+			Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters);
+			
+			JsonPath jsonPathEvaluator = response.jsonPath();
+			Assert.assertNotNull(jsonPathEvaluator.get("data"), "Subscription operation is success");
+			
+			paramMaps.put("subscriptionId", jsonPathEvaluator.get("data.replyTo"));
+		}
+		
+		Response response = ApiServiceEndpoint.deleteSubscriptions(paramMaps.get("subscriptionId")); 
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		  
-		HashMap<String, String> deviceMap = ApiServiceEndpoint.getDeviceIdByName(new ArrayList<String>(){{ add("1#制冷机"); add("3#制冷机"); }}); 
-		HashMap<String, Object> queryParameters = new HashMap<>(); 
-		queryParameters.put("request", Integer.parseInt(deviceMap.get("1#制冷机"))); 
-		  
-		Response responsePro = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters);		  
-		Assert.assertEquals(responsePro.getStatusCode(), 200); 
-		  
-		JsonPath jsonPathEvaluator = responsePro.jsonPath();
-		Assert.assertNotNull(jsonPathEvaluator.get("data")); 
-		  
-		HashMap data = jsonPathEvaluator.get("data"); 
-		String replyTo = data.get("replyTo").toString(); 
-		Response response = ApiServiceEndpoint.deleteSubscriptions(replyTo);
-		  
-		Assert.assertEquals(response.getStatusCode(), 200);
-		Assert.assertNotNull(response.jsonPath().getString("data"));
-		checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
-	}
-	  
-	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS, dataProviderClass = SubscriptionsRequestDataPro.class, dataProvider = "dataForDeleteSubscriptions")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a request to SUT with id and delete subscription.")
-	@Feature("Get subscription data API")
-	@Story("Delete subscription by id") 
-	public void deleteSubscriptions(Map<String, String> paramMaps) { 
-		  
-		Response response = ApiServiceEndpoint.deleteSubscriptions(paramMaps.get("id")); 
-		  
-		if (paramMaps.get("description").contains("good request")) {
-			Assert.assertEquals(response.getStatusCode(), 200);
+		if (paramMaps.get("description").contains("good request")) 
+		{
 			Assert.assertNotNull(response.jsonPath().getString("data"));
 			checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
 		} 
-		else { 
+		else 
+		{ 
 			Assert.assertNull(response.jsonPath().getString("data"));
 		} 
 	}
@@ -689,6 +684,37 @@ public class ApiServiceTests {
         
         return flag;
     }
+	
+	public static void readDeviceList(Map<String, String> paramMaps, HashMap<String, Object> queryParameters)
+	{
+		if (paramMaps.containsKey("deviceList")) 
+		{ 
+			String result = "";
+			String separator = ",";			
+			if (paramMaps.containsKey("separator")) separator = paramMaps.get("separator");
+			
+			Boolean isFirst = true;
+			Scanner scanner = new Scanner(paramMaps.get("deviceList"));
+			scanner.useDelimiter("]");
+			
+			while (scanner.hasNext())
+			{
+				String device = scanner.next().trim();
+				String deviceType = device.substring(1, device.indexOf(","));
+				String deviceName = device.substring(device.indexOf(",")+1);
+				
+				if (isFirst==false) result += separator;
+				else isFirst = false;
+				
+				if (deviceType.equals("invalid")) result += deviceName;
+				else result += getDeviceId(deviceType, deviceName);
+			}
+			
+			queryParameters.put("request", result);
+			  
+			scanner.close();
+		}
+	}
 
 	public static void readDeviceIdParameter(Map<String, String> paramMaps, HashMap<String, Object> queryParameters)
 	{
