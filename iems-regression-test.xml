@@ -16,7 +16,7 @@
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
 				<!-- iems-dev: 32577 / iems-test: 32230 / iems-prod: 31467 -->
-	  			<parameter name="port" value="32577"/>
+	  			<parameter name="port" value="31467"/>
 	  			<parameter name="domain_name" value="iEMS"/>
             </class>
             
@@ -29,12 +29,12 @@
             <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
             	<parameter name="base_url" value="http://140.231.89.85" />
             	<!-- iems-dev: 30684 / iems-test: 31332 / iems-prod: 32588 -->
-            	<parameter name="port" value="30684"/>
+            	<parameter name="port" value="32588"/>
 	  			<parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
 	  			<parameter name="pre_data" value="/datalayer/api/v1/data/"/>
 				<parameter name="rabbitmq_host" value="140.231.89.85" />
 				<!-- iems-dev: 30248 / iems-test: 30952 / iems-prod: 30800 -->
-				<parameter name="rabbitmq_port" value="30248"/>
+				<parameter name="rabbitmq_port" value="30800"/>
 	  			<parameter name="rabbitmq_username" value="guest"/>
 	  			<parameter name="rabbitmq_password" value="guest"/>
 	  			<parameter name="rabbitmq_virtual_host" value="/"/>

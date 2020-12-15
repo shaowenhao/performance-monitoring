@@ -1,437 +1,117 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-        {
-            "code": 200,
-            "message": "OK",
-            "data": [
-                {
-                    "motor_current_percent": 0.0,
-                    "condensor_water_inlet_temperature": 21.7,
-                    "evaporator_cold_inlet_temperature": 5.0,
-                    "run_time": 1712.0,
-                    "start_up_time": 216.0,
-                    "condensor_water_outlet_temperature": 23.7,
-                    "dt_condensor": 0.031350754,
-                    "updateTime": "2020-10-28 02:56:37",
-                    "deviceName": "1#制冷机",
-                    "evaporator_water_leave_temperature": 14.8,
-                    "oil_tank_press_low": 533.1,
-                    "oil_tank_press_high": 553.7,
-                    "condensor_hot_outlet_pressure": 6.379867,
-                    "dt_evaporator": 9.8,
-                    "evaporator_heat": 11956.617,
-                    "motor_work": 1151.0002,
-                    "lubricate_press_diff": 0.0,
-                    "compressor_poly_efficiency": 0.85372776,
-                    "evaporator_cold_inlet_pressure": 3.496586,
-                    "condensor_hot_sat_temperature": 23.7,
-                    "condensor_hot_outlet_temperature": 21.7,
-                    "evaporator_water_back_temperature": 16.0
-                },
-                {
-                    "motor_current_percent": 0.0,
-                    "condensor_water_inlet_temperature": 21.7,
-                    "evaporator_cold_inlet_temperature": 5.0,
-                    "run_time": 1712.0,
-                    "start_up_time": 216.0,
-                    "condensor_water_outlet_temperature": 23.7,
-                    "dt_condensor": 0.031350754,
-                    "updateTime": "2020-10-28 02:51:38",
-                    "deviceName": "1#制冷机",
-                    "evaporator_water_leave_temperature": 14.8,
-                    "oil_tank_press_low": 533.1,
-                    "oil_tank_press_high": 553.7,
-                    "condensor_hot_outlet_pressure": 6.379867,
-                    "dt_evaporator": 9.8,
-                    "evaporator_heat": 11956.617,
-                    "motor_work": 1151.0002,
-                    "lubricate_press_diff": 0.0,
-                    "compressor_poly_efficiency": 0.85372776,
-                    "evaporator_cold_inlet_pressure": 3.496586,
-                    "condensor_hot_sat_temperature": 23.7,
-                    "condensor_hot_outlet_temperature": 21.7,
-                    "evaporator_water_back_temperature": 16.0
-                }
-            ]
-        }
-    ],
-    "required": [
-        "code",
-        "message",
-        "data"
-    ],
-    "properties": {
-        "code": {
-            "$id": "#/properties/code",
-            "type": "integer",
-            "title": "The code schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                200
-            ]
-        },
-        "message": {
-            "$id": "#/properties/message",
-            "type": "string",
-            "title": "The message schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "OK"
-            ]
-        },
-        "data": {
-            "$id": "#/properties/data",
-            "type": "array",
-            "title": "The data schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": [],
-            "examples": [
-                [
-                    {
-                        "motor_current_percent": 0.0,
-                        "condensor_water_inlet_temperature": 21.7,
-                        "evaporator_cold_inlet_temperature": 5.0,
-                        "run_time": 1712.0,
-                        "start_up_time": 216.0,
-                        "condensor_water_outlet_temperature": 23.7,
-                        "dt_condensor": 0.031350754,
-                        "updateTime": "2020-10-28 02:56:37",
-                        "deviceName": "1#制冷机",
-                        "evaporator_water_leave_temperature": 14.8,
-                        "oil_tank_press_low": 533.1,
-                        "oil_tank_press_high": 553.7,
-                        "condensor_hot_outlet_pressure": 6.379867,
-                        "dt_evaporator": 9.8,
-                        "evaporator_heat": 11956.617,
-                        "motor_work": 1151.0002,
-                        "lubricate_press_diff": 0.0,
-                        "compressor_poly_efficiency": 0.85372776,
-                        "evaporator_cold_inlet_pressure": 3.496586,
-                        "condensor_hot_sat_temperature": 23.7,
-                        "condensor_hot_outlet_temperature": 21.7,
-                        "evaporator_water_back_temperature": 16.0
-                    },
-                    {
-                        "motor_current_percent": 0.0,
-                        "condensor_water_inlet_temperature": 21.7,
-                        "evaporator_cold_inlet_temperature": 5.0,
-                        "run_time": 1712.0,
-                        "start_up_time": 216.0,
-                        "condensor_water_outlet_temperature": 23.7,
-                        "dt_condensor": 0.031350754,
-                        "updateTime": "2020-10-28 02:51:38",
-                        "deviceName": "1#制冷机",
-                        "evaporator_water_leave_temperature": 14.8,
-                        "oil_tank_press_low": 533.1,
-                        "oil_tank_press_high": 553.7,
-                        "condensor_hot_outlet_pressure": 6.379867,
-                        "dt_evaporator": 9.8,
-                        "evaporator_heat": 11956.617,
-                        "motor_work": 1151.0002,
-                        "lubricate_press_diff": 0.0,
-                        "compressor_poly_efficiency": 0.85372776,
-                        "evaporator_cold_inlet_pressure": 3.496586,
-                        "condensor_hot_sat_temperature": 23.7,
-                        "condensor_hot_outlet_temperature": 21.7,
-                        "evaporator_water_back_temperature": 16.0
-                    }
-                ]
-            ],
-            "additionalItems": true,
-            "items": {
-                "$id": "#/properties/data/items",
-                "anyOf": [
-                    {
-                        "$id": "#/properties/data/items/anyOf/0",
-                        "type": "object",
-                        "title": "The first anyOf schema",
-                        "description": "An explanation about the purpose of this instance.",
-                        "default": {},
-                        "examples": [
-                            {
-                                "motor_current_percent": 0.0,
-                                "condensor_water_inlet_temperature": 21.7,
-                                "evaporator_cold_inlet_temperature": 5.0,
-                                "run_time": 1712.0,
-                                "start_up_time": 216.0,
-                                "condensor_water_outlet_temperature": 23.7,
-                                "dt_condensor": 0.031350754,
-                                "updateTime": "2020-10-28 02:56:37",
-                                "deviceName": "1#制冷机",
-                                "evaporator_water_leave_temperature": 14.8,
-                                "oil_tank_press_low": 533.1,
-                                "oil_tank_press_high": 553.7,
-                                "condensor_hot_outlet_pressure": 6.379867,
-                                "dt_evaporator": 9.8,
-                                "evaporator_heat": 11956.617,
-                                "motor_work": 1151.0002,
-                                "lubricate_press_diff": 0.0,
-                                "compressor_poly_efficiency": 0.85372776,
-                                "evaporator_cold_inlet_pressure": 3.496586,
-                                "condensor_hot_sat_temperature": 23.7,
-                                "condensor_hot_outlet_temperature": 21.7,
-                                "evaporator_water_back_temperature": 16.0
-                            }
-                        ],
-                        "required": [
-                            "motor_current_percent",
-                            "condensor_water_inlet_temperature",
-                            "evaporator_cold_inlet_temperature",
-                            "run_time",
-                            "start_up_time",
-                            "condensor_water_outlet_temperature",
-                            "dt_condensor",
-                            "updateTime",
-                            "deviceName",
-                            "evaporator_water_leave_temperature",
-                            "oil_tank_press_low",
-                            "oil_tank_press_high",
-                            "condensor_hot_outlet_pressure",
-                            "dt_evaporator",
-                            "evaporator_heat",
-                            "motor_work",
-                            "lubricate_press_diff",
-                            "compressor_poly_efficiency",
-                            "evaporator_cold_inlet_pressure",
-                            "condensor_hot_sat_temperature",
-                            "condensor_hot_outlet_temperature",
-                            "evaporator_water_back_temperature"
-                        ],
-                        "properties": {
-                            "motor_current_percent": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/motor_current_percent",
-                                "type": "number",
-                                "title": "The motor_current_percent schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    0.0
-                                ]
-                            },
-                            "condensor_water_inlet_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/condensor_water_inlet_temperature",
-                                "type": "number",
-                                "title": "The condensor_water_inlet_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    21.7
-                                ]
-                            },
-                            "evaporator_cold_inlet_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/evaporator_cold_inlet_temperature",
-                                "type": "number",
-                                "title": "The evaporator_cold_inlet_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    5.0
-                                ]
-                            },
-                            "run_time": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/run_time",
-                                "type": "number",
-                                "title": "The run_time schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    1712.0
-                                ]
-                            },
-                            "start_up_time": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/start_up_time",
-                                "type": "number",
-                                "title": "The start_up_time schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    216.0
-                                ]
-                            },
-                            "condensor_water_outlet_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/condensor_water_outlet_temperature",
-                                "type": "number",
-                                "title": "The condensor_water_outlet_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    23.7
-                                ]
-                            },
-                            "dt_condensor": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/dt_condensor",
-                                "type": "number",
-                                "title": "The dt_condensor schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    0.031350754
-                                ]
-                            },
-                            "updateTime": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/updateTime",
-                                "type": "string",
-                                "title": "The updateTime schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": "",
-                                "examples": [
-                                    "2020-10-28 02:56:37"
-                                ]
-                            },
-                            "deviceName": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/deviceName",
-                                "type": "string",
-                                "title": "The deviceName schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": "",
-                                "examples": [
-                                    "1#制冷机"
-                                ]
-                            },
-                            "evaporator_water_leave_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/evaporator_water_leave_temperature",
-                                "type": "number",
-                                "title": "The evaporator_water_leave_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    14.8
-                                ]
-                            },
-                            "oil_tank_press_low": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/oil_tank_press_low",
-                                "type": "number",
-                                "title": "The oil_tank_press_low schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    533.1
-                                ]
-                            },
-                            "oil_tank_press_high": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/oil_tank_press_high",
-                                "type": "number",
-                                "title": "The oil_tank_press_high schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    553.7
-                                ]
-                            },
-                            "condensor_hot_outlet_pressure": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/condensor_hot_outlet_pressure",
-                                "type": "number",
-                                "title": "The condensor_hot_outlet_pressure schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    6.379867
-                                ]
-                            },
-                            "dt_evaporator": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/dt_evaporator",
-                                "type": "number",
-                                "title": "The dt_evaporator schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    9.8
-                                ]
-                            },
-                            "evaporator_heat": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/evaporator_heat",
-                                "type": "number",
-                                "title": "The evaporator_heat schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    11956.617
-                                ]
-                            },
-                            "motor_work": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/motor_work",
-                                "type": "number",
-                                "title": "The motor_work schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    1151.0002
-                                ]
-                            },
-                            "lubricate_press_diff": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/lubricate_press_diff",
-                                "type": "number",
-                                "title": "The lubricate_press_diff schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    0.0
-                                ]
-                            },
-                            "compressor_poly_efficiency": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/compressor_poly_efficiency",
-                                "type": "number",
-                                "title": "The compressor_poly_efficiency schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    0.85372776
-                                ]
-                            },
-                            "evaporator_cold_inlet_pressure": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/evaporator_cold_inlet_pressure",
-                                "type": "number",
-                                "title": "The evaporator_cold_inlet_pressure schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    3.496586
-                                ]
-                            },
-                            "condensor_hot_sat_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/condensor_hot_sat_temperature",
-                                "type": "number",
-                                "title": "The condensor_hot_sat_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    23.7
-                                ]
-                            },
-                            "condensor_hot_outlet_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/condensor_hot_outlet_temperature",
-                                "type": "number",
-                                "title": "The condensor_hot_outlet_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    21.7
-                                ]
-                            },
-                            "evaporator_water_back_temperature": {
-                                "$id": "#/properties/data/items/anyOf/0/properties/evaporator_water_back_temperature",
-                                "type": "number",
-                                "title": "The evaporator_water_back_temperature schema",
-                                "description": "An explanation about the purpose of this instance.",
-                                "default": 0.0,
-                                "examples": [
-                                    16.0
-                                ]
-                            }
-                        },
-                        "additionalProperties": true
-                    }
-                ]
-            }
-        }
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
     },
-    "additionalProperties": true
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "motor_current_percent": {
+              "type": "number"
+            },
+            "condensor_water_inlet_temperature": {
+              "type": "number"
+            },
+            "evaporator_cold_inlet_temperature": {
+              "type": "number"
+            },
+            "run_time": {
+              "type": "null"
+            },
+            "start_up_time": {
+              "type": "null"
+            },
+            "condensor_water_outlet_temperature": {
+              "type": "number"
+            },
+            "dt_condensor": {
+              "type": "number"
+            },
+            "updateTime": {
+              "type": "string"
+            },
+            "deviceName": {
+              "type": "string"
+            },
+            "evaporator_water_leave_temperature": {
+              "type": "number"
+            },
+            "oil_tank_press_low": {
+              "type": "number"
+            },
+            "oil_tank_press_high": {
+              "type": "number"
+            },
+            "condensor_hot_outlet_pressure": {
+              "type": "number"
+            },
+            "dt_evaporator": {
+              "type": "number"
+            },
+            "evaporator_heat": {
+              "type": "number"
+            },
+            "motor_work": {
+              "type": "number"
+            },
+            "lubricate_press_diff": {
+              "type": "null"
+            },
+            "compressor_poly_efficiency": {
+              "type": "number"
+            },
+            "evaporator_cold_inlet_pressure": {
+              "type": "number"
+            },
+            "condensor_hot_sat_temperature": {
+              "type": "number"
+            },
+            "condensor_hot_outlet_temperature": {
+              "type": "number"
+            },
+            "evaporator_water_back_temperature": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "motor_current_percent",
+            "condensor_water_inlet_temperature",
+            "evaporator_cold_inlet_temperature",
+            "run_time",
+            "start_up_time",
+            "condensor_water_outlet_temperature",
+            "dt_condensor",
+            "updateTime",
+            "deviceName",
+            "evaporator_water_leave_temperature",
+            "oil_tank_press_low",
+            "oil_tank_press_high",
+            "condensor_hot_outlet_pressure",
+            "dt_evaporator",
+            "evaporator_heat",
+            "motor_work",
+            "lubricate_press_diff",
+            "compressor_poly_efficiency",
+            "evaporator_cold_inlet_pressure",
+            "condensor_hot_sat_temperature",
+            "condensor_hot_outlet_temperature",
+            "evaporator_water_back_temperature"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
 }

@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "order_no": {
+              "type": "string"
+            },
+            "start_time": {
+              "type": "string"
+            },
+            "product": {
+              "type": "string"
+            },
+            "work_center": {
+              "type": "string"
+            },
+            "end_time": {
+              "type": "string"
+            },
+            "plan_quantity": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "order_no",
+            "start_time",
+            "product",
+            "work_center",
+            "end_time",
+            "plan_quantity"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

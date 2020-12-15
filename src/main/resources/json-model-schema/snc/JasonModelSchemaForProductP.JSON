@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "product_type": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "product_no": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "product_type",
+                "name",
+                "description",
+                "product_no"
+              ]
+            }
+          ]
+        },
+        "totalCount": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "pageIndex": {
+          "type": "integer"
+        },
+        "totalPages": {
+          "type": "integer"
+        },
+        "first": {
+          "type": "boolean"
+        },
+        "last": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "data",
+        "totalCount",
+        "pageSize",
+        "pageIndex",
+        "totalPages",
+        "first",
+        "last"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

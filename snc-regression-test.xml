@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+    
+    <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" />
+    <parameter name="dataFileForApiServiceTest" value="snc-api-service-test-data.xlsx" />
+
+    <test verbose="2" preserve-order="true"
+          thread-count="5"
+          name="Regression Tests for SNC demo">
+        <classes>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod:  -->
+	  			<parameter name="port" value="32385"/>
+	  			<parameter name="domain_name" value="SNC"/>
+            </class>
+            
+			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
+	  			<parameter name="port" value="30985"/>
+            </class>         
+        </classes>
+    </test>
+</suite>
