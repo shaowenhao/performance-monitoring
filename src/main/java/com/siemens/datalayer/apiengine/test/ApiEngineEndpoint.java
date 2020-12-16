@@ -49,6 +49,7 @@ public class ApiEngineEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
 
         Response response = httpRequest.body(query)
+        							   .contentType("application/json")
 					        		   .filter(new AllureRestAssured())
 					                   .post("/graphql");
 

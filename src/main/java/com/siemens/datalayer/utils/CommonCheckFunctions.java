@@ -72,6 +72,7 @@ public class CommonCheckFunctions {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dateFormat.setLenient(false);
 		
+		if (input.length() < 5) return false;
 		if (!isIntegerStr(input.substring(0, 4))) input = input.substring(1, input.length()-1);
 		
 		try

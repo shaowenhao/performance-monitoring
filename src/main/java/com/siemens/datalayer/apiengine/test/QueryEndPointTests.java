@@ -340,6 +340,8 @@ public class QueryEndPointTests {
 		
 		String compareValue = equationStr.substring(equationStr.indexOf(' ')+1);
 		
+		if (compareValue.contains("\\\"")) compareValue = compareValue.replace("\\\"", "");
+		
 		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(compareField, compareType, compareValue, dataList);
 		
 		return result;
