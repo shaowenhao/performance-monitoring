@@ -1,8 +1,6 @@
 package com.siemens.datalayer.apiengine.test;
 
 import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
-import com.siemens.datalayer.apiservice.model.ApiResponse;
-import com.siemens.datalayer.apiservice.test.ApiServiceEndpoint;
 import com.siemens.datalayer.utils.Utils;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;

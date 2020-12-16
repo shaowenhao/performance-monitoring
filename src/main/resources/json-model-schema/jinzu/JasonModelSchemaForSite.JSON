@@ -23,15 +23,19 @@
             "power_station": {
               "type": "string"
             },
-            "capacity": {
-              "type": "number"
+            "state": {
+              "type": "string"
+            },
+            "commissioning_date": {
+              "type": "integer"
             }
           },
           "required": [
             "location",
             "id",
             "power_station",
-            "capacity"
+            "commissioning_date",
+            "state"
           ]
         }
       ]

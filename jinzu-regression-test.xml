@@ -5,7 +5,8 @@
         <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
     </listeners>
     
-    <parameter name="dataFileForConnectorTest" value="sampleTestData.xlsx" />
+    <parameter name="dataFileForConnectorTest" value="jinzu-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="jinzu-api-engine-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
@@ -18,8 +19,11 @@
   			<parameter name="domain_name" value="JinZu"/>
             </class>
             
-            <!-- Actually use api-engine in jinzu-dev: 31059 -->
-            <class name="com.siemens.datalayer.jinzu.test.JinzuTests" />
+           	<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+            <parameter name="base_url" value="http://140.231.89.85"/>
+			<!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: ???? -->
+  			<parameter name="port" value="31059"/>
+            </class> 
         </classes>
     </test>
 </suite>

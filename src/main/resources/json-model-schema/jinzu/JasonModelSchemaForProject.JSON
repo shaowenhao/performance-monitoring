@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "is_manufacture_buy_back": {
+              "type": "boolean"
+            },
+            "rent_type": {
+              "type": "string"
+            },
+            "no": {
+              "type": "string"
+            },
+            "classification_level": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "charge_frequency": {
+              "type": "integer"
+            },
+            "credit_amount": {
+              "type": "integer"
+            },
+            "risk_mgr": {
+              "type": "string"
+            },
+            "business_unit": {
+              "type": "string"
+            },
+            "is_manufacture_leasing": {
+              "type": "boolean"
+            },
+            "discount_ratio": {
+              "type": "number"
+            },
+            "class_level": {
+              "type": "string"
+            },
+            "manufacture": {
+              "type": "string"
+            },
+            "business_mgr": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            },
+            "guarantee_type": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "is_manufacture_buy_back",
+            "rent_type",
+            "no",
+            "classification_level",
+            "city",
+            "charge_frequency",
+            "credit_amount",
+            "risk_mgr",
+            "business_unit",
+            "is_manufacture_leasing",
+            "discount_ratio",
+            "class_level",
+            "business_mgr",
+            "province",
+            "guarantee_type",
+            "name",
+            "id",
+            "status"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

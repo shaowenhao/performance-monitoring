@@ -5,24 +5,24 @@
         <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
     </listeners>
     
-    <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" />
-    <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" />
+    <parameter name="dataFileForConnectorTest" value="iot-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="iot-api-engine-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
-          name="Regression Tests for SNC demo">
+          name="Regression Tests for IoT pilot">
         <classes>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod:  -->
-	  			<parameter name="port" value="32385"/>
-	  			<parameter name="domain_name" value="SNC"/>
+				<!-- iot-dev: 32019 / iot-test: 30850 / snc-prod:  -->
+	  			<parameter name="port" value="30850"/>
+	  			<parameter name="domain_name" value="IoT"/>
             </class>
             
 			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
-	  			<parameter name="port" value="30985"/>
+				<!-- iot-dev: 32552 / iot-test: 30346 / snc-prod: 30035 -->
+	  			<parameter name="port" value="30346"/>
             </class>         
         </classes>
     </test>
