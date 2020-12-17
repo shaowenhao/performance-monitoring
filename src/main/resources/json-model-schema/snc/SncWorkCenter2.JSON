@@ -1,0 +1,239 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "code": 100000,
+            "message": "Successfully",
+            "data": {
+                "Work_Center": [
+                    {
+                        "id": "70000",
+                        "Has_Preactor_Order": [
+                            {
+                                "order_no": "800014035899"
+                            },
+                            {
+                                "order_no": "800087654321"
+                            },
+                            {
+                                "order_no": "800076543210"
+                            },
+                            {
+                                "order_no": "800098765432"
+                            },
+                            {
+                                "order_no": "800012345678"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "required": [
+        "code",
+        "message",
+        "data"
+    ],
+    "properties": {
+        "code": {
+            "$id": "#/properties/code",
+            "type": "integer",
+            "title": "The code schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                100000
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Successfully"
+            ]
+        },
+        "data": {
+            "$id": "#/properties/data",
+            "type": "object",
+            "title": "The data schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "Work_Center": [
+                        {
+                            "id": "70000",
+                            "Has_Preactor_Order": [
+                                {
+                                    "order_no": "800014035899"
+                                },
+                                {
+                                    "order_no": "800087654321"
+                                },
+                                {
+                                    "order_no": "800076543210"
+                                },
+                                {
+                                    "order_no": "800098765432"
+                                },
+                                {
+                                    "order_no": "800012345678"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "Work_Center"
+            ],
+            "properties": {
+                "Work_Center": {
+                    "$id": "#/properties/data/properties/Work_Center",
+                    "type": "array",
+                    "title": "The Work_Center schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        [
+                            {
+                                "id": "70000",
+                                "Has_Preactor_Order": [
+                                    {
+                                        "order_no": "800014035899"
+                                    },
+                                    {
+                                        "order_no": "800087654321"
+                                    },
+                                    {
+                                        "order_no": "800076543210"
+                                    },
+                                    {
+                                        "order_no": "800098765432"
+                                    },
+                                    {
+                                        "order_no": "800012345678"
+                                    }
+                                ]
+                            }
+                        ]
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/data/properties/Work_Center/items",
+                        "anyOf": [
+                            {
+                                "$id": "#/properties/data/properties/Work_Center/items/anyOf/0",
+                                "type": "object",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "examples": [
+                                    {
+                                        "id": "70000",
+                                        "Has_Preactor_Order": [
+                                            {
+                                                "order_no": "800014035899"
+                                            },
+                                            {
+                                                "order_no": "800087654321"
+                                            },
+                                            {
+                                                "order_no": "800076543210"
+                                            },
+                                            {
+                                                "order_no": "800098765432"
+                                            },
+                                            {
+                                                "order_no": "800012345678"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "required": [
+                                    "id",
+                                    "Has_Preactor_Order"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "$id": "#/properties/data/properties/Work_Center/items/anyOf/0/properties/id",
+                                        "type": "string",
+                                        "title": "The id schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "70000"
+                                        ]
+                                    },
+                                    "Has_Preactor_Order": {
+                                        "$id": "#/properties/data/properties/Work_Center/items/anyOf/0/properties/Has_Preactor_Order",
+                                        "type": "array",
+                                        "title": "The Has_Preactor_Order schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": [],
+                                        "examples": [
+                                            [
+                                                {
+                                                    "order_no": "800014035899"
+                                                },
+                                                {
+                                                    "order_no": "800087654321"
+                                                }
+                                            ]
+                                        ],
+                                        "additionalItems": true,
+                                        "items": {
+                                            "$id": "#/properties/data/properties/Work_Center/items/anyOf/0/properties/Has_Preactor_Order/items",
+                                            "anyOf": [
+                                                {
+                                                    "$id": "#/properties/data/properties/Work_Center/items/anyOf/0/properties/Has_Preactor_Order/items/anyOf/0",
+                                                    "type": "object",
+                                                    "title": "The first anyOf schema",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": {},
+                                                    "examples": [
+                                                        {
+                                                            "order_no": "800014035899"
+                                                        }
+                                                    ],
+                                                    "required": [
+                                                        "order_no"
+                                                    ],
+                                                    "properties": {
+                                                        "order_no": {
+                                                            "$id": "#/properties/data/properties/Work_Center/items/anyOf/0/properties/Has_Preactor_Order/items/anyOf/0/properties/order_no",
+                                                            "type": "string",
+                                                            "title": "The order_no schema",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "800014035899"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "additionalProperties": true
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

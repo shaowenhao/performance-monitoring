@@ -23,7 +23,20 @@
 	            <parameter name="base_url" value="http://140.231.89.85"/>
 				<!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
 	  			<parameter name="port" value="30985"/>
-            </class>         
+            </class>
+
+            <class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
+                <parameter name="base_url" value="http://140.231.89.85"/>
+                <!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
+                <parameter name="port" value="30985"/>
+                <methods>
+                    <include name="queryProductOrderByGraphQL"/>
+                    <include name="queryWorkCenterByGraphQL"/>
+                    <include name="queryMaterialByGraphQL"/>
+                    <include name="queryPreactorOrderByGraphQL"/>
+                </methods>
+            </class>
+
         </classes>
     </test>
 </suite>

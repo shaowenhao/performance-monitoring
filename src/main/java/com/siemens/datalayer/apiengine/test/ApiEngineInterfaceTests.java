@@ -1,10 +1,9 @@
 package com.siemens.datalayer.apiengine.test;
 
-import com.siemens.datalayer.apiengine.model.EntitiesApiResponse;
-
 import com.siemens.datalayer.apiengine.model.GraphqlApiResponse;
 import com.siemens.datalayer.apiengine.model.ResponseCode;
-import com.siemens.datalayer.apiengine.model.SNCDataPro;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
+import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -15,9 +14,6 @@ import org.testng.Reporter;
 import org.testng.annotations.*;
 import org.testng.annotations.Optional;
 
-import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -1643,7 +1639,10 @@ public class ApiEngineInterfaceTests {
 
 
 
-    @Test(groups = "snc", description = "Test api engine interface: Query product order by graphql.", dataProviderClass = SNCDataPro.class, dataProvider = "dataForSNCProjectOrder")
+    @Test ( priority = 0,
+            description = "Test Api-engine Query Endpoint: GraphQL interface",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
     @Story("Query product order by graphql")
@@ -1668,14 +1667,21 @@ public class ApiEngineInterfaceTests {
 
         Assert.assertNotNull(jsonPathEvaluator.get(paramMaps.get("jsonpath")));
 
-        assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath(paramMaps.get("schema")));
+        checkDataFollowsModelSchema("json-model-schema/snc/" + paramMaps.get("schema"), response);
 
 
     }
 
+    public void checkDataFollowsModelSchema(String schemaName, Response response)
+    {
+        CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaName, response.getBody().asString());
+    }
 
-    @Test(groups = "snc", description = "Test api engine interface: Query work center by graphql.", dataProviderClass = SNCDataPro.class, dataProvider = "dataForSNCWorkCenter")
+
+    @Test ( priority = 0,
+            description = "Test Api-engine Query Endpoint: GraphQL interface",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
     @Story("Query work center by graphql")
@@ -1699,8 +1705,7 @@ public class ApiEngineInterfaceTests {
 
         Assert.assertNotNull(jsonPathEvaluator.get(paramMaps.get("jsonpath")));
 
-        assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath(paramMaps.get("schema")));
+        checkDataFollowsModelSchema("json-model-schema/snc/" + paramMaps.get("schema"), response);
 
 
     }
@@ -1745,7 +1750,10 @@ public class ApiEngineInterfaceTests {
     }
 
 
-    @Test(groups = "snc", description = "Test api engine interface: Query material by graphql.", dataProviderClass = SNCDataPro.class, dataProvider = "dataForSNCMaterial")
+    @Test ( priority = 0,
+            description = "Test Api-engine Query Endpoint: GraphQL interface",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
     @Story("Query material by graphql")
@@ -1769,14 +1777,15 @@ public class ApiEngineInterfaceTests {
 
         Assert.assertNotNull(jsonPathEvaluator.get(paramMaps.get("jsonpath")));
 
-        assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath(paramMaps.get("schema")));
-
+        checkDataFollowsModelSchema("json-model-schema/snc/" + paramMaps.get("schema"), response);
 
     }
 
 
-    @Test(groups = "snc", description = "Test api engine interface: Query preactor order by graphql.", dataProviderClass = SNCDataPro.class, dataProvider = "dataForSNCPreactorOrder")
+    @Test ( priority = 0,
+            description = "Test Api-engine Query Endpoint: GraphQL interface",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a request to SUT with graphql and verify if correct return.")
     @Story("Query preactor order by graphql")
@@ -1800,8 +1809,7 @@ public class ApiEngineInterfaceTests {
 
         Assert.assertNotNull(jsonPathEvaluator.get(paramMaps.get("jsonpath")));
 
-        assertThat(response.getBody().asString(),
-                matchesJsonSchemaInClasspath(paramMaps.get("schema")));
+        checkDataFollowsModelSchema("json-model-schema/snc/" + paramMaps.get("schema"), response);
 
 
     }
