@@ -128,7 +128,10 @@ public class QueryEndPointTests {
 
 				if (queryParameters.containsKey("condition"))
 				{
-					Assert.assertTrue(verifySingleCondition(queryParameters.get("condition"), entityList));
+					if (queryParameters.get("condition").contains("},"))
+						System.out.println("Multiple conditions found: " + queryParameters.get("condition"));
+					else
+						Assert.assertTrue(verifySingleCondition(queryParameters.get("condition"), entityList));
 				}
 				
 				if (queryParameters.containsKey("field"))
@@ -137,8 +140,19 @@ public class QueryEndPointTests {
 					
 					while (scanner.hasNext())
 					{
-						String fieldStr = scanner.next();						 
-						CommonCheckFunctions.checkDataContainsSpecifiedFields(fieldStr, entityList);
+						String fieldStr = scanner.next();	
+						if (fieldStr.contains("{"))
+						{
+							System.out.println("sub-entity found:" + fieldStr);
+							
+							while (scanner.hasNext())
+							{
+								String subFieldStr = scanner.next();
+								if (subFieldStr.contains("}")) break;
+							}
+						}
+						else
+							CommonCheckFunctions.checkDataContainsSpecifiedFields(fieldStr, entityList);
 					}	
 					  
 					scanner.close();
@@ -249,13 +263,26 @@ public class QueryEndPointTests {
 			
 			String conditionStr = scanner.next();
 			conditionStr = conditionStr.replace("(cond:", "");
+			
+			if ((conditionStr).contains(",order:"))
+			{
+				String orderStr = conditionStr.substring(conditionStr.indexOf(",order:"));
+				orderStr = orderStr.replace(",order:", "");
+				orderStr = orderStr.replace("\"", "");
+				
+				if (!orderStr.isEmpty()) queryParameters.put("order", orderStr.trim());
+				
+				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:")-1);
+			}
+			
 			queryParameters.put("condition", conditionStr.trim());
 		}
 		
 		String fieldStr = scanner.next();
 		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
-		fieldStr = fieldStr.replace("}", "");
-		queryParameters.put("field", fieldStr);
+		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}')-1);
+//		fieldStr = fieldStr.replace("}", "");
+		queryParameters.put("field", fieldStr.trim());
 		
 		scanner.close();
 	}

@@ -89,11 +89,11 @@ public class CommonCheckFunctions {
 	
 	public static boolean compareOrderFieldValue(String valueShouldBeSmall, String valueShouldBeLarge)
 	{       
-		if (isIntegerStr(valueShouldBeSmall)) // Compare integer values
+		if ((isIntegerStr(valueShouldBeSmall)) && (isIntegerStr(valueShouldBeLarge))) // Compare integer values
 		{
 			if (Integer.parseInt(valueShouldBeSmall) > Integer.parseInt(valueShouldBeLarge)) return false;
 		}
-		else if (isFloatStr(valueShouldBeSmall)) // Compare float values
+		else if ((isFloatStr(valueShouldBeSmall)) && (isFloatStr(valueShouldBeLarge))) // Compare float values
 		{
 			if (Float.parseFloat(valueShouldBeSmall) > Float.parseFloat(valueShouldBeLarge)) return false;
 		}
