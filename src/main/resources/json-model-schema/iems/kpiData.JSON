@@ -24,10 +24,10 @@
               "type": "number"
             },
             "run_time": {
-              "type": "null"
+              "type": "number"
             },
             "start_up_time": {
-              "type": "null"
+              "type": "number"
             },
             "condensor_water_outlet_temperature": {
               "type": "number"
@@ -63,7 +63,7 @@
               "type": "number"
             },
             "lubricate_press_diff": {
-              "type": "null"
+              "type": "number"
             },
             "compressor_poly_efficiency": {
               "type": "number"
