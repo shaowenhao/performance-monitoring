@@ -12,18 +12,29 @@
           thread-count="5"
           name="Regression Tests for Jinzu pilot">
         <classes>
-            <class name="com.siemens.datalayer.connector.test.InterfaceTests">   
-            <!-- jinzu-dev: 31439 / jinzu-test: 32710 / jinzu-prod: ???? -->         
-            <parameter name="base_url" value="http://140.231.89.85"/>            
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+            <!-- jinzu-dev: 31439 / jinzu-test: 32710 / jinzu-prod: ???? -->
+            <parameter name="base_url" value="http://140.231.89.85"/>
   			<parameter name="port" value="32710"/>
   			<parameter name="domain_name" value="JinZu"/>
             </class>
-            
-           	<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+
+           	<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
             <parameter name="base_url" value="http://140.231.89.85"/>
 			<!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: ???? -->
   			<parameter name="port" value="31059"/>
-            </class> 
+            </class>
+
+            <class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
+                <parameter name="base_url" value="http://140.231.89.85"/>
+                <!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: ???? -->
+                <parameter name="port" value="31059"/>
+                <methods>
+                    <include name="queryJinzuByGraphQL"/>
+                    <include name="queryJinzuAndCompareByGraphQL"/>
+                </methods>
+            </class>
+
         </classes>
     </test>
 </suite>
