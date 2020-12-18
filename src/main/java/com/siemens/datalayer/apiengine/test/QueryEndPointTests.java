@@ -245,25 +245,19 @@ public class QueryEndPointTests {
 	
 	public static void parseQueryString(String queryString, HashMap<String, String> queryParameters)
 	{
-		Scanner scanner = new Scanner(queryString);
+		String headStr = queryString.substring(0, queryString.indexOf(" {"));
+		String fieldStr = queryString.substring(queryString.indexOf(" {"));
+		String entityStr = headStr;
 		
-		String pattern = "\s\\{";
-		if (queryString.contains("(cond:")) pattern = "\\(cond:";
-
-		scanner.useDelimiter(pattern);
-		String entityStr = scanner.next();
-		entityStr = entityStr.replaceFirst("\\{", "");
-		queryParameters.put("entity", entityStr.trim());
-		
-		if (queryString.contains("(cond:"))
+		if (headStr.contains("(")) 
 		{
-			scanner.reset();
-			pattern = "\\)";
-			scanner.useDelimiter(pattern);
+			entityStr = queryString.substring(0, queryString.indexOf('('));
+			String conditionStr = queryString.substring(queryString.indexOf('('), queryString.indexOf(')')+1);
+			fieldStr = queryString.substring(queryString.indexOf(')')+1);
 			
-			String conditionStr = scanner.next();
 			conditionStr = conditionStr.replace("(cond:", "");
-			
+			conditionStr = conditionStr.substring(0, conditionStr.lastIndexOf(')'));
+
 			if ((conditionStr).contains(",order:"))
 			{
 				String orderStr = conditionStr.substring(conditionStr.indexOf(",order:"));
@@ -272,19 +266,23 @@ public class QueryEndPointTests {
 				
 				if (!orderStr.isEmpty()) queryParameters.put("order", orderStr.trim());
 				
-				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:")-1);
+				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:"));
 			}
 			
+			conditionStr= conditionStr.substring(conditionStr.indexOf("\"")+1);
+			conditionStr= conditionStr.substring(0, conditionStr.lastIndexOf("\""));
 			queryParameters.put("condition", conditionStr.trim());
 		}
 		
-		String fieldStr = scanner.next();
-		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
-		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}')-1);
-//		fieldStr = fieldStr.replace("}", "");
-		queryParameters.put("field", fieldStr.trim());
+		entityStr = entityStr.substring(entityStr.indexOf('{')+1);
+		queryParameters.put("entity", entityStr.trim());
 		
-		scanner.close();
+		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}'));
+		
+		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
+		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}'));
+		
+		if (!fieldStr.contains("{")) queryParameters.put("field", fieldStr.trim());
 	}
 	
 	public static void checkOrder(String orderStr, List<HashMap<String, String>> dataList)
@@ -365,11 +363,11 @@ public class QueryEndPointTests {
 		
 		String compareType = equationStr.substring(equationStr.indexOf('_')+1, equationStr.indexOf(':'));
 		
-		String compareValue = equationStr.substring(equationStr.indexOf(' ')+1);
+		String compareValue = equationStr.substring(equationStr.indexOf(':')+1);
 		
 		if (compareValue.contains("\\\"")) compareValue = compareValue.replace("\\\"", "");
 		
-		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(compareField, compareType, compareValue, dataList);
+		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(compareField, compareType, compareValue.trim(), dataList);
 		
 		return result;
 	}
