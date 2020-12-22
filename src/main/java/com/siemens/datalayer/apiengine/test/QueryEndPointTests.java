@@ -1,5 +1,8 @@
 package com.siemens.datalayer.apiengine.test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasKey;
+
 import java.util.*;
 
 import org.testng.Assert;
@@ -46,8 +49,8 @@ public class QueryEndPointTests {
 	{
 		HashMap<String, String> queryParameters = new HashMap<>();
 		  
-		if (paramMaps.containsKey("depth")) 		queryParameters.put("depth", paramMaps.get("depth"));  
-		if (paramMaps.containsKey("filter")) 		queryParameters.put("filter", paramMaps.get("filter"));
+		if (paramMaps.containsKey("depth")) 	queryParameters.put("depth", paramMaps.get("depth"));  
+		if (paramMaps.containsKey("filter")) 	queryParameters.put("filter", paramMaps.get("filter"));
 		if (paramMaps.containsKey("root")) 		queryParameters.put("root", paramMaps.get("root"));
 		  
 		Response response = ApiEngineEndpoint.getEntities(queryParameters);
@@ -129,7 +132,7 @@ public class QueryEndPointTests {
 				if (queryParameters.containsKey("condition"))
 				{
 					if (queryParameters.get("condition").contains("},"))
-						System.out.println("Multiple conditions found: " + queryParameters.get("condition"));
+						checkComplexCondition(queryParameters.get("condition"), queryParameters.get("entity"), response);
 					else
 						Assert.assertTrue(verifySingleCondition(queryParameters.get("condition"), entityList));
 				}
@@ -185,6 +188,83 @@ public class QueryEndPointTests {
 				Assert.assertEquals(actualMessage, "Successfully", "The message of 'operation success' is returned.");
 			else
 				System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
+		}
+	}
+	
+	// Function to process complex condition string like "{status:{_eq:\"online\"},Lease_Group:{lease_type:{_eq:\"2\"}}}"
+	public static void checkComplexCondition(String conditionStr, String rootEntity, Response response)
+	{
+		conditionStr = conditionStr.substring(conditionStr.indexOf("{")+1, conditionStr.lastIndexOf("}"));
+		
+		Scanner scanner = new Scanner(conditionStr);
+		scanner.useDelimiter("},");
+		
+		while (scanner.hasNext())
+		{
+			String conditionItem = scanner.next();
+			
+			// Make sure the last '}' is not deleted when using scanner 
+			long count1 = conditionItem.chars().filter(ch -> ch == '{').count();
+			long count2 = conditionItem.chars().filter(ch -> ch == '}').count();
+			if (count1>count2) conditionItem += "}";
+			
+			// Count the number of ':'
+			long count3 = conditionItem.chars().filter(ch -> ch == ':').count();
+			
+			if (count3==2) // condition like {status:{_eq:\"online\"}
+			{
+				conditionItem = "{" + conditionItem + "}";
+				verifySingleCondition(conditionItem, response.jsonPath().getList("data."+rootEntity));
+			}
+			else if (count3==3)
+			{
+				// If the first char is '{' ignore it
+				if (conditionItem.indexOf("{")==0) conditionItem = conditionItem.substring(1);
+				String subEntity = conditionItem.substring(0, conditionItem.indexOf(":{"));
+				String subCondition = conditionItem.substring(conditionItem.indexOf(":{")+1);
+				
+				List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
+				getSubEntityList(rootEntity, subEntity, subEntityList, response);
+				
+				if (subEntityList.size()>0) verifySingleCondition(subCondition, subEntityList);
+			}
+			else
+			{
+				System.out.println("Error: Unknown condition pattern.");
+			}
+		}
+		
+		scanner.close();
+	}
+	
+	public static void getSubEntityList(String rootEntity, String subEntity, List<HashMap<String, String>> subEntityList, Response response)
+	{
+		String entityListPath = "data." + rootEntity;
+		HashMap<String, String> entity = response.jsonPath().get(entityListPath+"[0]");
+		
+		for (String key : entity.keySet())
+		{
+			if (key.contains(subEntity)) // found the subEntity
+			{
+				List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
+				
+				for (int i=0;i<entityList.size(); i++)
+				{
+					String subEntityItemPath = entityListPath + "[" + i + "]." + key;
+					
+					try
+					{
+						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+					}
+					catch (Exception e) 
+				    {
+						subEntityItemPath += "[0]";
+						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+				    }
+				}
+				
+				break;
+			}
 		}
 	}
 	
@@ -451,7 +531,8 @@ public class QueryEndPointTests {
 	{	
 		String compareField = condition.substring(condition.indexOf('{')+1, condition.indexOf(':'));
 		
-		String equationStr = condition.substring(condition.indexOf('_'), condition.length()-2);
+		String equationStr = condition.substring(condition.indexOf(':')+1);		
+		equationStr = equationStr.substring(equationStr.indexOf('_'), equationStr.length()-2);
 		equationStr = equationStr.replace("}", "");
 		
 		String compareType = equationStr.substring(equationStr.indexOf('_')+1, equationStr.indexOf(':'));

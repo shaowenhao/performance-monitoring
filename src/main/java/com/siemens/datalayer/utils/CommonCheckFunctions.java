@@ -185,14 +185,18 @@ public class CommonCheckFunctions {
 
 	    while (iter.hasNext()) 
 	    {
-	    	currentEntry = iter.next();	    	
-	        String currentFieldValue = String.valueOf(currentEntry.get(fieldToCompare));
-	        
-	        if (checkCondition(currentFieldValue, compareType, compareValue)==false) 
-	        {
-	        	System.out.println("condition check failed: value '" + currentFieldValue + "' does not satisfy condition '" + compareType + ": " + valueToCompare + "'");
-	        	return false;
-	        }
+	    	currentEntry = iter.next();	
+	    	
+	    	if (currentEntry.containsKey(fieldToCompare))
+	    	{
+		        String currentFieldValue = String.valueOf(currentEntry.get(fieldToCompare));
+		        
+		        if (checkCondition(currentFieldValue, compareType, compareValue)==false) 
+		        {
+		        	System.out.println("condition check failed: value '" + currentFieldValue + "' does not satisfy condition '" + compareType + ": " + valueToCompare + "'");
+		        	return false;
+		        }
+	    	}
 	    }
 		
 		return true;
