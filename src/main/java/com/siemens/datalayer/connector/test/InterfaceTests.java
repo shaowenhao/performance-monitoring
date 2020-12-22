@@ -116,10 +116,10 @@ public class InterfaceTests {
 	  {	  
 		  List<HashMap<String, String>> rspDataList;
 		  
-		  if (response.getBody().asString().contains("totalPages"))
-			  rspDataList = response.jsonPath().getList("data.data");
-		  else
-			  rspDataList = response.jsonPath().getList("data");
+		  String listPath = "data";
+		  if (response.getBody().asString().contains("totalPages")) listPath += ".data";
+		  
+		  rspDataList = response.jsonPath().getList(listPath);
 		  
 		  // Check if the returned data list is not empty
 		  Assert.assertTrue(rspDataList.size() > 0);
@@ -130,7 +130,7 @@ public class InterfaceTests {
 				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
 			  else
 				  // Check if data contains the required fields
-				  CommonCheckFunctions.checkDataContainsSpecifiedFields(paramMaps.get("fields"), rspDataList);
+				  CommonCheckFunctions.checkDataContainsSpecifiedFields(listPath, paramMaps.get("fields"), rspDataList);
 		  }
 		  else
 		  {

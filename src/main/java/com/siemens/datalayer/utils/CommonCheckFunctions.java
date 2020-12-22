@@ -17,7 +17,7 @@ import io.qameta.allure.Step;
 public class CommonCheckFunctions {
 		
 	@Step("Verify if the response contains the required data fields")
-	public static void checkDataContainsSpecifiedFields(String fields, List<HashMap<String, String>> responseData)
+	public static void checkDataContainsSpecifiedFields(String jsonPath, String fields, List<HashMap<String, String>> responseData)
 	{	  
 		Scanner scanner = new Scanner(fields);
 		scanner.useDelimiter(",");

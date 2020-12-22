@@ -81,7 +81,7 @@ public class QueryEndPointTests {
 					  
 					// Check if the data in response message contains the specified fields
 					if (filterParameters.containsKey("field"))
-						CommonCheckFunctions.checkDataContainsSpecifiedFields(filterParameters.get("field"), entityList);
+						CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, filterParameters.get("field"), entityList);
 					  
 					if (filterParameters.containsKey("condition")) 
 						checkCondition(filterParameters.get("condition"), entityList);
@@ -136,26 +136,17 @@ public class QueryEndPointTests {
 				
 				if (queryParameters.containsKey("field"))
 				{				
-					Scanner scanner = new Scanner(queryParameters.get("field"));
-					
-					while (scanner.hasNext())
+					if (queryParameters.get("field").contains("{"))
 					{
-						String fieldStr = scanner.next();	
-						if (fieldStr.contains("{"))
-						{
-							System.out.println("sub-entity found:" + fieldStr);
-							
-							while (scanner.hasNext())
-							{
-								String subFieldStr = scanner.next();
-								if (subFieldStr.contains("}")) break;
-							}
-						}
-						else
-							CommonCheckFunctions.checkDataContainsSpecifiedFields(fieldStr, entityList);
-					}	
-					  
-					scanner.close();
+						String fieldStr = queryParameters.get("field");
+						checkSubEntityFields(fieldStr, queryParameters.get("entity"), response);
+					}
+					else // all items are field names
+					{
+						String allFields = queryParameters.get("field");
+						allFields = allFields.replaceAll("\\s+", ",");
+						CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, allFields, entityList);
+					}
 				}
 			}
 			else
@@ -195,6 +186,69 @@ public class QueryEndPointTests {
 			else
 				System.out.println("Operation message is not specified for test case： " + requestParameters.get("test-id"));
 		}
+	}
+	
+	public static void checkSubEntityFields(String fieldStr, String rootEntity, Response response)
+	{
+		fieldStr = fieldStr.replaceAll("\\s+", " ");
+		fieldStr = fieldStr.replaceAll(" \\{", "{");
+		fieldStr = fieldStr.replaceAll(" }", "}");
+		
+		String rootFields = "";
+		String [] items = fieldStr.trim().split("\\p{Space}");
+		
+		String entityListPath = "data." + rootEntity;
+		List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
+		
+		for (int i=0; i<items.length; i++)
+		{
+			if (items[i].contains("{")) 
+			{
+				String subFieldStr = items[i];
+				
+				Boolean isSubEntityItem = true;
+				
+				while(isSubEntityItem)
+				{
+					i++;									
+					if (items[i].contains("}")) isSubEntityItem = false;
+					subFieldStr += " ";
+					subFieldStr += items[i];
+				}
+				
+				HashMap<String, String> subQueryParameters = new HashMap<>();
+				parseSubQueryString(subFieldStr, subQueryParameters);
+				
+				List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
+				
+				for (int k=0;k<entityList.size(); k++)
+				{
+					String subEntityItemPath = entityListPath + "[" + k + "]." + subQueryParameters.get("entity");
+					
+					try
+					{
+						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+					}
+					catch (Exception e) 
+				    {
+						subEntityItemPath += "[0]";
+						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+				    }
+				}
+				
+				String allSubEntityFields = subQueryParameters.get("field");
+				allSubEntityFields = allSubEntityFields.replaceAll("\\s+", ",");
+				CommonCheckFunctions.checkDataContainsSpecifiedFields(
+						entityListPath+"."+subQueryParameters.get("entity"), allSubEntityFields, subEntityList);
+			}
+			else
+			{
+				if (!rootFields.isEmpty()) rootFields += ",";
+				rootFields += items[i];
+			}
+		}
+		
+		CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, rootFields, entityList);
 	}
 	
 	public static void parseFilterParameters(String filterStr, HashMap<String, String> filterParameters)
@@ -282,7 +336,46 @@ public class QueryEndPointTests {
 		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
 		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}'));
 		
-		if (!fieldStr.contains("{")) queryParameters.put("field", fieldStr.trim());
+		queryParameters.put("field", fieldStr.trim());
+	}
+	
+	public static void parseSubQueryString(String subQueryString, HashMap<String, String> subQueryParameters)
+	{
+		String headStr = subQueryString.substring(0, subQueryString.indexOf("{"));
+		String fieldStr = subQueryString.substring(subQueryString.indexOf("{"));
+		String entityStr = headStr;
+		
+		if (headStr.contains("(")) 
+		{
+			entityStr = subQueryString.substring(0, subQueryString.indexOf('('));
+			String conditionStr = subQueryString.substring(subQueryString.indexOf('('), subQueryString.indexOf(')')+1);
+			fieldStr = subQueryString.substring(subQueryString.indexOf(')')+1);
+			
+			conditionStr = conditionStr.replace("(cond:", "");
+			conditionStr = conditionStr.substring(0, conditionStr.lastIndexOf(')'));
+
+			if ((conditionStr).contains(",order:"))
+			{
+				String orderStr = conditionStr.substring(conditionStr.indexOf(",order:"));
+				orderStr = orderStr.replace(",order:", "");
+				orderStr = orderStr.replace("\"", "");
+				
+				if (!orderStr.isEmpty()) subQueryParameters.put("order", orderStr.trim());
+				
+				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:"));
+			}
+			
+			conditionStr= conditionStr.substring(conditionStr.indexOf("\"")+1);
+			conditionStr= conditionStr.substring(0, conditionStr.lastIndexOf("\""));
+			if (!conditionStr.isEmpty()) subQueryParameters.put("condition", conditionStr.trim());
+		}
+		
+		subQueryParameters.put("entity", entityStr.trim());
+		
+		fieldStr = fieldStr.substring(fieldStr.indexOf('{')+1);
+		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}'));
+		
+		subQueryParameters.put("field", fieldStr.trim());
 	}
 	
 	public static void checkOrder(String orderStr, List<HashMap<String, String>> dataList)
