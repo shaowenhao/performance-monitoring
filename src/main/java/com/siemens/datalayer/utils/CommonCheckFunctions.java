@@ -174,7 +174,7 @@ public class CommonCheckFunctions {
 	}
 	
 	@Step("Verify if the data satisfies the given condition")
-	public static boolean ifDataSatisfiesCondition(String fieldToCompare, String compareType, String valueToCompare, List<HashMap<String, String>> dataList)
+	public static boolean ifDataSatisfiesCondition(String jasonPath, String fieldToCompare, String compareType, String valueToCompare, List<HashMap<String, String>> dataList)
 	{	
 	    if (dataList.isEmpty()) return false;
 	    

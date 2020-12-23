@@ -1,8 +1,5 @@
 package com.siemens.datalayer.apiengine.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasKey;
-
 import java.util.*;
 
 import org.testng.Assert;
@@ -87,7 +84,7 @@ public class QueryEndPointTests {
 						CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, filterParameters.get("field"), entityList);
 					  
 					if (filterParameters.containsKey("condition")) 
-						checkCondition(filterParameters.get("condition"), entityList);
+						checkCondition(entityListPath, filterParameters.get("condition"), entityList);
 					  
 					// Check if the data in response message is sorted by the specified order parameters
 					if (filterParameters.containsKey("order")) 
@@ -134,7 +131,7 @@ public class QueryEndPointTests {
 					if (queryParameters.get("condition").contains("},"))
 						checkComplexCondition(queryParameters.get("condition"), queryParameters.get("entity"), response);
 					else
-						Assert.assertTrue(verifySingleCondition(queryParameters.get("condition"), entityList));
+						Assert.assertTrue(verifySingleCondition(entityListPath, queryParameters.get("condition"), entityList));
 				}
 				
 				if (queryParameters.containsKey("field"))
@@ -214,7 +211,8 @@ public class QueryEndPointTests {
 			if (count3==2) // condition like {status:{_eq:\"online\"}
 			{
 				conditionItem = "{" + conditionItem + "}";
-				verifySingleCondition(conditionItem, response.jsonPath().getList("data."+rootEntity));
+				String jasonPath = "data." + rootEntity;
+				verifySingleCondition(jasonPath, conditionItem, response.jsonPath().getList(jasonPath));
 			}
 			else if (count3==3)
 			{
@@ -226,7 +224,7 @@ public class QueryEndPointTests {
 				List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
 				getSubEntityList(rootEntity, subEntity, subEntityList, response);
 				
-				if (subEntityList.size()>0) verifySingleCondition(subCondition, subEntityList);
+				if (subEntityList.size()>0) verifySingleCondition("data."+rootEntity+"."+subEntity, subCondition, subEntityList);
 			}
 			else
 			{
@@ -488,7 +486,7 @@ public class QueryEndPointTests {
 		scanner.close();
 	}
 	
-	public static void checkCondition(String conditionFieldStr, List<HashMap<String, String>> dataList)
+	public static void checkCondition(String jasonPath, String conditionFieldStr, List<HashMap<String, String>> dataList)
 	{
 		Boolean result = false;
 		
@@ -496,8 +494,8 @@ public class QueryEndPointTests {
 		{
 			String conditionStr = conditionFieldStr.substring(conditionFieldStr.indexOf('[')+1, conditionFieldStr.indexOf(']'));
 			
-			result = verifySingleCondition(parseJointCondition(conditionStr, true), dataList) && 
-					 verifySingleCondition(parseJointCondition(conditionStr, false), dataList);
+			result = verifySingleCondition(jasonPath, parseJointCondition(conditionStr, true), dataList) && 
+					 verifySingleCondition(jasonPath, parseJointCondition(conditionStr, false), dataList);
 		}
 		else if (conditionFieldStr.contains("{_or:")) // condition-1 OR condition-2
 		{
@@ -507,7 +505,7 @@ public class QueryEndPointTests {
 		}
 		else	// Single condition
 		{
-			result = verifySingleCondition(conditionFieldStr, dataList);
+			result = verifySingleCondition(jasonPath, conditionFieldStr, dataList);
 		}
 		
 		Assert.assertTrue(result, "The data list satisfies the given condition.");
@@ -527,7 +525,7 @@ public class QueryEndPointTests {
 	}
 	
 	// Parse condition string like {updateTime: {_gt: "2020-09-27 04:00:00"}} and forward the results to check condition functions
-	public static boolean verifySingleCondition(String condition, List<HashMap<String, String>> dataList)
+	public static boolean verifySingleCondition(String jasonPath, String condition, List<HashMap<String, String>> dataList)
 	{	
 		String compareField = condition.substring(condition.indexOf('{')+1, condition.indexOf(':'));
 		
@@ -541,7 +539,7 @@ public class QueryEndPointTests {
 		
 		if (compareValue.contains("\\\"")) compareValue = compareValue.replace("\\\"", "");
 		
-		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(compareField, compareType, compareValue.trim(), dataList);
+		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(jasonPath, compareField, compareType, compareValue.trim(), dataList);
 		
 		return result;
 	}
