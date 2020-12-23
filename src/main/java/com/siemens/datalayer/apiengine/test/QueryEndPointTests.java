@@ -238,32 +238,41 @@ public class QueryEndPointTests {
 	public static void getSubEntityList(String rootEntity, String subEntity, List<HashMap<String, String>> subEntityList, Response response)
 	{
 		String entityListPath = "data." + rootEntity;
-		HashMap<String, String> entity = response.jsonPath().get(entityListPath+"[0]");
 		
-		for (String key : entity.keySet())
+		try
 		{
-			if (key.contains(subEntity)) // found the subEntity
+			HashMap<String, String> entity = response.jsonPath().get(entityListPath+"[0]");
+			
+			for (String key : entity.keySet())
 			{
-				List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
-				
-				for (int i=0;i<entityList.size(); i++)
+				if (key.contains(subEntity)) // found the subEntity
 				{
-					String subEntityItemPath = entityListPath + "[" + i + "]." + key;
+					List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
 					
-					try
+					for (int i=0;i<entityList.size(); i++)
 					{
-						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+						String subEntityItemPath = entityListPath + "[" + i + "]." + key;
+						
+						try
+						{
+							subEntityList.add(response.jsonPath().get(subEntityItemPath));
+						}
+						catch (Exception e) 
+					    {
+							subEntityItemPath += "[0]";
+							subEntityList.add(response.jsonPath().get(subEntityItemPath));
+					    }
 					}
-					catch (Exception e) 
-				    {
-						subEntityItemPath += "[0]";
-						subEntityList.add(response.jsonPath().get(subEntityItemPath));
-				    }
+					
+					break;
 				}
-				
-				break;
 			}
 		}
+	    catch(Exception e) 
+	    {
+	    	System.out.println("Error: null is returned when try to get data from jasonPath '" + entityListPath + "'");
+	        return;
+	    }
 	}
 	
 	public static void checkSubEntityFields(String fieldStr, String rootEntity, Response response)
@@ -278,20 +287,38 @@ public class QueryEndPointTests {
 		String entityListPath = "data." + rootEntity;
 		List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
 		
+		if (entityList==null)
+		{
+			System.out.println("Error: null is returned when try to get data from jasonPath '" + entityListPath + "'");
+			return;
+		}
+		
 		for (int i=0; i<items.length; i++)
 		{
 			if (items[i].contains("{")) 
 			{
 				String subFieldStr = items[i];
 				
-				Boolean isSubEntityItem = true;
+				long subLevelCount = 1;
 				
-				while(isSubEntityItem)
+				while(subLevelCount>=1)
 				{
-					i++;									
-					if (items[i].contains("}")) isSubEntityItem = false;
-					subFieldStr += " ";
-					subFieldStr += items[i];
+					i++;					
+					if (items[i].contains("{")) 
+						subLevelCount += items[i].chars().filter(ch -> ch == '{').count();
+					
+					if (subLevelCount==1) // ignore sub-entities with depth higher than 1
+					{
+						subFieldStr += " ";
+						subFieldStr += items[i];
+					}
+					
+					if (items[i].contains("}")) 
+					{
+						long minus = items[i].chars().filter(ch -> ch == '}').count();
+						if ((subLevelCount>1) && ((subLevelCount-minus)<=0)) subFieldStr += "}";
+						subLevelCount -= minus;
+					}
 				}
 				
 				HashMap<String, String> subQueryParameters = new HashMap<>();
@@ -307,17 +334,28 @@ public class QueryEndPointTests {
 					{
 						subEntityList.add(response.jsonPath().get(subEntityItemPath));
 					}
-					catch (Exception e) 
+					catch (Exception e1) 
 				    {
-						subEntityItemPath += "[0]";
-						subEntityList.add(response.jsonPath().get(subEntityItemPath));
+						try
+						{
+							subEntityItemPath += "[0]";
+							subEntityList.add(response.jsonPath().get(subEntityItemPath));
+						}
+						catch (Exception e2) 
+						{
+							System.out.println("Error: null is returned when try to get data from jasonPath '" + subEntityItemPath + "'");
+							break;
+						}
 				    }
 				}
 				
-				String allSubEntityFields = subQueryParameters.get("field");
-				allSubEntityFields = allSubEntityFields.replaceAll("\\s+", ",");
-				CommonCheckFunctions.checkDataContainsSpecifiedFields(
-						entityListPath+"."+subQueryParameters.get("entity"), allSubEntityFields, subEntityList);
+				if (subEntityList.size()>0)
+				{
+					String allSubEntityFields = subQueryParameters.get("field");
+					allSubEntityFields = allSubEntityFields.replaceAll("\\s+", ",");
+					CommonCheckFunctions.checkDataContainsSpecifiedFields(
+							entityListPath+"."+subQueryParameters.get("entity"), allSubEntityFields, subEntityList);
+				}
 			}
 			else
 			{

@@ -19,6 +19,12 @@ public class CommonCheckFunctions {
 	@Step("Verify if the response contains the required data fields")
 	public static void checkDataContainsSpecifiedFields(String jsonPath, String fields, List<HashMap<String, String>> responseData)
 	{	  
+		if (responseData==null)
+		{
+			System.out.println("Error: null is returned when try to get data from jasonPath '" + jsonPath + "'");
+			return;
+		}
+		
 		Scanner scanner = new Scanner(fields);
 		scanner.useDelimiter(",");
 		  
@@ -176,7 +182,8 @@ public class CommonCheckFunctions {
 	@Step("Verify if the data satisfies the given condition")
 	public static boolean ifDataSatisfiesCondition(String jasonPath, String fieldToCompare, String compareType, String valueToCompare, List<HashMap<String, String>> dataList)
 	{	
-	    if (dataList.isEmpty()) return false;
+		if (dataList==null) return false;
+		if (dataList.isEmpty()) return false;
 	    
 	    String compareValue = String.valueOf(valueToCompare);
 		 
