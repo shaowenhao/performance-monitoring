@@ -192,47 +192,66 @@ public class QueryEndPointTests {
 	public static void checkComplexCondition(String conditionStr, String rootEntity, Response response)
 	{
 		conditionStr = conditionStr.substring(conditionStr.indexOf("{")+1, conditionStr.lastIndexOf("}"));
+		conditionStr = CommonCheckFunctions.removeBlankBeforeToken(conditionStr);
 		
-		Scanner scanner = new Scanner(conditionStr);
-		scanner.useDelimiter("},");
-		
-		while (scanner.hasNext())
+		if ((conditionStr.contains("_and:[")) || (conditionStr.contains("_or:[")))
 		{
-			String conditionItem = scanner.next();
+			Boolean result = false;
+			String jasonPath = "data." + rootEntity;
+			String jointConditionStr = conditionStr.substring(conditionStr.indexOf('[')+1, conditionStr.lastIndexOf(']'));
 			
-			// Make sure the last '}' is not deleted when using scanner 
-			long count1 = conditionItem.chars().filter(ch -> ch == '{').count();
-			long count2 = conditionItem.chars().filter(ch -> ch == '}').count();
-			if (count1>count2) conditionItem += "}";
-			
-			// Count the number of ':'
-			long count3 = conditionItem.chars().filter(ch -> ch == ':').count();
-			
-			if (count3==2) // condition like {status:{_eq:\"online\"}
-			{
-				conditionItem = "{" + conditionItem + "}";
-				String jasonPath = "data." + rootEntity;
-				verifySingleCondition(jasonPath, conditionItem, response.jsonPath().getList(jasonPath));
-			}
-			else if (count3==3)
-			{
-				// If the first char is '{' ignore it
-				if (conditionItem.indexOf("{")==0) conditionItem = conditionItem.substring(1);
-				String subEntity = conditionItem.substring(0, conditionItem.indexOf(":{"));
-				String subCondition = conditionItem.substring(conditionItem.indexOf(":{")+1);
-				
-				List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
-				getSubEntityList(rootEntity, subEntity, subEntityList, response);
-				
-				if (subEntityList.size()>0) verifySingleCondition("data."+rootEntity+"."+subEntity, subCondition, subEntityList);
-			}
+			if (conditionStr.contains("_and:[")) 
+				result = verifySingleCondition(jasonPath, parseJointCondition(jointConditionStr, true), response.jsonPath().getList(jasonPath))
+					  && verifySingleCondition(jasonPath, parseJointCondition(jointConditionStr, false), response.jsonPath().getList(jasonPath));
 			else
-			{
-				System.out.println("Error: Unknown condition pattern.");
-			}
+				result = verifyJointCondition(parseJointCondition(jointConditionStr, true), 
+				  	  						  parseJointCondition(jointConditionStr, false), response.jsonPath().getList(jasonPath));
+			
+			Assert.assertTrue(result, "The data list satisfies the given condition.");
 		}
-		
-		scanner.close();
+		else // handle sub-entity conditions
+		{
+			Scanner scanner = new Scanner(conditionStr);
+			scanner.useDelimiter("},");
+			
+			while (scanner.hasNext())
+			{
+				String conditionItem = scanner.next();
+				
+				// Make sure the last '}' is not deleted when using scanner 
+				long count1 = conditionItem.chars().filter(ch -> ch == '{').count();
+				long count2 = conditionItem.chars().filter(ch -> ch == '}').count();
+				if (count1>count2) conditionItem += "}";
+				
+				// Count the number of ':'
+				long count3 = conditionItem.chars().filter(ch -> ch == ':').count();
+				
+				if (count3==2) // condition like {status:{_eq:\"online\"}
+				{
+					conditionItem = "{" + conditionItem + "}";
+					String jasonPath = "data." + rootEntity;
+					verifySingleCondition(jasonPath, conditionItem, response.jsonPath().getList(jasonPath));
+				}
+				else if (count3==3)
+				{
+					// If the first char is '{' ignore it
+					if (conditionItem.indexOf("{")==0) conditionItem = conditionItem.substring(1);
+					String subEntity = conditionItem.substring(0, conditionItem.indexOf(":{"));
+					String subCondition = conditionItem.substring(conditionItem.indexOf(":{")+1);
+					
+					List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
+					getSubEntityList(rootEntity, subEntity, subEntityList, response);
+					
+					if (subEntityList.size()>0) verifySingleCondition("data."+rootEntity+"."+subEntity, subCondition, subEntityList);
+				}
+				else
+				{
+					System.out.println("Error: Unknown condition pattern.");
+				}
+			}
+			
+			scanner.close();
+		}
 	}
 	
 	public static void getSubEntityList(String rootEntity, String subEntity, List<HashMap<String, String>> subEntityList, Response response)
@@ -281,6 +300,9 @@ public class QueryEndPointTests {
 		fieldStr = fieldStr.replaceAll(" \\{", "{");
 		fieldStr = fieldStr.replaceAll(" }", "}");
 		
+		if (fieldStr.contains(" (cond:")) fieldStr = fieldStr.replaceAll(" \\(cond:", "\\(cond:"); 
+		if (fieldStr.contains("\"){")) fieldStr = fieldStr.replaceAll("\"\\)\\{", "\"\\)\\{ ");
+		
 		String rootFields = "";
 		String [] items = fieldStr.trim().split("\\p{Space}");
 		
@@ -298,6 +320,9 @@ public class QueryEndPointTests {
 			if (items[i].contains("{")) 
 			{
 				String subFieldStr = items[i];
+				
+				if (subFieldStr.contains("(cond")) 
+					subFieldStr = subFieldStr.substring(0, subFieldStr.indexOf('(')) + "{";
 				
 				long subLevelCount = 1;
 				
@@ -555,9 +580,9 @@ public class QueryEndPointTests {
 		String returnCondition = "";
 		
 		if (getFirstCondition) 
-			returnCondition = jointConditionStr.substring(0, jointConditionStr.indexOf(','));
+			returnCondition = jointConditionStr.substring(0, jointConditionStr.indexOf(",{"));
 		else
-			returnCondition = jointConditionStr.substring(jointConditionStr.indexOf(',')+1);
+			returnCondition = jointConditionStr.substring(jointConditionStr.indexOf(",{")+1);
 		
 		return returnCondition;
 	}
@@ -565,6 +590,7 @@ public class QueryEndPointTests {
 	// Parse condition string like {updateTime: {_gt: "2020-09-27 04:00:00"}} and forward the results to check condition functions
 	public static boolean verifySingleCondition(String jasonPath, String condition, List<HashMap<String, String>> dataList)
 	{	
+		condition = condition.replaceAll("\\s+", " ");
 		String compareField = condition.substring(condition.indexOf('{')+1, condition.indexOf(':'));
 		
 		String equationStr = condition.substring(condition.indexOf(':')+1);		
@@ -573,9 +599,8 @@ public class QueryEndPointTests {
 		
 		String compareType = equationStr.substring(equationStr.indexOf('_')+1, equationStr.indexOf(':'));
 		
-		String compareValue = equationStr.substring(equationStr.indexOf(':')+1);
-		
-		if (compareValue.contains("\\\"")) compareValue = compareValue.replace("\\\"", "");
+		String compareValue = equationStr.substring(equationStr.indexOf(':')+1);		
+		compareValue = CommonCheckFunctions.removeBlankBeforeToken(compareValue);
 		
 		Boolean result = CommonCheckFunctions.ifDataSatisfiesCondition(jasonPath, compareField, compareType, compareValue.trim(), dataList);
 		
@@ -586,11 +611,11 @@ public class QueryEndPointTests {
 	{	
 		String compareField1 = condition1.substring(condition1.indexOf('{')+1, condition1.indexOf(':'));
 		
-		String equationStr1 = condition1.substring(condition1.indexOf('_'), condition1.length()-2);
+		String equationStr1 = condition1.substring(condition1.lastIndexOf('_'), condition1.length()-2);
 		
 		String compareType1 = equationStr1.substring(equationStr1.indexOf('_')+1, equationStr1.indexOf(':'));
 		
-		String compareValue1 = equationStr1.substring(equationStr1.indexOf(' ')+1);
+		String compareValue1 = equationStr1.substring(equationStr1.lastIndexOf(':')+1).trim();
 		
 		String compareField2 = condition2.substring(condition2.indexOf('{')+1, condition2.indexOf(':'));
 		
@@ -598,7 +623,7 @@ public class QueryEndPointTests {
 		
 		String compareType2 = equationStr2.substring(equationStr2.indexOf('_')+1, equationStr2.indexOf(':'));
 		
-		String compareValue2 = equationStr2.substring(equationStr2.indexOf(' ')+1);
+		String compareValue2 = equationStr2.substring(equationStr2.lastIndexOf(':')+1).trim();
 		
 		Boolean result = CommonCheckFunctions.ifDataSatisfiesJointCondition(compareField1, compareType1, compareValue1, 
 																			compareField2, compareType2, compareValue2, dataList);

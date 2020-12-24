@@ -34,7 +34,8 @@ public class CommonCheckFunctions {
 			  
 			for (HashMap<String, String> rspDataItem: responseData)
 			{
-				assertThat(rspDataItem, hasKey(keyToCompare));
+				if (rspDataItem != null)
+					assertThat(rspDataItem, hasKey(keyToCompare));
 			}	
 		}	
 		  
@@ -497,5 +498,19 @@ public class CommonCheckFunctions {
 		scanner.close();
 		
 		return result;
+	}
+	
+	public static String delRedundentBlank(String inputStr)
+	{
+		return inputStr.replaceAll("\\s+", " ");
+	}
+	
+	public static String removeBlankBeforeToken(String inputStr)
+	{
+		if (inputStr.contains("\\\"")) inputStr = inputStr.replace("\\\"", "");
+		if (inputStr.contains(" [")) inputStr = inputStr.replace(" [", "[");
+		if (inputStr.contains(" ]")) inputStr = inputStr.replace(" ]", "]");
+		
+		return inputStr;
 	}
 }

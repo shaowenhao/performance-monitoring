@@ -7,7 +7,7 @@
     
     <parameter name="dataFileForConnectorTest" value="jinzu-connector-test-data.xlsx" />
     <parameter name="dataFileForApiEngineTest" value="jinzu-api-engine-test-data.xlsx" />
-
+    
     <test verbose="2" preserve-order="true"
           thread-count="5"
           name="Regression Tests for Jinzu pilot">
