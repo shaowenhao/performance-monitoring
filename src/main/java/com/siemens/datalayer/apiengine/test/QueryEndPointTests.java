@@ -593,7 +593,12 @@ public class QueryEndPointTests {
 		condition = condition.replaceAll("\\s+", " ");
 		String compareField = condition.substring(condition.indexOf('{')+1, condition.indexOf(':'));
 		
-		String equationStr = condition.substring(condition.indexOf(':')+1);		
+		String equationStr = condition.substring(condition.indexOf(':')+1);	
+		
+		if (equationStr.contains(",order:"))
+			equationStr = equationStr.substring(equationStr.indexOf('_'), equationStr.indexOf(",order:"));
+		
+		// remove the last char (condition should end with "\"")
 		equationStr = equationStr.substring(equationStr.indexOf('_'), equationStr.length()-2);
 		equationStr = equationStr.replace("}", "");
 		

@@ -40,6 +40,11 @@ public class ExcelFileReaderClass {
 	                		case NUMERIC:
 			                    String cellValue = dataFormatter.formatCellValue(cell);
 			                    String dataFieldName = dataFormatter.formatCellValue(headLine.getCell(cell.getColumnIndex()));
+			                    
+			                    if ((dataFieldName.contains("query")) && (cellValue.contains("\n")))
+			                    {
+			                    	cellValue = formatQueryString(cellValue);
+			                    }
 			                    readParam.put(dataFieldName, cellValue);
 			                    
 	                		case BOOLEAN:
@@ -59,5 +64,28 @@ public class ExcelFileReaderClass {
         
         // Closing the workbook
         workbook.close();
+	}
+	
+	public static String formatQueryString(String inputStr)
+	{	
+		inputStr = inputStr.replaceAll("\\n", "");
+		inputStr = inputStr.replaceAll("\\s+", " ");
+		inputStr = inputStr.replaceAll(" \\(cond:", "\\(cond:");
+		
+		inputStr = inputStr.replace(" {", "{");
+		inputStr = inputStr.replace(" }", "}");
+		inputStr = inputStr.replace("( cond:", "(cond:");
+		inputStr = inputStr.replace("\", order:", "\",order:");
+		if (inputStr.contains("(cond:"))
+		{
+			int index1 = inputStr.indexOf("{", inputStr.indexOf("{")+1);
+			int index2 = inputStr.indexOf("(cond:");
+			if (index2<index1) inputStr = inputStr.replaceFirst("\"\\)\\{", "\"\\) \\{");
+		}
+		
+		if (inputStr.contains(" [")) inputStr = inputStr.replace(" [", "[");
+		if (inputStr.contains(" ]")) inputStr = inputStr.replace(" ]", "]");
+		
+		return inputStr;
 	}
 }
