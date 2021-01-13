@@ -294,6 +294,8 @@ public class QueryEndPointTests {
 	    }
 	}
 	
+	// Verify if the given data list contains the required information fields. Here field string can contains sub-entity fields, e.g.:
+	// business_mgr business_unit charge_frequency city province district invert_Customer(cond:"",order:"") { actual_controller category city contact_detail Restricted_By_Contract(cond:"",order:"") {contract_amount customer lease_end_time lease_start_time payment_method project} Refer_To_Lease_Group(cond:"",order:"") {asset_type count discount_ratio id unit_price}
 	public static void checkSubEntityFields(String fieldStr, String rootEntity, Response response)
 	{
 		fieldStr = fieldStr.replaceAll("\\s+", " ");
@@ -315,6 +317,7 @@ public class QueryEndPointTests {
 			return;
 		}
 		
+		// Start to extract sub-entity fields when first "{" is detected and continue until the corresponding "}" is found
 		for (int i=0; i<items.length; i++)
 		{
 			if (items[i].contains("{")) 
@@ -349,6 +352,7 @@ public class QueryEndPointTests {
 				HashMap<String, String> subQueryParameters = new HashMap<>();
 				parseSubQueryString(subFieldStr, subQueryParameters);
 				
+				// Try to extract sub-entity data items from the given data list
 				List<HashMap<String, String>> subEntityList = new ArrayList<HashMap<String, String>>();
 				
 				for (int k=0;k<entityList.size(); k++)
@@ -374,6 +378,7 @@ public class QueryEndPointTests {
 				    }
 				}
 				
+				// Verify if the required information fields are found in all the sub-entity data items
 				if (subEntityList.size()>0)
 				{
 					String allSubEntityFields = subQueryParameters.get("field");
@@ -438,6 +443,8 @@ public class QueryEndPointTests {
 		scanner.close();
 	}
 	
+	// Read the information from a top level query string, which can contains sub-entity string.
+	// Sample: {Project(cond:"{status:{_eq:\"online\"},Lease_Group:{lease_type:{_eq:\"2\"}}}",order:"") {business_mgr charge_frequency invert_Customer(cond:"",order:"") { actual_controller city contact_detail} Refer_To_Lease_Group(cond:"",order:"") {asset_type count discount_ratio id}} }
 	public static void parseQueryString(String queryString, HashMap<String, String> queryParameters)
 	{
 		String headStr = queryString.substring(0, queryString.indexOf(" {"));
@@ -480,6 +487,7 @@ public class QueryEndPointTests {
 		queryParameters.put("field", fieldStr.trim());
 	}
 	
+	// Read the information from a sub-entity string, e.g. invert_Customer(cond:"",order:"") { actual_controller category ... district}
 	public static void parseSubQueryString(String subQueryString, HashMap<String, String> subQueryParameters)
 	{
 		String headStr = subQueryString.substring(0, subQueryString.indexOf("{"));
@@ -612,6 +620,8 @@ public class QueryEndPointTests {
 		return result;
 	}
 	
+	// Check if two conditions can be both satisfied by a data list.
+	// Condition is represented by strings like "{business_mgr:{_in:[潘云晖,臧佳宝]}}", "{status:{_in:[archived]}}", etc.
 	public static boolean verifyJointCondition(String condition1, String condition2, List<HashMap<String, String>> dataList)
 	{	
 		String compareField1 = condition1.substring(condition1.indexOf('{')+1, condition1.indexOf(':'));

@@ -63,5 +63,23 @@ public class ExcelDataProviderClass {
 		
 		return queryParamCollection.iterator();
 	}
+	
+	@DataProvider(name = "entity-management-test-data-provider")
+	public static Iterator<Object[]> entityManagementTestDataProvider(Method m, ITestContext iTestContext)
+	{
+	    Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
+	    
+	    String methodName = m.getName();
+		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForEntityMgmtTest");
+	    
+		try {
+			ExcelFileReaderClass.readParamFromExcelFile(dataFileName, methodName, queryParamCollection);
+		} 
+		catch (Exception e) {
+			System.out.println("Error occurs when try to open the excel file： " + e.getMessage());
+		}
+		
+		return queryParamCollection.iterator();
+	}
 
 }
