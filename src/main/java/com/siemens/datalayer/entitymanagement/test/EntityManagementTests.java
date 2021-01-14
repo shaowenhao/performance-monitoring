@@ -88,7 +88,7 @@ public class EntityManagementTests {
 		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain" },
+	@Test ( dependsOnMethods = { "createEntityInDomain" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: updateEntity", 
 			dataProvider = "entity-management-test-data-provider", 
@@ -101,35 +101,48 @@ public class EntityManagementTests {
 		// Check if the entity to be update really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
 			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
-			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
+			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));		
+
+		String bodyString = paramMaps.get("body");
 		
-		try
+		// Check if the input string contains basic information
+		if (bodyString.contains("id") && bodyString.contains("label") && bodyString.contains("properties"))
 		{
 			ObjectMapper objectMapper = new ObjectMapper();	
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 			
-			// Prepare request body object based on the input body string 
-			updateEntityRequestBody requestBody = objectMapper.readValue(paramMaps.get("body"), updateEntityRequestBody.class);
-			
-			// If the entity to be test really exists, use its real id
-			if (TestEntityList.containsKey(paramMaps.get("entity"))) requestBody.setId(TestEntityList.get(paramMaps.get("entity")));
-			
-			// Create a request body in Json format and send it out
-			Response response = EntityManagementEndpoint.updateEntity(objectMapper.writeValueAsString(requestBody));
-			
-			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-			
-			if (paramMaps.get("description").contains("good request")) checkUpdateEntityResponse(requestBody, response);
+			try
+			{
+				// Prepare request body object based on the input body string 
+				updateEntityRequestBody requestBody = objectMapper.readValue(bodyString, updateEntityRequestBody.class);
+				
+				// If the entity to be test really exists, use its real id
+				if (TestEntityList.containsKey(paramMaps.get("entity"))) requestBody.setId(TestEntityList.get(paramMaps.get("entity")));
+				
+				// Create a request body in Json format
+				bodyString = objectMapper.writeValueAsString(requestBody);
+	
+				Response response = EntityManagementEndpoint.updateEntity(bodyString);
+				
+				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
+				
+				if (paramMaps.get("description").contains("good request")) checkUpdateEntityResponse(requestBody, response);
+			}
+			catch (Exception e) 
+		    {
+				System.out.println("Error: can not convert the input string 'body' to a jason request");
+				return;
+		    }
 		}
-		catch (Exception e) 
-	    {
-			System.out.println("Error: can not convert the input string 'body' to a jason request");
-	    }
-
+		else // test when input is not complete
+		{
+			Response response = EntityManagementEndpoint.updateEntity(bodyString);			
+			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
+		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain" },
+	@Test ( dependsOnMethods = { "createEntityInDomain" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: getEntityById", 
 			dataProvider = "entity-management-test-data-provider", 
@@ -170,7 +183,7 @@ public class EntityManagementTests {
 		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain", "getEntityById", "updateEntity" },
+	@Test ( dependsOnMethods = { "createEntityInDomain", "getEntityById", "updateEntity" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: deleteEntity", 
 			dataProvider = "entity-management-test-data-provider", 
