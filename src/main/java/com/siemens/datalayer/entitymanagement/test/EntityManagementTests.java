@@ -88,7 +88,8 @@ public class EntityManagementTests {
 		}
 	}
 	
-	@Test ( priority = 0, 
+	@Test ( dependsOnMethods = { "createEntityInDomain" },
+			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: updateEntity", 
 			dataProvider = "entity-management-test-data-provider", 
 			dataProviderClass = ExcelDataProviderClass.class)
@@ -98,21 +99,9 @@ public class EntityManagementTests {
 	public void updateEntity(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be update really exists, if not create it
-		if (!paramMaps.get("description").contains("entity id not exist"))
-		{
-			if ((paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
-			{
-				if (!TestEntityList.containsKey(paramMaps.get("entity")))
-				{
-					Response response = EntityManagementEndpoint.createEntityInDomain(paramMaps.get("domain"), paramMaps.get("entity"));
-				
-					if (response.jsonPath().getString("code").equals("0"))
-						TestEntityList.put(paramMaps.get("entity"), response.jsonPath().get("data.id"));
-					else
-						System.out.println("Error: can not create test entity '" + paramMaps.get("entity") + "'");
-				}
-			}
-		}
+		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
+			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
 		
 		try
 		{
@@ -120,13 +109,14 @@ public class EntityManagementTests {
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 			
+			// Prepare request body object based on the input body string 
 			updateEntityRequestBody requestBody = objectMapper.readValue(paramMaps.get("body"), updateEntityRequestBody.class);
-			requestBody.setId(TestEntityList.get(paramMaps.get("entity")));
 			
-			String valueAsString = objectMapper.writeValueAsString(requestBody);
-//			System.out.println(valueAsString);
+			// If the entity to be test really exists, use its real id
+			if (TestEntityList.containsKey(paramMaps.get("entity"))) requestBody.setId(TestEntityList.get(paramMaps.get("entity")));
 			
-			Response response = EntityManagementEndpoint.updateEntity(valueAsString);
+			// Create a request body in Json format and send it out
+			Response response = EntityManagementEndpoint.updateEntity(objectMapper.writeValueAsString(requestBody));
 			
 			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 			
@@ -134,9 +124,94 @@ public class EntityManagementTests {
 		}
 		catch (Exception e) 
 	    {
-			System.out.println("Error: can not convert the input field 'body' to a jason request");
+			System.out.println("Error: can not convert the input string 'body' to a jason request");
 	    }
 
+	}
+	
+	@Test ( dependsOnMethods = { "createEntityInDomain" },
+			priority = 0, 
+			description = "Test Entity-management Entity Endpoint: getEntityById", 
+			dataProvider = "entity-management-test-data-provider", 
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getEntityById' request to entity endpoint interface.")
+	@Story("Entity End Point: getEntityById")
+	public void getEntityById(Map<String, String> paramMaps)
+	{
+		// Check if the entity to be test really exists, if not create it
+		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
+			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
+		
+		// Read the id from input parameter 
+		String entityId = paramMaps.get("id");
+		
+		// If the entity to be test exists, use its real id
+		if (TestEntityList.containsKey(paramMaps.get("entity"))) 
+			entityId = TestEntityList.get(paramMaps.get("entity"));
+		
+		Response response = EntityManagementEndpoint.getEntityById(entityId);
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
+		
+		if (paramMaps.get("description").contains("good request"))
+		{
+			updateEntityRequestBody responseData = response.jsonPath().getObject("data", updateEntityRequestBody.class);
+			
+			Assert.assertTrue(responseData.getId().equals(entityId), "The entity is correct");
+			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The entity is correct");
+			
+			if ((paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+			{
+				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("entity")), "The entity name is correct");
+				Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("domain")), "The domain is correct");
+			}
+		}
+	}
+	
+	@Test ( dependsOnMethods = { "createEntityInDomain", "getEntityById", "updateEntity" },
+			priority = 0, 
+			description = "Test Entity-management Entity Endpoint: deleteEntity", 
+			dataProvider = "entity-management-test-data-provider", 
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'deleteEntity' request to entity endpoint interface.")
+	@Story("Entity End Point: deleteEntity")
+	public void deleteEntity(Map<String, String> paramMaps)
+	{
+		// Check if the entity to be delete really exists, if not create it
+		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
+			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
+		
+		// Read the id from input parameter 
+		String entityToBeDelete = paramMaps.get("id");
+		
+		// If the entity to be delete exists, use its real id
+		if (TestEntityList.containsKey(paramMaps.get("entity"))) 
+			entityToBeDelete = TestEntityList.get(paramMaps.get("entity"));
+		
+		Response response = EntityManagementEndpoint.deleteEntity(entityToBeDelete);
+		
+		if ((TestEntityList.containsKey(paramMaps.get("entity"))) && (response.jsonPath().getString("code").equals("0"))) 
+			TestEntityList.remove(paramMaps.get("entity"));
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
+	}
+	
+	// Check if the entity with the given domain & name really exists, if not try to create it
+	public static void createEntityToBeTest(String domain, String name)
+	{
+		if (!TestEntityList.containsKey(name))
+		{
+			Response response = EntityManagementEndpoint.createEntityInDomain(domain, name);
+		
+			if (response.jsonPath().getString("message").contains("OK"))
+				TestEntityList.put(name, response.jsonPath().get("data.id"));
+			else
+				System.out.println("Error: can not create test entity '" + name + "'");
+		}
 	}
 	
 	@Step("Verify the status code, operation code, and message")
@@ -147,10 +222,20 @@ public class EntityManagementTests {
 		Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
 		  
 		if ((requestParameters.containsKey("rspCode")))
+		{
+			if (requestParameters.get("rspCode").contains("null"))
+				Assert.assertNull(actualCode, "No operation code is found.");
+			else
 			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
+		}
 		  
 		if (requestParameters.containsKey("rspMessage"))
-			Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");		
+		{
+			if (requestParameters.get("rspMessage").contains("null"))
+				Assert.assertNull(actualMessage, "The content of operation message is null.");
+			else
+				Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");	
+		}
 	}
 	
 	@Step("Verify if the updateEntity response contains correct information")

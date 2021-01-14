@@ -5,9 +5,9 @@
         <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
     </listeners>
     
-<!--     <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" /> -->
-<!--     <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" /> -->
-    <parameter name="dataFileForEntityMgmtTest" value="sampleTestData.xlsx" />
+    <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" />
+    <parameter name="dataFileForEntityMgmtTest" value="snc-entity-management-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
@@ -41,7 +41,7 @@
             <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
 				<!-- snc-dev: 31717 / snc-test: 31998 / snc-prod: ??? -->
-	  			<parameter name="port" value="31717"/>
+	  			<parameter name="port" value="31998"/>
             </class>
 
         </classes>

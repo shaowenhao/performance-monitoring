@@ -84,12 +84,10 @@ public class EntityManagementEndpoint {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("Content-Type", "application/json");
-
-        Response response = httpRequest.body(entityId)
-					        		   .filter(new AllureRestAssured())
-					                   .get("/api/entities");
+        RequestSpecification httpRequest = RestAssured.given();     
+        
+        Response response = httpRequest.filter(new AllureRestAssured())
+					                   .get("/api/entities/" + entityId);
 
         return response;
     }
