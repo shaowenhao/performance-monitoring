@@ -1,6 +1,7 @@
 package com.siemens.datalayer.entitymanagement.test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.siemens.datalayer.entitymanagement.model.updateEntityRequestBody;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 
 import io.qameta.allure.Description;
@@ -28,7 +30,7 @@ import io.qameta.allure.Story;
 import io.restassured.response.Response;
 
 @Epic("SDL Entity-management")
-@Feature("Entity End Point")
+@Feature("Graph/ Entity/ Relation End Points")
 
 public class EntityManagementTests {
 	
@@ -213,6 +215,77 @@ public class EntityManagementTests {
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 	}
 	
+	@Test ( priority = 0, description = "Test Entity-management Graph Endpoint: getGraph")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getGraph' request to graph endpoint interface.")
+	@Story("Graph End Point: getGraph")
+	public void getGraph()
+	{
+		Response response = EntityManagementEndpoint.getGraph();
+		
+		Map<String, String> paramMaps = new HashMap<String, String>();
+		paramMaps.put("rspStatus", "200");
+		paramMaps.put("rspCode", "200");
+		paramMaps.put("message", "OK");
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
+	}
+	
+	@Test ( priority = 0, 
+			description = "Test Entity-management Relation Endpoint: getRelations",
+			dataProvider = "entity-management-test-data-provider", 
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getRelations' request to relation endpoint interface.")
+	@Story("Relation End Point: getRelations")
+	public void getRelations(Map<String, String> paramMaps)
+	{
+		Response response;
+		
+		if (paramMaps.containsKey("labels")==false)
+			response = EntityManagementEndpoint.getAllRelations();
+		else
+			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
+		
+		List<HashMap<String, String>> relationList = response.jsonPath().getList("data");
+		
+		if (paramMaps.get("description").contains("good request"))
+		{
+			Assert.assertTrue(relationList.size()>0, "Relation items are found in the response");
+			
+			if (paramMaps.containsKey("labels")) checkRelationLabels(relationList, paramMaps.get("labels"));
+			
+			String schemaTemplateFile = "json-model-schema/entity-mgmt/getAllRelationsResponse.JSON";	
+			CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+		}
+		else
+		{
+			Assert.assertTrue(relationList.size()==0, "The response does not contain any relation items");
+		}
+	}
+	
+	@Test ( priority = 0, 
+			description = "Test Entity-management Relation Endpoint: getRelationsById",
+			dataProvider = "entity-management-test-data-provider", 
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getRelationsById' request to relation endpoint interface.")
+	@Story("Relation End Point: getRelationsById")
+	public void getRelationsById(Map<String, String> paramMaps)
+	{
+		Response response = EntityManagementEndpoint.getRelations(paramMaps.get("relationId"));
+		
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		
+		if (paramMaps.get("description").contains("good request"))
+		{
+			HashMap<String, String> item = response.jsonPath().get("data");
+			Assert.assertTrue(paramMaps.get("relationId").equals(item.get("id")), "The relation id is the same as specified in the request");
+		}
+	}
+	
 	// Check if the entity with the given domain & name really exists, if not try to create it
 	public static void createEntityToBeTest(String domain, String name)
 	{
@@ -239,7 +312,7 @@ public class EntityManagementTests {
 			if (requestParameters.get("rspCode").contains("null"))
 				Assert.assertNull(actualCode, "No operation code is found.");
 			else
-			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
+				Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
 		}
 		  
 		if (requestParameters.containsKey("rspMessage"))
@@ -256,6 +329,15 @@ public class EntityManagementTests {
 	{
 		updateEntityRequestBody responseData = response.jsonPath().getObject("data", updateEntityRequestBody.class);	
 		Assert.assertTrue(request.equals(responseData), "The entity has been successfully updated");
+	}
+	
+	@Step("Verify if the relation labels in the response match the labels parameter of the request")
+	public static void checkRelationLabels(List<HashMap<String, String>> itemList, String labels)
+	{
+		for (HashMap<String, String> item : itemList)
+		{								
+			Assert.assertTrue(labels.contains(item.get("label")), "Relation item's label matches the labels parameter of the request");
+		}
 	}
 
 }

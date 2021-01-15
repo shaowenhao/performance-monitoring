@@ -91,5 +91,64 @@ public class EntityManagementEndpoint {
 
         return response;
     }
+	
+    // Graph Endpoint: getGraph 
+	@Step("Send a request of 'getGraph'")
+    public static Response getGraph() 
+	{
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
 
+        RequestSpecification httpRequest = RestAssured.given();     
+        
+        Response response = httpRequest.filter(new AllureRestAssured())
+					                   .get("/api/graphs");
+
+        return response;
+    }
+	
+	// Relation Endpoint: getRelations
+	@Step("Send a request of 'getRelations' without labels")
+    public static Response getAllRelations() 
+	{
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();     
+        
+        Response response = httpRequest.filter(new AllureRestAssured())
+					                   .get("/api/relations");
+
+        return response;
+    }
+
+	@Step("Send a request of 'getRelations'")
+    public static Response getRelations(String labels) 
+	{
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();     
+        
+        Response response = httpRequest.queryParam("labels", labels)
+        							   .filter(new AllureRestAssured())
+					                   .get("/api/relations");
+
+        return response;
+    }
+	
+	@Step("Send a request of 'getRelationById'")
+    public static Response getRelationById(String relationId) 
+	{
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();     
+        
+        Response response = httpRequest.filter(new AllureRestAssured())
+					                   .get("/api/relations/"+relationId);
+
+        return response;
+    }
+	
 }

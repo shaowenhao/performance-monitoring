@@ -5,8 +5,8 @@
         <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
     </listeners>
     
-<!--     <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" /> -->
-<!--     <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" /> -->
+    <parameter name="dataFileForConnectorTest" value="snc-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="snc-api-engine-test-data.xlsx" />
     <parameter name="dataFileForEntityMgmtTest" value="snc-entity-management-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
