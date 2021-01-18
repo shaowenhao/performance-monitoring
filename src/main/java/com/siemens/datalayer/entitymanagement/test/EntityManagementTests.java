@@ -275,6 +275,17 @@ public class EntityManagementTests {
 	@Story("Relation End Point: getRelationById")
 	public void getRelationById(Map<String, String> paramMaps)
 	{
+		if (paramMaps.containsKey("label")) 
+		{
+			// Use getRelations(String labels) to find a list of relations
+			Response response = EntityManagementEndpoint.getRelations(paramMaps.get("label"));
+			
+			List<HashMap<String, String>> relationList = response.jsonPath().getList("data");
+			
+			// Set the input parameter "relationId" to a value picked up from the above list
+			if (relationList.size()>0) paramMaps.put("relationId", response.jsonPath().getString("data[0].id"));
+		}
+		
 		Response response = EntityManagementEndpoint.getRelationById(paramMaps.get("relationId"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
