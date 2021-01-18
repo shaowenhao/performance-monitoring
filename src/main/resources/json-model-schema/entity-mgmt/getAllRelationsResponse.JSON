@@ -33,7 +33,7 @@
                   "type": "string"
                 }
               },
-              "required": [
+              "optional": [
                 "typevalue",
                 "keytype",
                 "relation"

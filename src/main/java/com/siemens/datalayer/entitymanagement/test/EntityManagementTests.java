@@ -44,7 +44,7 @@ public class EntityManagementTests {
 		
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
-	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("entity-management", base_url + ":" + port);
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-entity-management", base_url + ":" + port);
 	}
 	
 	@AfterClass (description = "Clean up test entities")
@@ -267,15 +267,15 @@ public class EntityManagementTests {
 	}
 	
 	@Test ( priority = 0, 
-			description = "Test Entity-management Relation Endpoint: getRelationsById",
+			description = "Test Entity-management Relation Endpoint: getRelationById",
 			dataProvider = "entity-management-test-data-provider", 
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'getRelationsById' request to relation endpoint interface.")
-	@Story("Relation End Point: getRelationsById")
-	public void getRelationsById(Map<String, String> paramMaps)
+	@Description("Send a 'getRelationById' request to relation endpoint interface.")
+	@Story("Relation End Point: getRelationById")
+	public void getRelationById(Map<String, String> paramMaps)
 	{
-		Response response = EntityManagementEndpoint.getRelations(paramMaps.get("relationId"));
+		Response response = EntityManagementEndpoint.getRelationById(paramMaps.get("relationId"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		
@@ -312,7 +312,7 @@ public class EntityManagementTests {
 			if (requestParameters.get("rspCode").contains("null"))
 				Assert.assertNull(actualCode, "No operation code is found.");
 			else
-				Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
+			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
 		}
 		  
 		if (requestParameters.containsKey("rspMessage"))
