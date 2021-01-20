@@ -2,7 +2,7 @@ package com.siemens.datalayer.utils;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +40,19 @@ public class CommonCheckFunctions {
 		}	
 		  
 		scanner.close();
+	}
+
+	@Step("Verify if the response contains the specified number of items")
+	public static void checkDataContainsNumOfItems(String jsonPath, String NumOfItems, List<HashMap<String, String>> responseData)
+	{
+		if (responseData==null)
+		{
+			System.out.println("Error: null is returned when try to get data from jasonPath '" + jsonPath + "'");
+			return;
+		}
+		int actualNumOfItems = responseData.size();
+		assertThat(NumOfItems,is(equalTo(String.valueOf(actualNumOfItems))));
+
 	}
 	
 	@Step("Verify if the data in response message matches the correct model schema")
