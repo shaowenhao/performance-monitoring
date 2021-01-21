@@ -14,14 +14,14 @@
         <classes>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- iot-dev: 32019 / iot-test: 30850 / snc-prod:  -->
+				<!-- iot-demo-dev: 32019 / iot-demo-test: 30850 / iot-demo-prod: 30388 -->
 	  			<parameter name="port" value="30850"/>
 	  			<parameter name="domain_name" value="IoT"/>
             </class>
             
 			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- iot-dev: 32552 / iot-test: 30346 / snc-prod: 30035 -->
+				<!-- iot-demo-dev: 32552 / iot-demo-test: 30346 / iot-demo-prod: 32227 -->
 	  			<parameter name="port" value="30346"/>
             </class>         
         </classes>

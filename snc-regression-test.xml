@@ -15,20 +15,20 @@
         <classes>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod:  -->
+				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod: 31548 -->
 	  			<parameter name="port" value="30544"/>
 	  			<parameter name="domain_name" value="SNC"/>
             </class>
             
 			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
+				<!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30896 -->
 	  			<parameter name="port" value="30169"/>
             </class>
 
             <class name="com.siemens.datalayer.apiengine.test.ApiEngineInterfaceTests">
                 <parameter name="base_url" value="http://140.231.89.85"/>
-                <!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30035 -->
+                <!-- snc-dev: 30985 / snc-test: 30169 / snc-prod: 30896 -->
                 <parameter name="port" value="30169"/>
                 <methods>
                     <include name="queryProductOrderByGraphQL"/>
@@ -40,7 +40,7 @@
             
             <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 31717 / snc-test: 31998 / snc-prod: ??? -->
+				<!-- snc-dev: 31717 / snc-test: 31998 / snc-prod: 32337 -->
 	  			<parameter name="port" value="31998"/>
             </class>
 

@@ -24,7 +24,7 @@ public class SubscriptionManagementTests {
     
     @Parameters({"base_url", "port", "domain_name"})
     @BeforeClass(description = "Configure the host address and communication port of iEMS Subscription management")
-    public void setSubscriptionManagementEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31111") String port, String domain_name) {
+    public void setSubscriptionManagementEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31111") String port, @Optional("iEMS") String domain_name) {
         SubscriptionManagementEndpoint.setBaseUrl(base_url);
         SubscriptionManagementEndpoint.setPort(port);
         SubscriptionManagementEndpoint.setDomain(domain_name);
