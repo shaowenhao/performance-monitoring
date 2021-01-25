@@ -174,8 +174,8 @@ public class EntityManagementTests {
 		{
 			updateEntityRequestBody responseData = response.jsonPath().getObject("data", updateEntityRequestBody.class);
 			
-			Assert.assertTrue(responseData.getId().equals(entityId), "The entity is correct");
-			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The entity is correct");
+			Assert.assertTrue(responseData.getId().equals(entityId), "The entity id is correct");
+			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The node type is correct");
 			
 			if ((paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
 			{
