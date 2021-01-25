@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,12 +29,14 @@ public class automationTestApplication {
 		List<String> myListeners = new ArrayList<String>();
 		myListeners.add("com.siemens.datalayer.utils.CustomizedTestListener");
 		
-		myTestSuite.setListeners(myListeners);
+		myTestSuite.setListeners(myListeners);	
 //		mySuite.setParallel(XmlSuite.ParallelMode.METHODS);   
 
 		//Create an instance of XmlTest and assign a name for it.  
 		XmlTest myTest = new XmlTest(myTestSuite); 
-		myTest.setName("Regression Tests for " + testConfig.getConfigName());   
+		myTest.setName("Regression Tests for " + testConfig.getConfigName());
+		myTest.setVerbose(2);
+		myTest.setPreserveOrder(true);
 	  
 		//Add any parameters that you want to set to the Test. 
 		myTest.setParameters(testParams); 
@@ -42,11 +44,55 @@ public class automationTestApplication {
 		//Create a list which can contain the classes that you want to run.
 		List<XmlClass> myClasses = new ArrayList<XmlClass>();
 	    
+		//Add test class for Connector
+		XmlClass connectorTest = new XmlClass("com.siemens.datalayer.connector.test.InterfaceTests");
+		
+		Map<String,String> connectorTestParams = new LinkedHashMap<String,String> ();
+		connectorTestParams.put("base_url", testConfig.getConnectorBaseURL());
+		connectorTestParams.put("port", testConfig.getConnectorPort());
+		connectorTestParams.put("domain_name", testConfig.getDomainName());	
+		
+		connectorTest.setParameters(connectorTestParams);
+		myClasses.add(connectorTest); 
+		
+		//Add test class for ApiEngine
+		XmlClass apiEngineTest = new XmlClass("com.siemens.datalayer.apiengine.test.QueryEndPointTests");
+		
+		Map<String,String> apiEngineTestParams = new LinkedHashMap<String,String> ();
+		apiEngineTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+		apiEngineTestParams.put("port", testConfig.getApiEnginePort());
+		
+		apiEngineTest.setParameters(apiEngineTestParams);
+		myClasses.add(apiEngineTest);
+		
+		//Add test class for ApiService
+		if (testConfig.getRunApiServiceTest())
+		{
+			XmlClass apiServiceTest = new XmlClass("com.siemens.datalayer.iems.test.ApiServiceTests");
+			
+			Map<String,String> apiServiceTestParams = new LinkedHashMap<String,String> ();
+			apiServiceTestParams.put("base_url", testConfig.getApiServiceBaseURL());
+			apiServiceTestParams.put("port", testConfig.getApiServicePort());
+			apiServiceTestParams.put("pre_asset", testConfig.getPreAsset());
+			apiServiceTestParams.put("pre_data", testConfig.getPreData());
+			apiServiceTestParams.put("rabbitmq_host", testConfig.getRabbitMQHost());
+			apiServiceTestParams.put("rabbitmq_port", testConfig.getRabbitMQPort());
+			apiServiceTestParams.put("rabbitmq_username", testConfig.getRabbitMQUserName());		
+			apiServiceTestParams.put("rabbitmq_password", testConfig.getRabbitMQPassword());		
+			apiServiceTestParams.put("rabbitmq_virtual_host", testConfig.getRabbitMQVirtualHost());		
+			apiServiceTestParams.put("rabbitmq_timeout", testConfig.getRabbitMQTimeout());
+			apiServiceTestParams.put("rabbitmq_exchange", testConfig.getRabbitMQExchange());		
+			
+			apiServiceTest.setParameters(apiServiceTestParams);
+			myClasses.add(apiServiceTest);
+		}
+		
+		//Add test class for EntityManagement
 		if (testConfig.getRunEntityMgmtTest())
 		{
 			XmlClass entityMgmtTest = new XmlClass("com.siemens.datalayer.entitymanagement.test.EntityManagementTests");
 			
-			Map<String,String> entityMgmtTestParams = new HashMap<String,String> ();
+			Map<String,String> entityMgmtTestParams = new LinkedHashMap<String,String> ();
 			entityMgmtTestParams.put("base_url", testConfig.getEntityManagementBaseURL());
 			entityMgmtTestParams.put("port", testConfig.getEntityManagementPort());
 			
@@ -69,24 +115,29 @@ public class automationTestApplication {
 		mySuiteList.add(myTestSuite);   
 	     
 		//Set the list of Suites to the testNG object you created earlier. 
-		String testngXmlName = testConfig.getConfigName() + "-regression-test.xml";
 		testNGInstance.setXmlSuites(mySuiteList);
-		myTestSuite.setFileName(testngXmlName); 
+		
+		String testngXmlName = testConfig.getConfigName() + "-regression-test.xml";
+		myTestSuite.setFileName(testngXmlName);
+		
 		myTestSuite.setThreadCount(5);   
 		testNGInstance.run();
-
+		
+		//Print the parameter values 
+		System.out.println("List of global test parameters:");
+		Map<String,String> params = myTest.getAllParameters(); 
+		
+		for(Map.Entry<String, String> entry : params.entrySet()) 
+		{ 
+			System.out.println(entry.getKey() + " = " + entry.getValue()); 
+		}
+		
 		//Create physical XML file based on the virtual XML content 
 		for(XmlSuite suite : mySuiteList) 
 		{  
 			createXmlFile(suite, testngXmlName); 
 		}   
-	 
-		//Print the parameter values 
-		Map<String,String> params = myTest.getAllParameters(); 
-		for(Map.Entry<String, String> entry : params.entrySet()) 
-		{ 
-			System.out.println(entry.getKey() + " => " + entry.getValue()); 
-		}
+
 	}
 
 	//This method will create an Xml file based on the XmlSuite data 
@@ -98,7 +149,10 @@ public class automationTestApplication {
 			writer = new FileWriter(new File(testngXmlName)); 
 			writer.write(mSuite.toXml()); 
 			writer.flush(); 
-			writer.close(); 
+			writer.close();
+			
+			System.out.println();
+			System.out.println("Write test configurations to the following testNG.xml:");
 			System.out.println(new File(testngXmlName).getAbsolutePath());
 		} 
 		catch (IOException e)
@@ -123,7 +177,7 @@ public class automationTestApplication {
 			if (testConfig.loadConfigurations(projectName, envName))
 			{
 				// Set Global test parameters	
-				Map<String,String> testParameters = new HashMap<String,String> ();
+				Map<String,String> testParameters = new LinkedHashMap<String,String> ();
 				
 				testParameters.put("dataFileForConnectorTest", projectName+"-connector-test-data.xlsx");			
 				testParameters.put("dataFileForApiEngineTest", projectName+"-api-engine-test-data.xlsx");

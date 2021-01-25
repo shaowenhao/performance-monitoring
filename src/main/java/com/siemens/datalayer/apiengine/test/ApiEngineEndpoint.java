@@ -17,6 +17,7 @@ public class ApiEngineEndpoint {
     public static void setBaseUrl(String base_url) 
     {
         BASE_URL = base_url;
+        RestAssured.basePath = "";
     }
 
     public static void setPort(String comm_port) 

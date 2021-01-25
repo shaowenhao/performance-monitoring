@@ -51,11 +51,11 @@ public class testConfigurationClass {
 	}
 	
 	public String getConnectorBaseURL() {
-		return this.apiEngine_base_url;
+		return this.connector_base_url;
 	}
 	
 	public String getConnectorPort() {
-		return this.apiEngine_port;
+		return this.connector_port;
 	}
 	
 	public void setApiEngineTest(String base_url, String port) {
@@ -64,11 +64,11 @@ public class testConfigurationClass {
 	}
 	
 	public String getApiEngineBaseURL() {
-		return this.connector_base_url;
+		return this.apiEngine_base_url;
 	}
 	
 	public String getApiEnginePort() {
-		return this.connector_port;
+		return this.apiEngine_port;
 	}
 	
 	public void setApiServiceTest(String base_url, String port) {

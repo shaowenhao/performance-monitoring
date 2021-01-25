@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+  <listeners>
+    <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+  </listeners>
+  <test thread-count="5" verbose="2" name="Regression Tests for iems-prod">
+    <parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx"/>
+    <parameter name="dataFileForApiEngineTest" value="iems-api-engine-test-data.xlsx"/>
+    <parameter name="dataFileForApiServiceTest" value="iems-api-service-test-data.xlsx"/>
+    <parameter name="dataFileForEntityMgmtTest" value="iems-entity-management-test-data.xlsx"/>
+    <classes>
+      <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="domain_name" value="iEMS"/>
+        <parameter name="port" value="31467"/>
+      </class> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
+      <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30035"/>
+      </class> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
+      <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
+        <parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
+        <parameter name="rabbitmq_username" value="guest"/>
+        <parameter name="rabbitmq_exchange" value="datalayer.exchange.out"/>
+        <parameter name="rabbitmq_port" value="30800"/>
+        <parameter name="port" value="32588"/>
+        <parameter name="rabbitmq_virtual_host" value="/"/>
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="rabbitmq_password" value="guest"/>
+        <parameter name="pre_data" value="/datalayer/api/v1/data/"/>
+        <parameter name="rabbitmq_host" value="140.231.89.85"/>
+        <parameter name="rabbitmq_timeout" value="30"/>
+      </class> <!-- com.siemens.datalayer.iems.test.ApiServiceTests -->
+      <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="31726"/>
+      </class> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
+    </classes>
+  </test> <!-- Regression Tests for iems-prod -->
+</suite> <!-- data-layer-automation test suite -->
