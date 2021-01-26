@@ -256,8 +256,8 @@ public class testConfigurationClass {
 			
 			case ("iems-prod"):
 				setConnectorTest(testEnvironmentConstants.IEMS_DOMAIN_NAME,
-						 testEnvironmentConstants.IEMS_PROD_CONNECTOR_BASE_URL, 
-						 testEnvironmentConstants.IEMS_PROD_CONNECTOR_PORT);
+								 testEnvironmentConstants.IEMS_PROD_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.IEMS_PROD_CONNECTOR_PORT);
 				
 				setApiEngineTest(testEnvironmentConstants.IEMS_PROD_APIENGINE_BASE_URL, 
 								 testEnvironmentConstants.IEMS_PROD_APIENGINE_PORT);
@@ -279,6 +279,84 @@ public class testConfigurationClass {
 				setEntityMgmtTest(testEnvironmentConstants.IEMS_PROD_ENTITY_MANAGEMENT_BASE_URL,
 								  testEnvironmentConstants.IEMS_PROD_ENTITY_MANAGEMENT_PORT);
 			
+				break;
+				
+			case ("snc-dev"):
+				setConnectorTest(testEnvironmentConstants.SNC_DOMAIN_NAME,
+								 testEnvironmentConstants.SNC_DEV_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.SNC_DEV_CONNECTOR_PORT);
+			
+				setApiEngineTest(testEnvironmentConstants.SNC_DEV_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.SNC_DEV_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_PORT);
+				
+				break;
+			
+			case ("snc-test"):
+				setConnectorTest(testEnvironmentConstants.SNC_DOMAIN_NAME,
+						 testEnvironmentConstants.SNC_TEST_CONNECTOR_BASE_URL, 
+						 testEnvironmentConstants.SNC_TEST_CONNECTOR_PORT);
+	
+				setApiEngineTest(testEnvironmentConstants.SNC_TEST_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.SNC_TEST_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);	
+				
+				break;
+			
+			case ("snc-prod"):
+				setConnectorTest(testEnvironmentConstants.SNC_DOMAIN_NAME,
+								 testEnvironmentConstants.SNC_PROD_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.SNC_PROD_CONNECTOR_PORT);
+			
+				setApiEngineTest(testEnvironmentConstants.SNC_PROD_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.SNC_PROD_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.SNC_PROD_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.SNC_PROD_ENTITY_MANAGEMENT_PORT);
+				
+				break;
+				
+			case ("jinzu-dev"):
+				setConnectorTest(testEnvironmentConstants.JINZU_DOMAIN_NAME,
+								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_PORT);
+			
+				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_PORT);
+				
+				break;
+			
+			case ("jinzu-test"):
+				setConnectorTest(testEnvironmentConstants.JINZU_DOMAIN_NAME,
+						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_BASE_URL, 
+						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_PORT);
+	
+				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);	
+				
+				break;
+			
+			case ("jinzu-prod"):
+				setConnectorTest(testEnvironmentConstants.JINZU_DOMAIN_NAME,
+								 testEnvironmentConstants.JINZU_PROD_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.JINZU_PROD_CONNECTOR_PORT);
+			
+				setApiEngineTest(testEnvironmentConstants.JINZU_PROD_APIENGINE_BASE_URL, 
+						 		 testEnvironmentConstants.JINZU_PROD_APIENGINE_PORT);
+				
+				setEntityMgmtTest(testEnvironmentConstants.JINZU_PROD_ENTITY_MANAGEMENT_BASE_URL,
+						  		  testEnvironmentConstants.JINZU_PROD_ENTITY_MANAGEMENT_PORT);
+				
 				break;
 			
 			default:

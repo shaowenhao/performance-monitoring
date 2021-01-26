@@ -35,7 +35,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test connector interface: Get All Entities name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'Get All Entities name' request to read out all the available entity names.")
-	@Story("Connctor Interface: Get all entities name")
+	@Story("Connector Interface: Get all entities name")
 	public void GetAllEntitiesName()
 	{	
 	  Response response = ConnectorEndpoint.getAllEntitiesName();

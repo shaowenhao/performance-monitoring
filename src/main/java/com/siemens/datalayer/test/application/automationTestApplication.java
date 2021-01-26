@@ -17,6 +17,9 @@ import org.testng.xml.XmlTest;
 
 public class automationTestApplication {
 	
+	static Boolean runRegressionTest = true;
+	static Boolean generateTestNGXML = true;
+	
 	public void runSDLRegressionTests(testConfigurationClass testConfig, Map<String,String> testParams)
 	{
 		//Create an instance on TestNG 
@@ -121,7 +124,7 @@ public class automationTestApplication {
 		myTestSuite.setFileName(testngXmlName);
 		
 		myTestSuite.setThreadCount(5);   
-		testNGInstance.run();
+		if (runRegressionTest) testNGInstance.run();
 		
 		//Print the parameter values 
 		System.out.println("List of global test parameters:");
@@ -133,10 +136,13 @@ public class automationTestApplication {
 		}
 		
 		//Create physical XML file based on the virtual XML content 
-		for(XmlSuite suite : mySuiteList) 
-		{  
-			createXmlFile(suite, testngXmlName); 
-		}   
+		if (generateTestNGXML)
+		{
+			for(XmlSuite suite : mySuiteList) 
+			{  
+				createXmlFile(suite, testngXmlName); 
+			} 
+		}
 
 	}
 
@@ -164,38 +170,55 @@ public class automationTestApplication {
 	//Main Method
 	public static void main (String args[]) 
 	{ 
-		List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc");
-		List<String> environmentList = Arrays.asList("dev", "test", "prod");
-		
-		if ((projectNameList.contains(args[0])) && (environmentList.contains(args[1])))
-		{		
-			// Read pilot name and the environment to run regression test
-			String projectName = args[0];
-			String envName = args[1];
-
-			testConfigurationClass testConfig = new testConfigurationClass();
-			if (testConfig.loadConfigurations(projectName, envName))
-			{
-				// Set Global test parameters	
-				Map<String,String> testParameters = new LinkedHashMap<String,String> ();
+		if (args.length >= 2)
+		{
+			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc");
+			List<String> environmentList = Arrays.asList("dev", "test", "prod");
+			
+			if ((projectNameList.contains(args[0])) && (environmentList.contains(args[1])))
+			{		
+				// Read pilot name and the environment to run regression test
+				String projectName = args[0];
+				String envName = args[1];
 				
-				testParameters.put("dataFileForConnectorTest", projectName+"-connector-test-data.xlsx");			
-				testParameters.put("dataFileForApiEngineTest", projectName+"-api-engine-test-data.xlsx");
-				
-				if (testConfig.getRunApiServiceTest()) 
-					testParameters.put("dataFileForApiServiceTest", projectName+"-api-service-test-data.xlsx");	
+				if (args.length > 2)
+				{
+					if (args[2].equals("noTest")) 
+						runRegressionTest = false;
+					else if (args[2].equals("noXML")) 
+						generateTestNGXML = false;
+					else
+						System.out.println("Unknown input parameter - '" + args[2] + "', please use 'noTest' or 'noXML'");
+				}
 	
-				if (testConfig.getRunEntityMgmtTest()) 
-					testParameters.put("dataFileForEntityMgmtTest", projectName+"-entity-management-test-data.xlsx");	
-				
-				// Create testNG instance to execute tests
-				automationTestApplication dt = new automationTestApplication(); 		
-				dt.runSDLRegressionTests(testConfig, testParameters); 
+				testConfigurationClass testConfig = new testConfigurationClass();
+				if (testConfig.loadConfigurations(projectName, envName))
+				{
+					// Set Global test parameters	
+					Map<String,String> testParameters = new LinkedHashMap<String,String> ();
+					
+					testParameters.put("dataFileForConnectorTest", projectName+"-connector-test-data.xlsx");			
+					testParameters.put("dataFileForApiEngineTest", projectName+"-api-engine-test-data.xlsx");
+					
+					if (testConfig.getRunApiServiceTest()) 
+						testParameters.put("dataFileForApiServiceTest", projectName+"-api-service-test-data.xlsx");	
+		
+					if (testConfig.getRunEntityMgmtTest()) 
+						testParameters.put("dataFileForEntityMgmtTest", projectName+"-entity-management-test-data.xlsx");	
+					
+					// Create testNG instance to execute tests
+					automationTestApplication dt = new automationTestApplication(); 		
+					dt.runSDLRegressionTests(testConfig, testParameters); 
+				}
+			}
+			else
+			{
+				System.out.println("Error: The test environment '" + args[0] + "-" + args[1] + "' does not exist!");
 			}
 		}
 		else
 		{
-			System.out.println("Error: The test environment '" + args[0] + "-" + args[1] + "' does not exist!");
+			System.out.println("Please specify the test environment, e.g. 'iems test'");
 		}
 	}
 }
