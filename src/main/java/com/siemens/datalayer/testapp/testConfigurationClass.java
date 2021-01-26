@@ -1,4 +1,4 @@
-package com.siemens.datalayer.test.application;
+package com.siemens.datalayer.testapp;
 
 public class testConfigurationClass {
 

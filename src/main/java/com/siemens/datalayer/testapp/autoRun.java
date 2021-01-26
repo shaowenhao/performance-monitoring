@@ -1,4 +1,4 @@
-package com.siemens.datalayer.test.application;
+package com.siemens.datalayer.testapp;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -15,7 +15,7 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-public class automationTestApplication {
+public class autoRun {
 	
 	static Boolean runRegressionTest = true;
 	static Boolean generateTestNGXML = true;
@@ -207,7 +207,7 @@ public class automationTestApplication {
 						testParameters.put("dataFileForEntityMgmtTest", projectName+"-entity-management-test-data.xlsx");	
 					
 					// Create testNG instance to execute tests
-					automationTestApplication dt = new automationTestApplication(); 		
+					autoRun dt = new autoRun(); 		
 					dt.runSDLRegressionTests(testConfig, testParameters); 
 				}
 			}
