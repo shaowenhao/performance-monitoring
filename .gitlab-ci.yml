@@ -1,18 +1,17 @@
 stages:
   - build
   - test
+  - scheduled-test
+
+variables:
+  HTTP_PROXY: "http://194.138.0.19:9400"
+  HTTPS_PROXY: "http://194.138.0.19:9400"
+  NO_PROXY: "140.231.89.119"
   
-.spec:
+Build Test Suite:
+  stage: build
   tags:
     - docker
-  only:
-    - $DL_PROJECT
-    - $DL_ENVIRONMENT
-  
-build-test-suite:
-  extends:
-    - .spec
-  stage: build
   image: maven
   variables:
     MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -27,11 +26,89 @@ build-test-suite:
     paths:
       - target/data-layer-automation-*-SNAPSHOT.jar
 
-test-application:
-  extends:
-    - .spec
+Run Tests:
+  tags:
+    - docker
+  only:
+    variables:
+      - $DL_PROJECT
+      - $DL_ENV
+  except:
+    - schedules
   stage: test
-  image: openjdk:8
-  variables:
+  image: openjdk:8-jdk-alpine
   script:
-    - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENVIRONMENT
+    - apk update && apk add zip curl
+    - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD -O "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/manual/$DL_PROJECT/$DL_ENV/allure-results.zip" 
+    - unzip allure-results.zip || true
+    - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENV
+    - rm allure-results.zip && zip -r allure-results.zip allure-results
+    - export MD5SUM=$(md5sum allure-results.zip | awk '{print $1}')
+    - export SHA1SUM=$(sha1sum allure-results.zip | awk '{print $1}')
+    - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD --header "X-Checksum-Sha1:${SHA1SUM}" --header "X-Checksum-MD5:${MD5SUM}" -T allure-results.zip "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/manual/$DL_PROJECT/$DL_ENV/allure-results.zip"
+  artifacts:
+    paths:
+      - allure-results.zip
+
+.scheduled:
+  stage: scheduled-test
+  tags:
+    - docker
+  only:
+    - schedules
+  image: openjdk:8-jdk-alpine
+  script:
+    - apk update && apk add zip curl
+    - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD -O "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/scheduled/$DL_PROJECT/$DL_ENV/allure-results.zip" || true
+    - unzip allure-results.zip || true
+    - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENV
+    - rm allure-results.zip && zip -r allure-results.zip allure-results
+    - export MD5SUM=$(md5sum allure-results.zip | awk '{print $1}')
+    - export SHA1SUM=$(sha1sum allure-results.zip | awk '{print $1}')
+    - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD --header "X-Checksum-Sha1:${SHA1SUM}" --header "X-Checksum-MD5:${MD5SUM}" -T allure-results.zip "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/scheduled/$DL_PROJECT/$DL_ENV/allure-results.zip"
+  artifacts:
+    paths:
+      - allure-results.zip
+
+jinzu test:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "jinzu"
+    DL_ENV: "test"
+jinzu prod:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "jinzu"
+    DL_ENV: "prod"
+iems test:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "iems"
+    DL_ENV: "test"
+iems prod:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "iems"
+    DL_ENV: "prod"
+snc test:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "snc"
+    DL_ENV: "test"
+snc prod:
+  extends: .scheduled
+  variables:
+    DL_PROJECT: "snc"
+    DL_ENV: "prod"
+
+### Commented out, waiting for Peng Fei ###
+#iot test:
+#  extends: .scheduled
+#  variables:
+#    DL_PROJECT: "iot"
+#    DL_ENV: "test"
+#iot prod:
+#  extends: .scheduled
+#  variables:
+#    DL_PROJECT: "iot"
+#    DL_ENV: "prod"
