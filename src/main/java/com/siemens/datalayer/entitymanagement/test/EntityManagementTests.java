@@ -63,34 +63,60 @@ public class EntityManagementTests {
 	}
 	
 	@Test ( priority = 0, 
-			description = "Test Entity-management Entity Endpoint: createEntityInDomain", 
+			description = "Test Entity-management Entity Endpoint: createEntity", 
 			dataProvider = "entity-management-test-data-provider", 
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'createEntityInDomain' request to entity endpoint interface.")
-	@Story("Entity End Point: createEntityInDomain")
-	public void createEntityInDomain(Map<String, String> paramMaps)
+	@Description("Send a 'createEntity' request to entity endpoint interface.")
+	@Story("Entity End Point: createEntity")
+	public void createEntity(Map<String, String> paramMaps)
 	{
-		if ((paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+		if ((paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
 		{
-			Response response = EntityManagementEndpoint.createEntityInDomain(paramMaps.get("domain"), paramMaps.get("entity"));
-			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-		
-			if (paramMaps.get("description").contains("good request"))
+			updateEntityRequestBody requestBody = new updateEntityRequestBody();
+			
+			requestBody.setId("1234");
+			requestBody.setLocation(paramMaps.get("location"));
+			requestBody.setLabel(paramMaps.get("label"));
+			
+			requestBody.setNodeType("ENTITY");
+			requestBody.setProperty("metadata_node_type", "entity");
+			requestBody.setProperty("metadata_node_domain", paramMaps.get("location"));	
+			requestBody.setProperty("additional_prop1", "value1");
+			requestBody.setProperty("additional_prop2", "value2");
+			
+			try
 			{
-				TestEntityList.put(paramMaps.get("entity"), response.jsonPath().get("data.id"));
+				ObjectMapper objectMapper = new ObjectMapper();	
+				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+				objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 				
-				Assert.assertEquals(response.jsonPath().get("data.nodeType"), "ENTITY");
-				Assert.assertEquals(response.jsonPath().get("data.label"), paramMaps.get("entity"), "New entity's label is set correctly");
-				Assert.assertEquals(response.jsonPath().get("data.location"), paramMaps.get("domain"), "New entity's location is set correctly");
-
-				Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_type"), "entity");
-				Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_domain"), paramMaps.get("domain"));
-			}		
+				String bodyString = objectMapper.writeValueAsString(requestBody);
+	
+				Response response = EntityManagementEndpoint.createEntity(bodyString);
+				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
+			
+				if (paramMaps.get("description").contains("good request"))
+				{
+					TestEntityList.put(paramMaps.get("label"), response.jsonPath().get("data.id"));
+					
+					Assert.assertEquals(response.jsonPath().get("data.nodeType"), "ENTITY");
+					Assert.assertEquals(response.jsonPath().get("data.label"), paramMaps.get("label"), "New entity's label is set correctly");
+					Assert.assertEquals(response.jsonPath().get("data.location"), paramMaps.get("location"), "New entity's location is set correctly");
+	
+					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_type"), "entity");
+					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_domain"), paramMaps.get("location"));
+				}	
+			}
+			catch (Exception e) 
+		    {
+				System.out.println("Error: failed to assemble a jason format request body");
+				return;
+		    }
 		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain" }, alwaysRun = true,
+	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: updateEntity", 
 			dataProvider = "entity-management-test-data-provider", 
@@ -102,8 +128,8 @@ public class EntityManagementTests {
 	{
 		// Check if the entity to be update really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
-			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));		
+			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));		
 
 		String bodyString = paramMaps.get("body");
 		
@@ -120,7 +146,7 @@ public class EntityManagementTests {
 				updateEntityRequestBody requestBody = objectMapper.readValue(bodyString, updateEntityRequestBody.class);
 				
 				// If the entity to be test really exists, use its real id
-				if (TestEntityList.containsKey(paramMaps.get("entity"))) requestBody.setId(TestEntityList.get(paramMaps.get("entity")));
+				if (TestEntityList.containsKey(paramMaps.get("label"))) requestBody.setId(TestEntityList.get(paramMaps.get("label")));
 				
 				// Create a request body in Json format
 				bodyString = objectMapper.writeValueAsString(requestBody);
@@ -144,7 +170,7 @@ public class EntityManagementTests {
 		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain" }, alwaysRun = true,
+	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: getEntityById", 
 			dataProvider = "entity-management-test-data-provider", 
@@ -156,15 +182,15 @@ public class EntityManagementTests {
 	{
 		// Check if the entity to be test really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
-			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
+			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));
 		
 		// Read the id from input parameter 
 		String entityId = paramMaps.get("id");
 		
 		// If the entity to be test exists, use its real id
-		if (TestEntityList.containsKey(paramMaps.get("entity"))) 
-			entityId = TestEntityList.get(paramMaps.get("entity"));
+		if (TestEntityList.containsKey(paramMaps.get("label"))) 
+			entityId = TestEntityList.get(paramMaps.get("label"));
 		
 		Response response = EntityManagementEndpoint.getEntityById(entityId);
 		
@@ -177,15 +203,15 @@ public class EntityManagementTests {
 			Assert.assertTrue(responseData.getId().equals(entityId), "The entity id is correct");
 			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The node type is correct");
 			
-			if ((paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
+			if ((paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
 			{
-				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("entity")), "The entity name is correct");
-				Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("domain")), "The domain is correct");
+				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("label")), "The entity name is correct");
+				Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("location")), "The domain is correct");
 			}
 		}
 	}
 	
-	@Test ( dependsOnMethods = { "createEntityInDomain", "getEntityById", "updateEntity" }, alwaysRun = true,
+	@Test ( dependsOnMethods = { "createEntity", "getEntityById", "updateEntity" }, alwaysRun = true,
 			priority = 0, 
 			description = "Test Entity-management Entity Endpoint: deleteEntity", 
 			dataProvider = "entity-management-test-data-provider", 
@@ -197,20 +223,20 @@ public class EntityManagementTests {
 	{
 		// Check if the entity to be delete really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("domain")) && (paramMaps.containsKey("entity")))
-			createEntityToBeTest(paramMaps.get("domain"), paramMaps.get("entity"));
+			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));
 		
 		// Read the id from input parameter 
 		String entityToBeDelete = paramMaps.get("id");
 		
 		// If the entity to be delete exists, use its real id
-		if (TestEntityList.containsKey(paramMaps.get("entity"))) 
-			entityToBeDelete = TestEntityList.get(paramMaps.get("entity"));
+		if (TestEntityList.containsKey(paramMaps.get("label"))) 
+			entityToBeDelete = TestEntityList.get(paramMaps.get("label"));
 		
 		Response response = EntityManagementEndpoint.deleteEntity(entityToBeDelete);
 		
-		if ((TestEntityList.containsKey(paramMaps.get("entity"))) && (response.jsonPath().getString("code").equals("0"))) 
-			TestEntityList.remove(paramMaps.get("entity"));
+		if ((TestEntityList.containsKey(paramMaps.get("label"))) && (response.jsonPath().getString("message").equals("OK"))) 
+			TestEntityList.remove(paramMaps.get("label"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 	}
@@ -297,18 +323,54 @@ public class EntityManagementTests {
 		}
 	}
 	
-	// Check if the entity with the given domain & name really exists, if not try to create it
-	public static void createEntityToBeTest(String domain, String name)
+	// Check if the entity with the given location & label really exists, if not try to create it
+	public static void createEntityToBeTest(String location, String label)
 	{
-		if (!TestEntityList.containsKey(name))
-		{
-			Response response = EntityManagementEndpoint.createEntityInDomain(domain, name);
-		
-			if (response.jsonPath().getString("message").contains("OK"))
-				TestEntityList.put(name, response.jsonPath().get("data.id"));
+		if (!TestEntityList.containsKey(label))
+		{	
+			String id = createEntity(location, label);
+			if (id.equals("none")==false)
+				TestEntityList.put(label, id);
 			else
-				System.out.println("Error: can not create test entity '" + name + "'");
+				System.out.println("Error: can not create test entity '" + label + "'");
 		}
+	}
+	
+	public static String createEntity(String location, String label)
+	{
+		String result = "none";
+		
+		updateEntityRequestBody requestBody = new updateEntityRequestBody();
+		
+		requestBody.setId("1234");
+		requestBody.setLocation(location);
+		requestBody.setLabel(label);		
+		requestBody.setNodeType("ENTITY");
+		requestBody.setProperty("metadata_node_type", "entity");
+		requestBody.setProperty("metadata_node_domain", location);	
+		requestBody.setProperty("additional_prop1", "value1");
+		requestBody.setProperty("additional_prop2", "value2");
+		
+		try
+		{
+			ObjectMapper objectMapper = new ObjectMapper();	
+			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+			
+			String bodyString = objectMapper.writeValueAsString(requestBody);
+
+			Response response = EntityManagementEndpoint.createEntity(bodyString);
+			
+			if (response.jsonPath().getString("message").contains("OK"))
+				result = response.jsonPath().getString("data.id");
+	
+		}
+		catch (Exception e) 
+	    {
+			System.out.println("Error: can not convert the input string 'body' to a jason request");
+	    }
+		
+		return result;
 	}
 	
 	@Step("Verify the status code, operation code, and message")

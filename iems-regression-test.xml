@@ -18,25 +18,25 @@
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">
                 <parameter name="base_url" value="http://140.231.89.85"/>
                 <!-- iems-dev: 32577 / iems-test: 32230 / iems-prod: 31467 -->
-                <parameter name="port" value="31467"/>
+                <parameter name="port" value="32230"/>
                 <parameter name="domain_name" value="iEMS"/>
             </class>
 
             <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
                 <parameter name="base_url" value="http://140.231.89.85"/>
                 <!-- iems-dev: 32510 / iems-test: 32223 / iems-prod: 30035 -->
-                <parameter name="port" value="30035"/>
+                <parameter name="port" value="32223"/>
             </class>
 
             <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
                 <parameter name="base_url" value="http://140.231.89.85" />
                 <!-- iems-dev: 30684 / iems-test: 31332 / iems-prod: 32588 -->
-                <parameter name="port" value="32588"/>
+                <parameter name="port" value="31332"/>
                 <parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
                 <parameter name="pre_data" value="/datalayer/api/v1/data/"/>
                 <parameter name="rabbitmq_host" value="140.231.89.85" />
                 <!-- iems-dev: 30248 / iems-test: 30952 / iems-prod: 30800 -->
-                <parameter name="rabbitmq_port" value="30800"/>
+                <parameter name="rabbitmq_port" value="30952"/>
                 <parameter name="rabbitmq_username" value="guest"/>
                 <parameter name="rabbitmq_password" value="guest"/>
                 <parameter name="rabbitmq_virtual_host" value="/"/>
@@ -47,13 +47,13 @@
             <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
                 <parameter name="base_url" value="http://140.231.89.85"/>
                 <!-- iems-dev: 31706 / iems-test: 31818 / iems-prod: 31726 -->
-                <parameter name="port" value="31726"/>
+                <parameter name="port" value="31818"/>
             </class>
 
             <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
                 <parameter name="base_url" value="http://140.231.89.85/" />
                 <!-- iems-dev: 32271 / iems-test: 31111 / iems-prod: 32563 -->
-                <parameter name="port" value="32563"/>
+                <parameter name="port" value="31111"/>
             </class>
         </classes>
     </test>

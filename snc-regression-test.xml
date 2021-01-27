@@ -15,7 +15,7 @@
         <classes>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
 	            <parameter name="base_url" value="http://140.231.89.85"/>
-				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod: 31548 -->
+				<!-- snc-dev: 32385 / snc-test: 30544 / snc-prod: 32328 -->
 	  			<parameter name="port" value="30544"/>
 	  			<parameter name="domain_name" value="SNC"/>
             </class>

@@ -1,5 +1,6 @@
 package com.siemens.datalayer.entitymanagement.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class updateEntityRequestBody {
@@ -8,7 +9,7 @@ public class updateEntityRequestBody {
 	
 	private String label;
 	
-	private Map<String, String> properties;
+	private Map<String, String> properties = new HashMap<String, String>();
 	
 	private String nodeType;
 	

@@ -24,21 +24,17 @@ public class EntityManagementEndpoint {
 		port = comm_port;
 	}
 
-    // Entity Endpoint: createEntityInDomain
-	@Step("Send a request of 'createEntityInDomain'")
-    public static Response createEntityInDomain(String domain, String entity) 
+    // Entity Endpoint: createEntity
+	@Step("Send a request of 'createEntity'")
+    public static Response createEntity(String body) 
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
         
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
-		
-		HashMap<String, String> parameters = new HashMap<>();		
-		parameters.put("domain", domain);
-		parameters.put("entity", entity);
 
-        Response response = httpRequest.queryParams(parameters)
+        Response response = httpRequest.body(body)
         							   .filter(new AllureRestAssured())
                 					   .post("/api/entities");
 
