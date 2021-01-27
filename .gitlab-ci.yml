@@ -36,8 +36,6 @@ Run Tests:
     variables:
       - $DL_PROJECT
       - $DL_ENV
-  except:
-    - schedules
   stage: test
   image: openjdk:8-jdk-alpine
   script:
