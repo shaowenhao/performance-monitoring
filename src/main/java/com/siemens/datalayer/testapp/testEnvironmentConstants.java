@@ -113,7 +113,7 @@ public class testEnvironmentConstants {
 	// Configuration for snc-prod environment
 	// =========================================================================================
 	public static final String SNC_PROD_CONNECTOR_BASE_URL = "http://140.231.89.85";
-	public static final String SNC_PROD_CONNECTOR_PORT = "31548";
+	public static final String SNC_PROD_CONNECTOR_PORT = "32328";
 	
 	public static final String SNC_PROD_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String SNC_PROD_APIENGINE_PORT = "30896";
