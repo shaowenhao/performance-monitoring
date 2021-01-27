@@ -1,0 +1,37 @@
+stages:
+  - build
+  - test
+  
+.spec:
+  tags:
+    - docker
+  only:
+    - $DL_PROJECT
+    - $DL_ENVIRONMENT
+  
+build-test-suite:
+  extends:
+    - .spec
+  stage: build
+  image: maven
+  variables:
+    MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  script:
+    - ls
+    - mvn clean
+    - mvn package -Pnotest
+  cache:
+    paths:
+      - .m2/repository/
+  artifacts:
+    paths:
+      - target/data-layer-automation-*-SNAPSHOT.jar
+
+test-application:
+  extends:
+    - .spec
+  stage: test
+  image: openjdk:8
+  variables:
+  script:
+    - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENVIRONMENT
