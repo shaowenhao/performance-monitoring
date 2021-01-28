@@ -77,8 +77,8 @@ Upload Allure Report:
   script:
     - apk update && apk add zip curl
     - zip -r allure-report.zip allure-report
-    - export MD5SUM=$(md5sum allure-results.zip | awk '{print $1}')
-    - export SHA1SUM=$(sha1sum allure-results.zip | awk '{print $1}')
+    - export MD5SUM=$(md5sum allure-report.zip | awk '{print $1}')
+    - export SHA1SUM=$(sha1sum allure-report.zip | awk '{print $1}')
     - curl  --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD --header "X-Checksum-Sha1:${SHA1SUM}" --header "X-Checksum-MD5:${MD5SUM}" -T allure-report.zip "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/$DL_PROJECT/$DL_ENV/allure-report.zip"
   artifacts:
     paths:
