@@ -4,7 +4,6 @@ stages:
   - scheduled-test
   - generate-report
   - upload-report
-
 variables:
   HTTP_PROXY: "http://194.138.0.19:9400"
   HTTPS_PROXY: "http://194.138.0.19:9400"
@@ -18,7 +17,6 @@ Build Test Suite:
   variables:
     MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   script:
-    - ls
     - mvn clean
     - mvn package -Pnotest
   cache:
@@ -44,9 +42,11 @@ Run Tests:
     - unzip allure-report.zip || true
     - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENV
     - if [ -d allure-report/history ]; then cp -r allure-report/history allure-results/history; else true; fi
+    - zip -r allure-results.zip allure-results
   artifacts:
     paths:
       - allure-results
+      - allure-results.zip
 
 Generate Allure Report:
   stage: generate-report
@@ -64,8 +64,24 @@ Generate Allure Report:
   artifacts:
     paths:
       - allure-report
-      
-Upload Allure Report:
+
+Allure Server:
+  stage: upload-report
+  tags:
+    - docker
+  only:
+    variables:
+      - $DL_PROJECT
+      - $DL_ENV
+  image: alpine
+  script:
+    - apk update && apk add curl jq
+    - export DL_UUID=$(curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/result --form 'allureResults=@./allure-results.zip;type=application/zip' 2>/dev/null | jq -r '.uuid')
+    - curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/report --header 'Content-Type:application/json' --data-raw '{"reportSpec":{"path":['\"$DL_PROJECT\"','\"$DL_ENV\"'],"executorInfo":{"buildName":'\"$DL_PROJECT-$DL_ENV\"'}},"results":['\"$DL_UUID\"'],"deleteResults":"false"}'
+  needs:
+    - Run Tests
+
+Artifactory:
   stage: upload-report
   tags:
     - docker
