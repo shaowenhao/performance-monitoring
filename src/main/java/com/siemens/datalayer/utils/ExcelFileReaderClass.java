@@ -7,7 +7,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ExcelFileReaderClass {
@@ -31,7 +31,7 @@ public class ExcelFileReaderClass {
 		            	
 		            	if (row.getRowNum() == 0) continue;
 		            	
-	                	Map<String, String> readParam = new HashMap<String, String>();
+	                	Map<String, String> readParam = new LinkedHashMap<String, String>();
 		            	for(Cell cell: row) {         	    
 		
 	                		switch (cell.getCellType()) {
