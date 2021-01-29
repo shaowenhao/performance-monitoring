@@ -18,6 +18,7 @@ report/
 logs/
 test-output/
 allure-results/
+allure-reports/
 target/
 snapshot/
 

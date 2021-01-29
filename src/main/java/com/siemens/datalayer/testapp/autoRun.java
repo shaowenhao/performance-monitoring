@@ -175,11 +175,11 @@ public class autoRun {
 			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc");
 			List<String> environmentList = Arrays.asList("dev", "test", "prod");
 			
-			if ((projectNameList.contains(args[0])) && (environmentList.contains(args[1])))
+			if ((projectNameList.contains(args[0].toLowerCase())) && (environmentList.contains(args[1].toLowerCase())))
 			{		
 				// Read pilot name and the environment to run regression test
-				String projectName = args[0];
-				String envName = args[1];
+				String projectName = args[0].toLowerCase();
+				String envName = args[1].toLowerCase();
 				
 				if (args.length > 2)
 				{
@@ -209,6 +209,7 @@ public class autoRun {
 					// Create testNG instance to execute tests
 					autoRun dt = new autoRun(); 		
 					dt.runSDLRegressionTests(testConfig, testParameters); 
+					System.exit(0);
 				}
 			}
 			else
@@ -220,5 +221,7 @@ public class autoRun {
 		{
 			System.out.println("Please specify the test environment, e.g. 'iems test'");
 		}
+
 	}
+	
 }
