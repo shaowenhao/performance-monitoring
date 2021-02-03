@@ -187,6 +187,10 @@ public class testConfigurationClass {
 		this.subscriptionManagement_port = port;
 	}
 	
+	public Boolean getRunSubscriptionMgmtTest() {
+		return this.runSubscriptionMgmtTest;
+	}
+	
 	public String getSubscriptionManagementBaseURL() {
 		return this.subscriptionManagement_base_url;
 	}
@@ -224,7 +228,11 @@ public class testConfigurationClass {
 				setRabbitMQExchange(testEnvironmentConstants.IEMS_DEV_RABBITMQ_EXCHANGE);
 				
 				setEntityMgmtTest(testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL,
-								  testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_PORT);			
+								  testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_PORT);
+				
+				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
+				
 				break;
 			
 			case ("iems-test"):
@@ -251,6 +259,9 @@ public class testConfigurationClass {
 				
 				setEntityMgmtTest(testEnvironmentConstants.IEMS_TEST_ENTITY_MANAGEMENT_BASE_URL,
 								  testEnvironmentConstants.IEMS_TEST_ENTITY_MANAGEMENT_PORT);
+				
+				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+										testEnvironmentConstants.IEMS_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
 			
 				break;
 			
@@ -278,6 +289,9 @@ public class testConfigurationClass {
 				
 				setEntityMgmtTest(testEnvironmentConstants.IEMS_PROD_ENTITY_MANAGEMENT_BASE_URL,
 								  testEnvironmentConstants.IEMS_PROD_ENTITY_MANAGEMENT_PORT);
+				
+				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+										testEnvironmentConstants.IEMS_PROD_SUBSCRIPTION_MANAGEMENT_PORT);
 			
 				break;
 				

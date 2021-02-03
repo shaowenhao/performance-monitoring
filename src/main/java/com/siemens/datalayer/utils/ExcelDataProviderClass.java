@@ -88,7 +88,7 @@ public class ExcelDataProviderClass {
 		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
 
 		String methodName = m.getName();
-		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForSubscriptionManagementTest");
+		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForSubMgmtTest");
 
 		try {
 			ExcelFileReaderClass.readParamFromExcelFile(dataFileName, methodName, queryParamCollection);

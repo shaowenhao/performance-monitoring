@@ -102,31 +102,46 @@ public class autoRun {
 			entityMgmtTest.setParameters(entityMgmtTestParams);
 			myClasses.add(entityMgmtTest); 
 		}
+		
+		//Add test class for SubscriptionManagement
+		if (testConfig.getRunSubscriptionMgmtTest())
+		{
+			XmlClass subMgmtTest = new XmlClass("com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests");
+			
+			Map<String,String> subMgmtTestParams = new LinkedHashMap<String,String> ();
+			subMgmtTestParams.put("base_url", testConfig.getSubscriptionManagementBaseURL());
+			subMgmtTestParams.put("port", testConfig.getSubscriptionManagementPort());
+			
+			subMgmtTest.setParameters(subMgmtTestParams);
+			myClasses.add(subMgmtTest); 
+		}
 
-		//Assign that to the XmlTest Object created earlier. 
+		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
-		//Create a list of XmlTests and put the Xmltest you created earlier to it.
+		//Create a list of XmlTests and put the XmlTest Object created earlier to it.
 		List<XmlTest> myTestList = new ArrayList<XmlTest>(); 
 		myTestList.add(myTest);   
 
-		//add the list of tests to your Suite. 
+		//Add the above list of XmlTests to the XML Suite. 
 		myTestSuite.setTests(myTestList);   
 
-		//Add the suite to the list of suites. 
+		//Create a list of XML Suite and add the XML Suite into it. 
 		List<XmlSuite> mySuiteList = new ArrayList<XmlSuite>(); 
 		mySuiteList.add(myTestSuite);   
 	     
-		//Set the list of Suites to the testNG object you created earlier. 
+		//Set the above list of XML Suites into the testNG object created earlier. 
 		testNGInstance.setXmlSuites(mySuiteList);
 		
+		//Set the testNG XML file name
 		String testngXmlName = testConfig.getConfigName() + "-regression-test.xml";
 		myTestSuite.setFileName(testngXmlName);
 		
+		//Execute the tests
 		myTestSuite.setThreadCount(5);   
 		if (runRegressionTest) testNGInstance.run();
 		
-		//Print the parameter values 
+		//Print the global parameters 
 		System.out.println("List of global test parameters:");
 		Map<String,String> params = myTest.getAllParameters(); 
 		
@@ -135,7 +150,7 @@ public class autoRun {
 			System.out.println(entry.getKey() + " = " + entry.getValue()); 
 		}
 		
-		//Create physical XML file based on the virtual XML content 
+		//Create a physical XML file based on the virtual XML content 
 		if (generateTestNGXML)
 		{
 			for(XmlSuite suite : mySuiteList) 
@@ -204,7 +219,10 @@ public class autoRun {
 						testParameters.put("dataFileForApiServiceTest", projectName+"-api-service-test-data.xlsx");	
 		
 					if (testConfig.getRunEntityMgmtTest()) 
-						testParameters.put("dataFileForEntityMgmtTest", projectName+"-entity-management-test-data.xlsx");	
+						testParameters.put("dataFileForEntityMgmtTest", projectName+"-entity-management-test-data.xlsx");
+					
+					if (testConfig.getRunSubscriptionMgmtTest())
+						testParameters.put("dataFileForSubMgmtTest", projectName+"-subscription-management-test-data.xlsx");
 					
 					// Create testNG instance to execute tests
 					autoRun dt = new autoRun(); 		
@@ -221,7 +239,6 @@ public class autoRun {
 		{
 			System.out.println("Please specify the test environment, e.g. 'iems test'");
 		}
-
 	}
 	
 }

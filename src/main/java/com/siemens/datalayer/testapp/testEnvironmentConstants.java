@@ -33,6 +33,9 @@ public class testEnvironmentConstants {
 	public static final String IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_ENTITY_MANAGEMENT_PORT = "31706";
 	
+	public static final String IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "32271";	
+	
 	// =========================================================================================
 	// Configuration for iems-test environment
 	// =========================================================================================
@@ -56,6 +59,9 @@ public class testEnvironmentConstants {
 	public static final String IEMS_TEST_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_TEST_ENTITY_MANAGEMENT_PORT = "31818";
 	
+	public static final String IEMS_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IEMS_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "31111";
+	
 	// =========================================================================================
 	// Configuration for iems-prod environment
 	// =========================================================================================
@@ -78,6 +84,9 @@ public class testEnvironmentConstants {
 	
 	public static final String IEMS_PROD_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_PROD_ENTITY_MANAGEMENT_PORT = "31726";
+	
+	public static final String IEMS_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IEMS_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "32563";
 	
 	// =========================================================================================
 	// #########################################################################################
