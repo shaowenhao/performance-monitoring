@@ -41,7 +41,7 @@ public class ExcelFileReaderClass {
 			                    String cellValue = dataFormatter.formatCellValue(cell);
 			                    String dataFieldName = dataFormatter.formatCellValue(headLine.getCell(cell.getColumnIndex()));
 			                    
-			                    if ((dataFieldName.contains("query")) && (cellValue.contains("\n")))
+			                    if ((dataFieldName.equals("query")) && (cellValue.contains("\n")))
 			                    {
 			                    	cellValue = formatQueryString(cellValue);
 			                    }

@@ -11,6 +11,9 @@ public class testConfigurationClass {
 	private String apiEngine_base_url = null;
 	private String apiEngine_port = null;
 	
+	Boolean runUserQueryTest = false;	
+	private String userQueryTestClass = null;
+	
 	Boolean runApiServiceTest = false;
 	private String apiService_base_url = null;
 	private String apiService_port = null;	
@@ -69,6 +72,16 @@ public class testConfigurationClass {
 	
 	public String getApiEnginePort() {
 		return this.apiEngine_port;
+	}
+	
+	public void setUserQueryTestClass(String userQueryTestClassName)
+	{
+		this.runUserQueryTest = true;
+		this.userQueryTestClass = userQueryTestClassName;
+	}
+	
+	public String getUserQueryTestClass() {
+		return this.userQueryTestClass;
 	}
 	
 	public void setApiServiceTest(String base_url, String port) {
@@ -342,6 +355,8 @@ public class testConfigurationClass {
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
 				
+				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
+				
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_PORT);
 				
@@ -355,6 +370,8 @@ public class testConfigurationClass {
 				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
 				
+				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
+				
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);	
 				
@@ -367,6 +384,8 @@ public class testConfigurationClass {
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_PROD_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_PROD_APIENGINE_PORT);
+				
+				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
 				
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_PROD_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_PROD_ENTITY_MANAGEMENT_PORT);

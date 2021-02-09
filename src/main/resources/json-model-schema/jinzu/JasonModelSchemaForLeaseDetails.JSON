@@ -1,0 +1,689 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "Lease": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "lease_type_gb": {
+                  "type": "string"
+                },
+                "lending": {
+                  "type": "string"
+                },
+                "lposition": {
+                  "type": "string"
+                },
+                "invoice_no": {
+                  "type": "string"
+                },
+                "project": {
+                  "type": "string"
+                },
+                "lease_type_yj": {
+                  "type": "string"
+                },
+                "brand_name": {
+                  "type": "string"
+                },
+                "unit_price": {
+                  "type": "number"
+                },
+                "serial_num": {
+                  "type": "null"
+                },
+                "discount_ratio": {
+                  "type": "number"
+                },
+                "transfer_price": {
+                  "type": "number"
+                },
+                "lease_net_val": {
+                  "type": "integer"
+                },
+                "nominal_cost": {
+                  "type": "integer"
+                },
+                "supplier": {
+                  "type": "string"
+                },
+                "asset_type": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "lease_type": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "purchase_time": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "lease_group": {
+                  "type": "string"
+                },
+                "product_model": {
+                  "type": "null"
+                },
+                "invert_Lease_Group": {
+                  "type": "object",
+                  "properties": {
+                    "lease_net_val": {
+                      "type": "integer"
+                    },
+                    "transfer_price": {
+                      "type": "number"
+                    },
+                    "lease_type_gb": {
+                      "type": "string"
+                    },
+                    "nominal_cost": {
+                      "type": "number"
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "asset_type": {
+                      "type": "string"
+                    },
+                    "project": {
+                      "type": "string"
+                    },
+                    "lease_type_yj": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "lease_type": {
+                      "type": "string"
+                    },
+                    "unit_price": {
+                      "type": "integer"
+                    },
+                    "discount_ratio": {
+                      "type": "number"
+                    },
+                    "invert_Project": {
+                      "type": "object",
+                      "properties": {
+                        "no": {
+                          "type": "string"
+                        },
+                        "rent_type": {
+                          "type": "string"
+                        },
+                        "is_manufacture_buy_back": {
+                          "type": "boolean"
+                        },
+                        "classification_level": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "detail_address": {
+                          "type": "null"
+                        },
+                        "charge_frequency": {
+                          "type": "integer"
+                        },
+                        "credit_amount": {
+                          "type": "integer"
+                        },
+                        "risk_mgr": {
+                          "type": "string"
+                        },
+                        "is_manufacture_leasing": {
+                          "type": "boolean"
+                        },
+                        "business_unit": {
+                          "type": "string"
+                        },
+                        "discount_ratio": {
+                          "type": "number"
+                        },
+                        "class_level": {
+                          "type": "string"
+                        },
+                        "manufacture": {
+                          "type": "string"
+                        },
+                        "business_mgr": {
+                          "type": "string"
+                        },
+                        "expire_date": {
+                          "type": "null"
+                        },
+                        "province": {
+                          "type": "string"
+                        },
+                        "district": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "guarantee_type": {
+                          "type": "string"
+                        },
+                        "id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "invert_Customer": {
+                          "type": "object",
+                          "properties": {
+                            "registered_address": {
+                              "type": "string"
+                            },
+                            "city": {
+                              "type": "string"
+                            },
+                            "major_class": {
+                              "type": "string"
+                            },
+                            "cname": {
+                              "type": "string"
+                            },
+                            "enterprise_size": {
+                              "type": "string"
+                            },
+                            "project": {
+                              "type": "string"
+                            },
+                            "is_connected_tx": {
+                              "type": "boolean"
+                            },
+                            "legal_person_id": {
+                              "type": "string"
+                            },
+                            "small_class": {
+                              "type": "string"
+                            },
+                            "province": {
+                              "type": "string"
+                            },
+                            "is_gov_fin_customer": {
+                              "type": "boolean"
+                            },
+                            "contact": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "group": {
+                              "type": "string"
+                            },
+                            "legal_person": {
+                              "type": "string"
+                            },
+                            "contact_detail": {
+                              "type": "string"
+                            },
+                            "actual_controller": {
+                              "type": "string"
+                            },
+                            "office_address": {
+                              "type": "string"
+                            },
+                            "ctype": {
+                              "type": "string"
+                            },
+                            "district": {
+                              "type": "string"
+                            },
+                            "is_group_customer": {
+                              "type": "boolean"
+                            },
+                            "middle_class": {
+                              "type": "string"
+                            },
+                            "category": {
+                              "type": "string"
+                            },
+                            "cid": {
+                              "type": "string"
+                            },
+                            "holding_type": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "registered_address",
+                            "city",
+                            "major_class",
+                            "cname",
+                            "enterprise_size",
+                            "project",
+                            "is_connected_tx",
+                            "legal_person_id",
+                            "small_class",
+                            "province",
+                            "is_gov_fin_customer",
+                            "contact",
+                            "id",
+                            "group",
+                            "legal_person",
+                            "contact_detail",
+                            "actual_controller",
+                            "office_address",
+                            "ctype",
+                            "district",
+                            "is_group_customer",
+                            "middle_class",
+                            "category",
+                            "cid",
+                            "holding_type"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "no",
+                        "rent_type",
+                        "is_manufacture_buy_back",
+                        "classification_level",
+                        "city",
+                        "detail_address",
+                        "charge_frequency",
+                        "credit_amount",
+                        "risk_mgr",
+                        "is_manufacture_leasing",
+                        "business_unit",
+                        "discount_ratio",
+                        "class_level",
+                        "manufacture",
+                        "business_mgr",
+                        "expire_date",
+                        "province",
+                        "district",
+                        "name",
+                        "guarantee_type",
+                        "id",
+                        "status",
+                        "invert_Customer"
+                      ]
+                    },
+                    "Refer_To_Power_Station_Properties": {
+                      "type": "object",
+                      "properties": {
+                        "avg_annual_eq_hours": {
+                          "type": "number"
+                        },
+                        "lease_group": {
+                          "type": "string"
+                        },
+                        "ps_type": {
+                          "type": "string"
+                        },
+                        "structure": {
+                          "type": "string"
+                        },
+                        "capacity": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "avg_annual_eq_hours",
+                        "lease_group",
+                        "ps_type",
+                        "structure",
+                        "capacity"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "lease_net_val",
+                    "transfer_price",
+                    "lease_type_gb",
+                    "nominal_cost",
+                    "count",
+                    "asset_type",
+                    "project",
+                    "lease_type_yj",
+                    "id",
+                    "lease_type",
+                    "unit_price",
+                    "discount_ratio",
+                    "invert_Project",
+                    "Refer_To_Power_Station_Properties"
+                  ]
+                },
+                "Refer_To_Power_Station": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "Compose_Of_Site": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "avg_annual_eq_hours": {
+                              "type": "null"
+                            },
+                            "avg_irradiance": {
+                              "type": "null"
+                            },
+                            "capacity": {
+                              "type": "number"
+                            },
+                            "city": {
+                              "type": "null"
+                            },
+                            "commissioning_date": {
+                              "type": "integer"
+                            },
+                            "grid_inject_production": {
+                              "type": "null"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "irradiance": {
+                              "type": "null"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "null"
+                            },
+                            "power_station": {
+                              "type": "string"
+                            },
+                            "state": {
+                              "type": "string"
+                            },
+                            "sys_engaged_date": {
+                              "type": "null"
+                            },
+                            "type": {
+                              "type": "null"
+                            },
+                            "voltage_degree": {
+                              "type": "null"
+                            },
+                            "Generate_Site_Report": {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "energy_loss": {
+                                      "type": "null"
+                                    },
+                                    "pr": {
+                                      "type": "number"
+                                    },
+                                    "peak_power_moment": {
+                                      "type": "null"
+                                    },
+                                    "production": {
+                                      "type": "number"
+                                    },
+                                    "purchasing_energy": {
+                                      "type": "null"
+                                    },
+                                    "sunshin_duration": {
+                                      "type": "null"
+                                    },
+                                    "full_generation_hours": {
+                                      "type": "null"
+                                    },
+                                    "comprehensive_plant_power_consumption": {
+                                      "type": "null"
+                                    },
+                                    "peak_power": {
+                                      "type": "null"
+                                    },
+                                    "self_consumed_percent": {
+                                      "type": "null"
+                                    },
+                                    "site": {
+                                      "type": "string"
+                                    },
+                                    "revenue": {
+                                      "type": "null"
+                                    },
+                                    "report_time": {
+                                      "type": "integer"
+                                    },
+                                    "comprehensive_plant_power_consumption_rate": {
+                                      "type": "null"
+                                    },
+                                    "self_consumed_production": {
+                                      "type": "null"
+                                    },
+                                    "energy_loss_rate": {
+                                      "type": "null"
+                                    },
+                                    "equivalent_hours": {
+                                      "type": "number"
+                                    },
+                                    "pr_validity": {
+                                      "type": "null"
+                                    }
+                                  },
+                                  "required": [
+                                    "energy_loss",
+                                    "pr",
+                                    "peak_power_moment",
+                                    "production",
+                                    "purchasing_energy",
+                                    "sunshin_duration",
+                                    "full_generation_hours",
+                                    "comprehensive_plant_power_consumption",
+                                    "peak_power",
+                                    "self_consumed_percent",
+                                    "site",
+                                    "revenue",
+                                    "report_time",
+                                    "comprehensive_plant_power_consumption_rate",
+                                    "self_consumed_production",
+                                    "energy_loss_rate",
+                                    "equivalent_hours",
+                                    "pr_validity"
+                                  ]
+                                }
+                              ]
+                            },
+                            "invert_Weather": {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "max_temperature": {
+                                      "type": "null"
+                                    },
+                                    "update_time": {
+                                      "type": "integer"
+                                    },
+                                    "site": {
+                                      "type": "string"
+                                    },
+                                    "rainfall": {
+                                      "type": "null"
+                                    },
+                                    "main_weather_station": {
+                                      "type": "null"
+                                    },
+                                    "avg_temperature": {
+                                      "type": "null"
+                                    },
+                                    "description": {
+                                      "type": "string"
+                                    },
+                                    "min_temperature": {
+                                      "type": "null"
+                                    }
+                                  },
+                                  "required": [
+                                    "max_temperature",
+                                    "update_time",
+                                    "site",
+                                    "rainfall",
+                                    "main_weather_station",
+                                    "avg_temperature",
+                                    "description",
+                                    "min_temperature"
+                                  ]
+                                }
+                              ]
+                            },
+                            "Involve_Device_Alarm_Event": {
+                              "type": "array",
+                              "items": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "alarm_location": {
+                                      "type": "null"
+                                    },
+                                    "update_time": {
+                                      "type": "integer"
+                                    },
+                                    "site": {
+                                      "type": "string"
+                                    },
+                                    "alarm_handle_status": {
+                                      "type": "string"
+                                    },
+                                    "alarm_template": {
+                                      "type": "string"
+                                    },
+                                    "occurring_time": {
+                                      "type": "integer"
+                                    },
+                                    "event_name": {
+                                      "type": "null"
+                                    },
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "update_by": {
+                                      "type": "string"
+                                    },
+                                    "device": {
+                                      "type": "null"
+                                    },
+                                    "confirm_time": {
+                                      "type": "null"
+                                    }
+                                  },
+                                  "required": [
+                                    "alarm_location",
+                                    "update_time",
+                                    "site",
+                                    "alarm_handle_status",
+                                    "alarm_template",
+                                    "occurring_time",
+                                    "event_name",
+                                    "id",
+                                    "update_by",
+                                    "device",
+                                    "confirm_time"
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          "required": [
+                            "avg_annual_eq_hours",
+                            "avg_irradiance",
+                            "capacity",
+                            "city",
+                            "commissioning_date",
+                            "grid_inject_production",
+                            "id",
+                            "irradiance",
+                            "location",
+                            "name",
+                            "power_station",
+                            "state",
+                            "sys_engaged_date",
+                            "type",
+                            "voltage_degree",
+                            "Generate_Site_Report",
+                            "invert_Weather",
+                            "Involve_Device_Alarm_Event"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "Compose_Of_Site"
+                  ]
+                }
+              },
+              "required": [
+                "lease_type_gb",
+                "lending",
+                "lposition",
+                "invoice_no",
+                "project",
+                "lease_type_yj",
+                "brand_name",
+                "unit_price",
+                "serial_num",
+                "discount_ratio",
+                "transfer_price",
+                "lease_net_val",
+                "nominal_cost",
+                "supplier",
+                "asset_type",
+                "name",
+                "lease_type",
+                "position",
+                "id",
+                "purchase_time",
+                "status",
+                "lease_group",
+                "product_model",
+                "invert_Lease_Group",
+                "Refer_To_Power_Station"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "Lease"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

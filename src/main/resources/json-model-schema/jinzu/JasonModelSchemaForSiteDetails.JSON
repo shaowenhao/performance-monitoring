@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "Site": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "commissioning_date": {
+                  "type": "integer"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "power_station": {
+                  "type": "string"
+                },
+                "Has_Device_Inverter": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "site": {
+                          "type": "string"
+                        },
+                        "pr": {
+                          "type": "number"
+                        },
+                        "production": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "full_generation_hours": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "site",
+                        "pr",
+                        "production",
+                        "name",
+                        "type",
+                        "full_generation_hours"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "location",
+                "commissioning_date",
+                "state",
+                "power_station",
+                "Has_Device_Inverter"
+              ]
+            }
+          ]
+        }
+      },
+      "required": [
+        "Site"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
+}

@@ -26,6 +26,12 @@
   			<parameter name="port" value="31059"/>
             </class>
             
+            <class name="com.siemens.datalayer.jinzu.test.UserQueryTests">
+            <parameter name="base_url" value="http://140.231.89.85"/>
+			<!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: 30480 -->
+  			<parameter name="port" value="31059"/>
+            </class>
+            
             <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">            
             <parameter name="base_url" value="http://140.231.89.85"/>
 			<!-- jinzu-dev: 31954 / jinzu-test: 32694 / jinzu-prod: 32093 -->
