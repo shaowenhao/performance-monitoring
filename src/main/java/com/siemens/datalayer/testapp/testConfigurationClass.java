@@ -73,6 +73,10 @@ public class testConfigurationClass {
 	public String getApiEnginePort() {
 		return this.apiEngine_port;
 	}
+	public Boolean getRunUserQueryTest()
+	{
+		return this.runUserQueryTest;
+	}
 	
 	public void setUserQueryTestClass(String userQueryTestClassName)
 	{

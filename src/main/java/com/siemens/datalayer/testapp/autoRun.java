@@ -69,10 +69,13 @@ public class autoRun {
 		myClasses.add(apiEngineTest);
 		
 		//Add test class for userQueryTest
-		XmlClass userQueryTest = new XmlClass(testConfig.getUserQueryTestClass());
-		
-		userQueryTest.setParameters(apiEngineTestParams);
-		myClasses.add(userQueryTest);
+		if (testConfig.getRunUserQueryTest())
+		{
+			XmlClass userQueryTest = new XmlClass(testConfig.getUserQueryTestClass());
+			
+			userQueryTest.setParameters(apiEngineTestParams);
+			myClasses.add(userQueryTest);
+		}
 		
 		//Add test class for ApiService
 		if (testConfig.getRunApiServiceTest())

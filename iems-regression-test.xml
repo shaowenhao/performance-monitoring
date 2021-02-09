@@ -7,9 +7,9 @@
 
 	<parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx" />
 	<parameter name="dataFileForApiEngineTest" value="iems-api-engine-test-data.xlsx" />
-<!-- 	<parameter name="dataFileForApiServiceTest" value="iems-api-service-test-data.xlsx" /> -->
-<!--     <parameter name="dataFileForEntityMgmtTest" value="iems-entity-management-test-data.xlsx" /> -->
-<!--     <parameter name="dataFileForSubMgmtTest" value="iems-subscription-management-test-data.xlsx" /> -->
+	<parameter name="dataFileForApiServiceTest" value="iems-api-service-test-data.xlsx" />
+    <parameter name="dataFileForEntityMgmtTest" value="iems-entity-management-test-data.xlsx" />
+    <parameter name="dataFileForSubMgmtTest" value="iems-subscription-management-test-data.xlsx" />
 
     <test verbose="2" preserve-order="true"
           thread-count="5"
