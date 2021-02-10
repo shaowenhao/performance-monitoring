@@ -320,6 +320,8 @@ public class testConfigurationClass {
 				setApiEngineTest(testEnvironmentConstants.SNC_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.SNC_DEV_APIENGINE_PORT);
 				
+				setUserQueryTestClass("com.siemens.datalayer.snc.test.UserQueryTests");
+				
 				setEntityMgmtTest(testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_PORT);
 				
@@ -333,6 +335,8 @@ public class testConfigurationClass {
 				setApiEngineTest(testEnvironmentConstants.SNC_TEST_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.SNC_TEST_APIENGINE_PORT);
 				
+				setUserQueryTestClass("com.siemens.datalayer.snc.test.UserQueryTests");
+				
 				setEntityMgmtTest(testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);	
 				
@@ -345,6 +349,8 @@ public class testConfigurationClass {
 			
 				setApiEngineTest(testEnvironmentConstants.SNC_PROD_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.SNC_PROD_APIENGINE_PORT);
+				
+				setUserQueryTestClass("com.siemens.datalayer.snc.test.UserQueryTests");
 				
 				setEntityMgmtTest(testEnvironmentConstants.SNC_PROD_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_PROD_ENTITY_MANAGEMENT_PORT);
