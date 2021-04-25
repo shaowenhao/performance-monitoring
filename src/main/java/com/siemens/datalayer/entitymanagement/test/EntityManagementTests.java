@@ -42,9 +42,10 @@ public class EntityManagementTests {
 	
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
-	public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31706") String port) 
+	public void setEntityManagementEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31706") String port)
 	{
 		TestEntityList = new HashMap<String, String>();
+		paramMapsOfcreateEntity = new HashMap<String,String>();
 		
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
@@ -77,7 +78,7 @@ public class EntityManagementTests {
 	// "location":"iEMS","label":"testEntity1","rspStatus":"200","rspCode":"200","rspMessage":"OK"}
 	public void createEntity(Map<String, String> paramMaps)
 	{
-		//System.out.println("paramMaps:"+paramMaps);
+		System.out.println("paramMaps:"+paramMaps);
 		if (true)
 		{
 			// 创建类updateEntityRequestBody的一个实例，updateEntityRequestBody类主要是构造传入接口的参数
@@ -108,8 +109,8 @@ public class EntityManagementTests {
 				Response response = EntityManagementEndpoint.createEntity(bodyString);
 				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
-				/*System.out.println("bodyString:"+bodyString);
-				System.out.println("data.id:"+response.jsonPath().get("data.id").toString());*/
+				System.out.println("bodyString:"+bodyString);
+				System.out.println("data.id:"+response.jsonPath().get("data.id").toString());
 
 				if (paramMaps.get("description").contains("good request"))
 				{
