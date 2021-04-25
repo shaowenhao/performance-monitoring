@@ -68,8 +68,10 @@ public class ExcelDataProviderClass {
 	public static Iterator<Object[]> entityManagementTestDataProvider(Method m, ITestContext iTestContext)
 	{
 	    Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
-	    
+
+	    // 获取调用此方法的testcase（带@Test）的函数名称，如createEntity
 	    String methodName = m.getName();
+	    // 获取xml文件中的变量“dataFileForEntityMgmtTest”的值，即iems-entity-management-test-data.xlsx
 		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForEntityMgmtTest");
 	    
 		try {

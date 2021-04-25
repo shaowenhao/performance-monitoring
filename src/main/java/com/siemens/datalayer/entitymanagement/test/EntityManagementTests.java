@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import jdk.nashorn.internal.objects.annotations.Constructor;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -29,12 +30,15 @@ import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
 
+import static io.restassured.RestAssured.given;
+
 @Epic("SDL Entity-management")
 @Feature("Graph/ Entity/ Relation End Points")
 
 public class EntityManagementTests {
 	
 	static Map<String, String> TestEntityList;
+	static Map<String,String> paramMapsOfcreateEntity;
 	
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
@@ -69,44 +73,59 @@ public class EntityManagementTests {
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'createEntity' request to entity endpoint interface.")
 	@Story("Entity End Point: createEntity")
+	// 此时的paramMaps为一个Map，比如{"test-id":"iEMS-Entity-mgmt-Test-1","description":"good request",
+	// "location":"iEMS","label":"testEntity1","rspStatus":"200","rspCode":"200","rspMessage":"OK"}
 	public void createEntity(Map<String, String> paramMaps)
 	{
-		if ((paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+		//System.out.println("paramMaps:"+paramMaps);
+		if (true)
 		{
+			// 创建类updateEntityRequestBody的一个实例，updateEntityRequestBody类主要是构造传入接口的参数
 			updateEntityRequestBody requestBody = new updateEntityRequestBody();
-			
-			requestBody.setId("1234");
-			requestBody.setLocation(paramMaps.get("location"));
+
+			requestBody.setId(paramMaps.get("id"));
 			requestBody.setLabel(paramMaps.get("label"));
-			
-			requestBody.setNodeType("ENTITY");
-			requestBody.setProperty("metadata_node_type", "entity");
-			requestBody.setProperty("metadata_node_domain", paramMaps.get("location"));	
-			requestBody.setProperty("additional_prop1", "value1");
-			requestBody.setProperty("additional_prop2", "value2");
-			
+
+			requestBody.setProperty("metadata_node_type", paramMaps.get("metadata_node_type"));
+			requestBody.setProperty("metadata_node_domain", paramMaps.get("metadata_node_domain"));
+			requestBody.setProperty("additional_prop1", paramMaps.get("additional_prop1"));
+			requestBody.setProperty("additional_prop2", paramMaps.get("additional_prop2"));
+
+			requestBody.setNodeType(paramMaps.get("nodeType"));
+			requestBody.setConnectedRelationNumber(paramMaps.get("connectedRelationNumber"));
+			System.out.println(requestBody);
+
 			try
 			{
-				ObjectMapper objectMapper = new ObjectMapper();	
+				ObjectMapper objectMapper = new ObjectMapper();
 				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 				objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-				
+
 				String bodyString = objectMapper.writeValueAsString(requestBody);
-	
+
+
+				// 通过EntityManagementEndpoint-createEntity方法，发送请求至http://140.231.89.85:31818/api/entities接口，并获取返回response
 				Response response = EntityManagementEndpoint.createEntity(bodyString);
-				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-			
+				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+				/*System.out.println("bodyString:"+bodyString);
+				System.out.println("data.id:"+response.jsonPath().get("data.id").toString());*/
+
 				if (paramMaps.get("description").contains("good request"))
 				{
 					TestEntityList.put(paramMaps.get("label"), response.jsonPath().get("data.id"));
-					
-					Assert.assertEquals(response.jsonPath().get("data.nodeType"), "ENTITY");
+
+					Assert.assertNotNull(response.jsonPath().get("data.id"));
 					Assert.assertEquals(response.jsonPath().get("data.label"), paramMaps.get("label"), "New entity's label is set correctly");
-					Assert.assertEquals(response.jsonPath().get("data.location"), paramMaps.get("location"), "New entity's location is set correctly");
-	
-					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_type"), "entity");
-					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_domain"), paramMaps.get("location"));
-				}	
+
+					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_type"), paramMaps.get("metadata_node_type"));
+					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_domain"), paramMaps.get("metadata_node_domain"));
+					Assert.assertEquals(response.jsonPath().get("data.properties.additional_prop1"), paramMaps.get("additional_prop1"));
+					Assert.assertEquals(response.jsonPath().get("data.properties.additional_prop2"), paramMaps.get("additional_prop2"));
+
+					Assert.assertEquals(response.jsonPath().get("data.nodeType"), paramMaps.get("nodeType"));
+					Assert.assertEquals(response.jsonPath().get("data.connectedRelationNumber"),paramMaps.get("connectedRelationNumber"));
+				}
 			}
 			catch (Exception e) 
 		    {
@@ -127,8 +146,8 @@ public class EntityManagementTests {
 	public void updateEntity(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be update really exists, if not create it
-		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+		if ((paramMaps.get("description").contains("entity id not exist")==false)
+				&& (paramMaps.containsKey("label")))
 			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));		
 
 		String bodyString = paramMaps.get("body");
@@ -206,7 +225,7 @@ public class EntityManagementTests {
 			if ((paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
 			{
 				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("label")), "The entity name is correct");
-				Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("location")), "The domain is correct");
+				//Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("location")), "The domain is correct");
 			}
 		}
 	}
@@ -343,7 +362,7 @@ public class EntityManagementTests {
 		updateEntityRequestBody requestBody = new updateEntityRequestBody();
 		
 		requestBody.setId("1234");
-		requestBody.setLocation(location);
+		//requestBody.setLocation(location);
 		requestBody.setLabel(label);		
 		requestBody.setNodeType("ENTITY");
 		requestBody.setProperty("metadata_node_type", "entity");
@@ -367,7 +386,7 @@ public class EntityManagementTests {
 		}
 		catch (Exception e) 
 	    {
-			System.out.println("Error: can not convert the input string 'body' to a jason request");
+			System.out.println("Error: can not convert the input string 'body' to a json request");
 	    }
 		
 		return result;
@@ -376,10 +395,12 @@ public class EntityManagementTests {
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
 	{
+		// 校验http返回状态码
 		int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
 		if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
 		Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
-		  
+
+		// 校验Response body-code
 		if ((requestParameters.containsKey("rspCode")))
 		{
 			if (requestParameters.get("rspCode").contains("null"))
@@ -387,7 +408,8 @@ public class EntityManagementTests {
 			else
 			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
 		}
-		  
+
+		// 校验Response body-message
 		if (requestParameters.containsKey("rspMessage"))
 		{
 			if (requestParameters.get("rspMessage").contains("null"))

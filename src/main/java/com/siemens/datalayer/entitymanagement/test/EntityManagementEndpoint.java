@@ -1,12 +1,12 @@
 package com.siemens.datalayer.entitymanagement.test;
 
-import java.util.HashMap;
-
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import static io.restassured.RestAssured.given;
 
 public class EntityManagementEndpoint {
 	
@@ -30,14 +30,15 @@ public class EntityManagementEndpoint {
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
-        
+        /*System.out.println("BASE_URL:"+BASE_URL);
+        System.out.println("port:"+Integer.valueOf(port).intValue());*/
+
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
         Response response = httpRequest.body(body)
         							   .filter(new AllureRestAssured())
                 					   .post("/api/entities");
-
         return response;
     }
 
