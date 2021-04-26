@@ -30,8 +30,6 @@ public class EntityManagementEndpoint {
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
-        /*System.out.println("BASE_URL:"+BASE_URL);
-        System.out.println("port:"+Integer.valueOf(port).intValue());*/
 
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");

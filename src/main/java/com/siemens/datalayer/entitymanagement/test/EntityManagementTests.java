@@ -38,14 +38,14 @@ import static io.restassured.RestAssured.given;
 public class EntityManagementTests {
 	
 	static Map<String, String> TestEntityList;
-	static Map<String,String> paramMapsOfcreateEntity;
+	static Map<String,Map> paramMapsOfcreateEntity;
 	
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
 	public void setEntityManagementEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31706") String port)
 	{
 		TestEntityList = new HashMap<String, String>();
-		paramMapsOfcreateEntity = new HashMap<String,String>();
+		paramMapsOfcreateEntity = new HashMap<String,Map>();
 		
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
@@ -53,7 +53,7 @@ public class EntityManagementTests {
 	}
 	
 	@AfterClass (description = "Clean up test entities")
-	public void removeTestEntities()
+	public void removeTestEntitiesAndparamMapsOfcreateEntity()
 	{
 		if (TestEntityList.size() > 0)
 		{
@@ -65,6 +65,20 @@ public class EntityManagementTests {
 					System.out.println("Error: can not remove the specified test entity (" + entry.getKey() + "/" + entry.getValue() + ")");
 			}
 		}
+
+		if(paramMapsOfcreateEntity.size() > 0){
+			for (String key : paramMapsOfcreateEntity.keySet())
+			{
+				paramMapsOfcreateEntity.remove(key);
+			}
+		}
+		/*if (paramMapsOfcreateEntity.size() > 0){
+			for(Map.Entry<String,Map> entry : paramMapsOfcreateEntity.entrySet())
+				System.out.println(entry.getKey() + " = " +entry.getValue());
+		}
+		else{
+			System.out.println("paramMapsOfcreateEntity.size():"+paramMapsOfcreateEntity.size());
+		}*/
 	}
 	
 	@Test ( priority = 0, 
@@ -78,7 +92,10 @@ public class EntityManagementTests {
 	// "location":"iEMS","label":"testEntity1","rspStatus":"200","rspCode":"200","rspMessage":"OK"}
 	public void createEntity(Map<String, String> paramMaps)
 	{
-		System.out.println("paramMaps:"+paramMaps);
+		if(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity") == null)
+			paramMapsOfcreateEntity.put("paramMapsOfcreateEntity",paramMaps);
+		/*for(Map.Entry<String,Map> entry : paramMapsOfcreateEntity.entrySet())
+			System.out.println(entry.getKey() + " = " +entry.getValue());*/
 		if (true)
 		{
 			// 创建类updateEntityRequestBody的一个实例，updateEntityRequestBody类主要是构造传入接口的参数
@@ -94,7 +111,6 @@ public class EntityManagementTests {
 
 			requestBody.setNodeType(paramMaps.get("nodeType"));
 			requestBody.setConnectedRelationNumber(paramMaps.get("connectedRelationNumber"));
-			System.out.println(requestBody);
 
 			try
 			{
@@ -109,7 +125,6 @@ public class EntityManagementTests {
 				Response response = EntityManagementEndpoint.createEntity(bodyString);
 				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
-				System.out.println("bodyString:"+bodyString);
 				System.out.println("data.id:"+response.jsonPath().get("data.id").toString());
 
 				if (paramMaps.get("description").contains("good request"))
@@ -149,9 +164,25 @@ public class EntityManagementTests {
 		// Check if the entity to be update really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false)
 				&& (paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));		
+			createEntityToBeTest(paramMaps.get("label"));
 
-		String bodyString = paramMaps.get("body");
+		updateEntityRequestBody requestBody = new updateEntityRequestBody();
+
+		// 将TestEntityList中的value，即data.id做为requestBody的id值
+		requestBody.setId(TestEntityList.get("label"));
+		// 将paramMaps中的label做为requestBody的label值
+		requestBody.setLabel(paramMaps.get("label"));
+
+		// 将paramMapsOfcreateEntity中的value中的对应的metadata_node_type、metadata_node_domain、additional_prop1、additional_prop2
+		// 的key和value分别作为properties的参数和值
+		requestBody.setProperty("metadata_node_type",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_type").toString());
+		requestBody.setProperty("metadata_node_domain",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_domain").toString());
+		requestBody.setProperty("additional_prop1",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop1").toString());
+		requestBody.setProperty("additional_prop2",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop2").toString());
+
+		requestBody.setNodeType(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("nodeType").toString());
+		requestBody.setConnectedRelationNumber(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("connectedRelationNumber").toString());
+
 		
 		// Check if the input string contains basic information
 		if (bodyString.contains("id") && bodyString.contains("label") && bodyString.contains("properties"))
@@ -203,7 +234,7 @@ public class EntityManagementTests {
 		// Check if the entity to be test really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
 			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));
+			createEntityToBeTest(paramMaps.get("label"));
 		
 		// Read the id from input parameter 
 		String entityId = paramMaps.get("id");
@@ -244,7 +275,7 @@ public class EntityManagementTests {
 		// Check if the entity to be delete really exists, if not create it
 		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
 			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("location"), paramMaps.get("label"));
+			createEntityToBeTest(paramMaps.get("label"));
 		
 		// Read the id from input parameter 
 		String entityToBeDelete = paramMaps.get("id");
@@ -344,11 +375,11 @@ public class EntityManagementTests {
 	}
 	
 	// Check if the entity with the given location & label really exists, if not try to create it
-	public static void createEntityToBeTest(String location, String label)
+	public static void createEntityToBeTest(String label)
 	{
 		if (!TestEntityList.containsKey(label))
 		{	
-			String id = createEntity(location, label);
+			String id = createEntity(label);
 			if (id.equals("none")==false)
 				TestEntityList.put(label, id);
 			else
@@ -356,20 +387,19 @@ public class EntityManagementTests {
 		}
 	}
 	
-	public static String createEntity(String location, String label)
+	public static String createEntity(String label)
 	{
 		String result = "none";
 		
 		updateEntityRequestBody requestBody = new updateEntityRequestBody();
 		
-		requestBody.setId("1234");
-		//requestBody.setLocation(location);
-		requestBody.setLabel(label);		
-		requestBody.setNodeType("ENTITY");
-		requestBody.setProperty("metadata_node_type", "entity");
-		requestBody.setProperty("metadata_node_domain", location);	
-		requestBody.setProperty("additional_prop1", "value1");
-		requestBody.setProperty("additional_prop2", "value2");
+		requestBody.setId(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("id").toString());
+		requestBody.setLabel(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("label").toString());
+		requestBody.setNodeType(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("nodeType").toString());
+		requestBody.setProperty("metadata_node_type", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_type").toString());
+		requestBody.setProperty("metadata_node_domain", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_domain").toString());
+		requestBody.setProperty("additional_prop1", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop1").toString());
+		requestBody.setProperty("additional_prop2", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop2").toString());
 		
 		try
 		{
