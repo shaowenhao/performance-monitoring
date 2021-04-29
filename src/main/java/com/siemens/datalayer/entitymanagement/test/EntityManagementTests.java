@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -29,6 +30,8 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
+
+import javax.swing.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -72,13 +75,6 @@ public class EntityManagementTests {
 				paramMapsOfcreateEntity.remove(key);
 			}
 		}
-		/*if (paramMapsOfcreateEntity.size() > 0){
-			for(Map.Entry<String,Map> entry : paramMapsOfcreateEntity.entrySet())
-				System.out.println(entry.getKey() + " = " +entry.getValue());
-		}
-		else{
-			System.out.println("paramMapsOfcreateEntity.size():"+paramMapsOfcreateEntity.size());
-		}*/
 	}
 	
 	@Test ( priority = 0, 
@@ -125,7 +121,7 @@ public class EntityManagementTests {
 				Response response = EntityManagementEndpoint.createEntity(bodyString);
 				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
-				System.out.println("data.id:"+response.jsonPath().get("data.id").toString());
+				// System.out.println("data.id:"+response.jsonPath().get("data.id").toString());
 
 				if (paramMaps.get("description").contains("good request"))
 				{
@@ -162,62 +158,47 @@ public class EntityManagementTests {
 	public void updateEntity(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be update really exists, if not create it
-		if ((paramMaps.get("description").contains("entity id not exist")==false)
-				&& (paramMaps.containsKey("label")))
+		if((paramMaps.get("description").contains("entity id not exist")==false)
+				&&(paramMaps.containsKey("label")))
 			createEntityToBeTest(paramMaps.get("label"));
 
-		updateEntityRequestBody requestBody = new updateEntityRequestBody();
+		String bodyString = paramMaps.get("body");
 
-		// 将TestEntityList中的value，即data.id做为requestBody的id值
-		requestBody.setId(TestEntityList.get("label"));
-		// 将paramMaps中的label做为requestBody的label值
-		requestBody.setLabel(paramMaps.get("label"));
-
-		// 将paramMapsOfcreateEntity中的value中的对应的metadata_node_type、metadata_node_domain、additional_prop1、additional_prop2
-		// 的key和value分别作为properties的参数和值
-		requestBody.setProperty("metadata_node_type",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_type").toString());
-		requestBody.setProperty("metadata_node_domain",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_domain").toString());
-		requestBody.setProperty("additional_prop1",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop1").toString());
-		requestBody.setProperty("additional_prop2",paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop2").toString());
-
-		requestBody.setNodeType(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("nodeType").toString());
-		requestBody.setConnectedRelationNumber(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("connectedRelationNumber").toString());
-
-		
 		// Check if the input string contains basic information
 		if (bodyString.contains("id") && bodyString.contains("label") && bodyString.contains("properties"))
 		{
-			ObjectMapper objectMapper = new ObjectMapper();	
+			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-			
+
 			try
 			{
-				// Prepare request body object based on the input body string 
+				// Prepare request body object based on the input body string
 				updateEntityRequestBody requestBody = objectMapper.readValue(bodyString, updateEntityRequestBody.class);
-				
+
 				// If the entity to be test really exists, use its real id
 				if (TestEntityList.containsKey(paramMaps.get("label"))) requestBody.setId(TestEntityList.get(paramMaps.get("label")));
-				
+
 				// Create a request body in Json format
 				bodyString = objectMapper.writeValueAsString(requestBody);
-	
+
 				Response response = EntityManagementEndpoint.updateEntity(bodyString);
-				
-				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-				
+				// System.out.println(response.jsonPath().get("data.properties").toString());
+
+				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
 				if (paramMaps.get("description").contains("good request")) checkUpdateEntityResponse(requestBody, response);
 			}
-			catch (Exception e) 
-		    {
+			catch (Exception e)
+			{
 				System.out.println("Error: can not convert the input string 'body' to a jason request");
 				return;
-		    }
+			}
 		}
 		else // test when input is not complete
 		{
-			Response response = EntityManagementEndpoint.updateEntity(bodyString);			
-			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
+			Response response = EntityManagementEndpoint.updateEntity(bodyString);
+			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		}
 	}
 	
@@ -232,8 +213,8 @@ public class EntityManagementTests {
 	public void getEntityById(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be test really exists, if not create it
-		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+		if((paramMaps.get("description").contains("entity id not exist")==false)
+				&&(paramMaps.containsKey("label")))
 			createEntityToBeTest(paramMaps.get("label"));
 		
 		// Read the id from input parameter 
@@ -244,6 +225,7 @@ public class EntityManagementTests {
 			entityId = TestEntityList.get(paramMaps.get("label"));
 		
 		Response response = EntityManagementEndpoint.getEntityById(entityId);
+		// System.out.println("message:"+response.jsonPath().get("message").toString());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 		
@@ -254,10 +236,9 @@ public class EntityManagementTests {
 			Assert.assertTrue(responseData.getId().equals(entityId), "The entity id is correct");
 			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The node type is correct");
 			
-			if ((paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+			if (paramMaps.containsKey("label"))
 			{
 				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("label")), "The entity name is correct");
-				//Assert.assertTrue(responseData.getLocation().equals(paramMaps.get("location")), "The domain is correct");
 			}
 		}
 	}
@@ -273,8 +254,8 @@ public class EntityManagementTests {
 	public void deleteEntity(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be delete really exists, if not create it
-		if ((paramMaps.get("description").contains("entity id not exist")==false) &&
-			(paramMaps.containsKey("location")) && (paramMaps.containsKey("label")))
+		if((paramMaps.get("description").contains("entity id not exist")==false)
+				&&(paramMaps.containsKey("label")))
 			createEntityToBeTest(paramMaps.get("label"));
 		
 		// Read the id from input parameter 
@@ -283,11 +264,13 @@ public class EntityManagementTests {
 		// If the entity to be delete exists, use its real id
 		if (TestEntityList.containsKey(paramMaps.get("label"))) 
 			entityToBeDelete = TestEntityList.get(paramMaps.get("label"));
-		
+
+		// System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
 		Response response = EntityManagementEndpoint.deleteEntity(entityToBeDelete);
 		
 		if ((TestEntityList.containsKey(paramMaps.get("label"))) && (response.jsonPath().getString("message").equals("OK"))) 
 			TestEntityList.remove(paramMaps.get("label"));
+		// System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 	}
@@ -302,8 +285,8 @@ public class EntityManagementTests {
 		
 		Map<String, String> paramMaps = new HashMap<String, String>();
 		paramMaps.put("rspStatus", "200");
-		paramMaps.put("rspCode", "200");
-		paramMaps.put("message", "OK");
+		paramMaps.put("rspCode", "100000");
+		paramMaps.put("message", "success");
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
 	}
@@ -323,6 +306,7 @@ public class EntityManagementTests {
 			response = EntityManagementEndpoint.getAllRelations();
 		else
 			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));
+		// System.out.println("size of data:"+response.jsonPath().getList("data").size());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 		
@@ -335,7 +319,7 @@ public class EntityManagementTests {
 			if (paramMaps.containsKey("labels")) checkRelationLabels(relationList, paramMaps.get("labels"));
 			
 			String schemaTemplateFile = "json-model-schema/entity-mgmt/getAllRelationsResponse.JSON";	
-			CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+			//CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
 		}
 		else
 		{

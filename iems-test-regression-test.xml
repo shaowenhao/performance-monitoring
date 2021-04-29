@@ -38,7 +38,12 @@
         <parameter name="port" value="31818"/>
         <methods>
           <include name="createEntity" />
-          <!-- <include name="updateEntity" /> -->
+          <include name="updateEntity" />
+          <include name="getEntityById" />
+          <include name="deleteEntity" />
+          <include name="getGraph" />
+          <include name="getRelations" />
+          <include name="getRelationById" />
         </methods>
       </class> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
       <!--<class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
