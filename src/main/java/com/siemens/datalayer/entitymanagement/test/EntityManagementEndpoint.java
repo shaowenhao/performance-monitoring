@@ -24,6 +24,20 @@ public class EntityManagementEndpoint {
 		port = comm_port;
 	}
 
+    // Entity Endpoint: getEntities
+    @Step("Send a request of 'getEntities'")
+	public static Response getEntities(){
+	    RestAssured.baseURI = BASE_URL;
+	    RestAssured.port = Integer.valueOf(port).intValue();
+
+	    RequestSpecification httpRequest = RestAssured.given();
+	    httpRequest.header("Content-Type", "application/json");
+
+	    Response response = httpRequest.filter(new AllureRestAssured())
+                                       .get("/api/entities");
+	    return response;
+    }
+
     // Entity Endpoint: createEntity
 	@Step("Send a request of 'createEntity'")
     public static Response createEntity(String body) 
@@ -44,6 +58,7 @@ public class EntityManagementEndpoint {
 	@Step("Send a request of 'updateEntity'")
     public static Response updateEntity(String body) 
     {
+        System.out.println(body);
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
@@ -84,6 +99,21 @@ public class EntityManagementEndpoint {
         
         Response response = httpRequest.filter(new AllureRestAssured())
 					                   .get("/api/entities/" + entityId);
+
+        return response;
+    }
+
+    // Entity Endpoint:  filterEntityByProperty
+    @Step("Send a request of ' filterEntityByProperty'")
+    public static Response  filterEntityByProperty(String entityLabel,String metadataNodType)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/entities/filter/" + entityLabel + "/" + metadataNodType);
 
         return response;
     }

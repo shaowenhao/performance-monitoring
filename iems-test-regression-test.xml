@@ -40,6 +40,8 @@
           <include name="createEntity" />
           <include name="updateEntity" />
           <include name="getEntityById" />
+          <include name="filterEntityByProperty" />
+          <include name="getEntities" />
           <include name="deleteEntity" />
           <include name="getGraph" />
           <include name="getRelations" />

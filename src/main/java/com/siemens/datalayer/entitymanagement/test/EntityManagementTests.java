@@ -1,5 +1,6 @@
 package com.siemens.datalayer.entitymanagement.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,26 +122,28 @@ public class EntityManagementTests {
 				Response response = EntityManagementEndpoint.createEntity(bodyString);
 				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
-				// System.out.println("data.id:"+response.jsonPath().get("data.id").toString());
+				System.out.println("data.id:"+response.jsonPath().getString("data.id"));
 
 				if (paramMaps.get("description").contains("good request"))
 				{
 					TestEntityList.put(paramMaps.get("label"), response.jsonPath().get("data.id"));
 
-					Assert.assertNotNull(response.jsonPath().get("data.id"));
-					Assert.assertEquals(response.jsonPath().get("data.label"), paramMaps.get("label"), "New entity's label is set correctly");
+					Assert.assertNotNull(response.jsonPath().getString("data.id"));
+					Assert.assertEquals(response.jsonPath().getString("data.label"), paramMaps.get("label"), "New entity's label is set correctly");
 
-					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_type"), paramMaps.get("metadata_node_type"));
-					Assert.assertEquals(response.jsonPath().get("data.properties.metadata_node_domain"), paramMaps.get("metadata_node_domain"));
-					Assert.assertEquals(response.jsonPath().get("data.properties.additional_prop1"), paramMaps.get("additional_prop1"));
-					Assert.assertEquals(response.jsonPath().get("data.properties.additional_prop2"), paramMaps.get("additional_prop2"));
+					Assert.assertEquals(response.jsonPath().getString("data.properties.metadata_node_type"), paramMaps.get("metadata_node_type"));
+					Assert.assertEquals(response.jsonPath().getString("data.properties.metadata_node_domain"), paramMaps.get("metadata_node_domain"));
+					Assert.assertEquals(response.jsonPath().getString("data.properties.additional_prop1"), paramMaps.get("additional_prop1"));
+					Assert.assertEquals(response.jsonPath().getString("data.properties.additional_prop2"), paramMaps.get("additional_prop2"));
 
-					Assert.assertEquals(response.jsonPath().get("data.nodeType"), paramMaps.get("nodeType"));
-					Assert.assertEquals(response.jsonPath().get("data.connectedRelationNumber"),paramMaps.get("connectedRelationNumber"));
+					Assert.assertEquals(response.jsonPath().getString("data.nodeType"), paramMaps.get("nodeType"));
+					Assert.assertEquals(response.jsonPath().getString("data.connectedRelationNumber"),paramMaps.get("connectedRelationNumber"));
 				}
+				System.out.println(response.jsonPath());
 			}
 			catch (Exception e) 
 		    {
+		    	System.out.println(e);
 				System.out.println("Error: failed to assemble a jason format request body");
 				return;
 		    }
@@ -183,11 +186,11 @@ public class EntityManagementTests {
 				bodyString = objectMapper.writeValueAsString(requestBody);
 
 				Response response = EntityManagementEndpoint.updateEntity(bodyString);
-				// System.out.println(response.jsonPath().get("data.properties").toString());
 
 				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
 				if (paramMaps.get("description").contains("good request")) checkUpdateEntityResponse(requestBody, response);
+				System.out.println(response.jsonPath());
 			}
 			catch (Exception e)
 			{
@@ -199,6 +202,7 @@ public class EntityManagementTests {
 		{
 			Response response = EntityManagementEndpoint.updateEntity(bodyString);
 			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+			System.out.println(response.jsonPath());
 		}
 	}
 	
@@ -225,7 +229,7 @@ public class EntityManagementTests {
 			entityId = TestEntityList.get(paramMaps.get("label"));
 		
 		Response response = EntityManagementEndpoint.getEntityById(entityId);
-		// System.out.println("message:"+response.jsonPath().get("message").toString());
+		System.out.println("message:"+response.jsonPath().get("message").toString());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 		
@@ -240,6 +244,68 @@ public class EntityManagementTests {
 			{
 				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("label")), "The entity name is correct");
 			}
+		}
+	}
+
+	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: filterEntityByProperty",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'filterEntityByProperty' request to entity endpoint interface.")
+	@Story("Entity End Point: filterEntityByProperty")
+	public void filterEntityByProperty(Map<String, String> paramMaps)
+	{
+		// Check if the entity to be test really exists, if not create it
+		if((paramMaps.get("description").contains("entity id not exist")==false)
+				&&(paramMaps.containsKey("label")))
+			createEntityToBeTest(paramMaps.get("label"));
+
+		String entityLabel = paramMaps.get("label");
+		String entityMetadataNodeType = paramMaps.get("metadata_node_type");
+
+		Response response = EntityManagementEndpoint.filterEntityByProperty(entityLabel,entityMetadataNodeType);
+		System.out.println(response.jsonPath().getString("data"));
+
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+		if (paramMaps.get("description").contains("good request"))
+		{
+			updateEntityRequestBody responseData = response.jsonPath().getObject("data[0]", updateEntityRequestBody.class);
+
+			Assert.assertTrue(responseData.getLabel().equals(entityLabel), "The entity label is correct");
+
+			Assert.assertTrue(response.jsonPath().getString("data[0].properties.metadata_node_type").equals(entityMetadataNodeType), "The metadata_node_type is correct");
+		}
+	}
+
+	@Test(  dependsOnMethods = {"createEntity"},alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: getEntities")
+	public void getEntities()
+	{
+		Response response = EntityManagementEndpoint.getEntities();
+
+		Map<String, String> paramMaps = new HashMap<String, String>();
+		paramMaps.put("rspStatus", "200");
+		paramMaps.put("rspCode", "100000");
+		paramMaps.put("message", "success");
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+		List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
+
+		List<String> idList = new ArrayList<>();
+
+		for(HashMap<String,String> map : entityList){
+			idList.add(map.get("id"));
+		}
+		System.out.println(idList);
+		// System.out.println(TestEntityList);
+
+		for(Map.Entry<String,String> entry : TestEntityList.entrySet()){
+			Assert.assertTrue(idList.contains(entry.getValue()));
 		}
 	}
 	
@@ -265,12 +331,12 @@ public class EntityManagementTests {
 		if (TestEntityList.containsKey(paramMaps.get("label"))) 
 			entityToBeDelete = TestEntityList.get(paramMaps.get("label"));
 
-		// System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
+		System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
 		Response response = EntityManagementEndpoint.deleteEntity(entityToBeDelete);
 		
-		if ((TestEntityList.containsKey(paramMaps.get("label"))) && (response.jsonPath().getString("message").equals("OK"))) 
+		if ((TestEntityList.containsKey(paramMaps.get("label"))) && (response.jsonPath().getString("message").contains("success")))
 			TestEntityList.remove(paramMaps.get("label"));
-		// System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
+		System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 	}
@@ -287,7 +353,8 @@ public class EntityManagementTests {
 		paramMaps.put("rspStatus", "200");
 		paramMaps.put("rspCode", "100000");
 		paramMaps.put("message", "success");
-		
+
+		System.out.println(response.jsonPath().getString("data.message"));
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
 	}
 	
@@ -306,7 +373,7 @@ public class EntityManagementTests {
 			response = EntityManagementEndpoint.getAllRelations();
 		else
 			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));
-		// System.out.println("size of data:"+response.jsonPath().getList("data").size());
+		System.out.println("size of data:"+response.jsonPath().getList("data").size());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
 		
@@ -319,7 +386,7 @@ public class EntityManagementTests {
 			if (paramMaps.containsKey("labels")) checkRelationLabels(relationList, paramMaps.get("labels"));
 			
 			String schemaTemplateFile = "json-model-schema/entity-mgmt/getAllRelationsResponse.JSON";	
-			//CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+			// CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
 		}
 		else
 		{
@@ -349,6 +416,7 @@ public class EntityManagementTests {
 		
 		Response response = EntityManagementEndpoint.getRelationById(paramMaps.get("relationId"));
 		
+		System.out.println(response.jsonPath());
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		
 		if (paramMaps.get("description").contains("good request"))
@@ -413,6 +481,7 @@ public class EntityManagementTests {
 		// 校验http返回状态码
 		int expStatusCode = 200;	// If not specified, the expected status code is set to 200 (OK)
 		if (requestParameters.containsKey("rspStatus")) expStatusCode = Integer.valueOf(requestParameters.get("rspStatus")).intValue();
+
 		Assert.assertEquals(actualStatusCode, expStatusCode, "The status code in response message matches the expected value.");
 
 		// 校验Response body-code
