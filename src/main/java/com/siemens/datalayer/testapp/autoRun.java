@@ -219,7 +219,7 @@ public class autoRun {
 				testConfigurationClass testConfig = new testConfigurationClass(); //创建类testConfigurationClass的一个实例
 				//方法loadConfigurations（传参：projectName, envName）作用：
 				// 1、返回布尔值，表示环境是否在jinzu/iems/snc + dev/test/prod中
-				// 2、设置各种变量，如url、port
+				// 2、设置各种变量，如domain、url、port
 				// 3、设置测试项，通过赋值runApiServiceTest、runEntityMgmtTest和runSubscriptionMgmtTest
 				if (testConfig.loadConfigurations(projectName, envName))
 				{

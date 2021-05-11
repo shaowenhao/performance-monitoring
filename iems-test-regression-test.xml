@@ -15,11 +15,14 @@
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="domain_name" value="iEMS"/>
         <parameter name="port" value="32230"/>
+        <methods>
+          <include name="GetAllEntitiesName" />
+        </methods>
       </class> --> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
       <!-- <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="32223"/>
-      </class>--> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
+      </class> --><!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
       <!-- <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
         <parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
         <parameter name="rabbitmq_username" value="guest"/>
@@ -32,23 +35,18 @@
         <parameter name="pre_data" value="/datalayer/api/v1/data/"/>
         <parameter name="rabbitmq_host" value="140.231.89.85"/>
         <parameter name="rabbitmq_timeout" value="30"/>
-      </class>--> <!-- com.siemens.datalayer.iems.test.ApiServiceTests -->
+      </class> --><!-- com.siemens.datalayer.iems.test.ApiServiceTests -->
       <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="31818"/>
-        <methods>
+        <!-- <methods>
           <include name="createEntity" />
-          <include name="updateEntity" />
-          <include name="getEntityById" />
-          <include name="filterEntityByProperty" />
           <include name="getEntities" />
-          <include name="deleteEntity" />
-          <include name="getGraph" />
+          <include name="getEntitiesAgain" />
           <include name="getRelations" />
-          <include name="getRelationById" />
-        </methods>
-      </class> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
-      <!--<class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
+        </methods> -->
+      </class><!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
+     <!-- <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="31111"/>
       </class> --> <!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->

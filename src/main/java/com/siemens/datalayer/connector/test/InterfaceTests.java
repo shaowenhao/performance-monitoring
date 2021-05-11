@@ -45,6 +45,7 @@ public class InterfaceTests {
 		
 	  Assert.assertEquals("Operate success.", rspBody.getMessage());
 
+	  //Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
 	}
   
 	@Test (priority = 0, description = "Test entity interface: Get concept model definition by model name.")

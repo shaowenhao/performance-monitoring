@@ -6,6 +6,9 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 
 public class EntityManagementEndpoint {
@@ -26,14 +29,19 @@ public class EntityManagementEndpoint {
 
     // Entity Endpoint: getEntities
     @Step("Send a request of 'getEntities'")
-	public static Response getEntities(){
+	public static Response getEntities(String labels,String order){
 	    RestAssured.baseURI = BASE_URL;
 	    RestAssured.port = Integer.valueOf(port).intValue();
+
+        Map<String,String> parameters = new HashMap<String,String>();
+        parameters.put("labels",labels);
+        parameters.put("order",order);
 
 	    RequestSpecification httpRequest = RestAssured.given();
 	    httpRequest.header("Content-Type", "application/json");
 
-	    Response response = httpRequest.filter(new AllureRestAssured())
+	    Response response = httpRequest.params(parameters)
+                                       .filter(new AllureRestAssured())
                                        .get("/api/entities");
 	    return response;
     }
@@ -149,7 +157,7 @@ public class EntityManagementEndpoint {
     }
 
 	@Step("Send a request of 'getRelations'")
-    public static Response getRelations(String labels) 
+    public static Response getRelations(String labels)
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
@@ -161,6 +169,23 @@ public class EntityManagementEndpoint {
 					                   .get("/api/relations");
 
         return response;
+    }
+    @Step("Send a request of 'getRelations'")
+    public static Response getRelations(String labels,String order)
+    {
+	    RestAssured.baseURI = BASE_URL;
+	    RestAssured.port = Integer.valueOf(port).intValue();
+
+	    Map<String,String> parameters = new HashMap<>();
+	    parameters.put("labels",labels);
+	    parameters.put("order",order);
+
+	    RequestSpecification httpRequest = RestAssured.given();
+
+	    Response response = httpRequest.params(parameters)
+                                       .filter(new AllureRestAssured())
+                                       .get("/api/relations");
+	    return response;
     }
 	
 	@Step("Send a request of 'getRelationById'")

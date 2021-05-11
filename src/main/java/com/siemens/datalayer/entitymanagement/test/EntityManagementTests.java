@@ -43,6 +43,7 @@ public class EntityManagementTests {
 	
 	static Map<String, String> TestEntityList;
 	static Map<String,Map> paramMapsOfcreateEntity;
+	static Map<String,String> paramMapsOfGetEntities;
 	
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
@@ -50,6 +51,7 @@ public class EntityManagementTests {
 	{
 		TestEntityList = new HashMap<String, String>();
 		paramMapsOfcreateEntity = new HashMap<String,Map>();
+		paramMapsOfGetEntities = new HashMap<String,String>();
 		
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
@@ -280,39 +282,79 @@ public class EntityManagementTests {
 		}
 	}
 
-	@Test(  dependsOnMethods = {"createEntity"},alwaysRun = true,
+	@Test(  dependsOnMethods = { "createEntity" }, alwaysRun = true,
 			priority = 0,
-			description = "Test Entity-management Entity Endpoint: getEntities")
-	public void getEntities()
+			description = "Test Entity-management Entity Endpoint: getEntities",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getEntities' request to entity endpoint interface.")
+	@Story("Entity End Point: getEntities")
+	public void getEntities(Map<String, String> paramMaps)
 	{
-		Response response = EntityManagementEndpoint.getEntities();
+		Response response = EntityManagementEndpoint.getEntities(paramMaps.get("label"),paramMaps.get("order"));
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+		if (paramMaps.get("description").contains("good request")){
+			List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
+
+			List<String> idList = new ArrayList<>();
+			List<String> labelList = new ArrayList<>();
+			for(HashMap<String,String> map : entityList){
+				idList.add(map.get("id"));
+				labelList.add(map.get("label"));
+				// System.out.println(idList);
+			}
+			for(Map.Entry<String,String> entry : TestEntityList.entrySet()){
+				Assert.assertTrue(idList.contains(entry.getValue()));
+			}
+			if (paramMaps.get("order")==null || paramMaps.get("order").equals("ASC")){
+				for(int i=0;i<labelList.size()-1;i++){
+					// System.out.println(labelList.get(i)+"     "+ labelList.get(i+1));
+					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
+					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) <= 0);}
+			}
+			else {
+				for (int i=0;i<labelList.size()-1;i++){
+					// System.out.println(labelList.get(i)+"     "+ labelList.get(i+1));
+					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
+					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) >= 0);}
+			}
+		}
+	}
+
+	@Test(  priority = 0,
+			description = "Test Entity-management Entity Endpoint: getEntities")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("以不带参数请求getEntities接口返回的data中的第一项中的label做为参数，再次请求getEntities接口，并对其校验")
+	@Story("Entity End Point: getEntities")
+	public void getEntitiesAgain()
+	{
+		Response response = EntityManagementEndpoint.getEntities("","");
 
 		Map<String, String> paramMaps = new HashMap<String, String>();
 		paramMaps.put("rspStatus", "200");
 		paramMaps.put("rspCode", "100000");
 		paramMaps.put("message", "success");
 
-		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
-
 		List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
 
-		List<String> idList = new ArrayList<>();
-
+		List<String> labelList = new ArrayList<>();
 		for(HashMap<String,String> map : entityList){
-			idList.add(map.get("id"));
+			labelList.add(map.get("label"));
 		}
-		System.out.println(idList);
-		// System.out.println(TestEntityList);
+		System.out.println(labelList.get(0));
 
-		for(Map.Entry<String,String> entry : TestEntityList.entrySet()){
-			Assert.assertTrue(idList.contains(entry.getValue()));
-		}
+		Response responseToBeAssert = EntityManagementEndpoint.getEntities(labelList.get(0),"");
+		checkResponseCode(paramMaps,responseToBeAssert.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+		Assert.assertEquals(labelList.get(0),responseToBeAssert.jsonPath().getString("data[0].label"));
 	}
 	
 	@Test ( dependsOnMethods = { "createEntity", "getEntityById", "updateEntity" }, alwaysRun = true,
 			priority = 0, 
-			description = "Test Entity-management Entity Endpoint: deleteEntity", 
-			dataProvider = "entity-management-test-data-provider", 
+			description = "Test Entity-management Entity Endpoint: deleteEntity",
+			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'deleteEntity' request to entity endpoint interface.")
@@ -367,12 +409,12 @@ public class EntityManagementTests {
 	@Story("Relation End Point: getRelations")
 	public void getRelations(Map<String, String> paramMaps)
 	{
-		Response response;
+		Response response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"),paramMaps.get("order"));
 		
-		if (paramMaps.containsKey("labels")==false)
+		/*if (paramMaps.containsKey("labels")==false)
 			response = EntityManagementEndpoint.getAllRelations();
 		else
-			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));
+			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));*/
 		System.out.println("size of data:"+response.jsonPath().getList("data").size());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
@@ -387,6 +429,27 @@ public class EntityManagementTests {
 			
 			String schemaTemplateFile = "json-model-schema/entity-mgmt/getAllRelationsResponse.JSON";	
 			// CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+
+			List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
+
+			List<String> labelList = new ArrayList<>();
+			for(HashMap<String,String> map : entityList)
+				labelList.add(map.get("label"));
+
+			if(paramMaps.get("order")==null || paramMaps.get("order").equals("ASC")){
+				for(int i=0;i<labelList.size()-1;i++){
+					// System.out.println(labelList.get(i)+"     "+labelList.get(i+1));
+					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
+					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) <= 0);
+				}
+			}
+			else{
+				for(int i=0;i<labelList.size()-1;i++){
+					// System.out.println(labelList.get(i)+"     "+labelList.get(i+1));
+					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
+					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) >= 0);
+				}
+			}
 		}
 		else
 		{
