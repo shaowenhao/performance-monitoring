@@ -1,9 +1,7 @@
 package com.siemens.datalayer.entitymanagement.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -56,6 +54,24 @@ public class EntityManagementTests {
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-entity-management", base_url + ":" + port);
+
+		Response reponseOfGetEntities = EntityManagementEndpoint.getEntities("","");
+		List<HashMap<String,String>> entityList = reponseOfGetEntities.jsonPath().getList("data");
+
+		List<String> labelList = new ArrayList<>();
+		for(HashMap<String,String> map : entityList){
+			labelList.add(map.get("label"));
+			// System.out.println(idList);
+		}
+		List<String> labelToDeleteList = Arrays.asList("testEntity1","testEntity2","testEntity3");
+		for(String label : labelToDeleteList){
+			if(labelList.contains(label)){
+				int index = labelList.indexOf(label);
+				String id = entityList.get(index).get("id");
+				System.out.println(index + "," + id);
+				Response responseOfDeleteEntity = EntityManagementEndpoint.deleteEntity(id);
+			}
+		}
 	}
 	
 	@AfterClass (description = "Clean up test entities")
