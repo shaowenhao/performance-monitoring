@@ -36,14 +36,19 @@
         <parameter name="rabbitmq_host" value="140.231.89.85"/>
         <parameter name="rabbitmq_timeout" value="30"/>
       </class> --><!-- com.siemens.datalayer.iems.test.ApiServiceTests -->
-      <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
+      <!-- <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="31818"/>
-      </class><!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
-     <!-- <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
+      </class> --><!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
+     <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="31111"/>
-      </class> --> <!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->
+         <methods>
+             <include name="registerSubscriptions" />
+             <include name="getSubscriptions" />
+             <include name="delSubscriptionById" />
+         </methods>
+      </class><!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->
     </classes>
   </test> <!-- Regression Tests for iems-test -->
 </suite> <!-- data-layer-automation test suite -->
