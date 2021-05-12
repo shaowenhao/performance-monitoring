@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+    
+    <parameter name="dataFileForConnectorTest" value="jinzu-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="jinzu-api-engine-test-data.xlsx" />
+    <parameter name="dataFileForEntityMgmtTest" value="jinzu-entity-management-test-data.xlsx" />
+    
+    <test verbose="2" preserve-order="true"
+          thread-count="5"
+          name="Regression Tests for Jinzu pilot">
+        <classes>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+            <!-- jinzu-dev: 31439 / jinzu-test: 32710 / jinzu-prod: 31718 -->
+            <parameter name="base_url" value="http://140.231.89.85"/>
+  			<parameter name="port" value="32710"/>
+  			<parameter name="domain_name" value="JinZu"/>
+            </class>
+
+           	<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
+            <parameter name="base_url" value="http://140.231.89.85"/>
+			<!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: 30480 -->
+  			<parameter name="port" value="31059"/>
+            </class>
+            
+            <class name="com.siemens.datalayer.jinzu.test.UserQueryTests">
+            <parameter name="base_url" value="http://140.231.89.85"/>
+			<!-- jinzu-dev: 31950 / jinzu-test: 31059 / jinzu-prod: 30480 -->
+  			<parameter name="port" value="31059"/>
+            </class>
+            
+            <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">            
+            <parameter name="base_url" value="http://140.231.89.85"/>
+			<!-- jinzu-dev: 31954 / jinzu-test: 32694 / jinzu-prod: 32093 -->
+  			<parameter name="port" value="32694"/>
+            </class>
+        </classes>
+    </test>
+</suite>

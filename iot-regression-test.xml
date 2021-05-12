@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+    
+    <parameter name="dataFileForConnectorTest" value="iot-connector-test-data.xlsx" />
+    <parameter name="dataFileForApiEngineTest" value="iot-api-engine-test-data.xlsx" />
+
+    <test verbose="2" preserve-order="true"
+          thread-count="5"
+          name="Regression Tests for IoT pilot">
+        <classes>
+            <class name="com.siemens.datalayer.connector.test.InterfaceTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- iot-demo-dev: 32019 / iot-demo-test: 30850 / iot-demo-prod: 30388 -->
+	  			<parameter name="port" value="30850"/>
+	  			<parameter name="domain_name" value="IoT"/>
+            </class>
+            
+			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- iot-demo-dev: 32552 / iot-demo-test: 30346 / iot-demo-prod: 32227 -->
+	  			<parameter name="port" value="30346"/>
+            </class>         
+        </classes>
+    </test>
+</suite>
