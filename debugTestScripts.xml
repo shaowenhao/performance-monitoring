@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+
+<!-- 	<parameter name="dataFileForConnectorTest" value="iems-connector-test-data.xlsx" /> -->
+<!-- 	<parameter name="dataFileForApiEngineTest" value="iems-api-engine-test-data.xlsx" /> -->
+	<parameter name="dataFileForApiServiceTest" value="sampleTestData.xlsx" />
+<!--     <parameter name="dataFileForEntityMgmtTest" value="iems-entity-management-test-data.xlsx" /> -->
+<!--     <parameter name="dataFileForSubMgmtTest" value="iems-subscription-management-test-data.xlsx" /> -->
+
+    <test verbose="2" preserve-order="true"
+          thread-count="5"
+          name="Regression Tests for iEMS pilot">
+        <classes>
+            <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
+                <parameter name="base_url" value="http://140.231.89.85" />
+                <!-- iems-dev: 30684 / iems-test: 31332 / iems-prod: 32588 -->
+                <parameter name="port" value="31332"/>
+                <parameter name="pre_asset" value="/datalayer/api/v1/asset/"/>
+                <parameter name="pre_data" value="/datalayer/api/v1/data/"/>
+                <parameter name="rabbitmq_host" value="140.231.89.85" />
+                <!-- iems-dev: 30248 / iems-test: 30952 / iems-prod: 30800 -->
+                <parameter name="rabbitmq_port" value="30952"/>
+                <parameter name="rabbitmq_username" value="guest"/>
+                <parameter name="rabbitmq_password" value="guest"/>
+                <parameter name="rabbitmq_virtual_host" value="/"/>
+                <parameter name="rabbitmq_timeout" value="30"/>
+                <parameter name="rabbitmq_exchange" value="datalayer.exchange.out"/>
+                <methods>
+        			<include name="getConfigData" />
+        			<include name="getMatrix" />
+      			</methods>
+            </class>
+        </classes>
+    </test>
+</suite>
