@@ -35,7 +35,7 @@ public class CommonCheckFunctions {
 			for (HashMap<String, String> rspDataItem: responseData)
 			{
 				if (rspDataItem != null)
-					assertThat(rspDataItem, hasKey(keyToCompare));
+					assertThat(rspDataItem, hasKey(keyToCompare.trim()));
 			}	
 		}	
 		  
