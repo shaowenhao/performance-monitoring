@@ -148,11 +148,19 @@ public class SubscriptionManagementTests {
         	{
         		if (item.get("clientId").equals(paramMaps.get("clientId")))
         		{
-		            queryParamters.put("clientId", paramMaps.get("clientId"));
+        			if (paramMaps.get("description").contains("bad request, valid id with invalid clientId"))
+        				queryParamters.put("clientId", paramMaps.get("clientId")+"_incorrect");
+        			else
+        				queryParamters.put("clientId", paramMaps.get("clientId"));
+        			
 		            Response response = SubscriptionManagementEndpoint.deleteSubscriptionById(queryParamters, item.get("id"));
+		            
 		            checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().get("message"), response.jsonPath().getString("data"));
-		            checkDataFollowsModelSchema(paramMaps.get("name"), response);
+		            
+		            if (paramMaps.get("name")!=null) checkDataFollowsModelSchema(paramMaps.get("name"), response);
+		            
 		            if(response.jsonPath().getString("message").contains("Successfully")) TestSubscriptionList.remove(item);
+		            
 		            break;
         		}
         	}
