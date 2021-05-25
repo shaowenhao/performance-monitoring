@@ -12,9 +12,9 @@ public class updateEntityRequestBody {
 	private Map<String, String> properties = new HashMap<String, String>();
 	
 	private String nodeType;
-	
-	private String location;	
-	
+
+	private String connectedRelationNumber;
+
 	public String getId() {
 		return id;
 	}
@@ -46,22 +46,22 @@ public class updateEntityRequestBody {
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
 	}
-	
-	public String getLocation() {
-		return location;
+
+	public String getConnectedRelationNumber(){
+		return this.connectedRelationNumber;
 	}
-	
-	public void setLocation(String location) {
-		this.location = location;
-	}	
+
+	public void setConnectedRelationNumber(String connectedRelationNumber) {
+		this.connectedRelationNumber = connectedRelationNumber;
+	}
 	
 	public boolean equals(updateEntityRequestBody other) {	
 		
 		return this.id.equals(other.id) 
-			&& this.label.equals(other.label) 
-			&& this.nodeType.equals(other.nodeType) 
-			&& this.location.equals(other.location) 
-			&& this.properties.equals(other.properties);
+			&& this.label.equals(other.label)
+			&& this.properties.equals(other.properties)
+			&& this.nodeType.equals(other.nodeType)
+			&& this.connectedRelationNumber.equals(other.connectedRelationNumber);
 	}
 
 }

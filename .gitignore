@@ -21,4 +21,14 @@ allure-results/
 allure-reports/
 target/
 snapshot/
+iems-dev-regression-test.xml
+iems-test-regression-test.xml
+iems-prod-regression-test.xml
+snc-dev-regression-test.xml
+snc-test-regression-test.xml
+snc-prod-regression-test.xml
+jinzu-dev-regression-test.xml
+jinzu-test-regression-test.xml
+jinzu-prod-regression-test.xml
+
 

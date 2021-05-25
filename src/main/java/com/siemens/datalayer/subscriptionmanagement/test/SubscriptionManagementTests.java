@@ -28,6 +28,8 @@ public class SubscriptionManagementTests {
         SubscriptionManagementEndpoint.setBaseUrl(base_url);
         SubscriptionManagementEndpoint.setPort(port);
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("iems-subscription-management", base_url + ":" + port);
+
+        // Response responseOfGetSubscriptions = SubscriptionManagementEndpoint.getSubscriptions();
     }
 
 
@@ -61,6 +63,7 @@ public class SubscriptionManagementTests {
         queryParamters.put("clientId", paramMaps.get("clientId"));
         
         Response response = SubscriptionManagementEndpoint.registerSubscriptions(queryParamters, subSentence);
+        System.out.println("clients: "+response.jsonPath().getString("data.clients"));
 
         if (paramMaps.get("description").contains("good request")) 
         {
@@ -93,9 +96,10 @@ public class SubscriptionManagementTests {
         
         Assert.assertEquals(response.getStatusCode(), 200, "The status code is 200.");
         
-        List<HashMap<String, String>> entityList = response.jsonPath().getList("$");
+        List<HashMap<String, String>> subscriptionsList = response.jsonPath().getList("$");
+        System.out.println("subscriptionsList.size(): "+ subscriptionsList.size());
         
-        for (HashMap<String, String> rspDataItem: entityList)
+        for (HashMap<String, String> rspDataItem: subscriptionsList)
         {
         	if (rspDataItem != null)
         	{
@@ -109,7 +113,7 @@ public class SubscriptionManagementTests {
         		}
     			catch (Exception e) 
     		    {
-    				System.out.println("Error: failed to convert data item in Jason format");
+    				System.out.println("Error: failed to convert data item in Json format");
     				return;
     		    }
         	}
@@ -144,11 +148,19 @@ public class SubscriptionManagementTests {
         	{
         		if (item.get("clientId").equals(paramMaps.get("clientId")))
         		{
-		            queryParamters.put("clientId", paramMaps.get("clientId"));
+        			if (paramMaps.get("description").contains("bad request, valid id with invalid clientId"))
+        				queryParamters.put("clientId", paramMaps.get("clientId")+"_incorrect");
+        			else
+        				queryParamters.put("clientId", paramMaps.get("clientId"));
+        			
 		            Response response = SubscriptionManagementEndpoint.deleteSubscriptionById(queryParamters, item.get("id"));
+		            
 		            checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().get("message"), response.jsonPath().getString("data"));
-		            checkDataFollowsModelSchema(paramMaps.get("name"), response);
+		            
+		            if (paramMaps.get("name")!=null) checkDataFollowsModelSchema(paramMaps.get("name"), response);
+		            
 		            if(response.jsonPath().getString("message").contains("Successfully")) TestSubscriptionList.remove(item);
+		            
 		            break;
         		}
         	}

@@ -216,6 +216,11 @@ public class testConfigurationClass {
 		return this.subscriptionManagement_port;
 	}
 	
+	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
+	subscription-management/RabbitMq/
+	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
+	则返回false，否者true
+	赋值：private String configName = testEnvName，如iems-dev*/
 	public Boolean loadConfigurations(String pilotName, String envName)
 	{
 		String testEnvName = pilotName + "-" + envName;
@@ -224,13 +229,14 @@ public class testConfigurationClass {
 		{
 			case ("iems-dev"):
 				setConnectorTest(testEnvironmentConstants.IEMS_DOMAIN_NAME,
-								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_BASE_URL, 
+								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_BASE_URL,
 								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_PORT);
 				
 				setApiEngineTest(testEnvironmentConstants.IEMS_DEV_APIENGINE_BASE_URL, 
 								 testEnvironmentConstants.IEMS_DEV_APIENGINE_PORT);
 				
-				setApiServiceTest(testEnvironmentConstants.IEMS_DEV_APISERVICE_BASE_URL, 
+				// 赋值：this.runApiServiceTest = true
+				setApiServiceTest(testEnvironmentConstants.IEMS_DEV_APISERVICE_BASE_URL,
 								  testEnvironmentConstants.IEMS_DEV_APISERVICE_PORT);
 				
 				setPreAsset(testEnvironmentConstants.IEMS_PRE_ASSET);
@@ -243,10 +249,11 @@ public class testConfigurationClass {
 				setRabbitMQVirtualHost(testEnvironmentConstants.IEMS_DEV_RABBITMQ_VIRTUALHOST);
 				setRabbitMQTimeout(testEnvironmentConstants.IEMS_DEV_RABBITMQ_TIMEOUT);
 				setRabbitMQExchange(testEnvironmentConstants.IEMS_DEV_RABBITMQ_EXCHANGE);
-				
+
+				// 赋值：this.runEntityMgmtTest = true;
 				setEntityMgmtTest(testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL,
 								  testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_PORT);
-				
+				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
 				
@@ -319,9 +326,9 @@ public class testConfigurationClass {
 			
 				setApiEngineTest(testEnvironmentConstants.SNC_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.SNC_DEV_APIENGINE_PORT);
-				
+				// 赋值：this.runUserQueryTest = true;
 				setUserQueryTestClass("com.siemens.datalayer.snc.test.UserQueryTests");
-				
+				// 赋值：this.runEntityMgmtTest = true;
 				setEntityMgmtTest(testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_DEV_ENTITY_MANAGEMENT_PORT);
 				
@@ -364,9 +371,9 @@ public class testConfigurationClass {
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
-				
+				// 赋值：this.runUserQueryTest = true;
 				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
-				
+				// 赋值：this.runEntityMgmtTest = true;
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_PORT);
 				
@@ -407,7 +414,7 @@ public class testConfigurationClass {
 				return false;
 		}
 		
-		setConfigName(testEnvName);
+		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
 	

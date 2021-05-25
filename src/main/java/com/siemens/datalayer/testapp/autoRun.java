@@ -65,6 +65,12 @@ public class autoRun {
 		apiEngineTestParams.put("base_url", testConfig.getApiEngineBaseURL());
 		apiEngineTestParams.put("port", testConfig.getApiEnginePort());
 		
+		//Exclude Restful API test methods
+		List<String> excludeMethods = new ArrayList<String>();
+		excludeMethods.add("getDataEntities");
+
+		apiEngineTest.setExcludedMethods(excludeMethods);
+		
 		apiEngineTest.setParameters(apiEngineTestParams);
 		myClasses.add(apiEngineTest);
 		
@@ -194,8 +200,9 @@ public class autoRun {
 	//Main Method
 	public static void main (String args[]) 
 	{ 
-		if (args.length >= 2)
+		if (args.length >= 2) // 如果输入的参数的个数大于或等于两个
 		{
+			// asList方法还提供了一个创建固定长度的列表的便捷方法，该列表被初始化为包含多个元素
 			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc");
 			List<String> environmentList = Arrays.asList("dev", "test", "prod");
 			
@@ -215,7 +222,11 @@ public class autoRun {
 						System.out.println("Unknown input parameter - '" + args[2] + "', please use 'noTest' or 'noXML'");
 				}
 	
-				testConfigurationClass testConfig = new testConfigurationClass();
+				testConfigurationClass testConfig = new testConfigurationClass(); //创建类testConfigurationClass的一个实例
+				//方法loadConfigurations（传参：projectName, envName）作用：
+				// 1、返回布尔值，表示环境是否在jinzu/iems/snc + dev/test/prod中
+				// 2、设置各种变量，如domain、url、port
+				// 3、设置测试项，通过赋值runApiServiceTest、runEntityMgmtTest和runSubscriptionMgmtTest
 				if (testConfig.loadConfigurations(projectName, envName))
 				{
 					// Set Global test parameters	
@@ -234,7 +245,8 @@ public class autoRun {
 						testParameters.put("dataFileForSubMgmtTest", projectName+"-subscription-management-test-data.xlsx");
 					
 					// Create testNG instance to execute tests
-					autoRun dt = new autoRun(); 		
+					autoRun dt = new autoRun();
+					// main函数走到这一步，各配置已经set完成
 					dt.runSDLRegressionTests(testConfig, testParameters); 
 					System.exit(0);
 				}

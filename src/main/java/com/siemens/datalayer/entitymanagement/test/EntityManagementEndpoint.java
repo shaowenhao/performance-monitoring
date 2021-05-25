@@ -1,12 +1,15 @@
 package com.siemens.datalayer.entitymanagement.test;
 
-import java.util.HashMap;
-
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static io.restassured.RestAssured.given;
 
 public class EntityManagementEndpoint {
 	
@@ -24,20 +27,38 @@ public class EntityManagementEndpoint {
 		port = comm_port;
 	}
 
+    // Entity Endpoint: getEntities
+    @Step("Send a request of 'getEntities'")
+	public static Response getEntities(String labels,String order){
+	    RestAssured.baseURI = BASE_URL;
+	    RestAssured.port = Integer.valueOf(port).intValue();
+
+        Map<String,String> parameters = new HashMap<String,String>();
+        parameters.put("labels",labels);
+        parameters.put("order",order);
+
+	    RequestSpecification httpRequest = RestAssured.given();
+	    httpRequest.header("Content-Type", "application/json");
+
+	    Response response = httpRequest.params(parameters)
+                                       .filter(new AllureRestAssured())
+                                       .get("/api/entities");
+	    return response;
+    }
+
     // Entity Endpoint: createEntity
 	@Step("Send a request of 'createEntity'")
     public static Response createEntity(String body) 
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
-        
+
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
         Response response = httpRequest.body(body)
         							   .filter(new AllureRestAssured())
                 					   .post("/api/entities");
-
         return response;
     }
 
@@ -45,6 +66,7 @@ public class EntityManagementEndpoint {
 	@Step("Send a request of 'updateEntity'")
     public static Response updateEntity(String body) 
     {
+        System.out.println(body);
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
@@ -88,6 +110,21 @@ public class EntityManagementEndpoint {
 
         return response;
     }
+
+    // Entity Endpoint:  filterEntityByProperty
+    @Step("Send a request of ' filterEntityByProperty'")
+    public static Response  filterEntityByProperty(String entityLabel,String metadataNodType)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/entities/filter/" + entityLabel + "/" + metadataNodType);
+
+        return response;
+    }
 	
     // Graph Endpoint: getGraph 
 	@Step("Send a request of 'getGraph'")
@@ -120,7 +157,7 @@ public class EntityManagementEndpoint {
     }
 
 	@Step("Send a request of 'getRelations'")
-    public static Response getRelations(String labels) 
+    public static Response getRelations(String labels)
 	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
@@ -132,6 +169,23 @@ public class EntityManagementEndpoint {
 					                   .get("/api/relations");
 
         return response;
+    }
+    @Step("Send a request of 'getRelations'")
+    public static Response getRelations(String labels,String order)
+    {
+	    RestAssured.baseURI = BASE_URL;
+	    RestAssured.port = Integer.valueOf(port).intValue();
+
+	    Map<String,String> parameters = new HashMap<>();
+	    parameters.put("labels",labels);
+	    parameters.put("order",order);
+
+	    RequestSpecification httpRequest = RestAssured.given();
+
+	    Response response = httpRequest.params(parameters)
+                                       .filter(new AllureRestAssured())
+                                       .get("/api/relations");
+	    return response;
     }
 	
 	@Step("Send a request of 'getRelationById'")

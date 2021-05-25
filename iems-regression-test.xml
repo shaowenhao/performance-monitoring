@@ -16,16 +16,16 @@
           name="Regression Tests for iEMS pilot">
         <classes>
             <class name="com.siemens.datalayer.connector.test.InterfaceTests">
-                <parameter name="base_url" value="http://140.231.89.77"/>
+                <parameter name="base_url" value="http://140.231.89.85"/>
                 <!-- iems-dev: 32577 / iems-test: 32230 / iems-prod: 31467 -->
-                <parameter name="port" value="9001"/>
+                <parameter name="port" value="32230"/>
                 <parameter name="domain_name" value="iEMS"/>
             </class>
 
             <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
-                <parameter name="base_url" value="http://140.231.89.77"/>
+                <parameter name="base_url" value="http://140.231.89.85"/>
                 <!-- iems-dev: 32510 / iems-test: 32223 / iems-prod: 30035 -->
-                <parameter name="port" value="8080"/>
+                <parameter name="port" value="32223"/>
             </class>
 
             <class name="com.siemens.datalayer.iems.test.ApiServiceTests">
