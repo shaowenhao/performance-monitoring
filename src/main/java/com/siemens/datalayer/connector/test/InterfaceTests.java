@@ -108,7 +108,7 @@ public class InterfaceTests {
 	  if (paramMaps.containsKey("order")) 			queryParameters.put("order", paramMaps.get("order"));
 	  if (paramMaps.containsKey("pageIndex")) 		queryParameters.put("pageIndex", paramMaps.get("pageIndex"));
 	  if (paramMaps.containsKey("pageSize")) 		queryParameters.put("pageSize", paramMaps.get("pageSize"));
-	  if (paramMaps.containsKey("timeout")) 		queryParameters.put("pageSize", paramMaps.get("timeout")); 
+	  if (paramMaps.containsKey("timeout")) 		queryParameters.put("timeout", paramMaps.get("timeout")); 
 	  
 	  Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
 	  
