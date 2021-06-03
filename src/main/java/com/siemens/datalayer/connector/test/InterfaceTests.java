@@ -136,7 +136,7 @@ public class InterfaceTests {
 		  }
 		  else
 		  {
-			  if(!paramMaps.get("description").contains("no scheme check"))
+			  if(!paramMaps.get("description").contains("no schema check"))
 			  {
 				  // Check if data entry matches the model schema
 				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
