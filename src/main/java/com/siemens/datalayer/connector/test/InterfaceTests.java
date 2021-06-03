@@ -136,8 +136,12 @@ public class InterfaceTests {
 		  }
 		  else
 		  {
-			  // Check if data entry matches the model schema
-			  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+			  if(!paramMaps.get("description").contains("no scheme check"))
+			  {
+				  // Check if data entry matches the model schema
+				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+			  }
+			  
 		  }
 		  
 		  if (paramMaps.containsKey("order"))
@@ -153,8 +157,11 @@ public class InterfaceTests {
 		  // Check if the pagination format is correct
 		  checkPaginationFormat(pageIndex, pageSize, response);
 		  
-		  // Check if data is correct
-		  checkSingleCondition(paramMaps, rspDataList);
+		  if(!paramMaps.get("description").contains("no condition check"))
+		  {
+			  // Check if the data satisfies the given condition
+			  checkSingleCondition(paramMaps, rspDataList);
+		  }
 	  }
 	  else 
 	  {
@@ -204,6 +211,7 @@ public class InterfaceTests {
 		schemaTemplateFile += ".JSON";
 		
 		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+	
 	}
 	
 	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
