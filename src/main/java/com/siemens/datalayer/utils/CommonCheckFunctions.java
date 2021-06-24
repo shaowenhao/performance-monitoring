@@ -6,7 +6,11 @@ import static org.hamcrest.Matchers.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
 import io.qameta.allure.Step;
 
@@ -450,11 +454,6 @@ public class CommonCheckFunctions {
 		String result = "  \"" + key + "\": " + value;	
 		return result;
 	}
-
-	public static Map addKVToMap(Map map,String key,String value){
-		map.put(key,value);
-		return map;
-	}
 	
 	public static String addTimeStampField(String timeStr, String key)
 	{
@@ -475,19 +474,6 @@ public class CommonCheckFunctions {
 		
 		return result;
 	}
-
-	public static long dateToTimestamps(String s){
-		long timeStamp = 0;
-		try{
-			SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date date = format.parse(s);
-			timeStamp = date.getTime();
-		}
-		catch (ParseException e){
-			System.out.println("\"Error: time parse operation failed");
-		}
-		return timeStamp;
-	}
 	
 	public static String timeStampToDate(String s)
 	{		
@@ -502,7 +488,7 @@ public class CommonCheckFunctions {
 		return result;
 	}
 	
-	public static String addListFieldAbandoned(String list, String listName, String entryName)
+	public static String addListField(String list, String listName, String entryName)
 	{
 		String result = "  \"" + listName + "\": [\r\n";
 		
@@ -523,32 +509,7 @@ public class CommonCheckFunctions {
 		if (!isFirst) result += "\r\n  ]";
 		
 		scanner.close();
-
-		return result;
-	}
-
-	public static Map<String,List> addListField(String list, String listName, String entryName){
-		// System.out.println(list+listName+entryName);
-		Map<String,List> result = new HashMap<>();
-		List<Map> sensorList = new ArrayList<>();
-
-		if(list != null){
-			Scanner scanner = new Scanner(list);
-			scanner.useDelimiter(",");
-
-			while(scanner.hasNext()){
-				Map<String,String> siid = new HashMap<>();
-				String entryValue = scanner.next();
-
-				siid.put(entryName,entryValue);
-				sensorList.add(siid);
-			}
-			result.put(listName,sensorList);
-
-			scanner.close();
-		}
-
-		// System.out.println(result);
+		
 		return result;
 	}
 	

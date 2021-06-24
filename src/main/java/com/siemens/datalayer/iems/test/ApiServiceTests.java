@@ -2,12 +2,9 @@ package com.siemens.datalayer.iems.test;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeoutException;
 
-import com.google.gson.Gson;
 import io.qameta.allure.*;
 
 import org.testng.annotations.BeforeClass;
@@ -175,7 +172,7 @@ public class ApiServiceTests {
 		if (paramMaps.containsKey("deviceType")) queryParameters.put("device_type", paramMaps.get("deviceType"));
 		
 		Response response = ApiServiceEndpoint.getDevicesByType(queryParameters);
-		// Assert.assertEquals(response.getStatusCode(), 200);
+		Assert.assertEquals(response.getStatusCode(), 200);
 	  
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 	  
@@ -259,8 +256,9 @@ public class ApiServiceTests {
 	@Description("Send a request to SUT with json and check the response message.")
 	@Feature("Get sensor data API")
 	@Story("Get sensor data by sensor ids") 
-	public void getSensorDataBySensorId(Map<String, String> paramMaps) throws ParseException {
-		/*Boolean isFirstParam = true;
+	public void getSensorDataBySensorId(Map<String, String> paramMaps) 
+	{ 
+		Boolean isFirstParam = true;		
 		String body = "{";	
 		
 		if (paramMaps.containsKey("endTime")) 
@@ -272,7 +270,7 @@ public class ApiServiceTests {
 		if (paramMaps.containsKey("sensor_id_list")) 
 		{
 			if (isFirstParam==false) body += ",\r\n";
-			body += CommonCheckFunctions.addListFieldAbandoned(paramMaps.get("sensor_id_list"), "sensor_list", "siid");
+			body += CommonCheckFunctions.addListField(paramMaps.get("sensor_id_list"), "sensor_list", "siid");				
 			if (isFirstParam) isFirstParam = false;
 		}
 		
@@ -283,30 +281,7 @@ public class ApiServiceTests {
 		}
 		
 		body += "\r\n}";
-
-		System.out.println(body);*/
-
-		Map<String,Object> mapOfBody = new HashMap<>();
-
-		if (paramMaps.containsKey("endTime")){
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("endTime"));
-			mapOfBody.put("endTime",timeStamp);
-		}
-
-		Map<String,List> result = CommonCheckFunctions.addListField(paramMaps.get("sensor_id_list"), "sensor_list", "siid");
-		for(Map.Entry<String,List> entry : result.entrySet()){
-			mapOfBody.put(entry.getKey(),entry.getValue());
-		}
-
-		if (paramMaps.containsKey("startTime")){
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("startTime"));
-			mapOfBody.put("startTime",timeStamp);
-		}
-
-		Gson gson = new Gson();
-		String body = gson.toJson(mapOfBody);
-		// System.out.println(body);
-
+		
 		Response response = ApiServiceEndpoint.getSensorDataBySensorId(body); 
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
@@ -330,7 +305,8 @@ public class ApiServiceTests {
 	@Feature("Get sensor data API")
 	@Story("Get sensor data by device id")
 	public void getSensorDataByDeviceId(Map<String, String> paramMaps) {
-		/*Boolean isFirstParam = true;
+		
+		Boolean isFirstParam = true;		
 		String body = "{";	
 		
 		if (paramMaps.containsKey("deviceName")) 
@@ -355,31 +331,8 @@ public class ApiServiceTests {
 		}
 		
 		body += "\r\n}";
-		System.out.println(body);*/
-
-		Map<String,Object> mapOfBody = new HashMap<>();
-		if (paramMaps.containsKey("deviceName"))
-		{
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			readDeviceIdParameter(paramMaps, queryParameters);
-			CommonCheckFunctions.addKVToMap(mapOfBody,"deviceId",queryParameters.get("id").toString());
-		}
-
-		if (paramMaps.containsKey("endTime")){
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("endTime"));
-			mapOfBody.put("endTime",timeStamp);
-		}
-
-		if (paramMaps.containsKey("startTime")){
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("startTime"));
-			mapOfBody.put("startTime",timeStamp);
-		}
-
-		Gson gson = new Gson();
-		String body = gson.toJson(mapOfBody);
-		// System.out.println(body);
-
-		Response response = ApiServiceEndpoint.getSensorDataByDeviceId(body);
+		
+		Response response = ApiServiceEndpoint.getSensorDataByDeviceId(body.toString());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		
@@ -403,7 +356,7 @@ public class ApiServiceTests {
 	@Story("Get top n sensor data by device id")
 	public void getTopSensorDataByDeviceId(Map<String, String> paramMaps) 
 	{
-		/*Boolean isFirstParam = true;
+		Boolean isFirstParam = true;
 		String body = "{";	
 		
 		if (paramMaps.containsKey("deviceName")) 
@@ -421,25 +374,7 @@ public class ApiServiceTests {
 		}
 				
 		body += "\r\n}";
-		System.out.println(body);*/
-
-		Map<String,Object> mapOfBody = new HashMap<>();
-		if (paramMaps.containsKey("deviceName"))
-		{
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			readDeviceIdParameter(paramMaps, queryParameters);
-			CommonCheckFunctions.addKVToMap(mapOfBody,"deviceId",queryParameters.get("id").toString());
-		}
-
-		if (paramMaps.containsKey("limit"))
-		{
-			CommonCheckFunctions.addKVToMap(mapOfBody,"limit",paramMaps.get("limit"));
-		}
-
-		Gson gson = new Gson();
-		String body = gson.toJson(mapOfBody);
-		// System.out.println(body);
-
+		
 		Response response = ApiServiceEndpoint.getTopSensorDataByDeviceId(body);
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
@@ -464,7 +399,7 @@ public class ApiServiceTests {
 	@Story("Get kpi data by device id")
 	public void getKpiDataByDeviceId(Map<String, String> paramMaps) 
 	{
-		/*Boolean isFirstParam = true;
+		Boolean isFirstParam = true;		
 		String body = "{";	
 		
 		if (paramMaps.containsKey("deviceName")) 
@@ -489,33 +424,8 @@ public class ApiServiceTests {
 		}
 		
 		body += "\r\n}";
-		System.out.println(body);*/
-
-		Map<String,Object> mapOfBody = new HashMap<>();
-		if (paramMaps.containsKey("deviceName"))
-		{
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			readDeviceIdParameter(paramMaps, queryParameters);
-			CommonCheckFunctions.addKVToMap(mapOfBody,"deviceId",queryParameters.get("id").toString());
-		}
-
-		if(paramMaps.containsKey("endTime"))
-		{
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("endTime"));
-			mapOfBody.put("endTime",timeStamp);
-		}
-
-		if(paramMaps.containsKey("startTime"))
-		{
-			long timeStamp = CommonCheckFunctions.dateToTimestamps(paramMaps.get("startTime"));
-			mapOfBody.put("startTime",timeStamp);
-		}
-
-		Gson gson = new Gson();
-		String body = gson.toJson(mapOfBody);
-		// System.out.println(body);
 		
-		Response response = ApiServiceEndpoint.getKpiDataByDeviceId(body);
+		Response response = ApiServiceEndpoint.getKpiDataByDeviceId(body.toString());
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		
@@ -539,7 +449,7 @@ public class ApiServiceTests {
 	@Story("Get top n kpi data by device id") 
 	public void getTopKPIDataByDeviceId(Map<String, String> paramMaps) 
 	{ 
-		/*Boolean isFirstParam = true;
+		Boolean isFirstParam = true;
 		String body = "{";	
 		
 		if (paramMaps.containsKey("deviceName")) 
@@ -557,24 +467,6 @@ public class ApiServiceTests {
 		}
 				
 		body += "\r\n}";
-		System.out.println(body);*/
-
-		Map<String,Object> mapOfBody = new HashMap<>();
-		if (paramMaps.containsKey("deviceName"))
-		{
-			HashMap<String, Object> queryParameters = new HashMap<>();
-			readDeviceIdParameter(paramMaps, queryParameters);
-			CommonCheckFunctions.addKVToMap(mapOfBody,"deviceId",queryParameters.get("id").toString());
-		}
-
-		if (paramMaps.containsKey("limit"))
-		{
-			CommonCheckFunctions.addKVToMap(mapOfBody,"limit",paramMaps.get("limit"));
-		}
-
-		Gson gson = new Gson();
-		String body = gson.toJson(mapOfBody);
-		// System.out.println(body);
 			
 		Response response = ApiServiceEndpoint.getTopKPIDataByDeviceId(body); 
 		
@@ -602,8 +494,7 @@ public class ApiServiceTests {
 	public void subscriptionsBySensorId(Map<String, String> paramMaps) throws IOException, TimeoutException 
 	{ 
 		HashMap<String, Object> queryParameters = new HashMap<>();
-		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request"));
-		// System.out.println(queryParameters);
+		if (paramMaps.containsKey("request")) queryParameters.put("request", paramMaps.get("request").toString()); 
 		
 		Response response = ApiServiceEndpoint.subscriptionsBySensorId(queryParameters); 
 		
@@ -618,7 +509,7 @@ public class ApiServiceTests {
 				System.out.println("Get sensor data by sensor ids success."); 
 			else 
 				Assert.fail("Get MQ data fail."); 
-
+			
 			deleteSubscription(response); 
 		} 
 		else 
@@ -642,10 +533,8 @@ public class ApiServiceTests {
 		
 		if (queryParameters.containsKey("id"))
 			queryParameters.put("deviceId", queryParameters.get("id"));
-		// System.out.println(queryParameters);
 		
-		Response response = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters);
-		// System.out.println(response.jsonPath().getString("data"));
+		Response response = ApiServiceEndpoint.subscriptionsByDeviceId(queryParameters); 
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 		
@@ -678,7 +567,6 @@ public class ApiServiceTests {
 	{ 
 		HashMap<String, Object> queryParameters = new HashMap<>(); 
 		if (paramMaps.containsKey("deviceList")) readDeviceList(paramMaps, queryParameters);
-		System.out.println(queryParameters);
 		  
 		Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters); 
 		
@@ -807,16 +695,11 @@ public class ApiServiceTests {
 			
 			Boolean isFirst = true;
 			Scanner scanner = new Scanner(paramMaps.get("deviceList"));
-			// useDelimiter(String pattern)
-			// 将此扫描器的分隔模式设置为从指定 String 构造的模式。
 			scanner.useDelimiter("]");
 			
 			while (scanner.hasNext())
 			{
-				// trim() 方法用于删除字符串的头尾空白符
 				String device = scanner.next().trim();
-				// substring() 方法返回字符串的子字符串
-				// int indexOf(String str): 返回指定字符在字符串中第一次出现处的索引，如果此字符串中没有这样的字符，则返回 -1
 				String deviceType = device.substring(1, device.indexOf(","));
 				String deviceName = device.substring(device.indexOf(",")+1);
 				
