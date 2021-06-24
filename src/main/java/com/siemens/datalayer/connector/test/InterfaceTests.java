@@ -14,6 +14,7 @@ import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 
+import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 
 import io.restassured.path.json.JsonPath;
@@ -107,7 +108,7 @@ public class InterfaceTests {
 	  if (paramMaps.containsKey("order")) 			queryParameters.put("order", paramMaps.get("order"));
 	  if (paramMaps.containsKey("pageIndex")) 		queryParameters.put("pageIndex", paramMaps.get("pageIndex"));
 	  if (paramMaps.containsKey("pageSize")) 		queryParameters.put("pageSize", paramMaps.get("pageSize"));
-	  if (paramMaps.containsKey("timeout")) 		queryParameters.put("pageSize", paramMaps.get("timeout")); 
+	  if (paramMaps.containsKey("timeout")) 		queryParameters.put("timeout", paramMaps.get("timeout")); 
 	  
 	  Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
 	  
@@ -135,8 +136,12 @@ public class InterfaceTests {
 		  }
 		  else
 		  {
-			  // Check if data entry matches the model schema
-			  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+			  if(!paramMaps.get("description").contains("no schema check"))
+			  {
+				  // Check if data entry matches the model schema
+				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
+			  }
+			  
 		  }
 		  
 		  if (paramMaps.containsKey("order"))
@@ -151,6 +156,12 @@ public class InterfaceTests {
 		  
 		  // Check if the pagination format is correct
 		  checkPaginationFormat(pageIndex, pageSize, response);
+		  
+		  if(!paramMaps.get("description").contains("no condition check"))
+		  {
+			  // Check if the data satisfies the given condition
+			  checkSingleCondition(paramMaps, rspDataList);
+		  }
 	  }
 	  else 
 	  {
@@ -158,7 +169,7 @@ public class InterfaceTests {
 	  }
 
   	}
-	
+
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
 	{
@@ -200,6 +211,7 @@ public class InterfaceTests {
 		schemaTemplateFile += ".JSON";
 		
 		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+	
 	}
 	
 	public static void checkPaginationFormat(String pageIndex, String pageSize, Response response)
@@ -257,6 +269,88 @@ public class InterfaceTests {
 			Assert.assertTrue(isLastPage, "The mark of last page is set.");
 		else
 			Assert.assertTrue(!isLastPage, "The mark of last page is not set.");
+	}
+	
+	private void checkSingleCondition(Map<String, String> paramMaps, List<HashMap<String, String>> rspDataList) {
+		if (paramMaps.get("description").contains("good request")) {
+			// condition limitation: not support AND,OR
+			if (paramMaps.containsKey("condition")) {
+				String conditionStr = paramMaps.get("condition");
+				String conditionStrLower = conditionStr.toLowerCase();
+				if (!conditionStrLower.contains(" and ") && !conditionStrLower.contains(" or ")) {
+					Condition condition = new Condition(conditionStr);
+					if (StringUtils.isNumeric(condition.getField())) {
+						// no need to check this condition, such as condition is 1=2
+						System.out.println("No need to check this condition (" + conditionStr + ")");
+						return;
+					}
+					boolean result = CommonCheckFunctions.ifDataSatisfiesCondition("", condition.getField(),
+							condition.getCompareType(), condition.getValue(), rspDataList);
+					Assert.assertTrue(result,
+							"The data list do not satisfies the given condition (" + conditionStr + ")");
+				} else {
+					System.out.println("Not support to check this condition (" + conditionStr
+							+ ") since this condition contains \"AND\" or \"OR\"");
+				}
+			}
+		}
+	}
+
+	private static class Condition {
+		private String conditionStr;
+		private String field;
+		private String value;
+		private String compareType;
+
+		public Condition(String conditionStr) {
+			this.conditionStr = conditionStr;
+			parse();
+		}
+
+		private void parse() {
+			String[] parts = {};
+			if (this.conditionStr.contains(">=")) {
+				this.compareType = "gte";
+				parts = this.conditionStr.split(">=");
+			} else if (this.conditionStr.contains(">")) {
+				this.compareType = "gt";
+				parts = this.conditionStr.split(">");
+			} else if (this.conditionStr.contains("<=")) {
+				this.compareType = "lte";
+				parts = this.conditionStr.split("<=");
+			} else if (this.conditionStr.contains("<")) {
+				this.compareType = "lt";
+				parts = this.conditionStr.split("<");
+			} else if (this.conditionStr.contains("!=")) {
+				this.compareType = "neq";
+				parts = this.conditionStr.split("!=");
+			} else if (this.conditionStr.contains("<>")) {
+				this.compareType = "neq";
+				parts = this.conditionStr.split("<>");
+			} else if (this.conditionStr.contains("=")) {
+				this.compareType = "eq";
+				parts = this.conditionStr.split("=");
+			}
+			if (parts.length >= 2) {
+				this.field = parts[0].trim();
+				this.value = StringUtils.removeEnd(StringUtils.removeStart(parts[1].trim(), "'"), "'");
+			} else {
+				throw new IllegalArgumentException("Wrong condition: " + conditionStr);
+			}
+		}
+
+		public String getField() {
+			return field;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public String getCompareType() {
+			return compareType;
+		}
+
 	}
 }
 

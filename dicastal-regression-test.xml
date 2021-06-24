@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+    <listeners>
+        <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+    </listeners>
+    
+    <parameter name="dataFileForApiEngineTest" value="dicastal-api-engine-test-data.xlsx" />
+
+    <test verbose="2" preserve-order="true"
+          name="Regression Tests for Dicastal pilot">
+        <classes>
+			<class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">            
+	            <parameter name="base_url" value="http://140.231.89.85"/>
+				<!-- dicastal-dev: 31488 / dicastal-test: 31079 / dicastal-prod: 30716 -->
+	  			<parameter name="port" value="31079"/>
+            </class>
+        </classes>
+    </test>
+</suite>

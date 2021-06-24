@@ -471,9 +471,13 @@ public class QueryEndPointTests {
 				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:"));
 			}
 			
-			conditionStr= conditionStr.substring(conditionStr.indexOf("\"")+1);
-			conditionStr= conditionStr.substring(0, conditionStr.lastIndexOf("\""));
-			queryParameters.put("condition", conditionStr.trim());
+			// process the case: conditionStr=""
+			if(conditionStr.length()>2)
+			{
+				conditionStr= conditionStr.substring(conditionStr.indexOf("\"")+1);
+				conditionStr= conditionStr.substring(0, conditionStr.lastIndexOf("\""));
+				queryParameters.put("condition", conditionStr.trim());
+			}
 		}
 		
 		entityStr = entityStr.substring(entityStr.indexOf('{')+1);
