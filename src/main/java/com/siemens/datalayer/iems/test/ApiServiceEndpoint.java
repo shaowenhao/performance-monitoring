@@ -196,5 +196,4 @@ public class ApiServiceEndpoint {
 	{
 		return deleteResponseById(PRE_DATA + RestConstants.DELETESUBSCRIPTIONS + "/" +id);
 	}
-
 }
