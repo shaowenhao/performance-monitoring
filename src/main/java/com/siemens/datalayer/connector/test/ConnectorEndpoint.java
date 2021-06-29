@@ -106,7 +106,8 @@ public class ConnectorEndpoint {
 		RequestSpecification httpRequest = RestAssured.given();
 		
 		HashMap<String, String> parameters = new HashMap<>();
-		
+
+		// System.out.println(domain_name);
 		if (domain.equals("default")) {
 			parameters.put("domainName", domain_name);
 		}

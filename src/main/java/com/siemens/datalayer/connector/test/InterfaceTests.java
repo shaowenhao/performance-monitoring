@@ -23,7 +23,6 @@ import io.restassured.response.Response;
 @Epic("SDL Connector")
 @Feature("Rest API")
 public class InterfaceTests {
-	
 	@Parameters({"base_url", "port", "domain_name"})
 	@BeforeClass (description = "Configure the host address and communication port of data-layer-connector")
 	public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name) {
@@ -141,7 +140,6 @@ public class InterfaceTests {
 				  // Check if data entry matches the model schema
 				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
 			  }
-			  
 		  }
 		  
 		  if (paramMaps.containsKey("order"))

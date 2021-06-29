@@ -171,4 +171,78 @@ public class testEnvironmentConstants {
 	
 	public static final String JINZU_PROD_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String JINZU_PROD_ENTITY_MANAGEMENT_PORT = "32093";
+
+	// #########################################################################################
+	// iot demo Project
+	// =========================================================================================
+	public static final String IOT_DOMAIN_NAME = "IOT";
+
+	// =========================================================================================
+	// Configuration for iot-dev environment
+	// =========================================================================================
+	public static final String IOT_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_DEV_CONNECTOR_PORT = "32019";
+
+	public static final String IOT_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_DEV_APIENGINE_PORT = "32552";
+
+	public static final String IOT_DEV_RABBITMQ_HOST = "140.231.89.85";
+	public static final String IOT_DEV_RABBITMQ_PORT = "32290";
+	public static final String IOT_DEV_RABBIT_USERNAME = "guest";
+	public static final String IOT_DEV_RABBIT_PASSWORD = "guest";
+	public static final String IOT_DEV_RABBIT_VIRTUALHOST = "/";
+	public static final String IOT_DEV_RABBIT_TIMEOUT = "30";
+	public static final String IOT_DEV_RABBIT_EXCHANGE = "datalayer.exchange.out";
+
+	public static final String IOT_DEV_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_DEV_ENTITY_MANAGEMENT_PORT = "30753";
+
+	public static final String IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "30111";
+
+	// =========================================================================================
+	// Configuration for iot-test environment
+	// =========================================================================================
+	public static final String IOT_TEST_CONNECTOR_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_TEST_CONNECTOR_PORT = "30850";
+
+	public static final String IOT_TEST_APIENGINE_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_TEST_APIENGINE_PORT = "30346";
+
+	public static final String IOT_TEST_RABBITMQ_HOST = "140.231.89.85";
+	public static final String IOT_TEST_RABBITMQ_PORT = "32105";
+	public static final String IOT_TEST_RABBIT_USERNAME = "guest";
+	public static final String IOT_TEST_RABBIT_PASSWORD = "guest";
+	public static final String IOT_TEST_RABBIT_VIRTUALHOST = "/";
+	public static final String IOT_TEST_RABBIT_TIMEOUT = "30";
+	public static final String IOT_TEST_RABBIT_EXCHANGE = "datalayer.exchange.out";
+
+	public static final String IOT_TEST_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_TEST_ENTITY_MANAGEMENT_PORT = "31873";
+
+	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "30807";
+
+	// =========================================================================================
+	// Configuration for iot-prod environment
+	// =========================================================================================
+	public static final String IOT_PROD_CONNECTOR_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_PROD_CONNECTOR_PORT = "30310";
+
+	public static final String IOT_PROD_APIENGINE_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_PROD_APIENGINE_PORT = "32227";
+
+	public static final String IOT_PROD_RABBITMQ_HOST = "140.231.89.85";
+	public static final String IOT_PROD_RABBITMQ_PORT = "";
+	public static final String IOT_PROD_RABBIT_USERNAME = "guest";
+	public static final String IOT_PROD_RABBIT_PASSWORD = "guest";
+	public static final String IOT_PROD_RABBIT_VIRTUALHOST = "/";
+	public static final String IOT_PROD_RABBIT_TIMEOUT = "30";
+	public static final String IOT_PROD_RABBIT_EXCHANGE = "datalayer.exchange.out";
+
+	public static final String IOT_PROD_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_PROD_ENTITY_MANAGEMENT_PORT = "31468";
+
+	public static final String IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "31851";
 }

@@ -408,6 +408,81 @@ public class testConfigurationClass {
 						  		  testEnvironmentConstants.JINZU_PROD_ENTITY_MANAGEMENT_PORT);
 				
 				break;
+
+			case("iot-dev"):
+				setConnectorTest(testEnvironmentConstants.IOT_DOMAIN_NAME,
+						         testEnvironmentConstants.IOT_DEV_CONNECTOR_BASE_URL,
+						         testEnvironmentConstants.IOT_DEV_CONNECTOR_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.IOT_DEV_APIENGINE_BASE_URL,
+						         testEnvironmentConstants.IEMS_DEV_APIENGINE_PORT);
+
+				setRabbitMQHost(testEnvironmentConstants.IOT_DEV_RABBITMQ_HOST);
+				setRabbitMQPort(testEnvironmentConstants.IOT_DEV_RABBITMQ_PORT);
+				setRabbitMQUserName(testEnvironmentConstants.IOT_DEV_RABBIT_USERNAME);
+				setRabbitMQPassword(testEnvironmentConstants.IOT_DEV_RABBIT_PASSWORD);
+				setRabbitMQVirtualHost(testEnvironmentConstants.IOT_DEV_RABBIT_VIRTUALHOST);
+				setRabbitMQTimeout(testEnvironmentConstants.IOT_DEV_RABBIT_TIMEOUT);
+				setRabbitMQExchange(testEnvironmentConstants.IOT_DEV_RABBIT_EXCHANGE);
+
+				// 赋值：this.runEntityMgmtTest = true;
+				setEntityMgmtTest(testEnvironmentConstants.IOT_DEV_ENTITY_MANAGEMENT_BASE_URL,
+						          testEnvironmentConstants.IOT_DEV_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runSubscriptionMgmtTest = true;
+				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+						                testEnvironmentConstants.IOT_DEV_ENTITY_MANAGEMENT_PORT);
+				break;
+
+			case("iot-test"):
+				setConnectorTest(testEnvironmentConstants.IOT_DOMAIN_NAME,
+						testEnvironmentConstants.IOT_TEST_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.IOT_TEST_CONNECTOR_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.IOT_TEST_APIENGINE_BASE_URL,
+						testEnvironmentConstants.IEMS_TEST_APIENGINE_PORT);
+
+				setRabbitMQHost(testEnvironmentConstants.IOT_TEST_RABBITMQ_HOST);
+				setRabbitMQPort(testEnvironmentConstants.IOT_TEST_RABBITMQ_PORT);
+				setRabbitMQUserName(testEnvironmentConstants.IOT_TEST_RABBIT_USERNAME);
+				setRabbitMQPassword(testEnvironmentConstants.IOT_TEST_RABBIT_PASSWORD);
+				setRabbitMQVirtualHost(testEnvironmentConstants.IOT_TEST_RABBIT_VIRTUALHOST);
+				setRabbitMQTimeout(testEnvironmentConstants.IOT_TEST_RABBIT_TIMEOUT);
+				setRabbitMQExchange(testEnvironmentConstants.IOT_TEST_RABBIT_EXCHANGE);
+
+				// 赋值：this.runEntityMgmtTest = true;
+				setEntityMgmtTest(testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_BASE_URL,
+						testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runSubscriptionMgmtTest = true;
+				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+						testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_PORT);
+				break;
+
+			case("iot-prod"):
+				setConnectorTest(testEnvironmentConstants.IOT_DOMAIN_NAME,
+						testEnvironmentConstants.IOT_PROD_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.IOT_PROD_CONNECTOR_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.IOT_PROD_APIENGINE_BASE_URL,
+						testEnvironmentConstants.IEMS_PROD_APIENGINE_PORT);
+
+				setRabbitMQHost(testEnvironmentConstants.IOT_PROD_RABBITMQ_HOST);
+				setRabbitMQPort(testEnvironmentConstants.IOT_PROD_RABBITMQ_PORT);
+				setRabbitMQUserName(testEnvironmentConstants.IOT_PROD_RABBIT_USERNAME);
+				setRabbitMQPassword(testEnvironmentConstants.IOT_PROD_RABBIT_PASSWORD);
+				setRabbitMQVirtualHost(testEnvironmentConstants.IOT_PROD_RABBIT_VIRTUALHOST);
+				setRabbitMQTimeout(testEnvironmentConstants.IOT_PROD_RABBIT_TIMEOUT);
+				setRabbitMQExchange(testEnvironmentConstants.IOT_PROD_RABBIT_EXCHANGE);
+
+				// 赋值：this.runEntityMgmtTest = true;
+				setEntityMgmtTest(testEnvironmentConstants.IOT_PROD_ENTITY_MANAGEMENT_BASE_URL,
+						testEnvironmentConstants.IOT_PROD_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runSubscriptionMgmtTest = true;
+				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+						testEnvironmentConstants.IOT_PROD_ENTITY_MANAGEMENT_PORT);
+				break;
 			
 			default:
 				System.out.println("Error: Unknown test environment '" + testEnvName + "'!");	
