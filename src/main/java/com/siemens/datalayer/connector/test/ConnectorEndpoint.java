@@ -51,7 +51,7 @@ public class ConnectorEndpoint {
 				resourcePath = "json-model-schema/snc/";
 				break;
 				
-			case "IoT":
+			case "IOT":
 				resourcePath = "json-model-schema/iot/";
 				break;
 				

@@ -207,7 +207,8 @@ public class InterfaceTests {
 		// If data is returned in pagination format
 		if (response.getBody().asString().contains("totalPages")) schemaTemplateFile += "P";
 		schemaTemplateFile += ".JSON";
-		
+
+		System.out.println(schemaTemplateFile);
 		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
 	
 	}
