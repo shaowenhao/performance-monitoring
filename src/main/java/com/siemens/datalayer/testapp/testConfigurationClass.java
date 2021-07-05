@@ -415,7 +415,7 @@ public class testConfigurationClass {
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_PORT);
 
 				setApiEngineTest(testEnvironmentConstants.IOT_DEV_APIENGINE_BASE_URL,
-						         testEnvironmentConstants.IEMS_DEV_APIENGINE_PORT);
+						         testEnvironmentConstants.IOT_DEV_APIENGINE_PORT);
 
 				setRabbitMQHost(testEnvironmentConstants.IOT_DEV_RABBITMQ_HOST);
 				setRabbitMQPort(testEnvironmentConstants.IOT_DEV_RABBITMQ_PORT);
@@ -440,7 +440,7 @@ public class testConfigurationClass {
 						testEnvironmentConstants.IOT_TEST_CONNECTOR_PORT);
 
 				setApiEngineTest(testEnvironmentConstants.IOT_TEST_APIENGINE_BASE_URL,
-						testEnvironmentConstants.IEMS_TEST_APIENGINE_PORT);
+						testEnvironmentConstants.IOT_TEST_APIENGINE_PORT);
 
 				setRabbitMQHost(testEnvironmentConstants.IOT_TEST_RABBITMQ_HOST);
 				setRabbitMQPort(testEnvironmentConstants.IOT_TEST_RABBITMQ_PORT);
@@ -465,7 +465,7 @@ public class testConfigurationClass {
 						testEnvironmentConstants.IOT_PROD_CONNECTOR_PORT);
 
 				setApiEngineTest(testEnvironmentConstants.IOT_PROD_APIENGINE_BASE_URL,
-						testEnvironmentConstants.IEMS_PROD_APIENGINE_PORT);
+						testEnvironmentConstants.IOT_PROD_APIENGINE_PORT);
 
 				setRabbitMQHost(testEnvironmentConstants.IOT_PROD_RABBITMQ_HOST);
 				setRabbitMQPort(testEnvironmentConstants.IOT_PROD_RABBITMQ_PORT);
