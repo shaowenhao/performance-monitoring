@@ -51,7 +51,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test entity interface: Get concept model definition by model name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'searchModelSchemaByName' request to read out the model schema of the entity specified in the name parameter.")
-	@Story("Entity Interface: Search model schema by name")
+	@Story("Connector Interface: Search model schema by name")
   	public void SearchModelSchemaByName()
   	{
 	  Response response = ConnectorEndpoint.getAllEntitiesName();
@@ -70,7 +70,7 @@ public class InterfaceTests {
 	@Test (priority = 0, description = "Test connector interface: Get all entities name and then check its concept model.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'Get All Entities name' request to get all the available entity names, then read out the model schema of every entity.")
-	@Story("Entity Interface: Search model schema by name")
+	@Story("Connector Interface: Search model schema by name")
   	public void SearchModelSchemaForAllEntities()
   	{		
 	  Response response = ConnectorEndpoint.getAllEntitiesName();
