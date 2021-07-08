@@ -2,6 +2,8 @@ package com.siemens.datalayer.apiengine.test;
 
 import java.util.*;
 
+import com.google.gson.Gson;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
@@ -25,7 +27,7 @@ import io.restassured.response.Response;
 @Feature("Query End Point")
 
 public class QueryEndPointTests {
-	
+
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of data-layer-api-engine")
 	public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30035") String port) 
@@ -154,6 +156,46 @@ public class QueryEndPointTests {
 				Assert.assertNull(response.jsonPath().get(entityListPath), "The response message does not contain any data.");
 			}
 		}
+	}
+
+	@Test(priority = 0,
+	      description = "通过调用apiengine-POST /graphql接口，发送Insert/Update/Delete entity请求，最终会形成多个restful请求，验证事务")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Post a 'getData' request to graphql query interface.")
+	@Story("Query End Point: GraphQL Interface")
+	public void postGraphForRestful()
+	{
+		String postRequest = generatePostRequest("input",10);
+		//System.out.println(postRequest);
+
+		Response response = ApiEngineEndpoint.postGraphql(postRequest);
+	}
+
+	@Step("generate api-engine post request")
+	public static String generatePostRequest(String operate,int requestNumber)
+	{
+		Gson gson = new Gson();
+
+		String postRequest = "";
+		List<String> userList = new ArrayList<>();
+		HashMap<String,String> user = new HashMap<>();
+
+		for(int i=1;i<=requestNumber;i++){
+			user.put("id",String.valueOf(i));
+			user.put("name","name"+Integer.toString(i));
+			user.put("age",""+i);
+
+			String stringOfUser = gson.toJson(user);
+			userList.add("\n" + stringOfUser);
+
+		}
+		postRequest ="mutation {\n" + "Insert" + "(" + operate + ":" + "\n" + "{" + "\n"  + "User: " +userList + "\n" + "}" + "\n"  +")" + "\n" + "{\n" +
+				"        json_value\n" +
+				"        succeed_count\n" +
+				"        reserved_field_1\n" +
+				"        reserved_field_2\n" +
+				"}" + "\n}";
+		return postRequest;
 	}
 	
 	@Step("Verify the status code, operation code, and message")
@@ -459,6 +501,7 @@ public class QueryEndPointTests {
 			
 			conditionStr = conditionStr.replace("(cond:", "");
 			conditionStr = conditionStr.substring(0, conditionStr.lastIndexOf(')'));
+			// System.out.println("conditionStr: " + conditionStr);
 
 			if ((conditionStr).contains(",order:"))
 			{
@@ -467,6 +510,7 @@ public class QueryEndPointTests {
 				orderStr = orderStr.replace("\"", "");
 				
 				if (!orderStr.isEmpty()) queryParameters.put("order", orderStr.trim());
+				// System.out.println("order: "+orderStr.trim());
 				
 				conditionStr = conditionStr.substring(0, conditionStr.indexOf(",order:"));
 			}
@@ -477,6 +521,7 @@ public class QueryEndPointTests {
 				conditionStr= conditionStr.substring(conditionStr.indexOf("\"")+1);
 				conditionStr= conditionStr.substring(0, conditionStr.lastIndexOf("\""));
 				queryParameters.put("condition", conditionStr.trim());
+				// System.out.println("condition: "+conditionStr.trim());
 			}
 		}
 		
@@ -489,6 +534,8 @@ public class QueryEndPointTests {
 		fieldStr = fieldStr.substring(0, fieldStr.lastIndexOf('}'));
 		
 		queryParameters.put("field", fieldStr.trim());
+		// System.out.println("entity: "+entityStr.trim());
+		// System.out.println("field: "+fieldStr.trim());
 	}
 	
 	// Read the information from a sub-entity string, e.g. invert_Customer(cond:"",order:"") { actual_controller category ... district}

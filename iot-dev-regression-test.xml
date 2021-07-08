@@ -10,18 +10,18 @@
     <parameter name="dataFileForEntityMgmtTest" value="iot-entity-management-test-data.xlsx"/>
     <parameter name="dataFileForSubMgmtTest" value="iot-subscription-management-test-data.xlsx"/>
     <classes>
-      <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+      <!-- <class name="com.siemens.datalayer.connector.test.InterfaceTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="domain_name" value="IOT"/>
         <parameter name="port" value="32019"/>
-      </class> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
-      <!-- <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
+      </class> --> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
+      <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="32552"/>
         <methods>
           <exclude name="getDataEntities"/>
         </methods>
-      </class> --> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
+      </class> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
       <!-- <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
         <parameter name="base_url" value="http://140.231.89.85"/>
         <parameter name="port" value="30753"/>
