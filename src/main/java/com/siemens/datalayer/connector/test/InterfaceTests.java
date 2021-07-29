@@ -1,5 +1,6 @@
 package com.siemens.datalayer.connector.test;
 
+import java.sql.Connection;
 import java.util.*;
 
 import io.qameta.allure.*;
@@ -37,17 +38,36 @@ public class InterfaceTests {
 	@Description("Send a 'Get All Entities name' request to read out all the available entity names.")
 	@Story("Connector Interface: Get all entities name")
 	public void GetAllEntitiesName()
-	{	
+	{
 	  Response response = ConnectorEndpoint.getAllEntitiesName();
-	  
-	  // This is an example of processing the response message via POJO  
+
+	  // This is an example of processing the response message via POJO
 	  GetAllEntitiesNameResponse rspBody = response.getBody().as(GetAllEntitiesNameResponse.class);
 		
 	  Assert.assertEquals("Operate success.", rspBody.getMessage());
 
 	  //Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
 	}
-  
+
+	/*
+	@Test(priority = 0, description = "Test connector interface:check the usability of all entities through request 'getConceptModelDataByCondition'")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'Get All Entities name' request to get all the available entity names, then check the usability of all entities")
+	@Story("Connector Interface:Get All Entities name and check the usability")
+	public void checkAllEntitiesName()
+	{
+		Response response = ConnectorEndpoint.getAllEntitiesName();
+		List<String> allEntities = response.jsonPath().getList("data");
+		for (String entityItem : allEntities)
+		{
+			HashMap<String, String> parameters = new HashMap<>();
+			parameters.put("name",entityItem);
+			System.out.println(entityItem);
+			response = ConnectorEndpoint.getConceptModelDataByCondition(parameters);
+			Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
+		}
+	}
+
 	@Test (priority = 0, description = "Test entity interface: Get concept model definition by model name.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'searchModelSchemaByName' request to read out the model schema of the entity specified in the name parameter.")
@@ -64,7 +84,6 @@ public class InterfaceTests {
 	
 	  // This is an example of extracting information from the response message via Json path  
 	  Assert.assertEquals("Operate success.", response.jsonPath().getString("message"));
-		
   	}
   
 	@Test (priority = 0, description = "Test connector interface: Get all entities name and then check its concept model.")
@@ -72,7 +91,7 @@ public class InterfaceTests {
 	@Description("Send a 'Get All Entities name' request to get all the available entity names, then read out the model schema of every entity.")
 	@Story("Connector Interface: Search model schema by name")
   	public void SearchModelSchemaForAllEntities()
-  	{		
+  	{
 	  Response response = ConnectorEndpoint.getAllEntitiesName();
 	  
 	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
@@ -88,6 +107,7 @@ public class InterfaceTests {
 		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
 	  }
   	}
+   */
   
 	@Test (	priority = 0, 
 			description = "Test connector interface: Get concept model data by condition.", 
@@ -118,20 +138,23 @@ public class InterfaceTests {
 		  List<HashMap<String, String>> rspDataList;
 		  
 		  String listPath = "data";
-		  if (response.getBody().asString().contains("totalPages")) listPath += ".data";
+		  if (response.getBody().asString().contains("totalPages")) listPath += ".data"; // 只有分页时，路径才会变成data.data，其他时候为data
 		  
-		  rspDataList = response.jsonPath().getList(listPath);
+		  rspDataList = response.jsonPath().getList(listPath); // 获取列表
 		  
 		  // Check if the returned data list is not empty
 		  Assert.assertTrue(rspDataList.size() > 0);
 		  
 		  if (paramMaps.containsKey("fields")) 
 		  {
-			  if (paramMaps.get("fields").contains("*"))
+			  if (paramMaps.get("fields").contains("*")) // *表示返回所有字段
 				  checkDataFollowsModelSchema(paramMaps.get("name"), response);
 			  else
-				  // Check if data contains the required fields
+			  {
+			  	// Check if data contains the required fields
 				  CommonCheckFunctions.checkDataContainsSpecifiedFields(listPath, paramMaps.get("fields"), rspDataList);
+				  // CommonCheckFunctions.checkDataOnlyContainsSpecifiedFields(listPath,paramMaps.get("fields"),rspDataList);
+			  }
 		  }
 		  else
 		  {

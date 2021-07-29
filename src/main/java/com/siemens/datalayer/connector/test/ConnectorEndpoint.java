@@ -71,9 +71,10 @@ public class ConnectorEndpoint {
 		
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
-        
+        // httpRequest.header("version", "1.0");
+
         Response response = httpRequest.filter(new AllureRestAssured())
-        							   .get("api/connector/entities");
+        							   .get("/api/connectors/entities");
         
         return response;
 	}
@@ -87,10 +88,12 @@ public class ConnectorEndpoint {
 //		RestAssured.basePath = "api/connector/searchData";
 		
 		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("content-type","application/json");
+		// httpRequest.header("version","1.0");
 
 		Response response = httpRequest.queryParams(parameters) 
 									   .filter(new AllureRestAssured())
-									   .get("api/connector/searchData");
+									   .get("/api/connectors/searchData");
 		
 		return response;
 	}	
@@ -104,6 +107,8 @@ public class ConnectorEndpoint {
 //		RestAssured.basePath = "api/v1/entity/searchModelSchemaByName";
 		
 		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("Content-Type", "application/json");
+		// httpRequest.header("version", "1.0");
 		
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -119,7 +124,7 @@ public class ConnectorEndpoint {
 		
 		Response response = httpRequest.queryParams(parameters)
 									   .filter(new AllureRestAssured())
-									   .get("api/v1/entity/searchModelSchemaByName");
+									   .get("/api/entities/modelSchemaByName");
 		
 		return response;
 	}

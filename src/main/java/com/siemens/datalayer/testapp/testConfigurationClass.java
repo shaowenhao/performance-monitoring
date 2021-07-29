@@ -432,6 +432,9 @@ public class testConfigurationClass {
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						                testEnvironmentConstants.IOT_DEV_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runUserQueryTest = true;
+				setUserQueryTestClass("com.siemens.datalayer.iot.test.UserQueryTests");
 				break;
 
 			case("iot-test"):
@@ -482,6 +485,7 @@ public class testConfigurationClass {
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						testEnvironmentConstants.IOT_PROD_ENTITY_MANAGEMENT_PORT);
+
 				break;
 			
 			default:

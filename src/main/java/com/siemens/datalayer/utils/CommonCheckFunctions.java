@@ -37,9 +37,28 @@ public class CommonCheckFunctions {
 				if (rspDataItem != null)
 					assertThat(rspDataItem, hasKey(keyToCompare.trim()));
 			}	
-		}	
-		  
+		}
 		scanner.close();
+	}
+
+	@Step("Verify if the response only contains the required data fields")
+	public static void checkDataOnlyContainsSpecifiedFields(String jsonPath,String fields,List<HashMap<String,String>> responseData)
+	{
+		if (responseData == null)
+		{
+			System.out.println("Error: null is returned when try to get data from jasonPath '" + jsonPath + "'");
+		}
+
+		for (HashMap<String,String> rspDataItem : responseData)
+		{
+			if (rspDataItem != null)
+			{
+				for (String key : rspDataItem.keySet())
+				{
+					assert(fields.contains(key));
+				}
+			}
+		}
 	}
 
 	@Step("Verify if the response contains the specified number of items")
