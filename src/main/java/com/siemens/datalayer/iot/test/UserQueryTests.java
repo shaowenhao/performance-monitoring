@@ -22,8 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Epic("SDL Api-engine")
-@Feature("mysql insert/delete/update/get Scenarios")
+@Epic("User Query Scenarios")
 public class UserQueryTests {
 
     static List<String> idList;
@@ -95,7 +94,7 @@ public class UserQueryTests {
           dataProvider = "api-engine-test-data-provider",
           dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("数据库 增/删/改/查")
+    @Feature("mysql insert/delete/update/get Scenarios")
     @Story("mysql 增/删/改/查")
     public void postGraphForMysql(Map<String, String> paramMaps) throws JSONException {
         if(paramMaps.containsKey("queryWithoutData") && paramMaps.containsKey("data"))
