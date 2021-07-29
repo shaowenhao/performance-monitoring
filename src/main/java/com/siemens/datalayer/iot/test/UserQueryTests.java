@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Epic("mysql insert/delete/update/get Scenarios")
+@Epic("SDL Api-engine")
+@Feature("mysql insert/delete/update/get Scenarios")
 public class UserQueryTests {
 
     static List<String> idList;
