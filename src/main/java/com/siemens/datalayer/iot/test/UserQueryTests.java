@@ -63,7 +63,7 @@ public class UserQueryTests {
         idList = new ArrayList<>();
     }
 
-   @AfterClass
+   @AfterClass(description = "Delete the data written for testing in Mysql")
     public void deleteDataForMysql()
     {
         try
