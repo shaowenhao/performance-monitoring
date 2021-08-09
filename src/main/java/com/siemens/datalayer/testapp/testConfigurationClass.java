@@ -10,9 +10,17 @@ public class testConfigurationClass {
 	
 	private String apiEngine_base_url = null;
 	private String apiEngine_port = null;
+
+	private String relationalDatabase_properties = null;
+
+	Boolean runConnectorOtherInterfaceTest = false;
+	private String connectorOtherInterfaceTestClass = null;
 	
 	Boolean runUserQueryTest = false;	
 	private String userQueryTestClass = null;
+
+	Boolean runRelationalDatabaseTest = false;
+	private String relationalDatabaseTestClass = null;
 	
 	Boolean runApiServiceTest = false;
 	private String apiService_base_url = null;
@@ -73,6 +81,34 @@ public class testConfigurationClass {
 	public String getApiEnginePort() {
 		return this.apiEngine_port;
 	}
+
+	// setRelationalDatabaseTest、getRelationalDatabaseProperties
+	// 这两个方法针对获取数据库的配置 而添加
+	public void setRelationalDatabaseTest(String properties){
+		this.relationalDatabase_properties = properties;
+	}
+
+	public String getRelationalDatabaseProperties()
+	{
+		return this.relationalDatabase_properties;
+	}
+
+	// getRunConnectorOtherInterfaceTest、setConnectorOtherInterfaceTestClass、getConnectorOtherInterfaceTestClass
+	// 这三个方法针对connector的其他接口的测试 而添加
+	public Boolean getRunConnectorOtherInterfaceTest()
+	{
+		return this.runConnectorOtherInterfaceTest;
+	}
+	public void setConnectorOtherInterfaceTestClass(String runConnectorOtherInterfaceTestClassName)
+	{
+		this.runConnectorOtherInterfaceTest = true;
+		this.connectorOtherInterfaceTestClass = runConnectorOtherInterfaceTestClassName;
+	}
+	public String getConnectorOtherInterfaceTestClass()
+	{
+		return this.connectorOtherInterfaceTestClass;
+	}
+
 	public Boolean getRunUserQueryTest()
 	{
 		return this.runUserQueryTest;
@@ -86,6 +122,24 @@ public class testConfigurationClass {
 	
 	public String getUserQueryTestClass() {
 		return this.userQueryTestClass;
+	}
+
+	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
+	// 这三个方法针对“关系型数据库”的测试 而添加
+	public Boolean getRunRelationalDatabaseTest()
+	{
+		return this.runRelationalDatabaseTest;
+	}
+
+	public void setRelationalDatabaseTestClass(String relationalDatabaseTestClassName)
+	{
+		this.runRelationalDatabaseTest = true;
+		this.relationalDatabaseTestClass = relationalDatabaseTestClassName;
+	}
+
+	public String getRelationalDatabaseTestClass()
+	{
+		return this.relationalDatabaseTestClass;
 	}
 	
 	public void setApiServiceTest(String base_url, String port) {
@@ -433,8 +487,12 @@ public class testConfigurationClass {
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						                testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
 
-				// 赋值：this.runUserQueryTest = true;
-				setUserQueryTestClass("com.siemens.datalayer.iot.test.UserQueryTests");
+				// 赋值：this.runRelationalDatabaseTest = true;
+				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTest");
+				setRelationalDatabaseTest("iot.dev.mysql.db.properties");
+
+				//赋值：this.runConnectorOtherInterfaceTest = true;
+				setConnectorOtherInterfaceTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfaceTests");
 				break;
 
 			case("iot-test"):
@@ -459,7 +517,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
-						testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_PORT);
+						testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
 				break;
 
 			case("iot-prod"):
@@ -484,7 +542,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
-						testEnvironmentConstants.IOT_PROD_ENTITY_MANAGEMENT_PORT);
+						testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT);
 
 				break;
 			

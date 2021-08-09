@@ -1,12 +1,14 @@
 package com.siemens.datalayer.iot.test;
-
-import com.google.gson.Gson;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
-import com.siemens.datalayer.iot.util.JdbcUtil;
+import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
+
+import com.google.gson.Gson;
+
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+
 import org.apache.commons.collections4.MapUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,31 +24,34 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Epic("User Query Scenarios")
-public class UserQueryTests {
+@Epic("Relational databases test Scenarios")
+public class RelationalDatabaseTest {
 
+    static Connection connection;
+    static Statement statement;
     static List<String> idList;
 
-    @Parameters({"base_url","port"})
-    @BeforeClass(description = "1.Configure the host address and communication port of data-layer-api-engine;")
-    public void setApiEnigineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32552") String port)
+    @Parameters({"base_url","port","db_properties"})
+    @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
+    public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32552") String port,String db_properties)
     {
         // 执行case之前，连接MySQL，并且清空表Mysql_Test
+        // 保持数据库连接不断开，最后在AfterClass(deleteDataForMysql)中关闭数据库连接
         try
         {
             // 连接数据库
-            Connection connection = JdbcUtil.getConnection();
+            connection = JdbcMysqlUtil.getConnection(db_properties);
             if(!connection.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
 
             // 操作数据库
-            Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             // 需要执行的sql语句
             String sql = "DELETE FROM Mysql_Test";
             statement.execute(sql);
 
-            statement.close();
-            connection.close();
+            // statement.close();
+            // connection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -56,7 +61,7 @@ public class UserQueryTests {
         ApiEngineEndpoint.setPort(port);
 
         // 连接数据库的方式
-        // 1、新建数据库配置文件(resources.db.properties)
+        // 1、新建数据库配置文件(resources.iot.dev.mysql.db.properties)
         // 2、获取配置文件信息(com.siemens.datalayer.iot.util.JdbcUtil)
         // 3、注册数据库驱动
 
@@ -68,19 +73,13 @@ public class UserQueryTests {
     {
         try
         {
-            // 连接数据库
-            Connection connection = JdbcUtil.getConnection();
-            if(!connection.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
-
-            // 操作数据库
-            Statement statement = connection.createStatement();
             // 需要执行的sql语句
             if(idList.size() > 0){
                 String sql = "DELETE FROM Mysql_Test WHERE ID in " + "(" + String.join(",",idList) + ")";
                 statement.execute(sql);
             }
 
+            // 断开数据库的连接，释放资源
             statement.close();
             connection.close();
 
@@ -200,13 +199,6 @@ public class UserQueryTests {
     public static void checkInsertUpdateMysql(Map<String,String> data){
         try
         {
-            // 连接数据库
-            Connection connection = JdbcUtil.getConnection();
-            if(!connection.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
-
-            // 操作数据库
-            Statement statement = connection.createStatement();
             // 需要执行的sql语句
             Double id = MapUtils.getDouble(data, "ID");
             String sql = "SELECT * from Mysql_Test WHERE ID = " + id;
@@ -237,8 +229,8 @@ public class UserQueryTests {
             }
 
             rs.close();
-            statement.close();
-            connection.close();
+            // statement.close();
+            // connection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -249,25 +241,16 @@ public class UserQueryTests {
     public static void checkDeleteMysql(Map<String,String> data){
         try
         {
-            // 连接数据库
-            Connection connection = JdbcUtil.getConnection();
-            if(!connection.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
-
-            // 操作数据库
-            Statement statement = connection.createStatement();
             // 需要执行的sql语句
             Double id = MapUtils.getDouble(data, "ID");
             String sql = "SELECT * from Mysql_Test WHERE ID = " + id;
 
             ResultSet rs = statement.executeQuery(sql);
 
-            System.out.println("rs.next():" + rs.next());
+            // System.out.println("rs.next():" + rs.next());
             Assert.assertFalse(rs.next());
 
             rs.close();
-            statement.close();
-            connection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

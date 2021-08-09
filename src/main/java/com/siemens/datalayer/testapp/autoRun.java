@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
@@ -73,14 +69,36 @@ public class autoRun {
 		
 		apiEngineTest.setParameters(apiEngineTestParams);
 		myClasses.add(apiEngineTest);
-		
+
+		//Add test class for connectorOtherInterfaceTest
+		if (testConfig.getRunConnectorOtherInterfaceTest())
+		{
+			XmlClass connectorOtherInterfaceTests = new XmlClass(testConfig.getConnectorOtherInterfaceTestClass());
+
+			connectorOtherInterfaceTests.setParameters(connectorTestParams);
+			myClasses.add(connectorOtherInterfaceTests);
+		}
+
 		//Add test class for userQueryTest
 		if (testConfig.getRunUserQueryTest())
 		{
 			XmlClass userQueryTest = new XmlClass(testConfig.getUserQueryTestClass());
-			
 			userQueryTest.setParameters(apiEngineTestParams);
 			myClasses.add(userQueryTest);
+		}
+
+		// Add test class for relationalDatabaseTest
+		if (testConfig.getRunRelationalDatabaseTest())
+		{
+			XmlClass relationalDatabaseTest = new XmlClass(testConfig.getRelationalDatabaseTestClass());
+
+			Map<String,String> relationalDatabaseTestParams = new HashMap<>();
+			relationalDatabaseTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			relationalDatabaseTestParams.put("port", testConfig.getApiEnginePort());
+			relationalDatabaseTestParams.put("db_properties",testConfig.getRelationalDatabaseProperties());
+
+			relationalDatabaseTest.setParameters(relationalDatabaseTestParams);
+			myClasses.add(relationalDatabaseTest);
 		}
 		
 		//Add test class for ApiService

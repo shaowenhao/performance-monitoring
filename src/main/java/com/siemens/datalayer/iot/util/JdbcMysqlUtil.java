@@ -9,38 +9,35 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 // 获取到db.properties文件中的数据库信息
-public class JdbcUtil {
+public class JdbcMysqlUtil {
     // 私有变量
     private static String driver;
     private static String url;
     private static String user;
     private static String password;
 
-    // 静态块
-    static {
-        try {
+    // 返回数据库连接
+    public static Connection getConnection(String file){
+        try{
             // 1.新建属性集对象
             Properties properties = new Properties();
 
             // 2.通过反射，新建字符输入流，读取db.properties文件
-            InputStream input = JdbcUtil.class.getClassLoader().getResourceAsStream("db.properties");
+            InputStream input = JdbcMysqlUtil.class.getClassLoader().getResourceAsStream(file);
 
             // 3.将输入流中读取到的属性，加载到properties属性集对象中
             properties.load(input);
 
-            //4.根据键，获取properties中对应的值
+            // 4.根据键，获取properties中对应的值
             driver = properties.getProperty("driver");
             url = properties.getProperty("url");
             user = properties.getProperty("user");
             password = properties.getProperty("password");
 
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
-    }
 
-    // 返回数据库连接
-    public static Connection getConnection() {
         try {
             // 注册数据库的驱动
             Class.forName(driver);
