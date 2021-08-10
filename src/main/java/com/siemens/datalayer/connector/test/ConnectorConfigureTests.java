@@ -6,7 +6,6 @@ import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 
-import org.json.JSONException;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -18,7 +17,7 @@ import java.util.*;
 
 @Epic("SDL Connector")
 @Feature("Rest api except 'Connector Interface'")
-public class ConnectorOtherInterfaceTests {
+public class ConnectorConfigureTests {
     static List<String> connectorNamesList;
 
     @Parameters({"base_url", "port", "domain_name"})
@@ -26,15 +25,15 @@ public class ConnectorOtherInterfaceTests {
     public void setConnectorOtherInterfaceEndpoint(@Optional("http://localhost") String base_url,@Optional("9001") String port,String domain_name){
         connectorNamesList = new ArrayList<>();
 
-        ConnectorOtherInterfaceEndpoint.setBaseUrl(base_url);
-        ConnectorOtherInterfaceEndpoint.setPort(port);
-        ConnectorOtherInterfaceEndpoint.setDomainName(domain_name);
+        ConnectorConfigureEndpoint.setBaseUrl(base_url);
+        ConnectorConfigureEndpoint.setPort(port);
+        ConnectorConfigureEndpoint.setDomainName(domain_name);
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector", base_url + ":" + port);
 
         List<String> connectorNamesToBeCreatedList = Arrays.asList("TESTCONNECTORREFACTOR","TESTCONNECTORREFACTOR_1");
         for (String connectorName : connectorNamesToBeCreatedList)
         {
-            Response response = ConnectorOtherInterfaceEndpoint.deleteConnector(connectorName);
+            Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
         }
     }
 
@@ -44,7 +43,7 @@ public class ConnectorOtherInterfaceTests {
         if (connectorNamesList.size() > 0)
         {
             for (String connectorName : connectorNamesList){
-                Response response = ConnectorOtherInterfaceEndpoint.deleteConnector(connectorName);
+                Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
             }
         }
     }
@@ -55,7 +54,7 @@ public class ConnectorOtherInterfaceTests {
     @Story("connector-domain-controller:getAllConnectors")
     public void getAllConnectors()
     {
-        Response response = ConnectorOtherInterfaceEndpoint.getAllConnectors();
+        Response response = ConnectorConfigureEndpoint.getAllConnectors();
         JsonPath jsonPath = response.jsonPath();
 
         Assert.assertEquals("Operate success.",jsonPath.getString("message"));
@@ -76,7 +75,7 @@ public class ConnectorOtherInterfaceTests {
     {
         String bodyString = paramMaps.get("body");
 
-        Response response = ConnectorOtherInterfaceEndpoint.saveConnector(bodyString);
+        Response response = ConnectorConfigureEndpoint.saveConnector(bodyString);
 
         // check the response message
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
@@ -87,7 +86,7 @@ public class ConnectorOtherInterfaceTests {
             System.out.println("connectors been created for test: " + connectorNamesList);
 
             // check the connector that been created above,can be found in "getAllConnectors"
-            Response responseOfGetAllConnectors = ConnectorOtherInterfaceEndpoint.getAllConnectors();
+            Response responseOfGetAllConnectors = ConnectorConfigureEndpoint.getAllConnectors();
             String pathOfGetAllConnectors = "data.types.ALL";
             List<Map<String,String>> actualConnectorsList = responseOfGetAllConnectors.jsonPath().getList(pathOfGetAllConnectors);
 
@@ -117,7 +116,7 @@ public class ConnectorOtherInterfaceTests {
     {
         for (int i=0;i<connectorNamesList.size();i++)
         {
-            Response response = ConnectorOtherInterfaceEndpoint.getConnector(connectorNamesList.get(i));
+            Response response = ConnectorConfigureEndpoint.getConnector(connectorNamesList.get(i));
 
             Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
 
@@ -137,7 +136,7 @@ public class ConnectorOtherInterfaceTests {
     public void updateConnector(Map<String,String> paramMaps){
         String connectorName = paramMaps.get("connectorName");
         String bodyString = paramMaps.get("body");
-        Response response = ConnectorOtherInterfaceEndpoint.updateConnector(connectorName,bodyString);
+        Response response = ConnectorConfigureEndpoint.updateConnector(connectorName,bodyString);
 
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
     }
@@ -152,13 +151,13 @@ public class ConnectorOtherInterfaceTests {
     @Story("Test connector-domain-controller:deleteConnector")
     public void deleteConnector(Map<String,String> paramMaps)
     {
-        Response response = ConnectorOtherInterfaceEndpoint.deleteConnector(paramMaps.get("connectorName"));
+        Response response = ConnectorConfigureEndpoint.deleteConnector(paramMaps.get("connectorName"));
 
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
         if (paramMaps.get("description").contains("good request"))
         {
-            Response responseOfGetAllConnectors = ConnectorOtherInterfaceEndpoint.getAllConnectors();
+            Response responseOfGetAllConnectors = ConnectorConfigureEndpoint.getAllConnectors();
             String pathOfGetAllConnectors = "data.types.ALL";
             List<Map<String,String>> actualConnectorsList = responseOfGetAllConnectors.jsonPath().getList(pathOfGetAllConnectors);
 

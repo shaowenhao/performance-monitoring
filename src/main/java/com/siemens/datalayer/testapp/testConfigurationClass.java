@@ -7,14 +7,17 @@ public class testConfigurationClass {
 	
 	private String connector_base_url = null;
 	private String connector_port = null;
-	
+
+	private String connectorConfigure_base_url = null;
+	private String connectorConfigure_port = null;
+
 	private String apiEngine_base_url = null;
 	private String apiEngine_port = null;
 
 	private String relationalDatabase_properties = null;
 
-	Boolean runConnectorOtherInterfaceTest = false;
-	private String connectorOtherInterfaceTestClass = null;
+	Boolean runConnectorConfigureTest = false;
+	private String connectorConfigureTestClass = null;
 	
 	Boolean runUserQueryTest = false;	
 	private String userQueryTestClass = null;
@@ -68,6 +71,19 @@ public class testConfigurationClass {
 	public String getConnectorPort() {
 		return this.connector_port;
 	}
+
+	// setConnectorConfigureTest、getConnectorConfigureBaseURL、getConnectorConfigurePort
+	// 这三个方法针对获取data-layer-connector-configure的地址、端口号 而添加
+	public void setConnectorConfigureTest(String base_url,String port){
+		this.connectorConfigure_base_url = base_url;
+		this.connectorConfigure_port = port;
+	}
+
+	public String getConnectorConfigureBaseURL(){
+		return this.connectorConfigure_base_url;
+	}
+
+	public String getConnectorConfigurePort(){return this.connectorConfigure_port;}
 	
 	public void setApiEngineTest(String base_url, String port) {
 		this.apiEngine_base_url = base_url;
@@ -93,20 +109,20 @@ public class testConfigurationClass {
 		return this.relationalDatabase_properties;
 	}
 
-	// getRunConnectorOtherInterfaceTest、setConnectorOtherInterfaceTestClass、getConnectorOtherInterfaceTestClass
-	// 这三个方法针对connector的其他接口的测试 而添加
-	public Boolean getRunConnectorOtherInterfaceTest()
+	// getRunConnectorConfigureTest、setConnectorConfigureTestClass、getConnectorConfigureTestClass
+	// 这三个方法针对connector-configure接口的测试 而添加
+	public Boolean getRunConnectorConfigureTest()
 	{
-		return this.runConnectorOtherInterfaceTest;
+		return this.runConnectorConfigureTest;
 	}
-	public void setConnectorOtherInterfaceTestClass(String runConnectorOtherInterfaceTestClassName)
+	public void setConnectorConfigureTestClass(String runConnectorConfigureTestClassName)
 	{
-		this.runConnectorOtherInterfaceTest = true;
-		this.connectorOtherInterfaceTestClass = runConnectorOtherInterfaceTestClassName;
+		this.runConnectorConfigureTest = true;
+		this.connectorConfigureTestClass = runConnectorConfigureTestClassName;
 	}
-	public String getConnectorOtherInterfaceTestClass()
+	public String getConnectorConfigureTestClass()
 	{
-		return this.connectorOtherInterfaceTestClass;
+		return this.connectorConfigureTestClass;
 	}
 
 	public Boolean getRunUserQueryTest()
@@ -468,6 +484,9 @@ public class testConfigurationClass {
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_PORT);
 
+				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
+
 				setApiEngineTest(testEnvironmentConstants.IOT_DEV_APIENGINE_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_APIENGINE_PORT);
 
@@ -488,11 +507,11 @@ public class testConfigurationClass {
 						                testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
 
 				// 赋值：this.runRelationalDatabaseTest = true;
-				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTest");
+				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest("iot.dev.mysql.db.properties");
 
-				//赋值：this.runConnectorOtherInterfaceTest = true;
-				setConnectorOtherInterfaceTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfaceTests");
+				//赋值：this.runConnectorConfigureTest = true;
+				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 				break;
 
 			case("iot-test"):

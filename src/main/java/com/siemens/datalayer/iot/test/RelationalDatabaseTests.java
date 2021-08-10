@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Epic("Relational databases test Scenarios")
-public class RelationalDatabaseTest {
+public class RelationalDatabaseTests {
 
     static Connection connection;
     static Statement statement;

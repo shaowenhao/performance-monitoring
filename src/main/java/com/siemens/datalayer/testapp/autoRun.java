@@ -52,8 +52,22 @@ public class autoRun {
 		connectorTestParams.put("domain_name", testConfig.getDomainName());	
 		
 		connectorTest.setParameters(connectorTestParams);
-		myClasses.add(connectorTest); 
-		
+		myClasses.add(connectorTest);
+
+		//Add test class for connectorConfigureTest
+		if (testConfig.getRunConnectorConfigureTest())
+		{
+			XmlClass connectorConfigureTests = new XmlClass(testConfig.getConnectorConfigureTestClass());
+
+			Map<String,String> connectorConfigureTestParams = new HashMap<>();
+			connectorConfigureTestParams.put("base_url",testConfig.getConnectorConfigureBaseURL());
+			connectorConfigureTestParams.put("port",testConfig.getConnectorConfigurePort());
+			connectorConfigureTestParams.put("domain_name",testConfig.getDomainName());
+
+			connectorConfigureTests.setParameters(connectorConfigureTestParams);
+			myClasses.add(connectorConfigureTests);
+		}
+
 		//Add test class for ApiEngine
 		XmlClass apiEngineTest = new XmlClass("com.siemens.datalayer.apiengine.test.QueryEndPointTests");
 		
@@ -69,15 +83,6 @@ public class autoRun {
 		
 		apiEngineTest.setParameters(apiEngineTestParams);
 		myClasses.add(apiEngineTest);
-
-		//Add test class for connectorOtherInterfaceTest
-		if (testConfig.getRunConnectorOtherInterfaceTest())
-		{
-			XmlClass connectorOtherInterfaceTests = new XmlClass(testConfig.getConnectorOtherInterfaceTestClass());
-
-			connectorOtherInterfaceTests.setParameters(connectorTestParams);
-			myClasses.add(connectorOtherInterfaceTests);
-		}
 
 		//Add test class for userQueryTest
 		if (testConfig.getRunUserQueryTest())

@@ -9,7 +9,7 @@ import io.restassured.specification.RequestSpecification;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class ConnectorOtherInterfaceEndpoint {
+public class ConnectorConfigureEndpoint {
 
     private static String baseUrl = "";
 
