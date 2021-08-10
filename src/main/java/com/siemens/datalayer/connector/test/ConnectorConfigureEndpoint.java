@@ -44,7 +44,7 @@ public class ConnectorConfigureEndpoint {
         httpRequest.header("content-type","application/json");
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                                        .get("/api/connectors");
+                                        .get("/connectors");
 
         return response;
     }
@@ -61,7 +61,7 @@ public class ConnectorConfigureEndpoint {
 
         Response response = httpRequest.body(body)
                                        .filter(new AllureRestAssured())
-                                       .post("/api/connectors");
+                                       .post("/connectors");
 
         return response;
     }
@@ -77,7 +77,7 @@ public class ConnectorConfigureEndpoint {
         httpRequest.header("content-type","application/json");
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                                       .delete("/api/connectors/" + connectorName);
+                                       .delete("/connectors/" + connectorName);
         return response;
     }
 
@@ -92,7 +92,7 @@ public class ConnectorConfigureEndpoint {
         httpRequest.header("content-type","application/json");
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                                       .get("/api/connectors/" + connectorName);
+                                       .get("/connectors/" + connectorName);
 
         return response;
     }
@@ -110,7 +110,7 @@ public class ConnectorConfigureEndpoint {
 
         Response response = httpRequest.body(jsonObject)
                                        .filter(new AllureRestAssured())
-                                       .put("/api/connectors/" + connectorName);
+                                       .put("/connectors/" + connectorName);
 
         return response;
     }
