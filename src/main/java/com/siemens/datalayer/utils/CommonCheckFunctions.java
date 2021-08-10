@@ -247,7 +247,9 @@ public class CommonCheckFunctions {
 														String fieldToCompare2, String compareType2, String valueToCompare2,
 														List<HashMap<String, String>> dataList)
 	{	
-	    if (dataList.isEmpty()) return false;
+		if (dataList == null || dataList.isEmpty()) {
+			return false;
+		}
 	    
 	    String compareValue1 = String.valueOf(valueToCompare1);
 	    String compareValue2 = String.valueOf(valueToCompare2);
