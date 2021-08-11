@@ -143,8 +143,8 @@ public class InterfaceTests {
 		  rspDataList = response.jsonPath().getList(listPath); // 获取列表
 		  
 		  // Check if the returned data list is not empty
-          if(rspDataList != null)
-		  Assert.assertTrue(rspDataList.size() > 0);
+          Assert.assertNotNull(rspDataList,"return data is null");
+		  Assert.assertTrue(rspDataList.size() > 0,"return data is empty");
 		  
 		  if (paramMaps.containsKey("fields")) 
 		  {
