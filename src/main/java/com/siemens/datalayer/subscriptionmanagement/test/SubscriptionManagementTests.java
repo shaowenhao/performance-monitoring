@@ -27,7 +27,7 @@ public class SubscriptionManagementTests {
         TestSubscriptionList = new ArrayList<HashMap<String, String>>();
         SubscriptionManagementEndpoint.setBaseUrl(base_url);
         SubscriptionManagementEndpoint.setPort(port);
-        AllureEnvironmentPropertiesWriter.addEnvironmentItem("iems-subscription-management", base_url + ":" + port);
+        AllureEnvironmentPropertiesWriter.addEnvironmentItem("datalayer-subscription-management", base_url + ":" + port);
 
         // Response responseOfGetSubscriptions = SubscriptionManagementEndpoint.getSubscriptions();
     }

@@ -2,6 +2,7 @@ package com.siemens.datalayer.iot.test;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
 import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 
 import com.google.gson.Gson;

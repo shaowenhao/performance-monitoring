@@ -28,7 +28,7 @@ public class ConnectorConfigureTests {
         ConnectorConfigureEndpoint.setBaseUrl(base_url);
         ConnectorConfigureEndpoint.setPort(port);
         ConnectorConfigureEndpoint.setDomainName(domain_name);
-        AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector", base_url + ":" + port);
+        AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector-configure", base_url + ":" + port);
 
         List<String> connectorNamesToBeCreatedList = Arrays.asList("TESTCONNECTORREFACTOR","TESTCONNECTORREFACTOR_1");
         for (String connectorName : connectorNamesToBeCreatedList)
