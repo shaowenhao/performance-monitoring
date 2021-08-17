@@ -54,6 +54,14 @@ public class autoRun {
 		connectorTest.setParameters(connectorTestParams);
 		myClasses.add(connectorTest);
 
+		//Add test class for connectorOtherInterfacesTest
+		if (testConfig.getRunConnectorOtherInterfacesTset())
+		{
+			XmlClass connectorOtherInterfacesTests = new XmlClass(testConfig.getConnectorOtherInterfacesTestClass());
+			connectorOtherInterfacesTests.setParameters(connectorTestParams);
+			myClasses.add(connectorOtherInterfacesTests);
+		}
+
 		//Add test class for connectorConfigureTest
 		if (testConfig.getRunConnectorConfigureTest())
 		{
@@ -257,6 +265,9 @@ public class autoRun {
 					
 					testParameters.put("dataFileForConnectorTest", projectName+"-connector-test-data.xlsx");			
 					testParameters.put("dataFileForApiEngineTest", projectName+"-api-engine-test-data.xlsx");
+
+					if(testConfig.getRunConnectorConfigureTest())
+						testParameters.put("dataFileForConnectorConfigureTest",projectName+"-connector-configure-test-data.xlsx");
 					
 					if (testConfig.getRunApiServiceTest()) 
 						testParameters.put("dataFileForApiServiceTest", projectName+"-api-service-test-data.xlsx");	

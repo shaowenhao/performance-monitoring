@@ -15,14 +15,14 @@ import org.testng.annotations.Optional;
 
 import java.util.*;
 
-@Epic("SDL Connector")
-@Feature("Rest api except 'Connector Interface'")
+@Epic("SDL Connector configure")
+@Feature("Rest api")
 public class ConnectorConfigureTests {
     static List<String> connectorNamesList;
 
     @Parameters({"base_url", "port", "domain_name"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorOtherInterfaceEndpoint(@Optional("http://localhost") String base_url,@Optional("9001") String port,String domain_name){
+    public void setConnectorConfigureEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name){
         connectorNamesList = new ArrayList<>();
 
         ConnectorConfigureEndpoint.setBaseUrl(base_url);
@@ -66,7 +66,7 @@ public class ConnectorConfigureTests {
 
     @Test (	priority = 0,
             description = "Test connector-domain-controller:save connector.",
-            dataProvider = "connector-test-data-provider",
+            dataProvider = "connector-configure-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'save connector' request with specified parameters and check the response message.")
@@ -128,7 +128,7 @@ public class ConnectorConfigureTests {
     @Test (	dependsOnMethods = {"saveConnector"},alwaysRun = true,
             priority = 0,
             description = "Test connector-domain-controller:updateConnector.",
-            dataProvider = "connector-test-data-provider",
+            dataProvider = "connector-configure-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'updateConnector' request with specified parameters and check the response message.")
@@ -144,7 +144,7 @@ public class ConnectorConfigureTests {
     @Test (	dependsOnMethods = {"saveConnector","updateConnector","getConnector"},alwaysRun = true,
             priority = 0,
             description = "Test connector-domain-controller:deleteConnector.",
-            dataProvider = "connector-test-data-provider",
+            dataProvider = "connector-configure-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'deleteConnector' request with specified parameters and check the response message.")

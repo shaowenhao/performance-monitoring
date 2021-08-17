@@ -16,6 +16,9 @@ public class testConfigurationClass {
 
 	private String relationalDatabase_properties = null;
 
+	Boolean runConnectorOtherInterfacesTest = false;
+	private String connectorOtherInterfacesTestClass = null;
+
 	Boolean runConnectorConfigureTest = false;
 	private String connectorConfigureTestClass = null;
 	
@@ -108,6 +111,19 @@ public class testConfigurationClass {
 	{
 		return this.relationalDatabase_properties;
 	}
+
+	// getRunConnectorOtherInterfacesTset、setConnectorOtherInterfacesTestClass、getConnectorOtherInterfacesTestClass
+	// 这三个方法针对connector，除了“Connector Interface”的其他接口的测试
+	public Boolean getRunConnectorOtherInterfacesTset()
+	{
+		return this.runConnectorOtherInterfacesTest;
+	}
+	public void setConnectorOtherInterfacesTestClass(String runConnectorOtherInterfacesTestClassName)
+	{
+		this.runConnectorOtherInterfacesTest = true;
+		this.connectorOtherInterfacesTestClass = runConnectorOtherInterfacesTestClassName;
+	}
+	public String getConnectorOtherInterfacesTestClass(){return this.connectorOtherInterfacesTestClass;}
 
 	// getRunConnectorConfigureTest、setConnectorConfigureTestClass、getConnectorConfigureTestClass
 	// 这三个方法针对connector-configure接口的测试 而添加
@@ -510,8 +526,11 @@ public class testConfigurationClass {
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest("iot.dev.mysql.db.properties");
 
-				//赋值：this.runConnectorConfigureTest = true;
+				// 赋值：this.runConnectorConfigureTest = true;
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+
+				// 赋值：
+				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 				break;
 
 			case("iot-test"):
