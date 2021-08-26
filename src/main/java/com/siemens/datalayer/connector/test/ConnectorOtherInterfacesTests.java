@@ -5,13 +5,17 @@ import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 @Epic("SDL Connector")
 @Feature("Rest api except 'Connector Interface'")
 public class ConnectorOtherInterfacesTests {
 
+    @Parameters({"base_url", "port", "domain_name"})
+    @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
     public void setConnectorOtherInterfacesEndpoint(@Optional("http://localhost") String base_url,@Optional("9001") String port,String domain_name){
         ConnectorOtherInterfacesEndpoint.setBaseUrl(base_url);
         ConnectorOtherInterfacesEndpoint.setPort(port);

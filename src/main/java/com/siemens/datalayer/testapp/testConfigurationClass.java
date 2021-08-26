@@ -524,12 +524,12 @@ public class testConfigurationClass {
 
 				// 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				setRelationalDatabaseTest("iot.dev.mysql.db.properties");
+				setRelationalDatabaseTest(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
 
 				// 赋值：this.runConnectorConfigureTest = true;
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 
-				// 赋值：
+				// 赋值：this.runConnectorOtherInterfacesTest = true;
 				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 				break;
 
@@ -556,6 +556,10 @@ public class testConfigurationClass {
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
+
+				// 赋值：this.runRelationalDatabaseTest = true;
+				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
+				setRelationalDatabaseTest(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
 				break;
 
 			case("iot-prod"):

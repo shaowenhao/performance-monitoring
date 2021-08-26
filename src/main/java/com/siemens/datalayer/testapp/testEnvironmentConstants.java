@@ -188,6 +188,7 @@ public class testEnvironmentConstants {
 
 	public static final String IOT_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_DEV_APIENGINE_PORT = "32552";
+	public static final String IOT_DEV_DB_PROPERTIES = "iot.dev.mysql.db.properties";
 
 	public static final String IOT_DEV_RABBITMQ_HOST = "140.231.89.85";
 	public static final String IOT_DEV_RABBITMQ_PORT = "32290";
