@@ -1,2151 +1,724 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "title": "The root schema",
-    "description": "The root schema comprises the entire JSON document.",
-    "default": {},
-    "examples": [
-        {
-            "code": 200,
-            "message": "OK",
-            "data": {
-                "id": 1744,
-                "label": "1#制冷机",
-                "properties": {
-                    "design.output.condensor_hot_outlet_temperature": "31.5",
-                    "start_up_time": "siid=34133",
-                    "design.input.condensor_water_inlet_fluid.name": "water",
-                    "design.output.evaporator_AK": "2204.1454463292466",
-                    "off-design.input.condensor_water_inlet_fluid.name": "water",
-                    "off-design.input.dt_condensor_water_in_out": "7",
-                    "off-design.input.dp_condensor_hot": "0.02",
-                    "off-design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                    "design.input.physical_property": "HEOS",
-                    "design.input.motor_work": "1151.0002920483962",
-                    "off-design.output.motor_work_0": "1151.0002920483962",
-                    "off-design.output.evaporator_cold_outlet_temperature": "4.71",
-                    "off-design.input.dt_condensor": "0.7310607513664422",
-                    "off-design.input.condensor_water_inlet_fluid.value": "[1]",
-                    "off-design.output.evaporator_hot_factor": "0.9",
-                    "design.input.evaporator_water_return_flow": "230.66666666666666",
-                    "rtDataManualSetting": "",
-                    "design.input.evaporator_water_back_temperature": "13.4",
-                    "id": "221",
-                    "off-design.input.condensor_water_inlet_temperature": "siid=34153",
-                    "design.input.evaporator_water_leave_pressure": "1.0",
-                    "off-design.input.evaporator_water_leave_pressure": "siid=33321",
-                    "off-design.input.condensor_water_outlet_temperature": "siid=34151",
-                    "modelType": "heatPumpDetail",
-                    "off-design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                    "design.output.motor_work_0": "1151.0002920483962",
-                    "design.input.compressor_poly_efficiency": "0.8785977604675561",
-                    "off-design.output.evaporator_cold_factor": "0.012432807978367212",
-                    "design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                    "off-design.input.condensor_water_outlet_pressure": "siid=33022",
-                    "off-design.input.dp_evaporator_cold": "0.02",
-                    "design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                    "off-design.output.condensor_hot_inlet_pressure": "siid=34157",
-                    "design.output.evaporator_cold_inlet_pressure": "siid=34159",
-                    "design.output.condensor_hot_inlet_pressure": "8.506383628361515",
-                    "off-design.input.refrigerant.name": "R134A",
-                    "refTopo": "",
-                    "off-design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                    "design.input.condensor_water_outlet_temperature": "33",
-                    "design.input.dt_inlet_compressor": "0.009999999999999787",
-                    "design.output.condensor_hot_factor": "0.054087175112221976",
-                    "off-design.input.compressor_poly_efficiency": "8785977604675561",
-                    "design.output.COP_cold": "6.5788285692574275",
-                    "design.input.condensor_hot_sat_temperature": "siid=34141",
-                    "off-design.input.evaporator_water_back.value": "[1]",
-                    "design.output.valve_factor": "0.7",
-                    "off-design.output.COP_heat": "7.478828569257428",
-                    "off-design.output.evaporator_AK": "2204.1454463292466",
-                    "off-design.input.evaporator_water_leave_temperature": "siid=34163",
-                    "off-design.output.COP_cold": "6.5788285692574275",
-                    "off-design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                    "rtDataId": "",
-                    "design.input.evaporator_water_leave_temperature": "5.6",
-                    "off-esign.input.condensor_water_inlet_flow": "293.38411795318456",
-                    "design.output.condensor_hot_flow": "48.07960670187515",
-                    "off-design.output.evaporator_cold_flow": "48.07960670187515",
-                    "modelName": "1#制冷机",
-                    "design.input.condensor_water_outlet_enthalpy": "138.9023",
-                    "design.input.dt_evaporator": "0.8999999999999995",
-                    "design.output.evaporator_cold_flow": "48.07960670187515",
-                    "design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                    "off-design.output.condensor_hot_flow": "48.07960670187515",
-                    "off-design.output.condensor_hot_outlet_temperature": "31.5",
-                    "off-design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                    "off-design.input.condensor_water_outlet_enthalpy": "138.90232691784644",
-                    "design.input.evaporator_water_back.name": "water",
-                    "design.input.operation_mode": "cold",
-                    "off-design.output.condensor_hot_factor": "0.054087175112221976",
-                    "design.input.refrigerant.name": "R134A",
-                    "off-design.input.dt_inlet_valve": "2.0",
-                    "off-design.input.dt_inlet_compressor": "0.009999999999999787",
-                    "off-design.input.evaporator_water_back_temperature": "siid=34161",
-                    "design.output.evaporator_cold_flow_0": "48.07960670187515",
-                    "off-design.input.dt_evaporator": "0.8999999999999995",
-                    "metadata_node_type": "instance",
-                    "inputType": "water,el",
-                    "design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                    "design.input.condensor_water_inlet_fluid.value": "[1]",
-                    "design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                    "design.input.condensor_water_inlet_pressure": "siid=33024",
-                    "off-design.output.condensor_cold_factor": "3642.5862944557716",
-                    "design.input.input_label": "2019/4/24  19:00:00",
-                    "design.output.condensor_AK": "3642.5862944557716",
-                    "design.output.evaporator_hot_factor": "0.9",
-                    "motor_current_percent": "siid=34149",
-                    "design.output.COP_heat": "7.478828569257428",
-                    "run_time": "siid=34135",
-                    "off-design.input.evaporator_water_back.name": "water",
-                    "off-design.output.condensor_heat": "3642.5862944557716",
-                    "design.input.dt_condensor": "0.7310607513664422",
-                    "off-design.output.evaporator_cold_inlet_temperature": "siid=34159",
-                    "design.output.evaporator_cold_outlet_temperature": "4.71",
-                    "design.input.evaporator_water_back.value": "[]",
-                    "design.output.evaporator_cold_inlet_temperature": "siid=34143",
-                    "oil_tank_press_low": "siid=34129",
-                    "off-design.output.evaporator_cold_inlet_pressure": "3.4602613371381206",
-                    "off-design.input.motor_work": "1151.0002920483962",
-                    "off-design.input.evaporator_water_return_flow": "siid=33293",
-                    "design.output.condensor_heat": "3642.5862944557716",
-                    "lubricate_press_diff": "siid=34155",
-                    "design.input.condensor_water_outlet_pressure": "7.0",
-                    "channels": "0->0",
-                    "off-design.input.evaporator_water_back_pressure": "siid=33307",
-                    "design.input.condensor_water_inlet_flow": "293.38411795318456",
-                    "off-design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                    "off-design.output.condensor_AK": "3642.5862944557716",
-                    "design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                    "off-design.output.converge_level": "[0.0,1]",
-                    "off-design.output.evaporator_cold_outlet_enthalpy": "siid=34143",
-                    "off-design.input.input_label": "2019/4/24  19:00:00",
-                    "design.output.condensor_hot_inlet_temperature": "39.50011340055357",
-                    "outputType": "water",
-                    "design.input.dp_condensor_hot": "0.02",
-                    "design.output.evaporator_cold_outlet_enthalpy": "401.38726467599827",
-                    "oil_tank_press_high": "siid=34131",
-                    "design.output.condensor_cold_factor": "3642.5862944557716",
-                    "displayContent": "1#制冷机",
-                    "design.output.converge_level": "[0.0,1]",
-                    "design.input.evaporator_water_back_enthalpy": "56.46885364375451",
-                    "design.input.dt_condensor_water_in_out": "7",
-                    "design.input.dt_inlet_valve": "2.0",
-                    "design.input.condensor_water_inlet_temperature": "siid=34153",
-                    "off-design.output.evaporator_cold_flow_0": "48.07960670187515",
-                    "off-design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                    "metadata_node_pk": "id",
-                    "design.input.refrigerant.value": "[1]",
-                    "design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                    "design.output.evaporator_cold_factor": "0.012432807978367212",
-                    "design.input.efficiency_factor": "[1,1,1]",
-                    "operation_mode": "cold",
-                    "off-design.input.operation_mode": "cold",
-                    "design.input.efficiency_rotor": "0.9",
-                    "off-design.input.efficiency_rotor": "0.9",
-                    "design.input.evaporator_water_back_pressure": "2.0",
-                    "off-design.input.refrigerant.value": "[1]",
-                    "off-design.input.condensor_hot_sat_temperature": "siid=34141",
-                    "off-design.output.valve_factor": "0.7",
-                    "off-design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                    "design.input.dp_evaporator_cold": "0.02",
-                    "off-design.input.condensor_water_inlet_pressure": "siid=33024",
-                    "off-design.output.evaporator_heat": "7572.233604551631",
-                    "design.output.evaporator_heat": "7572.233604551631",
-                    "off-design.input.efficiency_factor": "[1,1,1]",
-                    "design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                    "off-design.output.condensor_hot_inlet_temperature": "siid=34139",
-                    "off-design.input.evaporator_water_back_enthalpy": "56.46885364375451"
-                }
-            }
-        }
-    ],
-    "required": [
-        "code",
-        "message",
-        "data"
-    ],
-    "properties": {
-        "code": {
-            "$id": "#/properties/code",
-            "type": "integer",
-            "title": "The code schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                200
-            ]
-        },
-        "message": {
-            "$id": "#/properties/message",
-            "type": "string",
-            "title": "The message schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "OK"
-            ]
-        },
-        "data": {
-            "$id": "#/properties/data",
-            "type": "object",
-            "title": "The data schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": {},
-            "examples": [
-                {
-                    "id": 1744,
-                    "label": "1#制冷机",
-                    "properties": {
-                        "design.output.condensor_hot_outlet_temperature": "31.5",
-                        "start_up_time": "siid=34133",
-                        "design.input.condensor_water_inlet_fluid.name": "water",
-                        "design.output.evaporator_AK": "2204.1454463292466",
-                        "off-design.input.condensor_water_inlet_fluid.name": "water",
-                        "off-design.input.dt_condensor_water_in_out": "7",
-                        "off-design.input.dp_condensor_hot": "0.02",
-                        "off-design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                        "design.input.physical_property": "HEOS",
-                        "design.input.motor_work": "1151.0002920483962",
-                        "off-design.output.motor_work_0": "1151.0002920483962",
-                        "off-design.output.evaporator_cold_outlet_temperature": "4.71",
-                        "off-design.input.dt_condensor": "0.7310607513664422",
-                        "off-design.input.condensor_water_inlet_fluid.value": "[1]",
-                        "off-design.output.evaporator_hot_factor": "0.9",
-                        "design.input.evaporator_water_return_flow": "230.66666666666666",
-                        "rtDataManualSetting": "",
-                        "design.input.evaporator_water_back_temperature": "13.4",
-                        "id": "221",
-                        "off-design.input.condensor_water_inlet_temperature": "siid=34153",
-                        "design.input.evaporator_water_leave_pressure": "1.0",
-                        "off-design.input.evaporator_water_leave_pressure": "siid=33321",
-                        "off-design.input.condensor_water_outlet_temperature": "siid=34151",
-                        "modelType": "heatPumpDetail",
-                        "off-design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                        "design.output.motor_work_0": "1151.0002920483962",
-                        "design.input.compressor_poly_efficiency": "0.8785977604675561",
-                        "off-design.output.evaporator_cold_factor": "0.012432807978367212",
-                        "design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                        "off-design.input.condensor_water_outlet_pressure": "siid=33022",
-                        "off-design.input.dp_evaporator_cold": "0.02",
-                        "design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                        "off-design.output.condensor_hot_inlet_pressure": "siid=34157",
-                        "design.output.evaporator_cold_inlet_pressure": "siid=34159",
-                        "design.output.condensor_hot_inlet_pressure": "8.506383628361515",
-                        "off-design.input.refrigerant.name": "R134A",
-                        "refTopo": "",
-                        "off-design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                        "design.input.condensor_water_outlet_temperature": "33",
-                        "design.input.dt_inlet_compressor": "0.009999999999999787",
-                        "design.output.condensor_hot_factor": "0.054087175112221976",
-                        "off-design.input.compressor_poly_efficiency": "8785977604675561",
-                        "design.output.COP_cold": "6.5788285692574275",
-                        "design.input.condensor_hot_sat_temperature": "siid=34141",
-                        "off-design.input.evaporator_water_back.value": "[1]",
-                        "design.output.valve_factor": "0.7",
-                        "off-design.output.COP_heat": "7.478828569257428",
-                        "off-design.output.evaporator_AK": "2204.1454463292466",
-                        "off-design.input.evaporator_water_leave_temperature": "siid=34163",
-                        "off-design.output.COP_cold": "6.5788285692574275",
-                        "off-design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                        "rtDataId": "",
-                        "design.input.evaporator_water_leave_temperature": "5.6",
-                        "off-esign.input.condensor_water_inlet_flow": "293.38411795318456",
-                        "design.output.condensor_hot_flow": "48.07960670187515",
-                        "off-design.output.evaporator_cold_flow": "48.07960670187515",
-                        "modelName": "1#制冷机",
-                        "design.input.condensor_water_outlet_enthalpy": "138.9023",
-                        "design.input.dt_evaporator": "0.8999999999999995",
-                        "design.output.evaporator_cold_flow": "48.07960670187515",
-                        "design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                        "off-design.output.condensor_hot_flow": "48.07960670187515",
-                        "off-design.output.condensor_hot_outlet_temperature": "31.5",
-                        "off-design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                        "off-design.input.condensor_water_outlet_enthalpy": "138.90232691784644",
-                        "design.input.evaporator_water_back.name": "water",
-                        "design.input.operation_mode": "cold",
-                        "off-design.output.condensor_hot_factor": "0.054087175112221976",
-                        "design.input.refrigerant.name": "R134A",
-                        "off-design.input.dt_inlet_valve": "2.0",
-                        "off-design.input.dt_inlet_compressor": "0.009999999999999787",
-                        "off-design.input.evaporator_water_back_temperature": "siid=34161",
-                        "design.output.evaporator_cold_flow_0": "48.07960670187515",
-                        "off-design.input.dt_evaporator": "0.8999999999999995",
-                        "metadata_node_type": "instance",
-                        "inputType": "water,el",
-                        "design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                        "design.input.condensor_water_inlet_fluid.value": "[1]",
-                        "design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                        "design.input.condensor_water_inlet_pressure": "siid=33024",
-                        "off-design.output.condensor_cold_factor": "3642.5862944557716",
-                        "design.input.input_label": "2019/4/24  19:00:00",
-                        "design.output.condensor_AK": "3642.5862944557716",
-                        "design.output.evaporator_hot_factor": "0.9",
-                        "motor_current_percent": "siid=34149",
-                        "design.output.COP_heat": "7.478828569257428",
-                        "run_time": "siid=34135",
-                        "off-design.input.evaporator_water_back.name": "water",
-                        "off-design.output.condensor_heat": "3642.5862944557716",
-                        "design.input.dt_condensor": "0.7310607513664422",
-                        "off-design.output.evaporator_cold_inlet_temperature": "siid=34159",
-                        "design.output.evaporator_cold_outlet_temperature": "4.71",
-                        "design.input.evaporator_water_back.value": "[]",
-                        "design.output.evaporator_cold_inlet_temperature": "siid=34143",
-                        "oil_tank_press_low": "siid=34129",
-                        "off-design.output.evaporator_cold_inlet_pressure": "3.4602613371381206",
-                        "off-design.input.motor_work": "1151.0002920483962",
-                        "off-design.input.evaporator_water_return_flow": "siid=33293",
-                        "design.output.condensor_heat": "3642.5862944557716",
-                        "lubricate_press_diff": "siid=34155",
-                        "design.input.condensor_water_outlet_pressure": "7.0",
-                        "channels": "0->0",
-                        "off-design.input.evaporator_water_back_pressure": "siid=33307",
-                        "design.input.condensor_water_inlet_flow": "293.38411795318456",
-                        "off-design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                        "off-design.output.condensor_AK": "3642.5862944557716",
-                        "design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                        "off-design.output.converge_level": "[0.0,1]",
-                        "off-design.output.evaporator_cold_outlet_enthalpy": "siid=34143",
-                        "off-design.input.input_label": "2019/4/24  19:00:00",
-                        "design.output.condensor_hot_inlet_temperature": "39.50011340055357",
-                        "outputType": "water",
-                        "design.input.dp_condensor_hot": "0.02",
-                        "design.output.evaporator_cold_outlet_enthalpy": "401.38726467599827",
-                        "oil_tank_press_high": "siid=34131",
-                        "design.output.condensor_cold_factor": "3642.5862944557716",
-                        "displayContent": "1#制冷机",
-                        "design.output.converge_level": "[0.0,1]",
-                        "design.input.evaporator_water_back_enthalpy": "56.46885364375451",
-                        "design.input.dt_condensor_water_in_out": "7",
-                        "design.input.dt_inlet_valve": "2.0",
-                        "design.input.condensor_water_inlet_temperature": "siid=34153",
-                        "off-design.output.evaporator_cold_flow_0": "48.07960670187515",
-                        "off-design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                        "metadata_node_pk": "id",
-                        "design.input.refrigerant.value": "[1]",
-                        "design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                        "design.output.evaporator_cold_factor": "0.012432807978367212",
-                        "design.input.efficiency_factor": "[1,1,1]",
-                        "operation_mode": "cold",
-                        "off-design.input.operation_mode": "cold",
-                        "design.input.efficiency_rotor": "0.9",
-                        "off-design.input.efficiency_rotor": "0.9",
-                        "design.input.evaporator_water_back_pressure": "2.0",
-                        "off-design.input.refrigerant.value": "[1]",
-                        "off-design.input.condensor_hot_sat_temperature": "siid=34141",
-                        "off-design.output.valve_factor": "0.7",
-                        "off-design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                        "design.input.dp_evaporator_cold": "0.02",
-                        "off-design.input.condensor_water_inlet_pressure": "siid=33024",
-                        "off-design.output.evaporator_heat": "7572.233604551631",
-                        "design.output.evaporator_heat": "7572.233604551631",
-                        "off-design.input.efficiency_factor": "[1,1,1]",
-                        "design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                        "off-design.output.condensor_hot_inlet_temperature": "siid=34139",
-                        "off-design.input.evaporator_water_back_enthalpy": "56.46885364375451"
-                    }
-                }
-            ],
-            "required": [
-                "id",
-                "label",
-                "properties"
-            ],
-            "properties": {
-                "id": {
-                    "$id": "#/properties/data/properties/id",
-                    "type": "integer",
-                    "title": "The id schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": 0,
-                    "examples": [
-                        1744
-                    ]
-                },
-                "label": {
-                    "$id": "#/properties/data/properties/label",
-                    "type": "string",
-                    "title": "The label schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        "1#制冷机"
-                    ]
-                },
-                "properties": {
-                    "$id": "#/properties/data/properties/properties",
-                    "type": "object",
-                    "title": "The properties schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": {},
-                    "examples": [
-                        {
-                            "design.output.condensor_hot_outlet_temperature": "31.5",
-                            "start_up_time": "siid=34133",
-                            "design.input.condensor_water_inlet_fluid.name": "water",
-                            "design.output.evaporator_AK": "2204.1454463292466",
-                            "off-design.input.condensor_water_inlet_fluid.name": "water",
-                            "off-design.input.dt_condensor_water_in_out": "7",
-                            "off-design.input.dp_condensor_hot": "0.02",
-                            "off-design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                            "design.input.physical_property": "HEOS",
-                            "design.input.motor_work": "1151.0002920483962",
-                            "off-design.output.motor_work_0": "1151.0002920483962",
-                            "off-design.output.evaporator_cold_outlet_temperature": "4.71",
-                            "off-design.input.dt_condensor": "0.7310607513664422",
-                            "off-design.input.condensor_water_inlet_fluid.value": "[1]",
-                            "off-design.output.evaporator_hot_factor": "0.9",
-                            "design.input.evaporator_water_return_flow": "230.66666666666666",
-                            "rtDataManualSetting": "",
-                            "design.input.evaporator_water_back_temperature": "13.4",
-                            "id": "221",
-                            "off-design.input.condensor_water_inlet_temperature": "siid=34153",
-                            "design.input.evaporator_water_leave_pressure": "1.0",
-                            "off-design.input.evaporator_water_leave_pressure": "siid=33321",
-                            "off-design.input.condensor_water_outlet_temperature": "siid=34151",
-                            "modelType": "heatPumpDetail",
-                            "off-design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                            "design.output.motor_work_0": "1151.0002920483962",
-                            "design.input.compressor_poly_efficiency": "0.8785977604675561",
-                            "off-design.output.evaporator_cold_factor": "0.012432807978367212",
-                            "design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                            "off-design.input.condensor_water_outlet_pressure": "siid=33022",
-                            "off-design.input.dp_evaporator_cold": "0.02",
-                            "design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                            "off-design.output.condensor_hot_inlet_pressure": "siid=34157",
-                            "design.output.evaporator_cold_inlet_pressure": "siid=34159",
-                            "design.output.condensor_hot_inlet_pressure": "8.506383628361515",
-                            "off-design.input.refrigerant.name": "R134A",
-                            "refTopo": "",
-                            "off-design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                            "design.input.condensor_water_outlet_temperature": "33",
-                            "design.input.dt_inlet_compressor": "0.009999999999999787",
-                            "design.output.condensor_hot_factor": "0.054087175112221976",
-                            "off-design.input.compressor_poly_efficiency": "8785977604675561",
-                            "design.output.COP_cold": "6.5788285692574275",
-                            "design.input.condensor_hot_sat_temperature": "siid=34141",
-                            "off-design.input.evaporator_water_back.value": "[1]",
-                            "design.output.valve_factor": "0.7",
-                            "off-design.output.COP_heat": "7.478828569257428",
-                            "off-design.output.evaporator_AK": "2204.1454463292466",
-                            "off-design.input.evaporator_water_leave_temperature": "siid=34163",
-                            "off-design.output.COP_cold": "6.5788285692574275",
-                            "off-design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                            "rtDataId": "",
-                            "design.input.evaporator_water_leave_temperature": "5.6",
-                            "off-esign.input.condensor_water_inlet_flow": "293.38411795318456",
-                            "design.output.condensor_hot_flow": "48.07960670187515",
-                            "off-design.output.evaporator_cold_flow": "48.07960670187515",
-                            "modelName": "1#制冷机",
-                            "design.input.condensor_water_outlet_enthalpy": "138.9023",
-                            "design.input.dt_evaporator": "0.8999999999999995",
-                            "design.output.evaporator_cold_flow": "48.07960670187515",
-                            "design.output.evaporator_cold_inlet_enthalpy": "243.8935969032062",
-                            "off-design.output.condensor_hot_flow": "48.07960670187515",
-                            "off-design.output.condensor_hot_outlet_temperature": "31.5",
-                            "off-design.output.condensor_hot_outlet_pressure": "8.486383628361516",
-                            "off-design.input.condensor_water_outlet_enthalpy": "138.90232691784644",
-                            "design.input.evaporator_water_back.name": "water",
-                            "design.input.operation_mode": "cold",
-                            "off-design.output.condensor_hot_factor": "0.054087175112221976",
-                            "design.input.refrigerant.name": "R134A",
-                            "off-design.input.dt_inlet_valve": "2.0",
-                            "off-design.input.dt_inlet_compressor": "0.009999999999999787",
-                            "off-design.input.evaporator_water_back_temperature": "siid=34161",
-                            "design.output.evaporator_cold_flow_0": "48.07960670187515",
-                            "off-design.input.dt_evaporator": "0.8999999999999995",
-                            "metadata_node_type": "instance",
-                            "inputType": "water,el",
-                            "design.output.condensor_hot_inlet_enthalpy": "422.93278748500984",
-                            "design.input.condensor_water_inlet_fluid.value": "[1]",
-                            "design.input.condensor_water_inlet_enthalpy": "109.56149576634971",
-                            "design.input.condensor_water_inlet_pressure": "siid=33024",
-                            "off-design.output.condensor_cold_factor": "3642.5862944557716",
-                            "design.input.input_label": "2019/4/24  19:00:00",
-                            "design.output.condensor_AK": "3642.5862944557716",
-                            "design.output.evaporator_hot_factor": "0.9",
-                            "motor_current_percent": "siid=34149",
-                            "design.output.COP_heat": "7.478828569257428",
-                            "run_time": "siid=34135",
-                            "off-design.input.evaporator_water_back.name": "water",
-                            "off-design.output.condensor_heat": "3642.5862944557716",
-                            "design.input.dt_condensor": "0.7310607513664422",
-                            "off-design.output.evaporator_cold_inlet_temperature": "siid=34159",
-                            "design.output.evaporator_cold_outlet_temperature": "4.71",
-                            "design.input.evaporator_water_back.value": "[]",
-                            "design.output.evaporator_cold_inlet_temperature": "siid=34143",
-                            "oil_tank_press_low": "siid=34129",
-                            "off-design.output.evaporator_cold_inlet_pressure": "3.4602613371381206",
-                            "off-design.input.motor_work": "1151.0002920483962",
-                            "off-design.input.evaporator_water_return_flow": "siid=33293",
-                            "design.output.condensor_heat": "3642.5862944557716",
-                            "lubricate_press_diff": "siid=34155",
-                            "design.input.condensor_water_outlet_pressure": "7.0",
-                            "channels": "0->0",
-                            "off-design.input.evaporator_water_back_pressure": "siid=33307",
-                            "design.input.condensor_water_inlet_flow": "293.38411795318456",
-                            "off-design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                            "off-design.output.condensor_AK": "3642.5862944557716",
-                            "design.input.evaporator_water_leave_enthalpy": "23.641251311883277",
-                            "off-design.output.converge_level": "[0.0,1]",
-                            "off-design.output.evaporator_cold_outlet_enthalpy": "siid=34143",
-                            "off-design.input.input_label": "2019/4/24  19:00:00",
-                            "design.output.condensor_hot_inlet_temperature": "39.50011340055357",
-                            "outputType": "water",
-                            "design.input.dp_condensor_hot": "0.02",
-                            "design.output.evaporator_cold_outlet_enthalpy": "401.38726467599827",
-                            "oil_tank_press_high": "siid=34131",
-                            "design.output.condensor_cold_factor": "3642.5862944557716",
-                            "displayContent": "1#制冷机",
-                            "design.output.converge_level": "[0.0,1]",
-                            "design.input.evaporator_water_back_enthalpy": "56.46885364375451",
-                            "design.input.dt_condensor_water_in_out": "7",
-                            "design.input.dt_inlet_valve": "2.0",
-                            "design.input.condensor_water_inlet_temperature": "siid=34153",
-                            "off-design.output.evaporator_cold_flow_0": "48.07960670187515",
-                            "off-design.output.evaporator_cold_outlet_pressure": "3.4402613371381205",
-                            "metadata_node_pk": "id",
-                            "design.input.refrigerant.value": "[1]",
-                            "design.output.condensor_hot_outlet_enthalpy": "243.8935969032062",
-                            "design.output.evaporator_cold_factor": "0.012432807978367212",
-                            "design.input.efficiency_factor": "[1,1,1]",
-                            "operation_mode": "cold",
-                            "off-design.input.operation_mode": "cold",
-                            "design.input.efficiency_rotor": "0.9",
-                            "off-design.input.efficiency_rotor": "0.9",
-                            "design.input.evaporator_water_back_pressure": "2.0",
-                            "off-design.input.refrigerant.value": "[1]",
-                            "off-design.input.condensor_hot_sat_temperature": "siid=34141",
-                            "off-design.output.valve_factor": "0.7",
-                            "off-design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                            "design.input.dp_evaporator_cold": "0.02",
-                            "off-design.input.condensor_water_inlet_pressure": "siid=33024",
-                            "off-design.output.evaporator_heat": "7572.233604551631",
-                            "design.output.evaporator_heat": "7572.233604551631",
-                            "off-design.input.efficiency_factor": "[1,1,1]",
-                            "design.input.dt_condensor_outletwater_hotsat": "0.000007",
-                            "off-design.output.condensor_hot_inlet_temperature": "siid=34139",
-                            "off-design.input.evaporator_water_back_enthalpy": "56.46885364375451"
-                        }
-                    ],
-                    "required": [
-                        "design.output.condensor_hot_outlet_temperature",
-                        "start_up_time",
-                        "design.input.condensor_water_inlet_fluid.name",
-                        "design.output.evaporator_AK",
-                        "off-design.input.condensor_water_inlet_fluid.name",
-                        "off-design.input.dt_condensor_water_in_out",
-                        "off-design.input.dp_condensor_hot",
-                        "off-design.input.evaporator_water_leave_enthalpy",
-                        "design.input.physical_property",
-                        "design.input.motor_work",
-                        "off-design.output.motor_work_0",
-                        "off-design.output.evaporator_cold_outlet_temperature",
-                        "off-design.input.dt_condensor",
-                        "off-design.input.condensor_water_inlet_fluid.value",
-                        "off-design.output.evaporator_hot_factor",
-                        "design.input.evaporator_water_return_flow",
-                        "rtDataManualSetting",
-                        "design.input.evaporator_water_back_temperature",
-                        "id",
-                        "off-design.input.condensor_water_inlet_temperature",
-                        "design.input.evaporator_water_leave_pressure",
-                        "off-design.input.evaporator_water_leave_pressure",
-                        "off-design.input.condensor_water_outlet_temperature",
-                        "modelType",
-                        "off-design.input.condensor_water_inlet_enthalpy",
-                        "design.output.motor_work_0",
-                        "design.input.compressor_poly_efficiency",
-                        "off-design.output.evaporator_cold_factor",
-                        "design.output.evaporator_cold_outlet_pressure",
-                        "off-design.input.condensor_water_outlet_pressure",
-                        "off-design.input.dp_evaporator_cold",
-                        "design.output.condensor_hot_outlet_pressure",
-                        "off-design.output.condensor_hot_inlet_pressure",
-                        "design.output.evaporator_cold_inlet_pressure",
-                        "design.output.condensor_hot_inlet_pressure",
-                        "off-design.input.refrigerant.name",
-                        "refTopo",
-                        "off-design.output.evaporator_cold_inlet_enthalpy",
-                        "design.input.condensor_water_outlet_temperature",
-                        "design.input.dt_inlet_compressor",
-                        "design.output.condensor_hot_factor",
-                        "off-design.input.compressor_poly_efficiency",
-                        "design.output.COP_cold",
-                        "design.input.condensor_hot_sat_temperature",
-                        "off-design.input.evaporator_water_back.value",
-                        "design.output.valve_factor",
-                        "off-design.output.COP_heat",
-                        "off-design.output.evaporator_AK",
-                        "off-design.input.evaporator_water_leave_temperature",
-                        "off-design.output.COP_cold",
-                        "off-design.output.condensor_hot_inlet_enthalpy",
-                        "rtDataId",
-                        "design.input.evaporator_water_leave_temperature",
-                        "off-esign.input.condensor_water_inlet_flow",
-                        "design.output.condensor_hot_flow",
-                        "off-design.output.evaporator_cold_flow",
-                        "modelName",
-                        "design.input.condensor_water_outlet_enthalpy",
-                        "design.input.dt_evaporator",
-                        "design.output.evaporator_cold_flow",
-                        "design.output.evaporator_cold_inlet_enthalpy",
-                        "off-design.output.condensor_hot_flow",
-                        "off-design.output.condensor_hot_outlet_temperature",
-                        "off-design.output.condensor_hot_outlet_pressure",
-                        "off-design.input.condensor_water_outlet_enthalpy",
-                        "design.input.evaporator_water_back.name",
-                        "design.input.operation_mode",
-                        "off-design.output.condensor_hot_factor",
-                        "design.input.refrigerant.name",
-                        "off-design.input.dt_inlet_valve",
-                        "off-design.input.dt_inlet_compressor",
-                        "off-design.input.evaporator_water_back_temperature",
-                        "design.output.evaporator_cold_flow_0",
-                        "off-design.input.dt_evaporator",
-                        "metadata_node_type",
-                        "inputType",
-                        "design.output.condensor_hot_inlet_enthalpy",
-                        "design.input.condensor_water_inlet_fluid.value",
-                        "design.input.condensor_water_inlet_enthalpy",
-                        "design.input.condensor_water_inlet_pressure",
-                        "off-design.output.condensor_cold_factor",
-                        "design.input.input_label",
-                        "design.output.condensor_AK",
-                        "design.output.evaporator_hot_factor",
-                        "motor_current_percent",
-                        "design.output.COP_heat",
-                        "run_time",
-                        "off-design.input.evaporator_water_back.name",
-                        "off-design.output.condensor_heat",
-                        "design.input.dt_condensor",
-                        "off-design.output.evaporator_cold_inlet_temperature",
-                        "design.output.evaporator_cold_outlet_temperature",
-                        "design.input.evaporator_water_back.value",
-                        "design.output.evaporator_cold_inlet_temperature",
-                        "oil_tank_press_low",
-                        "off-design.output.evaporator_cold_inlet_pressure",
-                        "off-design.input.motor_work",
-                        "off-design.input.evaporator_water_return_flow",
-                        "design.output.condensor_heat",
-                        "lubricate_press_diff",
-                        "design.input.condensor_water_outlet_pressure",
-                        "channels",
-                        "off-design.input.evaporator_water_back_pressure",
-                        "design.input.condensor_water_inlet_flow",
-                        "off-design.output.condensor_hot_outlet_enthalpy",
-                        "off-design.output.condensor_AK",
-                        "design.input.evaporator_water_leave_enthalpy",
-                        "off-design.output.converge_level",
-                        "off-design.output.evaporator_cold_outlet_enthalpy",
-                        "off-design.input.input_label",
-                        "design.output.condensor_hot_inlet_temperature",
-                        "outputType",
-                        "design.input.dp_condensor_hot",
-                        "design.output.evaporator_cold_outlet_enthalpy",
-                        "oil_tank_press_high",
-                        "design.output.condensor_cold_factor",
-                        "displayContent",
-                        "design.output.converge_level",
-                        "design.input.evaporator_water_back_enthalpy",
-                        "design.input.dt_condensor_water_in_out",
-                        "design.input.dt_inlet_valve",
-                        "design.input.condensor_water_inlet_temperature",
-                        "off-design.output.evaporator_cold_flow_0",
-                        "off-design.output.evaporator_cold_outlet_pressure",
-                        "metadata_node_pk",
-                        "design.input.refrigerant.value",
-                        "design.output.condensor_hot_outlet_enthalpy",
-                        "design.output.evaporator_cold_factor",
-                        "design.input.efficiency_factor",
-                        "operation_mode",
-                        "off-design.input.operation_mode",
-                        "design.input.efficiency_rotor",
-                        "off-design.input.efficiency_rotor",
-                        "design.input.evaporator_water_back_pressure",
-                        "off-design.input.refrigerant.value",
-                        "off-design.input.condensor_hot_sat_temperature",
-                        "off-design.output.valve_factor",
-                        "off-design.input.dt_condensor_outletwater_hotsat",
-                        "design.input.dp_evaporator_cold",
-                        "off-design.input.condensor_water_inlet_pressure",
-                        "off-design.output.evaporator_heat",
-                        "design.output.evaporator_heat",
-                        "off-design.input.efficiency_factor",
-                        "design.input.dt_condensor_outletwater_hotsat",
-                        "off-design.output.condensor_hot_inlet_temperature",
-                        "off-design.input.evaporator_water_back_enthalpy"
-                    ],
-                    "properties": {
-                        "design.output.condensor_hot_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_outlet_temperature",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "31.5"
-                            ]
-                        },
-                        "start_up_time": {
-                            "$id": "#/properties/data/properties/properties/properties/start_up_time",
-                            "type": "string",
-                            "title": "The start_up_time schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34133"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_fluid.name": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_fluid.name",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_fluid.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water"
-                            ]
-                        },
-                        "design.output.evaporator_AK": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_AK",
-                            "type": "string",
-                            "title": "The design.output.evaporator_AK schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2204.1454463292466"
-                            ]
-                        },
-                        "off-design.input.condensor_water_inlet_fluid.name": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_inlet_fluid.name",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_inlet_fluid.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water"
-                            ]
-                        },
-                        "off-design.input.dt_condensor_water_in_out": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_condensor_water_in_out",
-                            "type": "string",
-                            "title": "The off-design.input.dt_condensor_water_in_out schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7"
-                            ]
-                        },
-                        "off-design.input.dp_condensor_hot": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dp_condensor_hot",
-                            "type": "string",
-                            "title": "The off-design.input.dp_condensor_hot schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.02"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_leave_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_leave_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_leave_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "23.641251311883277"
-                            ]
-                        },
-                        "design.input.physical_property": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.physical_property",
-                            "type": "string",
-                            "title": "The design.input.physical_property schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "HEOS"
-                            ]
-                        },
-                        "design.input.motor_work": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.motor_work",
-                            "type": "string",
-                            "title": "The design.input.motor_work schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1151.0002920483962"
-                            ]
-                        },
-                        "off-design.output.motor_work_0": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.motor_work_0",
-                            "type": "string",
-                            "title": "The off-design.output.motor_work_0 schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1151.0002920483962"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_outlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "4.71"
-                            ]
-                        },
-                        "off-design.input.dt_condensor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_condensor",
-                            "type": "string",
-                            "title": "The off-design.input.dt_condensor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.7310607513664422"
-                            ]
-                        },
-                        "off-design.input.condensor_water_inlet_fluid.value": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_inlet_fluid.value",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_inlet_fluid.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1]"
-                            ]
-                        },
-                        "off-design.output.evaporator_hot_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_hot_factor",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_hot_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.9"
-                            ]
-                        },
-                        "design.input.evaporator_water_return_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_return_flow",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_return_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "230.66666666666666"
-                            ]
-                        },
-                        "rtDataManualSetting": {
-                            "$id": "#/properties/data/properties/properties/properties/rtDataManualSetting",
-                            "type": "string",
-                            "title": "The rtDataManualSetting schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "design.input.evaporator_water_back_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_back_temperature",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_back_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "13.4"
-                            ]
-                        },
-                        "id": {
-                            "$id": "#/properties/data/properties/properties/properties/id",
-                            "type": "string",
-                            "title": "The id schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "221"
-                            ]
-                        },
-                        "off-design.input.condensor_water_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_inlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34153"
-                            ]
-                        },
-                        "design.input.evaporator_water_leave_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_leave_pressure",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_leave_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1.0"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_leave_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_leave_pressure",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_leave_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33321"
-                            ]
-                        },
-                        "off-design.input.condensor_water_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_outlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34151"
-                            ]
-                        },
-                        "modelType": {
-                            "$id": "#/properties/data/properties/properties/properties/modelType",
-                            "type": "string",
-                            "title": "The modelType schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "heatPumpDetail"
-                            ]
-                        },
-                        "off-design.input.condensor_water_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "109.56149576634971"
-                            ]
-                        },
-                        "design.output.motor_work_0": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.motor_work_0",
-                            "type": "string",
-                            "title": "The design.output.motor_work_0 schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1151.0002920483962"
-                            ]
-                        },
-                        "design.input.compressor_poly_efficiency": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.compressor_poly_efficiency",
-                            "type": "string",
-                            "title": "The design.input.compressor_poly_efficiency schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.8785977604675561"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_factor",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.012432807978367212"
-                            ]
-                        },
-                        "design.output.evaporator_cold_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_outlet_pressure",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3.4402613371381205"
-                            ]
-                        },
-                        "off-design.input.condensor_water_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_outlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33022"
-                            ]
-                        },
-                        "off-design.input.dp_evaporator_cold": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dp_evaporator_cold",
-                            "type": "string",
-                            "title": "The off-design.input.dp_evaporator_cold schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.02"
-                            ]
-                        },
-                        "design.output.condensor_hot_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_outlet_pressure",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "8.486383628361516"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_inlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34157"
-                            ]
-                        },
-                        "design.output.evaporator_cold_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_inlet_pressure",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34159"
-                            ]
-                        },
-                        "design.output.condensor_hot_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_inlet_pressure",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "8.506383628361515"
-                            ]
-                        },
-                        "off-design.input.refrigerant.name": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.refrigerant.name",
-                            "type": "string",
-                            "title": "The off-design.input.refrigerant.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "R134A"
-                            ]
-                        },
-                        "refTopo": {
-                            "$id": "#/properties/data/properties/properties/properties/refTopo",
-                            "type": "string",
-                            "title": "The refTopo schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "243.8935969032062"
-                            ]
-                        },
-                        "design.input.condensor_water_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_outlet_temperature",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "33"
-                            ]
-                        },
-                        "design.input.dt_inlet_compressor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_inlet_compressor",
-                            "type": "string",
-                            "title": "The design.input.dt_inlet_compressor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.009999999999999787"
-                            ]
-                        },
-                        "design.output.condensor_hot_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_factor",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.054087175112221976"
-                            ]
-                        },
-                        "off-design.input.compressor_poly_efficiency": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.compressor_poly_efficiency",
-                            "type": "string",
-                            "title": "The off-design.input.compressor_poly_efficiency schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "8785977604675561"
-                            ]
-                        },
-                        "design.output.COP_cold": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.COP_cold",
-                            "type": "string",
-                            "title": "The design.output.COP_cold schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "6.5788285692574275"
-                            ]
-                        },
-                        "design.input.condensor_hot_sat_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_hot_sat_temperature",
-                            "type": "string",
-                            "title": "The design.input.condensor_hot_sat_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34141"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_back.value": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_back.value",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_back.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1]"
-                            ]
-                        },
-                        "design.output.valve_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.valve_factor",
-                            "type": "string",
-                            "title": "The design.output.valve_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.7"
-                            ]
-                        },
-                        "off-design.output.COP_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.COP_heat",
-                            "type": "string",
-                            "title": "The off-design.output.COP_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7.478828569257428"
-                            ]
-                        },
-                        "off-design.output.evaporator_AK": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_AK",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_AK schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2204.1454463292466"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_leave_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_leave_temperature",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_leave_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34163"
-                            ]
-                        },
-                        "off-design.output.COP_cold": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.COP_cold",
-                            "type": "string",
-                            "title": "The off-design.output.COP_cold schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "6.5788285692574275"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "422.93278748500984"
-                            ]
-                        },
-                        "rtDataId": {
-                            "$id": "#/properties/data/properties/properties/properties/rtDataId",
-                            "type": "string",
-                            "title": "The rtDataId schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                ""
-                            ]
-                        },
-                        "design.input.evaporator_water_leave_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_leave_temperature",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_leave_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "5.6"
-                            ]
-                        },
-                        "off-esign.input.condensor_water_inlet_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/off-esign.input.condensor_water_inlet_flow",
-                            "type": "string",
-                            "title": "The off-esign.input.condensor_water_inlet_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "293.38411795318456"
-                            ]
-                        },
-                        "design.output.condensor_hot_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_flow",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_flow",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "modelName": {
-                            "$id": "#/properties/data/properties/properties/properties/modelName",
-                            "type": "string",
-                            "title": "The modelName schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1#制冷机"
-                            ]
-                        },
-                        "design.input.condensor_water_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "138.9023"
-                            ]
-                        },
-                        "design.input.dt_evaporator": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_evaporator",
-                            "type": "string",
-                            "title": "The design.input.dt_evaporator schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.8999999999999995"
-                            ]
-                        },
-                        "design.output.evaporator_cold_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_flow",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "design.output.evaporator_cold_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "243.8935969032062"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_flow",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_outlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "31.5"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_outlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "8.486383628361516"
-                            ]
-                        },
-                        "off-design.input.condensor_water_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "138.90232691784644"
-                            ]
-                        },
-                        "design.input.evaporator_water_back.name": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_back.name",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_back.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water"
-                            ]
-                        },
-                        "design.input.operation_mode": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.operation_mode",
-                            "type": "string",
-                            "title": "The design.input.operation_mode schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "cold"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_factor",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.054087175112221976"
-                            ]
-                        },
-                        "design.input.refrigerant.name": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.refrigerant.name",
-                            "type": "string",
-                            "title": "The design.input.refrigerant.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "R134A"
-                            ]
-                        },
-                        "off-design.input.dt_inlet_valve": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_inlet_valve",
-                            "type": "string",
-                            "title": "The off-design.input.dt_inlet_valve schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2.0"
-                            ]
-                        },
-                        "off-design.input.dt_inlet_compressor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_inlet_compressor",
-                            "type": "string",
-                            "title": "The off-design.input.dt_inlet_compressor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.009999999999999787"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_back_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_back_temperature",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_back_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34161"
-                            ]
-                        },
-                        "design.output.evaporator_cold_flow_0": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_flow_0",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_flow_0 schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "off-design.input.dt_evaporator": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_evaporator",
-                            "type": "string",
-                            "title": "The off-design.input.dt_evaporator schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.8999999999999995"
-                            ]
-                        },
-                        "metadata_node_type": {
-                            "$id": "#/properties/data/properties/properties/properties/metadata_node_type",
-                            "type": "string",
-                            "title": "The metadata_node_type schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "instance"
-                            ]
-                        },
-                        "inputType": {
-                            "$id": "#/properties/data/properties/properties/properties/inputType",
-                            "type": "string",
-                            "title": "The inputType schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water,el"
-                            ]
-                        },
-                        "design.output.condensor_hot_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "422.93278748500984"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_fluid.value": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_fluid.value",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_fluid.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1]"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "109.56149576634971"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_pressure",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33024"
-                            ]
-                        },
-                        "off-design.output.condensor_cold_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_cold_factor",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_cold_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "design.input.input_label": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.input_label",
-                            "type": "string",
-                            "title": "The design.input.input_label schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2019/4/24  19:00:00"
-                            ]
-                        },
-                        "design.output.condensor_AK": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_AK",
-                            "type": "string",
-                            "title": "The design.output.condensor_AK schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "design.output.evaporator_hot_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_hot_factor",
-                            "type": "string",
-                            "title": "The design.output.evaporator_hot_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.9"
-                            ]
-                        },
-                        "motor_current_percent": {
-                            "$id": "#/properties/data/properties/properties/properties/motor_current_percent",
-                            "type": "string",
-                            "title": "The motor_current_percent schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34149"
-                            ]
-                        },
-                        "design.output.COP_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.COP_heat",
-                            "type": "string",
-                            "title": "The design.output.COP_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7.478828569257428"
-                            ]
-                        },
-                        "run_time": {
-                            "$id": "#/properties/data/properties/properties/properties/run_time",
-                            "type": "string",
-                            "title": "The run_time schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34135"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_back.name": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_back.name",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_back.name schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water"
-                            ]
-                        },
-                        "off-design.output.condensor_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_heat",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "design.input.dt_condensor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_condensor",
-                            "type": "string",
-                            "title": "The design.input.dt_condensor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.7310607513664422"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_inlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34159"
-                            ]
-                        },
-                        "design.output.evaporator_cold_outlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_outlet_temperature",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_outlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "4.71"
-                            ]
-                        },
-                        "design.input.evaporator_water_back.value": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_back.value",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_back.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[]"
-                            ]
-                        },
-                        "design.output.evaporator_cold_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_inlet_temperature",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34143"
-                            ]
-                        },
-                        "oil_tank_press_low": {
-                            "$id": "#/properties/data/properties/properties/properties/oil_tank_press_low",
-                            "type": "string",
-                            "title": "The oil_tank_press_low schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34129"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_inlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3.4602613371381206"
-                            ]
-                        },
-                        "off-design.input.motor_work": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.motor_work",
-                            "type": "string",
-                            "title": "The off-design.input.motor_work schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1151.0002920483962"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_return_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_return_flow",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_return_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33293"
-                            ]
-                        },
-                        "design.output.condensor_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_heat",
-                            "type": "string",
-                            "title": "The design.output.condensor_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "lubricate_press_diff": {
-                            "$id": "#/properties/data/properties/properties/properties/lubricate_press_diff",
-                            "type": "string",
-                            "title": "The lubricate_press_diff schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34155"
-                            ]
-                        },
-                        "design.input.condensor_water_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_outlet_pressure",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7.0"
-                            ]
-                        },
-                        "channels": {
-                            "$id": "#/properties/data/properties/properties/properties/channels",
-                            "type": "string",
-                            "title": "The channels schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0->0"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_back_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_back_pressure",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_back_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33307"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_flow": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_flow",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_flow schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "293.38411795318456"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "243.8935969032062"
-                            ]
-                        },
-                        "off-design.output.condensor_AK": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_AK",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_AK schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "design.input.evaporator_water_leave_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_leave_enthalpy",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_leave_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "23.641251311883277"
-                            ]
-                        },
-                        "off-design.output.converge_level": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.converge_level",
-                            "type": "string",
-                            "title": "The off-design.output.converge_level schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[0.0,1]"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34143"
-                            ]
-                        },
-                        "off-design.input.input_label": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.input_label",
-                            "type": "string",
-                            "title": "The off-design.input.input_label schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2019/4/24  19:00:00"
-                            ]
-                        },
-                        "design.output.condensor_hot_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_inlet_temperature",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "39.50011340055357"
-                            ]
-                        },
-                        "outputType": {
-                            "$id": "#/properties/data/properties/properties/properties/outputType",
-                            "type": "string",
-                            "title": "The outputType schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "water"
-                            ]
-                        },
-                        "design.input.dp_condensor_hot": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dp_condensor_hot",
-                            "type": "string",
-                            "title": "The design.input.dp_condensor_hot schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.02"
-                            ]
-                        },
-                        "design.output.evaporator_cold_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "401.38726467599827"
-                            ]
-                        },
-                        "oil_tank_press_high": {
-                            "$id": "#/properties/data/properties/properties/properties/oil_tank_press_high",
-                            "type": "string",
-                            "title": "The oil_tank_press_high schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34131"
-                            ]
-                        },
-                        "design.output.condensor_cold_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_cold_factor",
-                            "type": "string",
-                            "title": "The design.output.condensor_cold_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3642.5862944557716"
-                            ]
-                        },
-                        "displayContent": {
-                            "$id": "#/properties/data/properties/properties/properties/displayContent",
-                            "type": "string",
-                            "title": "The displayContent schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "1#制冷机"
-                            ]
-                        },
-                        "design.output.converge_level": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.converge_level",
-                            "type": "string",
-                            "title": "The design.output.converge_level schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[0.0,1]"
-                            ]
-                        },
-                        "design.input.evaporator_water_back_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_back_enthalpy",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_back_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "56.46885364375451"
-                            ]
-                        },
-                        "design.input.dt_condensor_water_in_out": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_condensor_water_in_out",
-                            "type": "string",
-                            "title": "The design.input.dt_condensor_water_in_out schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7"
-                            ]
-                        },
-                        "design.input.dt_inlet_valve": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_inlet_valve",
-                            "type": "string",
-                            "title": "The design.input.dt_inlet_valve schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2.0"
-                            ]
-                        },
-                        "design.input.condensor_water_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.condensor_water_inlet_temperature",
-                            "type": "string",
-                            "title": "The design.input.condensor_water_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34153"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_flow_0": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_flow_0",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_flow_0 schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "48.07960670187515"
-                            ]
-                        },
-                        "off-design.output.evaporator_cold_outlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_cold_outlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_cold_outlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "3.4402613371381205"
-                            ]
-                        },
-                        "metadata_node_pk": {
-                            "$id": "#/properties/data/properties/properties/properties/metadata_node_pk",
-                            "type": "string",
-                            "title": "The metadata_node_pk schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "id"
-                            ]
-                        },
-                        "design.input.refrigerant.value": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.refrigerant.value",
-                            "type": "string",
-                            "title": "The design.input.refrigerant.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1]"
-                            ]
-                        },
-                        "design.output.condensor_hot_outlet_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.condensor_hot_outlet_enthalpy",
-                            "type": "string",
-                            "title": "The design.output.condensor_hot_outlet_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "243.8935969032062"
-                            ]
-                        },
-                        "design.output.evaporator_cold_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_cold_factor",
-                            "type": "string",
-                            "title": "The design.output.evaporator_cold_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.012432807978367212"
-                            ]
-                        },
-                        "design.input.efficiency_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.efficiency_factor",
-                            "type": "string",
-                            "title": "The design.input.efficiency_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1,1,1]"
-                            ]
-                        },
-                        "operation_mode": {
-                            "$id": "#/properties/data/properties/properties/properties/operation_mode",
-                            "type": "string",
-                            "title": "The operation_mode schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "cold"
-                            ]
-                        },
-                        "off-design.input.operation_mode": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.operation_mode",
-                            "type": "string",
-                            "title": "The off-design.input.operation_mode schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "cold"
-                            ]
-                        },
-                        "design.input.efficiency_rotor": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.efficiency_rotor",
-                            "type": "string",
-                            "title": "The design.input.efficiency_rotor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.9"
-                            ]
-                        },
-                        "off-design.input.efficiency_rotor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.efficiency_rotor",
-                            "type": "string",
-                            "title": "The off-design.input.efficiency_rotor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.9"
-                            ]
-                        },
-                        "design.input.evaporator_water_back_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.evaporator_water_back_pressure",
-                            "type": "string",
-                            "title": "The design.input.evaporator_water_back_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "2.0"
-                            ]
-                        },
-                        "off-design.input.refrigerant.value": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.refrigerant.value",
-                            "type": "string",
-                            "title": "The off-design.input.refrigerant.value schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1]"
-                            ]
-                        },
-                        "off-design.input.condensor_hot_sat_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_hot_sat_temperature",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_hot_sat_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34141"
-                            ]
-                        },
-                        "off-design.output.valve_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.valve_factor",
-                            "type": "string",
-                            "title": "The off-design.output.valve_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.7"
-                            ]
-                        },
-                        "off-design.input.dt_condensor_outletwater_hotsat": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.dt_condensor_outletwater_hotsat",
-                            "type": "string",
-                            "title": "The off-design.input.dt_condensor_outletwater_hotsat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.000007"
-                            ]
-                        },
-                        "design.input.dp_evaporator_cold": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dp_evaporator_cold",
-                            "type": "string",
-                            "title": "The design.input.dp_evaporator_cold schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.02"
-                            ]
-                        },
-                        "off-design.input.condensor_water_inlet_pressure": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.condensor_water_inlet_pressure",
-                            "type": "string",
-                            "title": "The off-design.input.condensor_water_inlet_pressure schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=33024"
-                            ]
-                        },
-                        "off-design.output.evaporator_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.evaporator_heat",
-                            "type": "string",
-                            "title": "The off-design.output.evaporator_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7572.233604551631"
-                            ]
-                        },
-                        "design.output.evaporator_heat": {
-                            "$id": "#/properties/data/properties/properties/properties/design.output.evaporator_heat",
-                            "type": "string",
-                            "title": "The design.output.evaporator_heat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "7572.233604551631"
-                            ]
-                        },
-                        "off-design.input.efficiency_factor": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.efficiency_factor",
-                            "type": "string",
-                            "title": "The off-design.input.efficiency_factor schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "[1,1,1]"
-                            ]
-                        },
-                        "design.input.dt_condensor_outletwater_hotsat": {
-                            "$id": "#/properties/data/properties/properties/properties/design.input.dt_condensor_outletwater_hotsat",
-                            "type": "string",
-                            "title": "The design.input.dt_condensor_outletwater_hotsat schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "0.000007"
-                            ]
-                        },
-                        "off-design.output.condensor_hot_inlet_temperature": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.output.condensor_hot_inlet_temperature",
-                            "type": "string",
-                            "title": "The off-design.output.condensor_hot_inlet_temperature schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "siid=34139"
-                            ]
-                        },
-                        "off-design.input.evaporator_water_back_enthalpy": {
-                            "$id": "#/properties/data/properties/properties/properties/off-design.input.evaporator_water_back_enthalpy",
-                            "type": "string",
-                            "title": "The off-design.input.evaporator_water_back_enthalpy schema",
-                            "description": "An explanation about the purpose of this instance.",
-                            "default": "",
-                            "examples": [
-                                "56.46885364375451"
-                            ]
-                        }
-                    },
-                    "additionalProperties": true
-                }
-            },
-            "additionalProperties": true
-        }
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
     },
-    "additionalProperties": true
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "start_up_time": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_back_enthalpy": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_outlet_pressure": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_leave_pressure": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_inlet_temperature": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_leave_pressure": {
+              "type": "string"
+            },
+            "off_design_output_condensor_cold_factor": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_heat": {
+              "type": "string"
+            },
+            "off_design_output_condensor_AK": {
+              "type": "string"
+            },
+            "design__output__condensor_heat": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_back_value": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_enthalpy": {
+              "type": "string"
+            },
+            "design_input_dt_condensor_outletwater_hotsat": {
+              "type": "string"
+            },
+            "inputPowers": {
+              "type": "string"
+            },
+            "rtDataManualSetting": {
+              "type": "string"
+            },
+            "flag_runnable_heat_siid": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "off_design_input_dp_condensor_hot": {
+              "type": "string"
+            },
+            "off_design_input_dt_inlet_compressor": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_back_pressure": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_outlet_enthalpy": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_fluid_name": {
+              "type": "string"
+            },
+            "startupTimes": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_leave_temperature": {
+              "type": "string"
+            },
+            "CostPerStartUp": {
+              "type": "string"
+            },
+            "modelType": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_leave_enthalpy": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_back_name": {
+              "type": "string"
+            },
+            "design_input_input_label": {
+              "type": "string"
+            },
+            "design_input_refrigerant_name": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_outlet_temperature": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_inlet_temperature": {
+              "type": "string"
+            },
+            "off_design_input_dt_condensor_outletwater_hotsat": {
+              "type": "string"
+            },
+            "design_input_dt_inlet_valve": {
+              "type": "string"
+            },
+            "flag_runnable_heat": {
+              "type": "string"
+            },
+            "design_input_motor_work": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_factor": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_return_flow": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_flow": {
+              "type": "string"
+            },
+            "RelRampUpRateLimit": {
+              "type": "string"
+            },
+            "off_design_input_dp_evaporator_cold": {
+              "type": "string"
+            },
+            "refTopo": {
+              "type": "string"
+            },
+            "minPower": {
+              "type": "string"
+            },
+            "flag_runnable_siid": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_factor": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_inlet_enthalpy": {
+              "type": "string"
+            },
+            "design__output__evaporator_hot_factor": {
+              "type": "string"
+            },
+            "design_input_condensor_water_outlet_temperature": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_inlet_temperature": {
+              "type": "string"
+            },
+            "design_input_dt_condensor": {
+              "type": "string"
+            },
+            "design_input_condensor_water_outlet_pressure": {
+              "type": "string"
+            },
+            "power": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_flow_0": {
+              "type": "string"
+            },
+            "off_design_input_dt_condensor_water_in_out": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_factor": {
+              "type": "string"
+            },
+            "design_input_operation_mode": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_fluid_name": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_pressure": {
+              "type": "string"
+            },
+            "off_design_input_efficiency_rotor": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_back_name": {
+              "type": "string"
+            },
+            "off_design_input_dt_evaporator": {
+              "type": "string"
+            },
+            "design_input_dp_condensor_hot": {
+              "type": "string"
+            },
+            "off_design_input_dt_inlet_valve": {
+              "type": "string"
+            },
+            "efficiencies": {
+              "type": "string"
+            },
+            "off_design_output_valve_factor": {
+              "type": "string"
+            },
+            "design_input_dt_evaporator": {
+              "type": "string"
+            },
+            "rtDataId": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_back_temperature": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_temperature": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_hot_factor": {
+              "type": "string"
+            },
+            "modelName": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_inlet_pressure": {
+              "type": "string"
+            },
+            "n_section": {
+              "type": "string"
+            },
+            "off_design_input_input_label": {
+              "type": "string"
+            },
+            "design__output__motor_work_0": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_return_flow": {
+              "type": "string"
+            },
+            "RelRampDownRateLimit": {
+              "type": "string"
+            },
+            "startUpCostCounted": {
+              "type": "string"
+            },
+            "off_design_input_refrigerant_name": {
+              "type": "string"
+            },
+            "outputDataTypes": {
+              "type": "string"
+            },
+            "maxPower": {
+              "type": "string"
+            },
+            "off_design_output_converge_level": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_outlet_enthalpy": {
+              "type": "string"
+            },
+            "off_design_output_COP_cold": {
+              "type": "string"
+            },
+            "design_input_efficiency_factor": {
+              "type": "string"
+            },
+            "design_input_dt_condensor_water_in_out": {
+              "type": "string"
+            },
+            "design__output__evaporator_AK": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_inlet_enthalpy": {
+              "type": "string"
+            },
+            "off_design_output_COP_heat": {
+              "type": "string"
+            },
+            "efficiencyBaseIO": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_flow_0": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_outlet_temperature": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_back_value": {
+              "type": "string"
+            },
+            "design_input_efficiency_rotor": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_temperature": {
+              "type": "string"
+            },
+            "off_design_input_operation_mode": {
+              "type": "string"
+            },
+            "metadata_node_type": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_factor": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_outlet_temperature": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_inlet_enthalpy": {
+              "type": "string"
+            },
+            "off_design_output_condensor_heat": {
+              "type": "string"
+            },
+            "inputType": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_outlet_enthalpy": {
+              "type": "string"
+            },
+            "design_input_physical_property": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_AK": {
+              "type": "string"
+            },
+            "design__output__COP_heat": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_fluid_value": {
+              "type": "string"
+            },
+            "design_input_condensor_water_outlet_enthalpy": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_outlet_temperature": {
+              "type": "string"
+            },
+            "motor_current_percent": {
+              "type": "string"
+            },
+            "design__output__evaporator_heat": {
+              "type": "string"
+            },
+            "run_time": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_flow": {
+              "type": "string"
+            },
+            "design__output__evaporator_cold_outlet_pressure": {
+              "type": "string"
+            },
+            "design_input_refrigerant_value": {
+              "type": "string"
+            },
+            "off_design_input_dt_condensor": {
+              "type": "string"
+            },
+            "design__output__COP_cold": {
+              "type": "string"
+            },
+            "operationCostPerkWh": {
+              "type": "string"
+            },
+            "oil_tank_press_low": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_outlet_pressure": {
+              "type": "string"
+            },
+            "lubricate_press_diff": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_back_pressure": {
+              "type": "string"
+            },
+            "channels": {
+              "type": "string"
+            },
+            "off_design_input_condensor_hot_sat_temperature": {
+              "type": "string"
+            },
+            "outputPowers": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_flow": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_flow": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_enthalpy": {
+              "type": "string"
+            },
+            "inputDataTypes": {
+              "type": "string"
+            },
+            "flag_runnable": {
+              "type": "string"
+            },
+            "operationCostPerHr": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_inlet_temperature": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_inlet_pressure": {
+              "type": "string"
+            },
+            "outputType": {
+              "type": "string"
+            },
+            "design_input_dt_inlet_compressor": {
+              "type": "string"
+            },
+            "design_input_compressor_poly_efficiency": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_outlet_enthalpy": {
+              "type": "string"
+            },
+            "oil_tank_press_high": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_outlet_temperature": {
+              "type": "string"
+            },
+            "displayContent": {
+              "type": "string"
+            },
+            "design__output__valve_factor": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_back_temperature": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_inlet_pressure": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_outlet_enthalpy": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_inlet_pressure": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_fluid_value": {
+              "type": "string"
+            },
+            "design__output__condensor_cold_factor": {
+              "type": "string"
+            },
+            "off_design_output_evaporator_cold_outlet_pressure": {
+              "type": "string"
+            },
+            "design__output__condensor_hot_inlet_enthalpy": {
+              "type": "string"
+            },
+            "original": {
+              "type": "string"
+            },
+            "off_design_output_motor_work_0": {
+              "type": "string"
+            },
+            "design_input_condensor_hot_sat_temperature": {
+              "type": "string"
+            },
+            "design__output__condensor_AK": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_outlet_pressure": {
+              "type": "string"
+            },
+            "efficiencyBase": {
+              "type": "string"
+            },
+            "operationCostPerkW": {
+              "type": "string"
+            },
+            "operation_mode": {
+              "type": "string"
+            },
+            "startUpCost": {
+              "type": "string"
+            },
+            "off_design_input_evaporator_water_leave_temperature": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_leave_enthalpy": {
+              "type": "string"
+            },
+            "off_design_output_condensor_hot_flow": {
+              "type": "string"
+            },
+            "design_input_condensor_water_inlet_pressure": {
+              "type": "string"
+            },
+            "off_design_input_condensor_water_inlet_flow": {
+              "type": "string"
+            },
+            "steppedPower": {
+              "type": "string"
+            },
+            "design_input_evaporator_water_back_enthalpy": {
+              "type": "string"
+            },
+            "design__output__converge_level": {
+              "type": "string"
+            },
+            "design_input_dp_evaporator_cold": {
+              "type": "string"
+            },
+            "off_design_input_motor_work": {
+              "type": "string"
+            },
+            "off_design_input_compressor_poly_efficiency": {
+              "type": "string"
+            },
+            "off_design_input_efficiency_factor": {
+              "type": "string"
+            },
+            "off_design_input_refrigerant_value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "start_up_time",
+            "off_design_input_evaporator_water_back_enthalpy",
+            "off_design_output_condensor_hot_outlet_pressure",
+            "design_input_evaporator_water_leave_pressure",
+            "off_design_output_evaporator_cold_inlet_temperature",
+            "off_design_input_evaporator_water_leave_pressure",
+            "off_design_output_condensor_cold_factor",
+            "off_design_output_evaporator_heat",
+            "off_design_output_condensor_AK",
+            "design__output__condensor_heat",
+            "off_design_input_evaporator_water_back_value",
+            "design_input_condensor_water_inlet_enthalpy",
+            "design_input_dt_condensor_outletwater_hotsat",
+            "inputPowers",
+            "rtDataManualSetting",
+            "flag_runnable_heat_siid",
+            "id",
+            "off_design_input_dp_condensor_hot",
+            "off_design_input_dt_inlet_compressor",
+            "off_design_input_evaporator_water_back_pressure",
+            "off_design_output_condensor_hot_outlet_enthalpy",
+            "off_design_input_condensor_water_inlet_fluid_name",
+            "startupTimes",
+            "design_input_evaporator_water_leave_temperature",
+            "CostPerStartUp",
+            "modelType",
+            "off_design_input_evaporator_water_leave_enthalpy",
+            "design_input_evaporator_water_back_name",
+            "design_input_input_label",
+            "design_input_refrigerant_name",
+            "off_design_input_condensor_water_outlet_temperature",
+            "design__output__condensor_hot_inlet_temperature",
+            "off_design_input_dt_condensor_outletwater_hotsat",
+            "design_input_dt_inlet_valve",
+            "flag_runnable_heat",
+            "design_input_motor_work",
+            "design__output__evaporator_cold_factor",
+            "design_input_evaporator_water_return_flow",
+            "design__output__evaporator_cold_flow",
+            "RelRampUpRateLimit",
+            "off_design_input_dp_evaporator_cold",
+            "refTopo",
+            "minPower",
+            "flag_runnable_siid",
+            "off_design_output_evaporator_cold_factor",
+            "design__output__evaporator_cold_inlet_enthalpy",
+            "design__output__evaporator_hot_factor",
+            "design_input_condensor_water_outlet_temperature",
+            "design__output__evaporator_cold_inlet_temperature",
+            "design_input_dt_condensor",
+            "design_input_condensor_water_outlet_pressure",
+            "power",
+            "off_design_output_evaporator_cold_flow_0",
+            "off_design_input_dt_condensor_water_in_out",
+            "design__output__condensor_hot_factor",
+            "design_input_operation_mode",
+            "design_input_condensor_water_inlet_fluid_name",
+            "off_design_input_condensor_water_inlet_pressure",
+            "off_design_input_efficiency_rotor",
+            "off_design_input_evaporator_water_back_name",
+            "off_design_input_dt_evaporator",
+            "design_input_dp_condensor_hot",
+            "off_design_input_dt_inlet_valve",
+            "efficiencies",
+            "off_design_output_valve_factor",
+            "design_input_dt_evaporator",
+            "rtDataId",
+            "design_input_evaporator_water_back_temperature",
+            "design_input_condensor_water_inlet_temperature",
+            "off_design_output_evaporator_hot_factor",
+            "modelName",
+            "design__output__evaporator_cold_inlet_pressure",
+            "n_section",
+            "off_design_input_input_label",
+            "design__output__motor_work_0",
+            "off_design_input_evaporator_water_return_flow",
+            "RelRampDownRateLimit",
+            "startUpCostCounted",
+            "off_design_input_refrigerant_name",
+            "outputDataTypes",
+            "maxPower",
+            "off_design_output_converge_level",
+            "off_design_input_condensor_water_outlet_enthalpy",
+            "off_design_output_COP_cold",
+            "design_input_efficiency_factor",
+            "design_input_dt_condensor_water_in_out",
+            "design__output__evaporator_AK",
+            "off_design_output_condensor_hot_inlet_enthalpy",
+            "off_design_output_COP_heat",
+            "efficiencyBaseIO",
+            "design__output__evaporator_cold_flow_0",
+            "design__output__evaporator_cold_outlet_temperature",
+            "design_input_evaporator_water_back_value",
+            "design_input_efficiency_rotor",
+            "off_design_input_condensor_water_inlet_temperature",
+            "off_design_input_operation_mode",
+            "metadata_node_type",
+            "off_design_output_condensor_hot_factor",
+            "off_design_output_evaporator_cold_outlet_temperature",
+            "off_design_output_evaporator_cold_inlet_enthalpy",
+            "off_design_output_condensor_heat",
+            "inputType",
+            "design__output__evaporator_cold_outlet_enthalpy",
+            "design_input_physical_property",
+            "off_design_output_evaporator_AK",
+            "design__output__COP_heat",
+            "off_design_input_condensor_water_inlet_fluid_value",
+            "design_input_condensor_water_outlet_enthalpy",
+            "design__output__condensor_hot_outlet_temperature",
+            "motor_current_percent",
+            "design__output__evaporator_heat",
+            "run_time",
+            "design_input_condensor_water_inlet_flow",
+            "design__output__evaporator_cold_outlet_pressure",
+            "design_input_refrigerant_value",
+            "off_design_input_dt_condensor",
+            "design__output__COP_cold",
+            "operationCostPerkWh",
+            "oil_tank_press_low",
+            "design__output__condensor_hot_outlet_pressure",
+            "lubricate_press_diff",
+            "design_input_evaporator_water_back_pressure",
+            "channels",
+            "off_design_input_condensor_hot_sat_temperature",
+            "outputPowers",
+            "design__output__condensor_hot_flow",
+            "off_design_output_evaporator_cold_flow",
+            "off_design_input_condensor_water_inlet_enthalpy",
+            "inputDataTypes",
+            "flag_runnable",
+            "operationCostPerHr",
+            "off_design_output_condensor_hot_inlet_temperature",
+            "off_design_output_evaporator_cold_inlet_pressure",
+            "outputType",
+            "design_input_dt_inlet_compressor",
+            "design_input_compressor_poly_efficiency",
+            "design__output__condensor_hot_outlet_enthalpy",
+            "oil_tank_press_high",
+            "off_design_output_condensor_hot_outlet_temperature",
+            "displayContent",
+            "design__output__valve_factor",
+            "off_design_input_evaporator_water_back_temperature",
+            "off_design_output_condensor_hot_inlet_pressure",
+            "off_design_output_evaporator_cold_outlet_enthalpy",
+            "design__output__condensor_hot_inlet_pressure",
+            "design_input_condensor_water_inlet_fluid_value",
+            "design__output__condensor_cold_factor",
+            "off_design_output_evaporator_cold_outlet_pressure",
+            "design__output__condensor_hot_inlet_enthalpy",
+            "original",
+            "off_design_output_motor_work_0",
+            "design_input_condensor_hot_sat_temperature",
+            "design__output__condensor_AK",
+            "off_design_input_condensor_water_outlet_pressure",
+            "efficiencyBase",
+            "operationCostPerkW",
+            "operation_mode",
+            "startUpCost",
+            "off_design_input_evaporator_water_leave_temperature",
+            "design_input_evaporator_water_leave_enthalpy",
+            "off_design_output_condensor_hot_flow",
+            "design_input_condensor_water_inlet_pressure",
+            "off_design_input_condensor_water_inlet_flow",
+            "steppedPower",
+            "design_input_evaporator_water_back_enthalpy",
+            "design__output__converge_level",
+            "design_input_dp_evaporator_cold",
+            "off_design_input_motor_work",
+            "off_design_input_compressor_poly_efficiency",
+            "off_design_input_efficiency_factor",
+            "off_design_input_refrigerant_value"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "properties"
+      ]
+    }
+  },
+  "required": [
+    "code",
+    "message",
+    "data"
+  ]
 }
