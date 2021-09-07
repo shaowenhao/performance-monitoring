@@ -1,8 +1,6 @@
 package com.siemens.datalayer.connector.test;
 
-import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
-import com.sun.xml.internal.ws.developer.StreamingAttachment;
 
 import io.qameta.allure.*;
 import io.qameta.allure.restassured.AllureRestAssured;
