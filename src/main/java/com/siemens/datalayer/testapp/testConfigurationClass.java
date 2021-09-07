@@ -27,6 +27,9 @@ public class testConfigurationClass {
 
 	Boolean runRelationalDatabaseTest = false;
 	private String relationalDatabaseTestClass = null;
+
+	Boolean runRestfulAsDataSourcesTest = false;
+	private String restfulAsDataSourcesTestClass = null;
 	
 	Boolean runApiServiceTest = false;
 	private String apiService_base_url = null;
@@ -157,7 +160,7 @@ public class testConfigurationClass {
 	}
 
 	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
-	// 这三个方法针对“关系型数据库”的测试 而添加
+	// 这三个方法针对“关系型数据库做为数据源”的测试 而添加
 	public Boolean getRunRelationalDatabaseTest()
 	{
 		return this.runRelationalDatabaseTest;
@@ -173,6 +176,21 @@ public class testConfigurationClass {
 	{
 		return this.relationalDatabaseTestClass;
 	}
+
+	// getRunRestfulAsDataSourcesTests、setRestfulAsDataSourcesTestClass、getRestfulAsDataSourcesTestClass
+	// 这三个方法针对“restful做为数据源”的测试 而添加
+	public Boolean getRunRestfulAsDataSourcesTest()
+	{
+		return this.runRestfulAsDataSourcesTest;
+	}
+
+	public void setRestfulAsDataSourcesTestClass(String restfulAsDataSourcesTestClassName)
+	{
+		this.runRestfulAsDataSourcesTest = true;
+		this.restfulAsDataSourcesTestClass = restfulAsDataSourcesTestClassName;
+	}
+
+	public String getRestfulAsDataSourcesTestClass() {return this.restfulAsDataSourcesTestClass;}
 	
 	public void setApiServiceTest(String base_url, String port) {
 		this.runApiServiceTest = true;
@@ -531,6 +549,9 @@ public class testConfigurationClass {
 
 				// 赋值：this.runConnectorOtherInterfacesTest = true;
 				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
+
+				// 赋值：this.runRelationalDatabaseTest = true;
+				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 				break;
 
 			case("iot-test"):
@@ -559,7 +580,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				setRelationalDatabaseTest(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
+				setRelationalDatabaseTest(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 				break;
 
 			case("iot-prod"):
@@ -586,6 +607,9 @@ public class testConfigurationClass {
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT);
 
+				// 赋值：this.runRelationalDatabaseTest = true;
+				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
+				setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
 				break;
 			
 			default:

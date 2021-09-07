@@ -212,6 +212,7 @@ public class testEnvironmentConstants {
 
 	public static final String IOT_TEST_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_TEST_APIENGINE_PORT = "30346";
+	public static final String IOT_TEST_DB_PROPERTIES = "iot.dev.mysql.db.properties"; //和iot-demo-dev环境用的同一个MySQL
 
 	public static final String IOT_TEST_RABBITMQ_HOST = "140.231.89.85";
 	public static final String IOT_TEST_RABBITMQ_PORT = "32105";
@@ -235,6 +236,7 @@ public class testEnvironmentConstants {
 
 	public static final String IOT_PROD_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_PROD_APIENGINE_PORT = "32227";
+	public static final String IOT_PROD_DB_PROPERTIES = "iot.dev.mysql.db.properties"; //和iot-demo-dev环境用的同一个MySQL
 
 	public static final String IOT_PROD_RABBITMQ_HOST = "140.231.89.85";
 	public static final String IOT_PROD_RABBITMQ_PORT = "";

@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Epic("Relational databases test Scenarios")
+@Epic("SDL Api-engine")
+@Feature("Relational databases as data source,Insert/Update/Delete data source")
 public class RelationalDatabaseTests {
 
     static Connection connection;
@@ -97,12 +98,12 @@ public class RelationalDatabaseTests {
     }
 
     @Test(priority = 0,
-          description = "mysql 增/删/改/查",
+          description = "insert/delete/update mysql(data source)",
           dataProvider = "api-engine-test-data-provider",
           dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("mysql insert/delete/update/get Scenarios")
-    @Story("mysql 增/删/改/查")
+    @Description("Post a 'getData' request to graphql query interface.")
+    @Story("insert/delete/update mysql(data source) Scenarios")
     public void postGraphForMysql(Map<String, String> paramMaps) throws JSONException {
         // 在每个testcase执行前，清空当前数据库
         // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。

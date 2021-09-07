@@ -113,6 +113,19 @@ public class autoRun {
 			relationalDatabaseTest.setParameters(relationalDatabaseTestParams);
 			myClasses.add(relationalDatabaseTest);
 		}
+
+		// Add test class for RestfulAsDataSourcesTests
+		if (testConfig.getRunRestfulAsDataSourcesTest())
+		{
+			XmlClass restfulAsDataSourcesTest = new XmlClass(testConfig.getRestfulAsDataSourcesTestClass());
+
+			Map<String,String> restfulAsDataSourcesTestParams = new HashMap<>();
+			restfulAsDataSourcesTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			restfulAsDataSourcesTestParams.put("port", testConfig.getApiEnginePort());
+
+			restfulAsDataSourcesTest.setParameters(restfulAsDataSourcesTestParams);
+			myClasses.add(restfulAsDataSourcesTest);
+		}
 		
 		//Add test class for ApiService
 		if (testConfig.getRunApiServiceTest())

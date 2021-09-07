@@ -7,6 +7,8 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
+
 public class ConnectorOtherInterfacesEndpoint {
     private static String baseUrl = "";
 
@@ -36,6 +38,25 @@ public class ConnectorOtherInterfacesEndpoint {
 
         Response response = httpRequest.filter(new AllureRestAssured())
                                        .get("/api/cache-tools/redis-clearance");
+        return response;
+    }
+
+    // Connector Interface: Get concept model data by condition
+    @Step("Send a request of 'Get concept model data by condition'")
+    public static Response getConceptModelDataByCondition(HashMap<String, String> parameters)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+//		RestAssured.basePath = "api/connector/searchData";
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+        // httpRequest.header("version","1.0");
+
+        Response response = httpRequest.queryParams(parameters)
+                .filter(new AllureRestAssured())
+                .get("/api/connectors/searchData");
+
         return response;
     }
 }
