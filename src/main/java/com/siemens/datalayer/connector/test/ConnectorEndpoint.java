@@ -96,7 +96,22 @@ public class ConnectorEndpoint {
 									   .get("/api/connectors/searchData");
 		
 		return response;
-	}	
+	}
+
+	//Connector Interface: DML insert operator
+	@Step("Send a request of 'DML Insert operator'")
+	public static Response dmlInsertOperator(String insertInfo){
+		RestAssured.baseURI = BASE_URL;
+		RestAssured.port = Integer.valueOf(port).intValue();
+
+		RequestSpecification httpRequest = RestAssured.given();
+
+		Response response = httpRequest.body(insertInfo)
+				.contentType("application/json")
+				.filter(new AllureRestAssured())
+				.post("api/connectors/dmlData");
+		return response;
+	}
 	
 	// Entity Interface: searchModelSchemaByName
 	@Step("Send a request of 'searchModelSchemaByName'")
@@ -190,4 +205,6 @@ public class ConnectorEndpoint {
         
         return response;
 	}
+
+
 }

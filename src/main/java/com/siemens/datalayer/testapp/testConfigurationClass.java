@@ -30,7 +30,10 @@ public class testConfigurationClass {
 
 	Boolean runRestfulAsDataSourcesTest = false;
 	private String restfulAsDataSourcesTestClass = null;
-	
+
+	Boolean runWebServiceAsDataSourcesTest = false;
+	private String webServiceAsDataSourcesTestClass = null;
+
 	Boolean runApiServiceTest = false;
 	private String apiService_base_url = null;
 	private String apiService_port = null;	
@@ -157,6 +160,20 @@ public class testConfigurationClass {
 	
 	public String getUserQueryTestClass() {
 		return this.userQueryTestClass;
+	}
+    //这三个方法针对Web服务作为数据源的测试 而添加
+
+	public Boolean getRunWebServiceAsDataSourcesTest() {
+		return this.runWebServiceAsDataSourcesTest;
+	}
+
+	public String getWebServiceAsDataSourcesTestClass() {
+		return this.webServiceAsDataSourcesTestClass;
+	}
+
+	public void setWebServiceAsDataSourcesTestClass(String webServiceAsDataSourcesTestClassName) {
+		this.runWebServiceAsDataSourcesTest = true;
+		this.webServiceAsDataSourcesTestClass = webServiceAsDataSourcesTestClassName;
 	}
 
 	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
@@ -581,6 +598,9 @@ public class testConfigurationClass {
 				// 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
+
+				// 赋值：this.runWebServiceAsDataSourcesTest = true;
+				setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
 				break;
 
 			case("iot-prod"):

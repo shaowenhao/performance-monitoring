@@ -126,7 +126,16 @@ public class autoRun {
 			restfulAsDataSourcesTest.setParameters(restfulAsDataSourcesTestParams);
 			myClasses.add(restfulAsDataSourcesTest);
 		}
-		
+
+		// Add test class for WebServiceAsDataSourcesTests
+		 if (testConfig.getRunWebServiceAsDataSourcesTest()){
+		 	 XmlClass webServiceAsDataSourcesTest = new XmlClass(testConfig.getWebServiceAsDataSourcesTestClass());
+			 Map<String,String> webServiceAsDataSourcesTestParams = new HashMap<>();
+			 webServiceAsDataSourcesTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			 webServiceAsDataSourcesTestParams.put("port",testConfig.getConnectorPort());
+			 webServiceAsDataSourcesTest.setParameters(webServiceAsDataSourcesTestParams);
+			 myClasses.add(webServiceAsDataSourcesTest);
+		 }
 		//Add test class for ApiService
 		if (testConfig.getRunApiServiceTest())
 		{
