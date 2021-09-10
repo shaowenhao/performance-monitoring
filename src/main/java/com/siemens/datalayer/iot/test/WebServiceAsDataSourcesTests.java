@@ -6,10 +6,7 @@ import com.siemens.datalayer.connector.test.ConnectorEndpoint;
 import com.siemens.datalayer.connector.test.InterfaceTests;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
-import io.qameta.allure.Description;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -25,6 +22,8 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@Epic("SDL Connector")
+@Feature("Webservice as Datasource")
 public class WebServiceAsDataSourcesTests {
 
     @Parameters({"base_url", "port"})
@@ -46,15 +45,18 @@ public class WebServiceAsDataSourcesTests {
 
         String insertinfo = paramMaps.get("insertinfo");
         Response response = ConnectorEndpoint.dmlInsertOperator(insertinfo);
-        InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
         if (paramMaps.get("description").contains("data retrieved")) {
+            InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
             List<HashMap<String, String>> rspDataList;
             String listPath = "data.warehousewrite";
             rspDataList = response.jsonPath().getList(listPath);
             assertThat(rspDataList, hasSize(1));
         }
         else{
-            Assert.assertNull(response.jsonPath().getList("data"));
+            String dataPath = "data.warehousewrite[0].data";
+            String data = response.jsonPath().get(dataPath);
+            String expectData = paramMaps.get("rspMessage");
+            assertThat(data,is(equalTo(expectData)));
         }
     }
 
