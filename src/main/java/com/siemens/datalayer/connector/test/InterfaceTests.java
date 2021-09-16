@@ -186,9 +186,10 @@ public class InterfaceTests {
 		  }
 	  }
 	  else 
-	  {
-		  Assert.assertNull(response.jsonPath().getList("data"));
-	  }
+		{
+			Assert.assertTrue(
+					response.jsonPath().getList("data") == null || response.jsonPath().getList("data").size() == 0);
+		}
 
   	}
 
