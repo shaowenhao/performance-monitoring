@@ -567,8 +567,6 @@ public class testConfigurationClass {
 				// 赋值：this.runConnectorOtherInterfacesTest = true;
 				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 
-				// 赋值：this.runRestfulAsDataSourcesTest = true;
-				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 				break;
 
 			case("iot-test"):
@@ -604,6 +602,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
+
 				break;
 
 			case("iot-prod"):
@@ -633,6 +632,7 @@ public class testConfigurationClass {
 				// 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
+
 				break;
 			
 			default:
@@ -643,5 +643,4 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
-	
 }
