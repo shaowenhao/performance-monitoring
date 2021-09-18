@@ -567,6 +567,11 @@ public class testConfigurationClass {
 				// 赋值：this.runConnectorOtherInterfacesTest = true;
 				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 
+<<<<<<< Updated upstream
+=======
+				// 赋值：this.runRestfulAsDataSourcesTest = true;
+				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
+>>>>>>> Stashed changes
 				break;
 
 			case("iot-test"):
@@ -597,12 +602,17 @@ public class testConfigurationClass {
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
+<<<<<<< Updated upstream
 				// 赋值：this.runWebServiceAsDataSourcesTest = true;
 				setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
 
 				// 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
+=======
+				// 赋值：this.runRestfulAsDataSourcesTest = true;
+				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
+>>>>>>> Stashed changes
 				break;
 
 			case("iot-prod"):

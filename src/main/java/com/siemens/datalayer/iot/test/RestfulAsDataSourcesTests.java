@@ -101,6 +101,9 @@ public class RestfulAsDataSourcesTests {
             statementOfProduct.close();
             connectionOfProduct.close();
 
+            statementOfPerson.close();
+            connectionOfPerson.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
