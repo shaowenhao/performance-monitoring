@@ -35,12 +35,12 @@ public class ConnectorOtherInterfacesTests {
     }
 
     @Test (	priority = 0,
-            description = "Support for Write one Data Sources in one Request with Restful datasources",
+            description = "复杂结构的Restful做为数据源，connector get此数据源",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified 'name' and check the response message.")
-    @Story("复杂结构的Restful做为数据源，connector get此数据源")
+    @Story("Support for Complex Structure in Restful Get API as Data Sources")
     public void getDataByConditionForRestfulGet(Map<String,String> paramMaps)
     {
         HashMap<String,String> queryParameters = new HashMap<>();

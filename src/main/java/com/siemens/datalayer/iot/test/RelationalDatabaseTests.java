@@ -10,7 +10,6 @@ import io.qameta.allure.*;
 import io.restassured.response.Response;
 
 import org.apache.commons.collections4.MapUtils;
-import org.apache.velocity.servlet.VelocityServlet;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.Assert;
@@ -29,8 +28,6 @@ public class RelationalDatabaseTests {
     static Connection connection;
     static Statement statement;
 
-    // static List<String> databaseToBeClearInBeforeClassList;
-
     static List<String> databaseTableList;
 
     @Parameters({"base_url","port","db_properties"})
@@ -40,7 +37,6 @@ public class RelationalDatabaseTests {
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
 
-        // 执行case之前，连接MySQL，并且清空表Mysql_Test、Mysql_Device
         // 保持数据库连接不断开，最后在AfterClass(deleteDataForMysql)中关闭数据库连接
         try
         {
@@ -52,14 +48,6 @@ public class RelationalDatabaseTests {
             // 操作数据库
             statement = connection.createStatement();
 
-            // 需要在测试之前清空的数据库列表
-            /* databaseToBeClearInBeforeClassList = Arrays.asList("Mysql_Test","Mysql_Device");
-            for (String database : databaseToBeClearInBeforeClassList)
-            {
-                // 需要执行的sql语句
-                String sql = "DELETE FROM " + database;
-                statement.execute(sql);
-            } */
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -114,7 +102,7 @@ public class RelationalDatabaseTests {
             throwables.printStackTrace();
         }
 
-        // 这两行代码，在testcase执行之前执行，
+        // 这两行代码，在testcase最先执行，
         // 作用为：比如update、delete数据库前，需要数据库中有数据
         if (paramMaps.containsKey("pre-execution"))
             ApiEngineEndpoint.postGraphql(paramMaps.get("pre-execution"));
