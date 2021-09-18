@@ -42,10 +42,10 @@ public class JdbcMysqlUtil {
         try {
             // 注册数据库的驱动
             Class.forName(driver);
-
+            System.out.println(String.format(" SQL connection config %s %s %s %s", driver, url, user, password));
             // 获取数据库连接（里面内容依次是：主机名和端口、用户名、密码）
             Connection connection = DriverManager.getConnection(url, user, password);
-
+            System.out.println(String.format("%s", connection == null ? "null", connection.toString()));
             // 返回数据库连接
             return connection;
         } catch (ClassNotFoundException | SQLException e) {
