@@ -110,12 +110,12 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "Restful as data source,write (data source) by single simple/complex entity",
+            description = "insert/delete/update restful(data source) Scenarios",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("insert/delete/update restful(data source) Scenarios")
+    @Story("Restful as data source,write (data source) by single simple/complex entity")
     public void restfulTransactionSingleEntity(Map<String, String> paramMaps) throws JSONException {
 
         String entityName = paramMaps.get("entityName");
@@ -198,12 +198,12 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "Restful as data source,write (data source) by multi simple/complex entity",
+            description = "insert/delete/update restful(data source) Scenarios",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("insert/delete/update restful(data source) Scenarios")
+    @Story("Restful as data source,write (data source) by multi simple/complex entity")
     public void restfulTransactionMultiEntity(Map<String, String> paramMaps) {
 
         List<String> entityList = Arrays.asList(paramMaps.get("entityName").split(","));

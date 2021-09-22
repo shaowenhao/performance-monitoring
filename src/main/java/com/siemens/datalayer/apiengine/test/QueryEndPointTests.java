@@ -158,19 +158,6 @@ public class QueryEndPointTests {
 		}
 	}
 
-	@Test(priority = 0,
-	      description = "通过调用apiengine-POST /graphql接口，发送Insert/Update/Delete entity请求，最终会形成多个restful请求，验证事务")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Post a 'getData' request to graphql query interface.")
-	@Story("Query End Point: GraphQL Interface")
-	public void postGraphForRestful()
-	{
-		String postRequest = generatePostRequest("input",10);
-		//System.out.println(postRequest);
-
-		Response response = ApiEngineEndpoint.postGraphql(postRequest);
-	}
-
 	@Step("generate api-engine post request")
 	public static String generatePostRequest(String operate,int requestNumber)
 	{
