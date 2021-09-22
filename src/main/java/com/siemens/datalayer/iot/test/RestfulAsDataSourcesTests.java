@@ -110,7 +110,7 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "insert/delete/update restful(data source) Scenarios",
+            description = "insert/update/delete/ restful(data source) Scenarios",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
@@ -198,7 +198,7 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "insert/delete/update restful(data source) Scenarios",
+            description = "insert/update/delete restful(data source) Scenarios",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
