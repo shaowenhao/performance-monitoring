@@ -60,7 +60,7 @@ public class testEnvironmentConstants {
 	public static final String IEMS_TEST_ENTITY_MANAGEMENT_PORT = "31818";
 	
 	public static final String IEMS_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IEMS_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "31111";
+	public static final String IEMS_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "32223";
 	
 	// =========================================================================================
 	// Configuration for iems-prod environment

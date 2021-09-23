@@ -84,10 +84,10 @@ public class autoRun {
 		apiEngineTestParams.put("port", testConfig.getApiEnginePort());
 		
 		//Exclude Restful API test methods
-		List<String> excludeMethods = new ArrayList<String>();
+		/* List<String> excludeMethods = new ArrayList<String>();
 		excludeMethods.add("getDataEntities");
 
-		apiEngineTest.setExcludedMethods(excludeMethods);
+		apiEngineTest.setExcludedMethods(excludeMethods); */
 		
 		apiEngineTest.setParameters(apiEngineTestParams);
 		myClasses.add(apiEngineTest);

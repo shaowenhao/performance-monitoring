@@ -37,7 +37,7 @@ public class QueryEndPointTests {
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-api-engine", base_url + ":" + port);
 	}
 	
-	@Test ( priority = 0, 
+	/* @Test ( priority = 0,
 			description = "Test Api-engine Query Endpoint: Restful interface", 
 			dataProvider = "api-engine-test-data-provider", 
 			dataProviderClass = ExcelDataProviderClass.class)
@@ -100,7 +100,7 @@ public class QueryEndPointTests {
 				}
 			}
 		}
-	}
+	} */
 	
 	@Test ( priority = 0, 
 			description = "Test Api-engine Query Endpoint: GraphQL interface", 
