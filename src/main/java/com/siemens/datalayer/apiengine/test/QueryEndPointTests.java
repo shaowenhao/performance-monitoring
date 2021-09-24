@@ -36,7 +36,8 @@ public class QueryEndPointTests {
         ApiEngineEndpoint.setPort(port);
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-api-engine", base_url + ":" + port);
 	}
-	
+
+	// ---abandoned---
 	/* @Test ( priority = 0,
 			description = "Test Api-engine Query Endpoint: Restful interface", 
 			dataProvider = "api-engine-test-data-provider", 
@@ -158,6 +159,7 @@ public class QueryEndPointTests {
 		}
 	}
 
+	// ---abandoned---
 	@Step("generate api-engine post request")
 	public static String generatePostRequest(String operate,int requestNumber)
 	{
@@ -425,7 +427,8 @@ public class QueryEndPointTests {
 		
 		CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, rootFields, entityList);
 	}
-	
+
+	// ---abandoned---
 	public static void parseFilterParameters(String filterStr, HashMap<String, String> filterParameters)
 	{	  
 		Scanner scanner = new Scanner(filterStr);
@@ -564,7 +567,8 @@ public class QueryEndPointTests {
 		
 		subQueryParameters.put("field", fieldStr.trim());
 	}
-	
+
+	// ---abandoned---
 	public static void checkOrder(String orderStr, List<HashMap<String, String>> dataList)
 	{
 		Scanner scanner = new Scanner(orderStr);
@@ -579,7 +583,8 @@ public class QueryEndPointTests {
 		
 		scanner.close();
 	}
-	
+
+	// ---abandoned---
 	@Step("Verify if the data pagination format is correct")
 	public static void checkPaginationFormat(String format, int actualPageIndex, int actualPageSize)
 	{
@@ -594,7 +599,8 @@ public class QueryEndPointTests {
 		
 		scanner.close();
 	}
-	
+
+	// ---abandoned---
 	public static void checkCondition(String jasonPath, String conditionFieldStr, List<HashMap<String, String>> dataList)
 	{
 		Boolean result = false;
