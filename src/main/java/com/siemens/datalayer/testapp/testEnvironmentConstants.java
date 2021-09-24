@@ -34,7 +34,7 @@ public class testEnvironmentConstants {
 	public static final String IEMS_DEV_ENTITY_MANAGEMENT_PORT = "31706";
 	
 	public static final String IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "32271";	
+	public static final String IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "32510";
 	
 	// =========================================================================================
 	// Configuration for iems-test environment
@@ -86,7 +86,7 @@ public class testEnvironmentConstants {
 	public static final String IEMS_PROD_ENTITY_MANAGEMENT_PORT = "31726";
 	
 	public static final String IEMS_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IEMS_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "32563";
+	public static final String IEMS_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "30035";
 	
 	// =========================================================================================
 	// #########################################################################################
@@ -202,7 +202,7 @@ public class testEnvironmentConstants {
 	public static final String IOT_DEV_ENTITY_MANAGEMENT_PORT = "30753";
 
 	public static final String IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "30111";
+	public static final String IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT = "32552";
 
 	// =========================================================================================
 	// Configuration for iot-test environment
@@ -226,7 +226,7 @@ public class testEnvironmentConstants {
 	public static final String IOT_TEST_ENTITY_MANAGEMENT_PORT = "31873";
 
 	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "30807";
+	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "30346";
 
 	// =========================================================================================
 	// Configuration for iot-prod environment
@@ -250,5 +250,5 @@ public class testEnvironmentConstants {
 	public static final String IOT_PROD_ENTITY_MANAGEMENT_PORT = "31468";
 
 	public static final String IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL = "http://140.231.89.85";
-	public static final String IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "31851";
+	public static final String IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT = "32227";
 }
