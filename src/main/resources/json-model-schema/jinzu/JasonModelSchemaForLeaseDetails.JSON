@@ -174,7 +174,7 @@
                           "type": "string"
                         },
                         "expire_date": {
-                          "type": "null"
+                          "type": "string"
                         },
                         "province": {
                           "type": "string"
@@ -568,7 +568,7 @@
                                       "type": "null"
                                     },
                                     "update_time": {
-                                      "type": "integer"
+                                      "type": "null"
                                     },
                                     "site": {
                                       "type": "string"
@@ -580,7 +580,7 @@
                                       "type": "string"
                                     },
                                     "occurring_time": {
-                                      "type": "integer"
+                                      "type": "null"
                                     },
                                     "event_name": {
                                       "type": "null"
