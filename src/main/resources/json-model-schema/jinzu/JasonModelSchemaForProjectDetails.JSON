@@ -111,7 +111,7 @@
                       "type": "number"
                     },
                     "expire_date": {
-                      "type": "null"
+                      "type": "string"
                     },
                     "guarantee_type": {
                       "type": "string"

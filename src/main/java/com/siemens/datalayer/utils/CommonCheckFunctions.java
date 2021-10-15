@@ -108,22 +108,36 @@ public class CommonCheckFunctions {
 	
 	public static boolean isValidDateStr(String input)	
 	{
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		dateFormat.setLenient(false);
-		
-		if (input.length() < 5) return false;
-		if (!isIntegerStr(input.substring(0, 4))) input = input.substring(1, input.length()-1);
-		
-		try
-		{
-			dateFormat.parse(input);
+
+
+		if(!input.contains("T")) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			dateFormat.setLenient(false);
+			if (input.length() < 5) return false;
+			if (!isIntegerStr(input.substring(0, 4))) input = input.substring(1, input.length() - 1);
+
+			try {
+				dateFormat.parse(input);
+			} catch (Exception e) {
+				return false;
+			}
+
+			return true;
 		}
-	    catch(Exception e) 
-	    {
-	        return false;
-	    }
-		
-		return true;
+		else{
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			dateFormat.setLenient(false);
+			if (input.length() < 5) return false;
+			if (!isIntegerStr(input.substring(0, 4))) input = input.substring(1, input.length() - 1);
+
+			try {
+				dateFormat.parse(input);
+			} catch (Exception e) {
+				return false;
+			}
+
+			return true;
+		}
 	}
 	
 	public static boolean compareOrderFieldValue(String valueShouldBeSmall, String valueShouldBeLarge)
@@ -293,6 +307,7 @@ public class CommonCheckFunctions {
 					break;
 					
 				case "gt":
+					System.out.println("code into gt");
 					result = ifFieldValueGreaterThan(valueStr, valueToCompare);
 					break;
 					
@@ -326,7 +341,7 @@ public class CommonCheckFunctions {
 	}
 	
 	public static boolean ifFieldValueGreaterThan(String valueStr, String valueToCompare) throws ParseException 
-	{   	
+	{
 		if (isIntegerStr(valueToCompare)) // Compare integer values
 		{
 			if (Integer.parseInt(valueToCompare) >= Integer.parseInt(valueStr)) return false;
@@ -342,7 +357,7 @@ public class CommonCheckFunctions {
 				SimpleDateFormat valueDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 				valueDateFormat.setLenient(false);
 				Date dateValue = valueDateFormat.parse(valueStr.trim());
-				
+
 				SimpleDateFormat compareDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				compareDateFormat.setLenient(false);
 				
@@ -350,7 +365,6 @@ public class CommonCheckFunctions {
 					valueToCompare = valueToCompare.substring(1, valueToCompare.length()-1);
 				
 				Date dateValueToCompare = compareDateFormat.parse(valueToCompare.trim());
-				
 				return (dateValue.after(dateValueToCompare));
 			}
 			else
