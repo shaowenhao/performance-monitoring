@@ -101,21 +101,18 @@ public class UserQueryTests {
         		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate("json-model-schema/snc/" + paramMaps.get("schema"), response.getBody().asString());
         }
     	if(paramMaps.get("query").contains("$gteData") && paramMaps.get("query").contains("lteData")){
-			System.out.println("into correct method");
 			LocalDateTime now = LocalDateTime.now();
 			long lte = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-			//在跑回归的机器上的时间比本地时间慢了8小时， 回归机器的时间如果为 Fri Oct 15 07:08:54 UTC 2021，本地时间为 Fri Oct 15 15:08:54 CST 2021
 			//snc portal页面上 波峰焊机实时数据 和本地时间一致
-			
-			LocalDateTime dateTimePlus = now.plusHours(8);
-			lte = dateTimePlus.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+			//LocalDateTime dateTimePlus = now.plusHours(8);
+			lte = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
 			String replacedQuery = paramMaps.get("query").replace("$lteData", String.valueOf(lte));
 			System.out.println(replacedQuery);
 			System.out.println("lte:" + lte);
 			
 			//gte 比 lte时间早5分钟
-			LocalDateTime dateTimeMins = dateTimePlus.minusMinutes(5);
+			LocalDateTime dateTimeMins = now.minusMinutes(5);
 			long gte = dateTimeMins.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 			replacedQuery = replacedQuery.replace("$gteData",String.valueOf(gte));
 			System.out.println("---"+replacedQuery);
