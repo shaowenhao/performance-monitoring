@@ -3,8 +3,11 @@ package com.siemens.datalayer.snc.test;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Map;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -14,6 +17,9 @@ import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 @Epic("User Query Scenarios")
 public class UserQueryTests {
@@ -69,10 +75,23 @@ public class UserQueryTests {
   	{
       	sendQueryAndCheckResults(paramMaps);
   	}  
-    
+
+
+
+  	@Test(priority = 0, description = "查看波峰焊机实时数据",
+			dataProvider = "api-engine-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Feature("波峰焊机实时数据查询")
+	@Story("波峰焊机实时数据查询")
+    public void queryCrestWelderByGraphQL(Map<String, String> paramMaps){
+		sendQueryAndCheckResults(paramMaps);
+	}
+
+
     public static void sendQueryAndCheckResults(Map<String, String> paramMaps)
     {
-    	if (paramMaps.containsKey("query"))
+    	if (paramMaps.containsKey("query") && !paramMaps.get("query").contains("$"))
         {
         	Response response = ApiEngineEndpoint.postGraphql(paramMaps.get("query"));
         	
@@ -80,7 +99,34 @@ public class UserQueryTests {
         	
         	if (paramMaps.containsKey("schema"))
         		CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate("json-model-schema/snc/" + paramMaps.get("schema"), response.getBody().asString());
-        }    
+        }
+    	if(paramMaps.get("query").contains("$gteData") && paramMaps.get("query").contains("lteData")){
+			System.out.println("into correct method");
+			LocalDateTime now = LocalDateTime.now();
+			long lte = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+			//在跑回归的机器上的时间比本地时间慢了8小时， 回归机器的时间如果为 Fri Oct 15 07:08:54 UTC 2021，本地时间为 Fri Oct 15 15:08:54 CST 2021
+			//snc portal页面上 波峰焊机实时数据 和本地时间一致
+			
+			LocalDateTime dateTimePlus = now.plusHours(8);
+			lte = dateTimePlus.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+			String replacedQuery = paramMaps.get("query").replace("$lteData", String.valueOf(lte));
+			System.out.println(replacedQuery);
+			System.out.println("lte:" + lte);
+			
+			//gte 比 lte时间早5分钟
+			LocalDateTime dateTimeMins = dateTimePlus.minusMinutes(5);
+			long gte = dateTimeMins.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+			replacedQuery = replacedQuery.replace("$gteData",String.valueOf(gte));
+			System.out.println("---"+replacedQuery);
+			System.out.println("gte:" + gte);
+
+			Response response = ApiEngineEndpoint.postGraphql(replacedQuery);
+			QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+			int result = (int) response.jsonPath().get(paramMaps.get("jsonpath"));
+			//判断有实时数据上来
+            Assert.assertTrue(result > 0);
+		}
     }
 
 }
