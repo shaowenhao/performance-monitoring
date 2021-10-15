@@ -136,6 +136,20 @@ public class autoRun {
 			 webServiceAsDataSourcesTest.setParameters(webServiceAsDataSourcesTestParams);
 			 myClasses.add(webServiceAsDataSourcesTest);
 		 }
+
+		 // Add test class for AuthForRestfulWriteTests
+		 if (testConfig.getRunAuthForRestfulWriteTest())
+		 {
+		 	XmlClass authForRestfulWriteTest = new XmlClass(testConfig.getAuthForRestfulWriteTestClass());
+
+		 	Map<String,String> authForRestfulWriteTestParams = new HashMap<>();
+		 	authForRestfulWriteTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+		 	authForRestfulWriteTestParams.put("port", testConfig.getApiEnginePort());
+
+		 	authForRestfulWriteTest.setParameters(authForRestfulWriteTestParams);
+		 	myClasses.add(authForRestfulWriteTest);
+		 }
+
 		//Add test class for ApiService
 		if (testConfig.getRunApiServiceTest())
 		{

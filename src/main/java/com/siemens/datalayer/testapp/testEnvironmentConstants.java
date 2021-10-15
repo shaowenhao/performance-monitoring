@@ -198,6 +198,12 @@ public class testEnvironmentConstants {
 	public static final String IOT_DEV_RABBIT_TIMEOUT = "30";
 	public static final String IOT_DEV_RABBIT_EXCHANGE = "datalayer.exchange.out";
 
+	public static final String IOT_DEV_MONGODB_HOST = "140.231.89.85";
+	public static final String IOT_DEV_MONGODB_PORT = "30889";
+	public static final String IOT_DEV_MONGODB_USERNAME = "mongodb";
+	public static final String IOT_DEV_MONGODB_PASSWORD = "mongodb";
+	public static final String IOT_DEV_MONGODB_DATABASENAME = "admin";
+
 	public static final String IOT_DEV_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_DEV_ENTITY_MANAGEMENT_PORT = "30753";
 

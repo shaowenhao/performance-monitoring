@@ -14,6 +14,12 @@ public class testConfigurationClass {
 	private String apiEngine_base_url = null;
 	private String apiEngine_port = null;
 
+	private String mongodb_host = null;
+	private String mongodb_port = null;
+	private String mongodb_username = null;
+	private String mongodb_password = null;
+	private String mongodb_databasename = null;
+
 	private String relationalDatabase_properties = null;
 
 	Boolean runConnectorOtherInterfacesTest = false;
@@ -30,6 +36,9 @@ public class testConfigurationClass {
 
 	Boolean runRestfulAsDataSourcesTest = false;
 	private String restfulAsDataSourcesTestClass = null;
+
+	Boolean runAuthForRestfulWriteTest = false;
+	private String authForRestfulWriteTestClass = null;
 
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
@@ -116,6 +125,49 @@ public class testConfigurationClass {
 	public String getRelationalDatabaseProperties()
 	{
 		return this.relationalDatabase_properties;
+	}
+
+	// setMongoDBHost、getMongoDBHost、setMongoDBPort、getMongoDBPort、setMongoDBUserName、getMongoDBUserName
+	// setMongoDBPassword、getMongoDBPassword、setMongoDBDatabaseName、getMongoDBDatabaseName
+	// 这10个方法针对mongodb的连接而创建
+	public void setMongoDBHost(String host){
+		this.mongodb_host = host;
+	}
+
+	public String getMongoDBHost(){
+		return this.mongodb_host;
+	}
+
+	public void setMongoDBPort(String port){
+		this.mongodb_port = port;
+	}
+
+	public String getMongoDBPort(){
+		return this.mongodb_port;
+	}
+
+	public void setMongoDBUserName(String username){
+		this.mongodb_username = username;
+	}
+
+	public String getMongoDBUserName(){
+		return this.mongodb_username;
+	}
+
+	public void setMongoDBPassword(String password){
+		this.mongodb_password = password;
+	}
+
+	public String getMongoDBPassword(){
+		return this.mongodb_password;
+	}
+
+	public void setMongoDBDatabaseName(String databasename){
+		this.mongodb_databasename = databasename;
+	}
+
+	public String getMongoDBDatabaseName(){
+		return this.mongodb_databasename;
 	}
 
 	// getRunConnectorOtherInterfacesTset、setConnectorOtherInterfacesTestClass、getConnectorOtherInterfacesTestClass
@@ -208,7 +260,19 @@ public class testConfigurationClass {
 	}
 
 	public String getRestfulAsDataSourcesTestClass() {return this.restfulAsDataSourcesTestClass;}
-	
+
+	// getRunAuthForRestfulWriteTest、setAuthForRestfulWriteTestClass、getAuthForRestfulWriteTestClass
+	// 这三个方法针对“auth for restful write”的测试 而添加
+	public Boolean getRunAuthForRestfulWriteTest(){return this.runAuthForRestfulWriteTest;}
+
+	public void setAuthForRestfulWriteTestClass(String authForRestfulWriteTestClassName)
+	{
+		this.runAuthForRestfulWriteTest = true;
+		this.authForRestfulWriteTestClass = authForRestfulWriteTestClassName;
+	}
+
+	public String getAuthForRestfulWriteTestClass(){return this.authForRestfulWriteTestClass;}
+
 	public void setApiServiceTest(String base_url, String port) {
 		this.runApiServiceTest = true;
 		this.apiService_base_url = base_url;
@@ -603,6 +667,8 @@ public class testConfigurationClass {
 				// 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
+				// 赋值：this.runAuthForRestfulWriteTest = true
+				setAuthForRestfulWriteTestClass("com.siemens.datalayer.iot.test.AuthForRestfulWriteTests");
 
 				break;
 
