@@ -141,6 +141,9 @@ public class testEnvironmentConstants {
 	// =========================================================================================
 	public static final String JINZU_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
 	public static final String JINZU_DEV_CONNECTOR_PORT = "31439";
+
+	public static final String JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.85";
+	public static final String JINZU_DEV_CONNECTOR_CONFIGURE_PORT = "32644";
 	
 	public static final String JINZU_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String JINZU_DEV_APIENGINE_PORT = "31950";

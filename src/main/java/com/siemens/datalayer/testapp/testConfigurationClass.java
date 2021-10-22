@@ -40,6 +40,12 @@ public class testConfigurationClass {
 	Boolean runAuthForRestfulWriteTest = false;
 	private String authForRestfulWriteTestClass = null;
 
+	Boolean runAuthForRestfulReadTest = false;
+	private String authForRestfulReadTestClass = null;
+
+	Boolean runAuthForWebserviceTest = false;
+	private String authForWebserviceTestClass = null;
+
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
 
@@ -272,6 +278,30 @@ public class testConfigurationClass {
 	}
 
 	public String getAuthForRestfulWriteTestClass(){return this.authForRestfulWriteTestClass;}
+
+	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
+	// 这三个方法针对“auth for restful read”的测试 而添加
+	public Boolean getRunAuthForRestfulReadTest(){return this.runAuthForRestfulReadTest;}
+
+	public void setAuthForRestfulReadTestClass(String authForRestfulReadTestClassName)
+	{
+		this.runAuthForRestfulReadTest = true;
+		this.authForRestfulReadTestClass = authForRestfulReadTestClassName;
+	}
+
+	public String getAuthForRestfulReadTestClass(){return this.authForRestfulReadTestClass;}
+
+	// getRunAuthForWebserviceTest、setAuthForWebserviceTestClass、getAuthForWebserviceTestClass
+	// 这三个方法针对“auth for webservice”的测试 而添加
+	public Boolean getRunAuthForWebserviceTest(){return this.runAuthForWebserviceTest;}
+
+	public void setAuthForWebserviceTestClass(String authForWebserviceTestClassName)
+	{
+		this.runAuthForWebserviceTest = true;
+		this.authForWebserviceTestClass = authForWebserviceTestClassName;
+	}
+
+	public String getAuthForWebserviceTestClass(){return this.authForWebserviceTestClass;};
 
 	public void setApiServiceTest(String base_url, String port) {
 		this.runApiServiceTest = true;
@@ -553,6 +583,9 @@ public class testConfigurationClass {
 				setConnectorTest(testEnvironmentConstants.JINZU_DOMAIN_NAME,
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_BASE_URL, 
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_PORT);
+
+				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
@@ -561,6 +594,18 @@ public class testConfigurationClass {
 				// 赋值：this.runEntityMgmtTest = true;
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_DEV_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runAuthForRestfulReadTest = true;
+				setAuthForRestfulReadTestClass("com.siemens.datalayer.iot.test.AuthForRestfulReadTests");
+
+				// 赋值：this.runAuthForWebserviceTest = true;
+				setAuthForWebserviceTestClass("com.siemens.datalayer.iot.test.AuthForWebserviceTests");
+
+				// 赋值：this.runConnectorConfigureTest = true;
+				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+
+				// 赋值：this.runConnectorOtherInterfacesTest = true;
+				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 				
 				break;
 			

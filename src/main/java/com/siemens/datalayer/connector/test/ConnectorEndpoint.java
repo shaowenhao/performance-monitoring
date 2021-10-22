@@ -1,6 +1,7 @@
 package com.siemens.datalayer.connector.test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
@@ -110,6 +111,22 @@ public class ConnectorEndpoint {
 				.contentType("application/json")
 				.filter(new AllureRestAssured())
 				.post("api/connectors/dmlData");
+		return response;
+	}
+
+	//Connector Interface: DML insert operator
+	@Step("Send a request of 'DML Insert operator'")
+	public static Response dmlInsertOperator(HashMap<String,String> authInfo, String insertInfo){
+		RestAssured.baseURI = BASE_URL;
+		RestAssured.port = Integer.valueOf(port).intValue();
+
+		RequestSpecification httpRequest = RestAssured.given();
+
+		Response response = httpRequest.queryParams(authInfo)
+				                       .body(insertInfo)
+				                       .contentType("application/json")
+				                       .filter(new AllureRestAssured())
+				                       .post("api/connectors/dmlData");
 		return response;
 	}
 	

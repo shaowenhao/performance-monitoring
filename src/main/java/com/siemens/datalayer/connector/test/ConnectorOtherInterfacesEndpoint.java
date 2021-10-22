@@ -41,6 +41,36 @@ public class ConnectorOtherInterfacesEndpoint {
         return response;
     }
 
+    // Test Developer Tools:clearAllCaches
+    @Step("send a request of 'clearAllCaches'")
+    public static Response clearAllCaches()
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/dev-tools/caches-clearance");
+        return response;
+    }
+
+    // Test Developer Tools:clearRedisCache
+    @Step("send a request of 'clearRedisCache'")
+    public static Response clearRedisCache()
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/dev-tools/redisCache-clearance");
+        return response;
+    }
+
     // Connector Interface: Get concept model data by condition
     @Step("Send a request of 'Get concept model data by condition'")
     public static Response getConceptModelDataByCondition(HashMap<String, String> parameters)

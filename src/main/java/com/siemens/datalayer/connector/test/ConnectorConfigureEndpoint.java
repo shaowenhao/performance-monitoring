@@ -33,7 +33,23 @@ public class ConnectorConfigureEndpoint {
         domainName = domain_name;
     }
 
-    // connector-domain-controller:getAllConnectors
+    // Test Developer Tools:clear all cache
+    @Step("send a request of 'clear all cache'")
+    public static Response clearAllCache()
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache/clean");
+        return response;
+    }
+
+
+   // connector-domain-controller:getAllConnectors
     @Step("Send a request of 'getAllConnectors'")
     public static Response getAllConnectors()
     {

@@ -34,7 +34,7 @@ public class ConnectorOtherInterfacesTests {
         ConnectorOtherInterfacesEndpoint.setDomainName(domain_name);
     }
 
-    @Test (	priority = 0,
+    /* @Test (	priority = 0,
             description = "复杂结构的Restful做为数据源，connector get此数据源",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
@@ -52,7 +52,7 @@ public class ConnectorOtherInterfacesTests {
         InterfaceTests.checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
         checkEntityFields(paramMaps.get("entityFields"),response);
-    }
+    } */
 
     @Test(priority = 0, description = "Test Developer Tools:clearRedisCaches.")
     @Severity(SeverityLevel.BLOCKER)
@@ -61,6 +61,30 @@ public class ConnectorOtherInterfacesTests {
     public void clearRedisCaches()
     {
         Response response = ConnectorOtherInterfacesEndpoint.clearRedisCaches();
+        JsonPath jsonPath = response.jsonPath();
+
+        Assert.assertEquals("Operate success.",jsonPath.getString("message"));
+    }
+
+    @Test(priority = 0, description = "Test Developer Tools:clearRedisCache.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'clearRedisCache' request")
+    @Story("Test Developer Tools:clearRedisCache")
+    public void clearRedisCache()
+    {
+        Response response = ConnectorOtherInterfacesEndpoint.clearRedisCache();
+        JsonPath jsonPath = response.jsonPath();
+
+        Assert.assertEquals("Operate success.",jsonPath.getString("message"));
+    }
+
+    @Test(priority = 0, description = "Test Developer Tools:clearAllCaches.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'clearAllCaches' request")
+    @Story("Test Developer Tools:clearAllCaches")
+    public void clearAllCaches()
+    {
+        Response response = ConnectorOtherInterfacesEndpoint.clearAllCaches();
         JsonPath jsonPath = response.jsonPath();
 
         Assert.assertEquals("Operate success.",jsonPath.getString("message"));

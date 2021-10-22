@@ -30,14 +30,14 @@ public class ConnectorConfigureTests {
         ConnectorConfigureEndpoint.setDomainName(domain_name);
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector-configure", base_url + ":" + port);
 
-        List<String> connectorNamesToBeCreatedList = Arrays.asList("TESTCONNECTORREFACTOR","TESTCONNECTORREFACTOR_1");
+        /* List<String> connectorNamesToBeCreatedList = Arrays.asList("TESTCONNECTORREFACTOR","TESTCONNECTORREFACTOR_1");
         for (String connectorName : connectorNamesToBeCreatedList)
         {
             Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
-        }
+        } */
     }
 
-    @AfterClass(description = "clean up test connectors,locators...")
+    /* @AfterClass(description = "clean up test connectors,locators...")
     public void removeTestData()
     {
         if (connectorNamesList.size() > 0)
@@ -46,9 +46,21 @@ public class ConnectorConfigureTests {
                 Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
             }
         }
+    } */
+
+    @Test(priority = 0, description = "Test Developer Tools:clear all cache.")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'clear all cache' request")
+    @Story("Test Developer Tools:clear all cache")
+    public void clearRedisCaches()
+    {
+        Response response = ConnectorConfigureEndpoint.clearAllCache();
+        JsonPath jsonPath = response.jsonPath();
+
+        Assert.assertEquals("Operate success.",jsonPath.getString("message"));
     }
 
-    @Test(priority = 0, description = "Test connector-domain-controller:getAllConnectors.")
+    /* @Test(priority = 0, description = "Test connector-domain-controller:getAllConnectors.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getAllConnectors' request to read out all the available connectors names.")
     @Story("connector-domain-controller:getAllConnectors")
@@ -170,7 +182,7 @@ public class ConnectorConfigureTests {
             Assert.assertFalse(actualConnectorNamesList.contains(paramMaps.get("connectorName")));
             System.out.println(paramMaps.get("connectorName") + " has been deleted");
         }
-    }
+    } */
 
     @Step("Verify the status code, operation code, and message")
     public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)

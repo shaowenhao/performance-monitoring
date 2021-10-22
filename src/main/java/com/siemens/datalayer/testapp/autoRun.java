@@ -150,6 +150,32 @@ public class autoRun {
 		 	myClasses.add(authForRestfulWriteTest);
 		 }
 
+		// Add test calss for AuthForRestfulReadTests
+		if (testConfig.getRunAuthForRestfulReadTest())
+		{
+			XmlClass authForRestfulReadTest = new XmlClass(testConfig.getAuthForRestfulReadTestClass());
+
+			Map<String,String> authForRestfulReadTestParams = new HashMap<>();
+			authForRestfulReadTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			authForRestfulReadTestParams.put("port",testConfig.getConnectorPort());
+
+			authForRestfulReadTest.setParameters(authForRestfulReadTestParams);
+			myClasses.add(authForRestfulReadTest);
+		}
+
+		// Add test calss for AuthForWebserviceTests
+		if (testConfig.getRunAuthForWebserviceTest())
+		{
+			XmlClass authForWebserviceTest = new XmlClass(testConfig.getAuthForWebserviceTestClass());
+
+			Map<String,String> authForWebserviceTestParams = new HashMap<>();
+			authForWebserviceTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			authForWebserviceTestParams.put("port",testConfig.getConnectorPort());
+
+			authForWebserviceTest.setParameters(authForWebserviceTestParams);
+			myClasses.add(authForWebserviceTest);
+		}
+
 		//Add test class for ApiService
 		if (testConfig.getRunApiServiceTest())
 		{
