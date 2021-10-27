@@ -140,7 +140,21 @@ public class EntityManagementEndpoint {
 
         return response;
     }
-	
+
+    // Graph Endpoint: getCompactGraph
+    @Step("Send a request of 'getCompactGraph'")
+    public static Response getCompactGraph()
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/graphs/compact");
+
+        return response;
+    }
 	// Relation Endpoint: getRelations
 	@Step("Send a request of 'getRelations' without labels")
     public static Response getAllRelations() 

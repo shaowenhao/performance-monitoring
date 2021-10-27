@@ -51,6 +51,9 @@ public class WebServiceAsDataSourcesTests {
             String listPath = "data.warehousewrite";
             rspDataList = response.jsonPath().getList(listPath);
             assertThat(rspDataList, hasSize(1));
+            String codePath = "data.warehousewrite[0].code";
+            String responseCode = response.jsonPath().getString(codePath);
+            assertThat(responseCode,is(equalTo("0")));
         }
         else{
             String dataPath = "data.warehousewrite[0].data";
