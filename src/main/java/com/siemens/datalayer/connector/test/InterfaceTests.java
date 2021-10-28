@@ -3,6 +3,9 @@ package com.siemens.datalayer.connector.test;
 import java.sql.Connection;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.*;
 
 import org.testng.annotations.BeforeClass;
@@ -183,6 +186,23 @@ public class InterfaceTests {
 		  {
 			  // Check if the data satisfies the given condition
 			  checkSingleCondition(paramMaps, rspDataList);
+		  }
+		  if(paramMaps.containsKey("rspData")){
+
+			  List<String> list = Arrays.asList(paramMaps.get("rspData").split("}"));
+			  List<Map<String,String>> expectedRspDataList = new ArrayList<>();
+			  ObjectMapper mapper = new ObjectMapper();
+			  for(int i=0; i<list.size();i++){
+			  	Map<String,String> expectedRspDataListItem = new HashMap<>();
+				  try {
+				  expectedRspDataListItem = mapper.readValue((list.get(i) + "}"), new TypeReference<Map<String,String>>() {});
+				  } catch (JsonProcessingException e) {
+					  e.printStackTrace();
+				  }
+				  expectedRspDataList.add(expectedRspDataListItem);
+			  }
+			  List<Map<String,String>> actualRspDataList =  response.jsonPath().getList("data");
+			  Assert.assertEquals(actualRspDataList,expectedRspDataList);
 		  }
 	  }
 	  else 
