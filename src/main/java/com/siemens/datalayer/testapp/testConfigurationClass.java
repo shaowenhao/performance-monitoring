@@ -68,7 +68,10 @@ public class testConfigurationClass {
 	
 	Boolean runSubscriptionMgmtTest = false;
 	private String subscriptionManagement_base_url = null;
-	private String subscriptionManagement_port = null;	
+	private String subscriptionManagement_port = null;
+
+	Boolean runAppClientAuthenticationForK8sTest = false;
+	private String appClientAuthenticationForK8sTestClass = null;
 	
 	public void setConfigName(String name) {
 		this.configName = name;
@@ -430,6 +433,18 @@ public class testConfigurationClass {
 	public String getSubscriptionManagementPort() {
 		return this.subscriptionManagement_port;
 	}
+
+	// getRunAppClientAuthenticationForK8sTest、setAppClientAuthenticationForK8sTestClass、getAppClientAuthenticationForK8sTestClass
+	// 这三个方法针对“App client authentication for k8s”的测试 而添加
+	public Boolean getRunAppClientAuthenticationForK8sTest(){return this.runAppClientAuthenticationForK8sTest;}
+
+	public void setAppClientAuthenticationForK8sTestClass(String appClientAuthenticationForK8sTestClassName)
+	{
+		this.runAppClientAuthenticationForK8sTest = true;
+		this.appClientAuthenticationForK8sTestClass = appClientAuthenticationForK8sTestClassName;
+	}
+
+	public String getAppClientAuthenticationForK8sTestClass(){return this.appClientAuthenticationForK8sTestClass;}
 	
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
@@ -620,7 +635,10 @@ public class testConfigurationClass {
 				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
 				
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_BASE_URL,
-						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);	
+						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);
+
+				// 赋值：this.runAppClientAuthenticationForK8sTest = true;
+				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
 				
 				break;
 			

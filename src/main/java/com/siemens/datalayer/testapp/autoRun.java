@@ -1,15 +1,14 @@
 package com.siemens.datalayer.testapp;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import java.util.*;
-
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class autoRun {
 	
@@ -222,6 +221,17 @@ public class autoRun {
 			
 			subMgmtTest.setParameters(subMgmtTestParams);
 			myClasses.add(subMgmtTest); 
+		}
+
+		// Add test class for 'App client authentication for k8s'
+		if (testConfig.getRunAppClientAuthenticationForK8sTest())
+		{
+			XmlClass appClientAuthenticationForK8sTest = new XmlClass(testConfig.getAppClientAuthenticationForK8sTestClass());
+
+			Map<String,String> appClientAuthenticationForK8sTestParams = new LinkedHashMap<>();
+
+			appClientAuthenticationForK8sTest.setParameters(appClientAuthenticationForK8sTestParams);
+			myClasses.add(appClientAuthenticationForK8sTest);
 		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 

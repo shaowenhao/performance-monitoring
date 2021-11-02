@@ -1,38 +1,20 @@
 package com.siemens.datalayer.entitymanagement.test;
 
-import java.lang.reflect.Array;
-import java.util.*;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-// import jdk.nashorn.internal.objects.annotations.Constructor;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
-
 import com.siemens.datalayer.entitymanagement.model.updateEntityRequestBody;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
-import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
-
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Step;
-import io.qameta.allure.Story;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Optional;
+import org.testng.annotations.*;
 
-import javax.swing.*;
+import java.util.*;
 
-import static io.restassured.RestAssured.given;
+// import jdk.nashorn.internal.objects.annotations.Constructor;
 
 @Epic("SDL Entity-management")
 @Feature("Graph/ Entity/ Relation End Points")

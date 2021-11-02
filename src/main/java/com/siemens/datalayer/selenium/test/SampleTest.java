@@ -38,7 +38,8 @@ public class SampleTest extends WebDriverBaseClass {
 		driver = bs.initialize_driver();
 		driver.get("https://demo.nopcommerce.com/");
 		driver.manage().window().maximize();
-		
+
+		// 获取浏览器日志
 		Capabilities caps = ((RemoteWebDriver) driver).getCapabilities();
 		AllureEnvironmentPropertiesWriter.addEnvironmentItem("Web Browser", caps.getBrowserName() + "driver " + caps.getVersion());
 	}
