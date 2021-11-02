@@ -108,14 +108,12 @@ public class UserQueryTests {
 			lte = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
 			String replacedQuery = paramMaps.get("query").replace("$lteData", String.valueOf(lte));
-			System.out.println(replacedQuery);
 			System.out.println("lte:" + lte);
 			
 			//gte 比 lte时间早5分钟
 			LocalDateTime dateTimeMins = now.minusMinutes(5);
 			long gte = dateTimeMins.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 			replacedQuery = replacedQuery.replace("$gteData",String.valueOf(gte));
-			System.out.println("---"+replacedQuery);
 			System.out.println("gte:" + gte);
 
 			Response response = ApiEngineEndpoint.postGraphql(replacedQuery);

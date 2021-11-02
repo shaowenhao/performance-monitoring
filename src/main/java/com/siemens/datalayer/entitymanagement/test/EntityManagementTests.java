@@ -14,7 +14,13 @@ import org.testng.annotations.*;
 
 import java.util.*;
 
+<<<<<<< HEAD
 // import jdk.nashorn.internal.objects.annotations.Constructor;
+=======
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+>>>>>>> ca8072c51f3e9eed59734947ddc7e333779e275c
 
 @Epic("SDL Entity-management")
 @Feature("Graph/ Entity/ Relation End Points")
@@ -397,7 +403,31 @@ public class EntityManagementTests {
 		System.out.println(response.jsonPath().getString("data.message"));
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
 	}
-	
+
+
+	@Test ( priority = 0, description = "Test Entity-management Graph Endpoint: getCompactGraph")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getCompactGraph' request to graph endpoint interface.")
+	@Story("Graph End Point: getCompactGraph")
+	public void getCompactGraph()
+	{
+		Response response = EntityManagementEndpoint.getCompactGraph();
+
+		Map<String, String> paramMaps = new HashMap<String, String>();
+		paramMaps.put("rspStatus", "200");
+		paramMaps.put("rspCode", "100000");
+		paramMaps.put("rspMessage", "OK");
+
+		System.out.println(response.jsonPath().getString("data.message"));
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+		List<Object> verticesList = response.jsonPath().getList("data.vertices");
+		int verticesSize = verticesList.size();
+		assertThat(verticesSize,greaterThan(0));
+		List<Object> edgesList = response.jsonPath().getList("data.edges");
+		int edgesSize = edgesList.size();
+		assertThat(edgesSize,greaterThan(0));
+
+	}
 	@Test ( priority = 0, 
 			description = "Test Entity-management Relation Endpoint: getRelations",
 			dataProvider = "entity-management-test-data-provider", 
