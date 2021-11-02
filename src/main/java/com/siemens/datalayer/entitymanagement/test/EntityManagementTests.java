@@ -14,13 +14,8 @@ import org.testng.annotations.*;
 
 import java.util.*;
 
-<<<<<<< HEAD
-// import jdk.nashorn.internal.objects.annotations.Constructor;
-=======
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
->>>>>>> ca8072c51f3e9eed59734947ddc7e333779e275c
+import static org.hamcrest.Matchers.greaterThan;
 
 @Epic("SDL Entity-management")
 @Feature("Graph/ Entity/ Relation End Points")
