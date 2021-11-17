@@ -1,287 +1,264 @@
 package com.siemens.datalayer.entitymanagement.test;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.siemens.datalayer.entitymanagement.model.updateEntityRequestBody;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.*;
 
 import java.util.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
+import java.util.stream.Collectors;
 
 @Epic("SDL Entity-management")
-@Feature("Graph/ Entity/ Relation End Points")
+@Feature("Entity/ Relation/ Graph End Points")
 
 public class EntityManagementTests {
-	
-	static Map<String, String> TestEntityList;
-	static Map<String,Map> paramMapsOfcreateEntity;
-	static Map<String,String> paramMapsOfGetEntities;
-	
+	static String sucessfulRspCode = "100000";
+
+	static Map<String, List<String>> testEntityMap;
+	static Map<String,List<String>> testRelationMap;
+
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
 	public void setEntityManagementEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("31706") String port)
 	{
-		TestEntityList = new HashMap<String, String>();
-		paramMapsOfcreateEntity = new HashMap<String,Map>();
-		paramMapsOfGetEntities = new HashMap<String,String>();
-		
+		testEntityMap = new HashMap<>();
+		testRelationMap = new HashMap<>();
+
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-entity-management", base_url + ":" + port);
 
-		Response reponseOfGetEntities = EntityManagementEndpoint.getEntities("","");
-		List<HashMap<String,String>> entityList = reponseOfGetEntities.jsonPath().getList("data");
+		// delete the entities if the label of entity in List entityLabelToBeDeleteList
+	    List<String> entityIdToBeDeleteList = new ArrayList<>();
 
-		List<String> labelList = new ArrayList<>();
-		for(HashMap<String,String> map : entityList){
-			labelList.add(map.get("label"));
-			// System.out.println(idList);
-		}
-		List<String> labelToDeleteList = Arrays.asList("testEntity1","testEntity2","testEntity3");
-		for(String label : labelToDeleteList){
-			if(labelList.contains(label)){
-				int index = labelList.indexOf(label);
-				String id = entityList.get(index).get("id");
-				System.out.println(index + "," + id);
-				Response responseOfDeleteEntity = EntityManagementEndpoint.deleteEntity(id);
+		List<String> entityLabelToBeDeleteList = Arrays.asList("testEntity1","testEntity2","testEntity3",
+				"testEntity4","Device_Modelqwerqwr3r23rwer*()(!@#$%%^&*","testEntity1ForRelation","testEntity2ForRelation");
+
+		for(String label : entityLabelToBeDeleteList){
+			Response responseOfGetEntities = EntityManagementEndpoint.getEntities(label);
+			if ((responseOfGetEntities.jsonPath().getList("data") !=null) && (!responseOfGetEntities.jsonPath().getList("data").isEmpty()))
+			{
+				List<Map<String,Object>> entityList = responseOfGetEntities.jsonPath().getList("data");
+				for (int i=0;i<entityList.size();i++)
+				{
+					if (!entityIdToBeDeleteList.contains(entityList.get(i).get("id")))
+						entityIdToBeDeleteList.add(String.valueOf(entityList.get(i).get("id")));
+				}
 			}
 		}
+
+		if (!entityIdToBeDeleteList.isEmpty())
+			EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+
+		// delete the relations if the label of relation in List relationLabelToBeDeleteList
+		List<String> relationIdToBeDeleteList = new ArrayList<>();
+
+		List<String> relationLabelToBeDeleteList = Arrays.asList("testRelation1","testRelation2","testRelation3");
+
+		for(String label : relationLabelToBeDeleteList){
+			Response responseOfGetRelations = EntityManagementEndpoint.getRelations(label);
+			if ((responseOfGetRelations.jsonPath().getList("data") !=null) && (!responseOfGetRelations.jsonPath().getList("data").isEmpty()))
+			{
+				List<Map<String,Object>> entityList = responseOfGetRelations.jsonPath().getList("data");
+				for (int i=0;i<entityList.size();i++)
+				{
+					if (!relationIdToBeDeleteList.contains(entityList.get(i).get("id")))
+						relationIdToBeDeleteList.add(String.valueOf(entityList.get(i).get("id")));
+				}
+			}
+		}
+
+		if (!relationIdToBeDeleteList.isEmpty())
+			EntityManagementEndpoint.deleteRelations(String.join(",",relationIdToBeDeleteList));
 	}
-	
+
 	@AfterClass (description = "Clean up test entities")
-	public void removeTestEntitiesAndparamMapsOfcreateEntity()
+	public void clearTestEnvironment()
 	{
-		if (TestEntityList.size() > 0)
+		System.out.println("testEntityMap:" + testEntityMap);
+		// System.out.println("testEntityMap:" + testEntityMap);
+		if (testEntityMap.size() > 0)
 		{
-			for (Map.Entry<String, String> entry : TestEntityList.entrySet())
+			for (Map.Entry<String, List<String>> entity : testEntityMap.entrySet())
 			{
-				Response response = EntityManagementEndpoint.deleteEntity(entry.getValue());
-				
-				if (response.jsonPath().getString("code").equals("0")==false) 
-					System.out.println("Error: can not remove the specified test entity (" + entry.getKey() + "/" + entry.getValue() + ")");
+				for (String entityId : entity.getValue())
+				{
+					Response response = EntityManagementEndpoint.deleteEntity(entityId);
+					// System.out.println(response.jsonPath().prettify());
+
+					if (response.jsonPath().getString("code").equals(sucessfulRspCode)==false)
+						System.out.println("Error: can not remove the specified test entity (" + entity.getKey() + "/" + entityId + ")");
+				}
 			}
 		}
 
-		if(paramMapsOfcreateEntity.size() > 0){
-			for (String key : paramMapsOfcreateEntity.keySet())
-			{
-				paramMapsOfcreateEntity.remove(key);
-			}
-		}
+		System.out.println("testRelationMap:" + testRelationMap);
 	}
-	
-	@Test ( priority = 0, 
-			description = "Test Entity-management Entity Endpoint: createEntity", 
-			dataProvider = "entity-management-test-data-provider", 
+
+	@Test ( alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: createEntities",
+			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'createEntity' request to entity endpoint interface.")
-	@Story("Entity End Point: createEntity")
+	@Description("Send a 'createEntities' request to entity endpoint interface.")
+	@Story("Entity End Point: createEntities")
 	// 此时的paramMaps为一个Map，比如{"test-id":"iEMS-Entity-mgmt-Test-1","description":"good request",
 	// "location":"iEMS","label":"testEntity1","rspStatus":"200","rspCode":"200","rspMessage":"OK"}
-	public void createEntity(Map<String, String> paramMaps)
+	public void createEntities(Map<String, String> paramMaps)
 	{
-		if(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity") == null)
-			paramMapsOfcreateEntity.put("paramMapsOfcreateEntity",paramMaps);
-		/*for(Map.Entry<String,Map> entry : paramMapsOfcreateEntity.entrySet())
-			System.out.println(entry.getKey() + " = " +entry.getValue());*/
-		if (true)
+		String bodyString = paramMaps.get("body");
+		Response response = EntityManagementEndpoint.createEntities(bodyString);
+
+		// 如果接口创建entity成功，将其放入testEntityMap中
+		if (response.jsonPath().getString("code").equals(sucessfulRspCode))
 		{
-			// 创建类updateEntityRequestBody的一个实例，updateEntityRequestBody类主要是构造传入接口的参数
-			updateEntityRequestBody requestBody = new updateEntityRequestBody();
-
-			requestBody.setId(paramMaps.get("id"));
-			requestBody.setLabel(paramMaps.get("label"));
-
-			requestBody.setProperty("metadata_node_type", paramMaps.get("metadata_node_type"));
-			requestBody.setProperty("metadata_node_domain", paramMaps.get("metadata_node_domain"));
-			requestBody.setProperty("additional_prop1", paramMaps.get("additional_prop1"));
-			requestBody.setProperty("additional_prop2", paramMaps.get("additional_prop2"));
-
-			requestBody.setNodeType(paramMaps.get("nodeType"));
-			requestBody.setConnectedRelationNumber(paramMaps.get("connectedRelationNumber"));
-
-			try
+			List<Map<String,String>> entityList = response.jsonPath().getList("data");
+			for (Map<String,String> entity : entityList)
 			{
-				ObjectMapper objectMapper = new ObjectMapper();
-				objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-				objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-				String bodyString = objectMapper.writeValueAsString(requestBody);
-
-
-				// 通过EntityManagementEndpoint-createEntity方法，发送请求至http://140.231.89.85:31818/api/entities接口，并获取返回response
-				Response response = EntityManagementEndpoint.createEntity(bodyString);
-				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-
-				System.out.println("data.id:"+response.jsonPath().getString("data.id"));
-
-				if (paramMaps.get("description").contains("good request"))
-				{
-					TestEntityList.put(paramMaps.get("label"), response.jsonPath().get("data.id"));
-
-					Assert.assertNotNull(response.jsonPath().getString("data.id"));
-					Assert.assertEquals(response.jsonPath().getString("data.label"), paramMaps.get("label"), "New entity's label is set correctly");
-
-					Assert.assertEquals(response.jsonPath().getString("data.properties.metadata_node_type"), paramMaps.get("metadata_node_type"));
-					Assert.assertEquals(response.jsonPath().getString("data.properties.metadata_node_domain"), paramMaps.get("metadata_node_domain"));
-					Assert.assertEquals(response.jsonPath().getString("data.properties.additional_prop1"), paramMaps.get("additional_prop1"));
-					Assert.assertEquals(response.jsonPath().getString("data.properties.additional_prop2"), paramMaps.get("additional_prop2"));
-
-					Assert.assertEquals(response.jsonPath().getString("data.nodeType"), paramMaps.get("nodeType"));
-					Assert.assertEquals(response.jsonPath().getString("data.connectedRelationNumber"),paramMaps.get("connectedRelationNumber"));
+				if (!testEntityMap.containsKey(entity.get("label"))) {
+					testEntityMap.put(entity.get("label"), new ArrayList<String>() {
+						{
+							this.add(entity.get("id"));
+						}
+					});
 				}
-				System.out.println(response.jsonPath());
+				else
+					testEntityMap.get(entity.get("label")).add(entity.get("id"));
 			}
-			catch (Exception e) 
-		    {
-		    	System.out.println(e);
-				System.out.println("Error: failed to assemble a jason format request body");
-				return;
-		    }
+		}
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+		// check the response data size
+		checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+
+		// check the response data whether matches the request
+		if(paramMaps.get("description").contains("good request"))
+		{
+			List<Map<String,Object>> requestBodyList = null;
+			List<Map<String,Object>> responseEntityList = null;
+
+			try {
+				requestBodyList = (new ObjectMapper()).readValue(paramMaps.get("body"), new TypeReference<List<Map<String, Object>>>() {});
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			responseEntityList = response.jsonPath().getList("data");
+
+			checkEntityResponseData(requestBodyList,responseEntityList);
 		}
 	}
-	
-	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
-			priority = 0, 
-			description = "Test Entity-management Entity Endpoint: updateEntity", 
-			dataProvider = "entity-management-test-data-provider", 
+
+	@Test ( dependsOnMethods = { "createEntities" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: updateEntities",
+			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send an 'updateEntity' request to entity endpoint interface.")
-	@Story("Entity End Point: updateEntity")
-	public void updateEntity(Map<String, String> paramMaps)
+	@Description("Send an 'updateEntities' request to entity endpoint interface.")
+	@Story("Entity End Point: updateEntities")
+	public void updateEntities(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be update really exists, if not create it
-		if((paramMaps.get("description").contains("entity id not exist")==false)
-				&&(paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("label"));
-
-		String bodyString = paramMaps.get("body");
-
-		// Check if the input string contains basic information
-		if (bodyString.contains("id") && bodyString.contains("label") && bodyString.contains("properties"))
+		if (paramMaps.containsKey("pre-execution"))
 		{
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-			try
-			{
-				// Prepare request body object based on the input body string
-				updateEntityRequestBody requestBody = objectMapper.readValue(bodyString, updateEntityRequestBody.class);
-
-				// If the entity to be test really exists, use its real id
-				if (TestEntityList.containsKey(paramMaps.get("label"))) requestBody.setId(TestEntityList.get(paramMaps.get("label")));
-
-				// Create a request body in Json format
-				bodyString = objectMapper.writeValueAsString(requestBody);
-
-				Response response = EntityManagementEndpoint.updateEntity(bodyString);
-
-				checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-
-				if (paramMaps.get("description").contains("good request")) checkUpdateEntityResponse(requestBody, response);
-				System.out.println(response.jsonPath());
-			}
-			catch (Exception e)
-			{
-				System.out.println("Error: can not convert the input string 'body' to a jason request");
-				return;
-			}
+			createEntityToBeTest(paramMaps.get("pre-execution"));
 		}
-		else // test when input is not complete
+
+		// beforeReplacementBodyString：excel读取出的bodyString
+		String beforeReplacementBodyString = paramMaps.get("body");
+
+		if (paramMaps.get("description").contains("good request"))
 		{
-			Response response = EntityManagementEndpoint.updateEntity(bodyString);
-			checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-			System.out.println(response.jsonPath());
+			List<Map<String,Object>> requestBodyList = null;
+
+			try {
+				requestBodyList = (new ObjectMapper()).readValue(beforeReplacementBodyString, new TypeReference<List<Map<String, Object>>>() {});
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			// If the entity to be test really exists, use its real id
+			for (Map<String,Object> requestBody : requestBodyList)
+			{
+				// 如果某个label对应多个id，取第一个
+				requestBody.put("id",testEntityMap.get(requestBody.get("label")).get(0));
+			}
+
+			// bodyString：替换成真实id了的bodyString
+			String bodyString = com.alibaba.fastjson.JSONObject.toJSONString(requestBodyList);
+
+			Response response = EntityManagementEndpoint.updateEntities(bodyString);
+
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			// check the response data size
+			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+
+			List<Map<String,Object>> responseEntityList = response.jsonPath().getList("data");
+
+			// check the response data whether matches the request
+			checkEntityResponseData(requestBodyList,responseEntityList);
+		}
+		else
+		{
+			Response response = EntityManagementEndpoint.updateEntities(beforeReplacementBodyString);
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 		}
 	}
-	
-	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
-			priority = 0, 
-			description = "Test Entity-management Entity Endpoint: getEntityById", 
-			dataProvider = "entity-management-test-data-provider", 
+
+	@Test ( dependsOnMethods = { "createEntities" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: getEntityById",
+			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'getEntityById' request to entity endpoint interface.")
 	@Story("Entity End Point: getEntityById")
 	public void getEntityById(Map<String, String> paramMaps)
 	{
-		// Check if the entity to be test really exists, if not create it
-		if((paramMaps.get("description").contains("entity id not exist")==false)
-				&&(paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("label"));
-		
-		// Read the id from input parameter 
-		String entityId = paramMaps.get("id");
-		
-		// If the entity to be test exists, use its real id
-		if (TestEntityList.containsKey(paramMaps.get("label"))) 
-			entityId = TestEntityList.get(paramMaps.get("label"));
-		
-		Response response = EntityManagementEndpoint.getEntityById(entityId);
-		System.out.println("message:"+response.jsonPath().get("message").toString());
-		
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-		
-		if (paramMaps.get("description").contains("good request"))
+		// Check if the entity to be got really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
 		{
-			updateEntityRequestBody responseData = response.jsonPath().getObject("data", updateEntityRequestBody.class);
-			
-			Assert.assertTrue(responseData.getId().equals(entityId), "The entity id is correct");
-			Assert.assertTrue(responseData.getNodeType().equals("ENTITY"), "The node type is correct");
-			
-			if (paramMaps.containsKey("label"))
-			{
-				Assert.assertTrue(responseData.getLabel().equals(paramMaps.get("label")), "The entity name is correct");
-			}
+			createEntityToBeTest(paramMaps.get("pre-execution"));
 		}
-	}
 
-	@Test ( dependsOnMethods = { "createEntity" }, alwaysRun = true,
-			priority = 0,
-			description = "Test Entity-management Entity Endpoint: filterEntityByProperty",
-			dataProvider = "entity-management-test-data-provider",
-			dataProviderClass = ExcelDataProviderClass.class)
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'filterEntityByProperty' request to entity endpoint interface.")
-	@Story("Entity End Point: filterEntityByProperty")
-	public void filterEntityByProperty(Map<String, String> paramMaps)
-	{
-		// Check if the entity to be test really exists, if not create it
-		if((paramMaps.get("description").contains("entity id not exist")==false)
-				&&(paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("label"));
+		// Read the id from input parameter
+		String entityId = paramMaps.get("id");
 
-		String entityLabel = paramMaps.get("label");
-		String entityMetadataNodeType = paramMaps.get("metadata_node_type");
+		// If the entity to be test exists, use its real id
+		if (testEntityMap.containsKey(paramMaps.get("label")))
+			entityId = testEntityMap.get(paramMaps.get("label")).get(0);
 
-		Response response = EntityManagementEndpoint.filterEntityByProperty(entityLabel,entityMetadataNodeType);
-		System.out.println(response.jsonPath().getString("data"));
+		Response response = EntityManagementEndpoint.getEntityById(entityId);
 
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
+		// Verity the id and label of the response
 		if (paramMaps.get("description").contains("good request"))
 		{
-			updateEntityRequestBody responseData = response.jsonPath().getObject("data[0]", updateEntityRequestBody.class);
+			Map<String,Object> responseEntityMap = response.jsonPath().getMap("data");
 
-			Assert.assertTrue(responseData.getLabel().equals(entityLabel), "The entity label is correct");
-
-			Assert.assertTrue(response.jsonPath().getString("data[0].properties.metadata_node_type").equals(entityMetadataNodeType), "The metadata_node_type is correct");
+			Assert.assertEquals(responseEntityMap.get("id"),entityId);
+			Assert.assertEquals(responseEntityMap.get("label"),paramMaps.get("label"));
 		}
 	}
 
-	@Test(  dependsOnMethods = { "createEntity" }, alwaysRun = true,
+	@Test(  dependsOnMethods = { "createEntities" },
+			alwaysRun = true,
 			priority = 0,
 			description = "Test Entity-management Entity Endpoint: getEntities",
 			dataProvider = "entity-management-test-data-provider",
@@ -291,67 +268,83 @@ public class EntityManagementTests {
 	@Story("Entity End Point: getEntities")
 	public void getEntities(Map<String, String> paramMaps)
 	{
-		Response response = EntityManagementEndpoint.getEntities(paramMaps.get("label"),paramMaps.get("order"));
+		Response response = EntityManagementEndpoint.getEntities(paramMaps.get("labels"));
 
 		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
-		if (paramMaps.get("description").contains("good request")){
-			List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
 
-			List<String> idList = new ArrayList<>();
-			List<String> labelList = new ArrayList<>();
-			for(HashMap<String,String> map : entityList){
-				idList.add(map.get("id"));
-				labelList.add(map.get("label"));
-				// System.out.println(idList);
+		List<Map<String,Object>> responseEntityList= response.jsonPath().getList("data");
+		List<String> responseIdList = responseEntityList.stream().map(e->e.get("id").toString()).collect(Collectors.toList());
+
+		if (paramMaps.get("description").contains("good request") && !paramMaps.get("description").contains("entities don't exist"))
+		{
+			// 如果存在labels，getEntities接口只返回对应的entity
+			if (paramMaps.get("labels") != null)
+			{
+				List<Map<String,Object>> allEntityList = EntityManagementEndpoint.getEntities("").jsonPath().getList("data");
+				checkLabels(paramMaps,allEntityList,responseEntityList);
 			}
-			for(Map.Entry<String,String> entry : TestEntityList.entrySet()){
-				Assert.assertTrue(idList.contains(entry.getValue()));
+			// 如果不存在labels，getEntities接口返回所有entity
+			else
+			{
+				for (Map.Entry<String,List<String>> entry : testEntityMap.entrySet())
+				{
+					for (String id : entry.getValue())
+					{
+						Assert.assertTrue(responseIdList.contains(id));
+					}
+				}
 			}
-			if (paramMaps.get("order")==null || paramMaps.get("order").equals("ASC")){
-				for(int i=0;i<labelList.size()-1;i++){
-					// System.out.println(labelList.get(i)+"     "+ labelList.get(i+1));
-					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
-					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) <= 0);}
-			}
-			else {
-				for (int i=0;i<labelList.size()-1;i++){
-					// System.out.println(labelList.get(i)+"     "+ labelList.get(i+1));
-					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
-					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) >= 0);}
-			}
+		}
+		else
+		{
+			Assert.assertTrue(responseIdList.isEmpty());
 		}
 	}
 
-	@Test(  priority = 0,
-			description = "Test Entity-management Entity Endpoint: getEntities")
+	@Test(  dependsOnMethods = { "createEntities" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: getEntitiesLabelLike",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("以不带参数请求getEntities接口返回的data中的第一项中的label做为参数，再次请求getEntities接口，并对其校验")
-	@Story("Entity End Point: getEntities")
-	public void getEntitiesAgain()
+	@Description("Send a 'getEntitiesLabelLike' request to entity endpoint interface.")
+	@Story("Entity End Point: getEntitiesLabelLike")
+	public void getEntitiesLabelLike(Map<String, String> paramMaps)
 	{
-		Response response = EntityManagementEndpoint.getEntities("","");
+		Response response = EntityManagementEndpoint.getEntitiesLabelLike(paramMaps.get("keyword"));
 
-		Map<String, String> paramMaps = new HashMap<String, String>();
-		paramMaps.put("rspStatus", "200");
-		paramMaps.put("rspCode", "100000");
-		paramMaps.put("message", "success");
+		checkResponseCode(paramMaps,response.statusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-		List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
+		if (paramMaps.get("description").contains("good request"))
+		{
+			Response responseOfGetEntities = EntityManagementEndpoint.getEntities("");
 
-		List<String> labelList = new ArrayList<>();
-		for(HashMap<String,String> map : entityList){
-			labelList.add(map.get("label"));
+			List<Map<String,Object>> expAllEntityList= responseOfGetEntities.jsonPath().getList("data");
+
+			// List<String> expAllIdList = expAllEntityList.stream().map(e->e.get("id").toString()).collect(Collectors.toList());
+			// List<String> expIdList = expAllEntityList.stream().filter(e -> e != null && e.get("label") != null &&
+					// e.get("label").toString().contains("test")).map(e->e.get("id").toString()).collect(Collectors.toList());
+
+			List<Map<String,Object>> expEntityList = expAllEntityList.stream().filter(e -> e != null && e.get("label") != null &&
+					e.get("label").toString().contains(paramMaps.get("keyword"))).collect(Collectors.toList());
+
+			List<Map<String,Object>> actualEntityList = response.jsonPath().getList("data");
+
+			// List<String> actualIdList = actualEntityList.stream().map(e->e.get("id").toString()).collect(Collectors.toList());
+
+			System.out.println(actualEntityList);
+			System.out.println(expEntityList);
+
+			Assert.assertEquals(actualEntityList.size(),expEntityList.size());
+			for (Map<String,Object> entity : actualEntityList)
+				Assert.assertTrue(expEntityList.contains(entity));
 		}
-		System.out.println(labelList.get(0));
-
-		Response responseToBeAssert = EntityManagementEndpoint.getEntities(labelList.get(0),"");
-		checkResponseCode(paramMaps,responseToBeAssert.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
-
-		Assert.assertEquals(labelList.get(0),responseToBeAssert.jsonPath().getString("data[0].label"));
 	}
-	
-	@Test ( dependsOnMethods = { "createEntity", "getEntityById", "updateEntity" }, alwaysRun = true,
-			priority = 0, 
+
+	@Test ( dependsOnMethods = { "createEntities", "updateEntities", "getEntityById","getEntities","getEntitiesLabelLike"},
+			alwaysRun = true,
+			priority = 0,
 			description = "Test Entity-management Entity Endpoint: deleteEntity",
 			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
@@ -360,207 +353,471 @@ public class EntityManagementTests {
 	@Story("Entity End Point: deleteEntity")
 	public void deleteEntity(Map<String, String> paramMaps)
 	{
-		// Check if the entity to be delete really exists, if not create it
-		if((paramMaps.get("description").contains("entity id not exist")==false)
-				&&(paramMaps.containsKey("label")))
-			createEntityToBeTest(paramMaps.get("label"));
-		
-		// Read the id from input parameter 
-		String entityToBeDelete = paramMaps.get("id");
-		
-		// If the entity to be delete exists, use its real id
-		if (TestEntityList.containsKey(paramMaps.get("label"))) 
-			entityToBeDelete = TestEntityList.get(paramMaps.get("label"));
+		// Check if the entity to be deleted really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
+		{
+			createEntityToBeTest(paramMaps.get("pre-execution"));
+		}
 
-		System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
-		Response response = EntityManagementEndpoint.deleteEntity(entityToBeDelete);
-		
-		if ((TestEntityList.containsKey(paramMaps.get("label"))) && (response.jsonPath().getString("message").contains("success")))
-			TestEntityList.remove(paramMaps.get("label"));
-		System.out.println("data.id:"+TestEntityList.get(paramMaps.get("label")));
-		
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-	}
-	
-	@Test ( priority = 0, description = "Test Entity-management Graph Endpoint: getGraph")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'getGraph' request to graph endpoint interface.")
-	@Story("Graph End Point: getGraph")
-	public void getGraph()
-	{
-		Response response = EntityManagementEndpoint.getGraph();
-		
-		Map<String, String> paramMaps = new HashMap<String, String>();
-		paramMaps.put("rspStatus", "200");
-		paramMaps.put("rspCode", "100000");
-		paramMaps.put("message", "success");
+		// Read the id from input parameter
+		List<String> entityIdToBeDeleteList = Arrays.asList(paramMaps.get("id").split(","));
 
-		System.out.println(response.jsonPath().getString("data.message"));
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 	
-	}
-
-
-	@Test ( priority = 0, description = "Test Entity-management Graph Endpoint: getCompactGraph")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'getCompactGraph' request to graph endpoint interface.")
-	@Story("Graph End Point: getCompactGraph")
-	public void getCompactGraph()
-	{
-		Response response = EntityManagementEndpoint.getCompactGraph();
-
-		Map<String, String> paramMaps = new HashMap<String, String>();
-		paramMaps.put("rspStatus", "200");
-		paramMaps.put("rspCode", "100000");
-		paramMaps.put("rspMessage", "OK");
-
-		System.out.println(response.jsonPath().getString("data.message"));
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-		List<Object> verticesList = response.jsonPath().getList("data.vertices");
-		int verticesSize = verticesList.size();
-		assertThat(verticesSize,greaterThan(0));
-		List<Object> edgesList = response.jsonPath().getList("data.edges");
-		int edgesSize = edgesList.size();
-		assertThat(edgesSize,greaterThan(0));
-
-	}
-	@Test ( priority = 0, 
-			description = "Test Entity-management Relation Endpoint: getRelations",
-			dataProvider = "entity-management-test-data-provider", 
-			dataProviderClass = ExcelDataProviderClass.class)
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'getRelations' request to relation endpoint interface.")
-	@Story("Relation End Point: getRelations")
-	public void getRelations(Map<String, String> paramMaps)
-	{
-		Response response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"),paramMaps.get("order"));
-		
-		/*if (paramMaps.containsKey("labels")==false)
-			response = EntityManagementEndpoint.getAllRelations();
-		else
-			response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));*/
-		System.out.println("size of data:"+response.jsonPath().getList("data").size());
-		
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message")); 
-		
-		List<HashMap<String, String>> relationList = response.jsonPath().getList("data");
-		
 		if (paramMaps.get("description").contains("good request"))
 		{
-			Assert.assertTrue(relationList.size()>0, "Relation items are found in the response");
-			
-			if (paramMaps.containsKey("labels")) checkRelationLabels(relationList, paramMaps.get("labels"));
-			
-			String schemaTemplateFile = "json-model-schema/entity-mgmt/getAllRelationsResponse.JSON";	
-			// CommonCheckFunctions.verifyIfDataMatchesJsonSchemaTemplate(schemaTemplateFile, response.getBody().asString());
+			// Read the label from input parameter
+			List<String> entityLabelToBeDeleteList = Arrays.asList(paramMaps.get("label").split(","));
 
-			List<HashMap<String,String>> entityList = response.jsonPath().getList("data");
-
-			List<String> labelList = new ArrayList<>();
-			for(HashMap<String,String> map : entityList)
-				labelList.add(map.get("label"));
-
-			if(paramMaps.get("order")==null || paramMaps.get("order").equals("ASC")){
-				for(int i=0;i<labelList.size()-1;i++){
-					// System.out.println(labelList.get(i)+"     "+labelList.get(i+1));
-					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
-					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) <= 0);
+			// If the entity to be delete exists, use its real id
+			if (entityIdToBeDeleteList.size() == entityLabelToBeDeleteList.size())
+			{
+				for (int i=0;i<entityIdToBeDeleteList.size();i++)
+				{
+					if (testEntityMap.containsKey(entityLabelToBeDeleteList.get(i)))
+					{
+						entityIdToBeDeleteList.set(i,testEntityMap.get(entityLabelToBeDeleteList.get(i)).get(0));
+					}
 				}
-			}
-			else{
-				for(int i=0;i<labelList.size()-1;i++){
-					// System.out.println(labelList.get(i)+"     "+labelList.get(i+1));
-					// System.out.println(labelList.get(i).compareTo(labelList.get(i+1)));
-					Assert.assertTrue(labelList.get(i).compareTo(labelList.get(i+1)) >= 0);
-				}
+				System.out.println(entityIdToBeDeleteList);
+
+				// 此时的entityIdToBeDeleteList已经替换成了真实的entity id
+				Response response = EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+
+				checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+				// check if the entities are been deleted
+				Response responseOfGetEntities = EntityManagementEndpoint.getEntities("");
+				List<Map<String,Object>> allEntityList= responseOfGetEntities.jsonPath().getList("data");
+				List<String> allIdList = allEntityList.stream().map(e->e.get("id").toString()).collect(Collectors.toList());
+
+				for (String entityId : entityIdToBeDeleteList)
+					Assert.assertFalse(allIdList.contains(entityId));
 			}
 		}
 		else
 		{
-			Assert.assertTrue(relationList.size()==0, "The response does not contain any relation items");
+			Response response = EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 		}
 	}
-	
-	@Test ( priority = 0, 
+
+	@Test ( alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Relation Endpoint: createRelations",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'createRelations' request to Relation endpoint interface.")
+	@Story("Relation Endpoint: createRelations")
+	public void createRelations(Map<String,String> paramMaps)
+	{
+		// Check if the entity to be used in createRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
+		{
+			createEntityToBeTest(paramMaps.get("pre-execution"));
+		}
+
+		// 此时的bodyString为excel中读取的数据
+		String bodyString = paramMaps.get("body");
+
+		// 将bodyString中的占位符表示的值替换成real entity id
+		for (Map.Entry<String,List<String>> entity : testEntityMap.entrySet())
+		{
+			if (bodyString.contains("$" + entity.getKey()))
+			{
+				bodyString = bodyString.replaceAll("\\$" + entity.getKey(),entity.getValue().get(0));
+			}
+		}
+
+		// 此时的bodyString不含占位符
+		System.out.println("bodyString:" + bodyString);
+		Response response = EntityManagementEndpoint.createRelations(bodyString);
+		System.out.println(response.jsonPath().prettify());
+
+		// // 如果接口创建relation成功，将其放入testRelationMap中
+		if (response.jsonPath().getString("code").equals(sucessfulRspCode))
+		{
+			List<Map<String,String>> relationList = response.jsonPath().getList("data");
+			for (Map<String,String> relation : relationList)
+			{
+				if (!testRelationMap.containsKey(relation.get("label"))) {
+					testRelationMap.put(relation.get("label"), new ArrayList<String>() {
+						{
+							this.add(relation.get("id"));
+						}
+					});
+				}
+				else
+					testRelationMap.get(relation.get("label")).add(relation.get("id"));
+			}
+		}
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+		// check the response data size
+		checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+
+		if(paramMaps.get("description").contains("good request"))
+		{
+			List<Map<String,Object>> requestBodyList = null;
+			List<Map<String,Object>> responseEntityList = null;
+
+			try {
+				requestBodyList = (new ObjectMapper()).readValue(bodyString, new TypeReference<List<Map<String, Object>>>() {});
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			responseEntityList = response.jsonPath().getList("data");
+
+			// check the response data whether matches the request
+			checkRelationResponseData(requestBodyList,responseEntityList);
+		}
+	}
+
+	@Test ( dependsOnMethods = { "createRelations" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Relation Endpoint: updateRelations",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'updateRelations' request to Relation endpoint interface.")
+	@Story("Relation Endpoint: updateRelations")
+	public void updateRelations(Map<String,String> paramMaps)
+	{
+		// Check if the entity to be used in createRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-executionOfCreateEntities"))
+		{
+			createEntityToBeTest(paramMaps.get("pre-executionOfCreateEntities"));
+		}
+
+		// Check if the relation to be used in updateRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
+		{
+			// 此时的preBodyString为excel中读取的数据
+			String preBodyString = paramMaps.get("pre-execution");
+
+			// 将preBodyString中的占位符表示的值替换掉
+			for (Map.Entry<String,List<String>> entity : testEntityMap.entrySet())
+			{
+				if (preBodyString.contains("$" + entity.getKey()))
+				{
+					preBodyString = preBodyString.replaceAll("\\$" + entity.getKey(),entity.getValue().get(0));
+				}
+			}
+			// 此时的preBodyString不含占位符
+			createRelationToBeTest(preBodyString);
+		}
+
+		// 此时的beforeReplacementBodyString为excel中读取的数据
+		String beforeReplacementBodyString = paramMaps.get("body");
+
+		// 将beforeReplacementBodyString中的占位符表示的值替换掉
+		for (Map.Entry<String,List<String>> entity : testEntityMap.entrySet())
+		{
+			if (beforeReplacementBodyString.contains("$" + entity.getKey()))
+			{
+				beforeReplacementBodyString = beforeReplacementBodyString.replaceAll("\\$" + entity.getKey(),entity.getValue().get(0));
+			}
+		}
+		System.out.println("beforeReplacementBodyString:" + beforeReplacementBodyString);
+
+		if (paramMaps.get("description").contains("good request"))
+		{
+			List<Map<String, Object>> requestBodyList = null;
+
+			try {
+				requestBodyList = (new ObjectMapper()).readValue(beforeReplacementBodyString, new TypeReference<List<Map<String, Object>>>() {
+				});
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			// If the entity to be test really exists, use its real id
+			for (Map<String, Object> requestBody : requestBodyList) {
+				// 如果某个label对应多个id，取第一个
+				requestBody.put("id", testRelationMap.get(requestBody.get("label")).get(0));
+			}
+
+			// bodyString：替换成真实id了的bodyString
+			String bodyString = com.alibaba.fastjson.JSONObject.toJSONString(requestBodyList);
+			System.out.println("bodyString:" + bodyString);
+
+			Response response = EntityManagementEndpoint.updateRelations(bodyString);
+
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			// check the response data size
+			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+
+			List<Map<String,Object>> responseEntityList = response.jsonPath().getList("data");
+
+			// check the response data whether matches the request
+			checkRelationResponseData(requestBodyList,responseEntityList);
+		}
+		else
+		{
+			Response response = EntityManagementEndpoint.updateRelations(beforeReplacementBodyString);
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+		}
+	}
+
+	@Test ( dependsOnMethods = { "createRelations" },
+			alwaysRun = true,
+			priority = 0,
 			description = "Test Entity-management Relation Endpoint: getRelationById",
-			dataProvider = "entity-management-test-data-provider", 
+			dataProvider = "entity-management-test-data-provider",
 			dataProviderClass = ExcelDataProviderClass.class)
 	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'getRelationById' request to relation endpoint interface.")
-	@Story("Relation End Point: getRelationById")
-	public void getRelationById(Map<String, String> paramMaps)
+	@Description("Send a 'getRelationById' request to Relation endpoint interface.")
+	@Story("Relation Endpoint: getRelationById")
+	public void getRelationById(Map<String,String> paramMaps)
 	{
-		if (paramMaps.containsKey("label")) 
+		// Check if the entity to be used in createRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-executionOfCreateEntities"))
 		{
-			// Use getRelations(String labels) to find a list of relations
-			Response response = EntityManagementEndpoint.getRelations(paramMaps.get("label"));
-			
-			List<HashMap<String, String>> relationList = response.jsonPath().getList("data");
-			
-			// Set the input parameter "relationId" to a value picked up from the above list
-			if (relationList.size()>0) paramMaps.put("relationId", response.jsonPath().getString("data[0].id"));
+			createEntityToBeTest(paramMaps.get("pre-executionOfCreateEntities"));
 		}
-		
-		Response response = EntityManagementEndpoint.getRelationById(paramMaps.get("relationId"));
-		
-		System.out.println(response.jsonPath());
+
+		// Check if the relation to be used in getRelationById really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
+		{
+			// 此时的preBodyString为excel中读取的数据
+			String preBodyString = paramMaps.get("pre-execution");
+
+			// 将preBodyString中的占位符表示的值替换掉
+			for (Map.Entry<String,List<String>> entity : testEntityMap.entrySet())
+			{
+				if (preBodyString.contains("$" + entity.getKey()))
+				{
+					preBodyString = preBodyString.replaceAll("\\$" + entity.getKey(),entity.getValue().get(0));
+				}
+			}
+			// 此时的preBodyString不含占位符
+			createRelationToBeTest(preBodyString);
+		}
+
+		// Read the id from input parameter
+		String relationId = paramMaps.get("id");
+
+		// If the entity to be test exists, use its real id
+		if (testRelationMap.containsKey(paramMaps.get("label")))
+			relationId = testRelationMap.get(paramMaps.get("label")).get(0);
+
+		Response response = EntityManagementEndpoint.getRelationById(relationId);
+
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-		
+
+		// 校验返回的relation是否正确
 		if (paramMaps.get("description").contains("good request"))
 		{
-			HashMap<String, String> item = response.jsonPath().get("data");
-			Assert.assertTrue(paramMaps.get("relationId").equals(item.get("id")), "The relation id is the same as specified in the request");
+			Response responseOfGetRelations = EntityManagementEndpoint.getRelations("");
+			List<Map<String,Object>> allRelationList = responseOfGetRelations.jsonPath().getList("data");
+
+			String finalEntityId = relationId;
+			List<Map<String,Object>> expRelationList = allRelationList.stream().filter(e -> e != null && e.get("id") != null &&
+					e.get("id").equals(finalEntityId)).collect(Collectors.toList());
+
+			Assert.assertEquals(response.jsonPath().getMap("data"),expRelationList.get(0));
 		}
 	}
-	
-	// Check if the entity with the given location & label really exists, if not try to create it
-	public static void createEntityToBeTest(String label)
+
+	@Test ( dependsOnMethods = { "createRelations" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Relation Endpoint: getRelations",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'getRelations' request to Relation endpoint interface.")
+	@Story("Relation Endpoint: getRelations")
+	public void getRelations(Map<String,String> paramMaps)
 	{
-		if (!TestEntityList.containsKey(label))
-		{	
-			String id = createEntity(label);
-			if (id.equals("none")==false)
-				TestEntityList.put(label, id);
+		Response response = EntityManagementEndpoint.getRelations(paramMaps.get("labels"));
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+		List<Map<String,Object>> responseRelationList= response.jsonPath().getList("data");
+		List<String> responseIdList = responseRelationList.stream().map(e -> e.get("id").toString()).collect(Collectors.toList());
+
+		if (paramMaps.get("description").contains("good request") && !paramMaps.get("description").contains("entities don't exist"))
+		{
+			if (paramMaps.get("labels") != null)
+			{
+				List<Map<String,Object>> allRelationList = EntityManagementEndpoint.getRelations("").jsonPath().getList("data");
+				checkLabels(paramMaps,allRelationList,responseRelationList);
+			}
 			else
-				System.out.println("Error: can not create test entity '" + label + "'");
+			{
+				for (Map.Entry<String,List<String>> entry : testRelationMap.entrySet())
+				{
+					for (String id : entry.getValue())
+					{
+						Assert.assertTrue(responseIdList.contains(id));
+					}
+				}
+			}
+		}
+		else
+		{
+			Assert.assertTrue(responseRelationList.isEmpty());
 		}
 	}
-	
-	public static String createEntity(String label)
+
+	@Test ( dependsOnMethods = { "createRelations","updateRelations","getRelationById","getRelations" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Relation Endpoint: deleteRelations",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'deleteRelations' request to Relation endpoint interface.")
+	@Story("Relation Endpoint: deleteRelations")
+	public void deleteRelations(Map<String,String> paramMaps)
+	{
+		// Check if the entity to be used in createRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-executionOfCreateEntities"))
+		{
+			createEntityToBeTest(paramMaps.get("pre-executionOfCreateEntities"));
+		}
+
+		// Check if the relation to be used in deleteRelations really exists, if not create it
+		if (paramMaps.containsKey("pre-execution"))
+		{
+			// 此时的preBodyString为excel中读取的数据
+			String preBodyString = paramMaps.get("pre-execution");
+
+			// 将preBodyString中的占位符表示的值替换掉
+			for (Map.Entry<String,List<String>> entity : testEntityMap.entrySet())
+			{
+				if (preBodyString.contains("$" + entity.getKey()))
+				{
+					preBodyString = preBodyString.replaceAll("\\$" + entity.getKey(),entity.getValue().get(0));
+				}
+			}
+			// 此时的preBodyString不含占位符
+			createRelationToBeTest(preBodyString);
+		}
+
+		// Read the id from input parameter
+		List<String> relationIdToBeDeleteList = Arrays.asList(paramMaps.get("id").split(","));
+
+		if (paramMaps.get("description").contains("good request"))
+		{
+			// Read the label from input parameter
+			List<String> relationLabelToBeDeleteList = Arrays.asList(paramMaps.get("label").split(","));
+
+			// If the entity to be delete exists, use its real id
+			if (relationIdToBeDeleteList.size() == relationLabelToBeDeleteList.size())
+			{
+				for (int i=0;i<relationIdToBeDeleteList.size();i++)
+				{
+					if (testRelationMap.containsKey(relationLabelToBeDeleteList.get(i)))
+					{
+						relationIdToBeDeleteList.set(i,testRelationMap.get(relationLabelToBeDeleteList.get(i)).get(0));
+					}
+				}
+				System.out.println(relationIdToBeDeleteList);
+
+				Response response = EntityManagementEndpoint.deleteRelations(String.join(",",relationIdToBeDeleteList));
+
+				checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+				// check if the relations are been deleted
+				Response responseOfGetRelations = EntityManagementEndpoint.getRelations("");
+				List<Map<String,Object>> allRelationList= responseOfGetRelations.jsonPath().getList("data");
+				List<String> allIdList = allRelationList.stream().map(e->e.get("id").toString()).collect(Collectors.toList());
+
+				for (String entityId : relationIdToBeDeleteList)
+					Assert.assertFalse(allIdList.contains(entityId));
+			}
+		}
+		else
+		{
+			Response response = EntityManagementEndpoint.deleteRelations(String.join(",",relationIdToBeDeleteList));
+			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+		}
+	}
+
+
+	// Check if the entity with the given location & label really exists, if not try to create it
+	public static void createEntityToBeTest(String preBodyString)
+	{
+		List<Map<String,Object>> preRequestBodyList = null;
+		try {
+			preRequestBodyList = (new ObjectMapper()).readValue(preBodyString, new TypeReference<List<Map<String, Object>>>() {});
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		for (Map<String,Object> preRequestBody : preRequestBodyList)
+		{
+			if (!testEntityMap.containsKey(preRequestBody.get("label")))
+			{
+				org.json.JSONObject jsonObject = new JSONObject(preRequestBody);
+				String id = createEntity("[" + jsonObject + "]");
+
+				testEntityMap.put(preRequestBody.get("label").toString(), new ArrayList<String>() {
+					{
+						this.add(id);
+					}
+				});
+			}
+		}
+	}
+
+	public static String createEntity(String bodyStringForSingleEntity)
 	{
 		String result = "none";
-		
-		updateEntityRequestBody requestBody = new updateEntityRequestBody();
-		
-		requestBody.setId(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("id").toString());
-		requestBody.setLabel(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("label").toString());
-		requestBody.setNodeType(paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("nodeType").toString());
-		requestBody.setProperty("metadata_node_type", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_type").toString());
-		requestBody.setProperty("metadata_node_domain", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("metadata_node_domain").toString());
-		requestBody.setProperty("additional_prop1", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop1").toString());
-		requestBody.setProperty("additional_prop2", paramMapsOfcreateEntity.get("paramMapsOfcreateEntity").get("additional_prop2").toString());
-		
-		try
-		{
-			ObjectMapper objectMapper = new ObjectMapper();	
-			objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-			
-			String bodyString = objectMapper.writeValueAsString(requestBody);
 
-			Response response = EntityManagementEndpoint.createEntity(bodyString);
-			
-			if (response.jsonPath().getString("message").contains("OK"))
-				result = response.jsonPath().getString("data.id");
-	
-		}
-		catch (Exception e) 
-	    {
-			System.out.println("Error: can not convert the input string 'body' to a json request");
-	    }
-		
+		Response response = EntityManagementEndpoint.createEntities(bodyStringForSingleEntity);
+
+		if (response.jsonPath().getString("message").contains("OK"))
+			result = response.jsonPath().getString("data[0].id");
+
 		return result;
 	}
-	
+
+	// Check if the relation with the given location & label really exists, if not try to create it
+	public static void createRelationToBeTest(String preBodyString)
+	{
+		List<Map<String,Object>> preRequestBodyList = null;
+		try {
+			preRequestBodyList = (new ObjectMapper()).readValue(preBodyString, new TypeReference<List<Map<String, Object>>>() {});
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		for (Map<String,Object> preRequestBody : preRequestBodyList)
+		{
+			if (!testRelationMap.containsKey(preRequestBody.get("label")))
+			{
+				org.json.JSONObject jsonObject = new JSONObject(preRequestBody);
+				String id = createRelation("[" + jsonObject + "]");
+
+				testRelationMap.put(preRequestBody.get("label").toString(), new ArrayList<String>() {
+					{
+						this.add(id);
+					}
+				});
+			}
+		}
+	}
+
+	public static String createRelation(String bodyStringForSingleRelation)
+	{
+		String result = "none";
+
+		Response response = EntityManagementEndpoint.createRelations(bodyStringForSingleRelation);
+
+		if (response.jsonPath().getString("message").contains("OK"))
+			result = response.jsonPath().getString("data[0].id");
+
+		return result;
+	}
+
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)
 	{
@@ -576,7 +833,7 @@ public class EntityManagementTests {
 			if (requestParameters.get("rspCode").contains("null"))
 				Assert.assertNull(actualCode, "No operation code is found.");
 			else
-			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");  
+			Assert.assertEquals(actualCode, requestParameters.get("rspCode"), "The operation code in response message matches the expected value.");
 		}
 
 		// 校验Response body-message
@@ -585,24 +842,63 @@ public class EntityManagementTests {
 			if (requestParameters.get("rspMessage").contains("null"))
 				Assert.assertNull(actualMessage, "The content of operation message is null.");
 			else
-				Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");	
-		}
-	}
-	
-	@Step("Verify if the updateEntity response contains correct information")
-	public static void checkUpdateEntityResponse(updateEntityRequestBody request, Response response)
-	{
-		updateEntityRequestBody responseData = response.jsonPath().getObject("data", updateEntityRequestBody.class);	
-		Assert.assertTrue(request.equals(responseData), "The entity has been successfully updated");
-	}
-	
-	@Step("Verify if the relation labels in the response match the labels parameter of the request")
-	public static void checkRelationLabels(List<HashMap<String, String>> itemList, String labels)
-	{
-		for (HashMap<String, String> item : itemList)
-		{								
-			Assert.assertTrue(labels.contains(item.get("label")), "Relation item's label matches the labels parameter of the request");
+				Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
 		}
 	}
 
+	@Step("Verify the response data size")
+	public static void checkResponseDataSize(Map<String, String> requestParameters,int actualRspDataSize)
+	{
+		if (requestParameters.containsKey("rspDataSize"))
+		{
+			int expRspDataSize = Integer.valueOf(requestParameters.get("rspDataSize")).intValue();
+			Assert.assertEquals(actualRspDataSize,expRspDataSize);
+		}
+	}
+
+	@Step("Verify if the createEntities/updateEntities response contains correct information")
+	public static void checkEntityResponseData(List<Map<String,Object>> requestBodyList, List<Map<String,Object>> responseEntityList)
+	{
+		Assert.assertEquals(requestBodyList.size(),responseEntityList.size());
+
+		for (int i=0;i<requestBodyList.size();i++)
+		{
+			Assert.assertEquals(requestBodyList.get(i).get("label"),responseEntityList.get(i).get("label"));
+			Assert.assertEquals(requestBodyList.get(i).get("properties"),responseEntityList.get(i).get("properties"));
+		}
+	}
+
+	@Step("Verify if the createRelations/updateRelations response contains correct information")
+	public static void checkRelationResponseData(List<Map<String,Object>> requestBodyList, List<Map<String,Object>> responseEntityList)
+	{
+		Assert.assertEquals(requestBodyList.size(),responseEntityList.size());
+
+		for (int i=0;i<requestBodyList.size();i++)
+		{
+			Assert.assertEquals(requestBodyList.get(i).get("label"),responseEntityList.get(i).get("label"));
+			Assert.assertEquals(requestBodyList.get(i).get("properties"),responseEntityList.get(i).get("properties"));
+			Assert.assertEquals(requestBodyList.get(i).get("out"),responseEntityList.get(i).get("out"));
+			Assert.assertEquals(requestBodyList.get(i).get("in"),responseEntityList.get(i).get("in"));
+		}
+	}
+
+	@Step("Verify if the entity/relation labels in the response match the labels parameter of the request")
+	public static void checkLabels(Map<String, String> requestParameters, List<Map<String,Object>> allDataList,List<Map<String,Object>> responseDataList)
+	{
+		if (requestParameters.containsKey("labels"))
+		{
+			List<String> labelList = Arrays.asList(requestParameters.get("labels").split(","));
+
+			List<Map<String,Object>> expDataList = allDataList.stream().filter(e -> labelList.contains(e.get("label").toString())).collect(Collectors.toList());
+
+			System.out.println(responseDataList);
+			System.out.println(expDataList);
+			Assert.assertEquals(responseDataList.size(),expDataList.size());
+
+			Set<Map<String,Object>> responseDataSet = new HashSet<>(responseDataList);
+			Set<Map<String,Object>> expDataSet = new HashSet<>(expDataList);
+
+			Assert.assertEquals(responseDataSet,expDataSet);
+		}
+	}
 }

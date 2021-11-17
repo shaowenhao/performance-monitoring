@@ -9,8 +9,6 @@ import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
-
 public class EntityManagementEndpoint {
 	
 	private static String BASE_URL = "";	
@@ -27,93 +25,142 @@ public class EntityManagementEndpoint {
 		port = comm_port;
 	}
 
+    // Entity Endpoint: createEntities
+    @Step("Send a request of 'createEntities'")
+    public static Response createEntities(String body)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/api/v2/graph/entities");
+        return response;
+    }
+
+    // Entity Endpoint: updateEntities
+    @Step("Send a request of 'updateEntities'")
+    public static Response updateEntities(String body)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .put("/api/v2/graph/entities");
+
+        return response;
+    }
+
+    // Entity Endpoint: getEntityById
+    @Step("Send a request of 'getEntityById'")
+    public static Response getEntityById(String entityId)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/v2/graph/entities/" + entityId);
+
+        return response;
+    }
+
     // Entity Endpoint: getEntities
     @Step("Send a request of 'getEntities'")
-	public static Response getEntities(String labels,String order){
+	public static Response getEntities(String labels){
 	    RestAssured.baseURI = BASE_URL;
 	    RestAssured.port = Integer.valueOf(port).intValue();
 
         Map<String,String> parameters = new HashMap<String,String>();
         parameters.put("labels",labels);
-        parameters.put("order",order);
 
 	    RequestSpecification httpRequest = RestAssured.given();
 	    httpRequest.header("Content-Type", "application/json");
 
 	    Response response = httpRequest.params(parameters)
                                        .filter(new AllureRestAssured())
-                                       .get("/api/entities");
+                                       .get("/api/v2/graph/entities");
 	    return response;
     }
 
-    // Entity Endpoint: createEntity
-	@Step("Send a request of 'createEntity'")
-    public static Response createEntity(String body) 
-	{
-        RestAssured.baseURI = BASE_URL;
-        RestAssured.port = Integer.valueOf(port).intValue();
-
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("Content-Type", "application/json");
-
-        Response response = httpRequest.body(body)
-        							   .filter(new AllureRestAssured())
-                					   .post("/api/entities");
-        return response;
-    }
-
-    // Entity Endpoint: updateEntity 
-	@Step("Send a request of 'updateEntity'")
-    public static Response updateEntity(String body) 
+    // Entity Endpoint: getEntitiesLabelLike
+    @Step("Send a request of 'getEntitiesLabelLike'")
+    public static Response getEntitiesLabelLike(String keyword)
     {
-        System.out.println(body);
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
+
+        Map<String,String> parameters = new HashMap<String,String>();
+        parameters.put("keyword",keyword);
 
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
 
-        Response response = httpRequest.body(body)
-					        		   .filter(new AllureRestAssured())
-					                   .put("/api/entities");
-
+        Response response = httpRequest.params(parameters)
+                .filter(new AllureRestAssured())
+                .get("/api/v2/graph/entities/search");
         return response;
     }
 
     // Entity Endpoint: deleteEntity via entityId
 	@Step("Send a request of 'deleteEntity'")
-    public static Response deleteEntity(String entityId) 
+    public static Response deleteEntity(String entityIds)
     {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
         RequestSpecification httpRequest = RestAssured.given();
 
-        Response response = httpRequest.queryParam("entityId", entityId) 
+        Response response = httpRequest.queryParam("entityIds", entityIds)
         							   .filter(new AllureRestAssured())
-        							   .delete("/api/entities");
+        							   .delete("/api/v2/graph/entities");
 
         return response;
     }
 
-    // Entity Endpoint: getEntityById 
-	@Step("Send a request of 'getEntityById'")
-    public static Response getEntityById(String entityId) 
-	{
+    // Relation Endpoint: createRelations
+    @Step("Send a request of 'createRelations'")
+    public static Response createRelations(String body)
+    {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = RestAssured.given();     
-        
-        Response response = httpRequest.filter(new AllureRestAssured())
-					                   .get("/api/entities/" + entityId);
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
 
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/api/v2/graph/relations");
         return response;
     }
 
-    // Entity Endpoint:  filterEntityByProperty
-    @Step("Send a request of ' filterEntityByProperty'")
-    public static Response  filterEntityByProperty(String entityLabel,String metadataNodType)
+    // Relation Endpoint: updateRelations
+    @Step("Send a request of 'updateRelations'")
+    public static Response updateRelations(String body)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/api/v2/graph/relations");
+        return response;
+    }
+
+    // Relation Endpoint: getRelationById
+    @Step("Send a request of 'getRelationById'")
+    public static Response getRelationById(String relationId)
     {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
@@ -121,99 +168,39 @@ public class EntityManagementEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                .get("/api/entities/filter/" + entityLabel + "/" + metadataNodType);
-
-        return response;
-    }
-	
-    // Graph Endpoint: getGraph 
-	@Step("Send a request of 'getGraph'")
-    public static Response getGraph() 
-	{
-        RestAssured.baseURI = BASE_URL;
-        RestAssured.port = Integer.valueOf(port).intValue();
-
-        RequestSpecification httpRequest = RestAssured.given();     
-        
-        Response response = httpRequest.filter(new AllureRestAssured())
-					                   .get("/api/graphs");
+                .get("/api/v2/graph/relations/"+relationId);
 
         return response;
     }
 
-    // Graph Endpoint: getCompactGraph
-    @Step("Send a request of 'getCompactGraph'")
-    public static Response getCompactGraph()
-    {
-        RestAssured.baseURI = BASE_URL;
-        RestAssured.port = Integer.valueOf(port).intValue();
-
-        RequestSpecification httpRequest = RestAssured.given();
-
-        Response response = httpRequest.filter(new AllureRestAssured())
-                .get("/api/graphs/compact");
-
-        return response;
-    }
-	// Relation Endpoint: getRelations
-	@Step("Send a request of 'getRelations' without labels")
-    public static Response getAllRelations() 
-	{
-        RestAssured.baseURI = BASE_URL;
-        RestAssured.port = Integer.valueOf(port).intValue();
-
-        RequestSpecification httpRequest = RestAssured.given();     
-        
-        Response response = httpRequest.filter(new AllureRestAssured())
-					                   .get("/api/relations");
-
-        return response;
-    }
-
-	@Step("Send a request of 'getRelations'")
-    public static Response getRelations(String labels)
-	{
-        RestAssured.baseURI = BASE_URL;
-        RestAssured.port = Integer.valueOf(port).intValue();
-
-        RequestSpecification httpRequest = RestAssured.given();     
-        
-        Response response = httpRequest.queryParam("labels", labels)
-        							   .filter(new AllureRestAssured())
-					                   .get("/api/relations");
-
-        return response;
-    }
     @Step("Send a request of 'getRelations'")
-    public static Response getRelations(String labels,String order)
+    public static Response getRelations(String labels)
     {
-	    RestAssured.baseURI = BASE_URL;
-	    RestAssured.port = Integer.valueOf(port).intValue();
-
-	    Map<String,String> parameters = new HashMap<>();
-	    parameters.put("labels",labels);
-	    parameters.put("order",order);
-
-	    RequestSpecification httpRequest = RestAssured.given();
-
-	    Response response = httpRequest.params(parameters)
-                                       .filter(new AllureRestAssured())
-                                       .get("/api/relations");
-	    return response;
-    }
-	
-	@Step("Send a request of 'getRelationById'")
-    public static Response getRelationById(String relationId) 
-	{
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = RestAssured.given();     
-        
-        Response response = httpRequest.filter(new AllureRestAssured())
-					                   .get("/api/relations/"+relationId);
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.queryParam("labels", labels)
+                .filter(new AllureRestAssured())
+                .get("/api/v2/graph/relations");
 
         return response;
     }
-	
+
+    // Relation Endpoint: deleteRelation
+    @Step("Send a request of 'deleteRelation'")
+    public static Response deleteRelations(String relationIds)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.queryParam("relationIds", relationIds)
+                .filter(new AllureRestAssured())
+                .delete("/api/v2/graph/relations");
+
+        return response;
+    }
 }

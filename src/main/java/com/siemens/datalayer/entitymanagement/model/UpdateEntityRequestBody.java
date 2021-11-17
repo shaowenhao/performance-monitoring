@@ -3,7 +3,7 @@ package com.siemens.datalayer.entitymanagement.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class updateEntityRequestBody {
+public class UpdateEntityRequestBody {
 	
 	private String id;
 	
@@ -11,9 +11,9 @@ public class updateEntityRequestBody {
 	
 	private Map<String, String> properties = new HashMap<String, String>();
 	
-	private String nodeType;
+	/* private String nodeType;
 
-	private String connectedRelationNumber;
+	private String connectedRelationNumber; */
 
 	public String getId() {
 		return id;
@@ -39,7 +39,7 @@ public class updateEntityRequestBody {
 		this.properties.put(name, value);
 	}
 	
-	public String getNodeType() {
+	/* public String getNodeType() {
 		return nodeType;
 	}
 	
@@ -53,15 +53,15 @@ public class updateEntityRequestBody {
 
 	public void setConnectedRelationNumber(String connectedRelationNumber) {
 		this.connectedRelationNumber = connectedRelationNumber;
-	}
+	} */
 	
-	public boolean equals(updateEntityRequestBody other) {	
+	public boolean equals(UpdateEntityRequestBody other) {
 		
 		return this.id.equals(other.id) 
 			&& this.label.equals(other.label)
-			&& this.properties.equals(other.properties)
-			&& this.nodeType.equals(other.nodeType)
-			&& this.connectedRelationNumber.equals(other.connectedRelationNumber);
+			&& this.properties.equals(other.properties);
+			// && this.nodeType.equals(other.nodeType)
+			// && this.connectedRelationNumber.equals(other.connectedRelationNumber);
 	}
 
 }
