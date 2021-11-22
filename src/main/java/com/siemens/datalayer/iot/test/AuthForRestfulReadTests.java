@@ -2,12 +2,10 @@ package com.siemens.datalayer.iot.test;
 
 import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
-import com.siemens.datalayer.connector.test.ConnectorOtherInterfacesEndpoint;
 import com.siemens.datalayer.connector.test.InterfaceTests;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
-import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -41,9 +39,9 @@ public class AuthForRestfulReadTests {
 
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
         // 和connector-configure（clear all cache接口）清除缓存
-        ConnectorOtherInterfacesEndpoint.clearRedisCaches();
-        ConnectorOtherInterfacesEndpoint.clearAllCaches();
-        ConnectorOtherInterfacesEndpoint.clearRedisCache();
+        ConnectorEndpoint.clearRedisCaches();
+        ConnectorEndpoint.clearAllCaches();
+        ConnectorEndpoint.clearRedisCache();
 
         ConnectorConfigureEndpoint.clearAllCache();
 

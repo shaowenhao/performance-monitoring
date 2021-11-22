@@ -3,7 +3,6 @@ package com.siemens.datalayer.iot.test;
 import com.google.gson.Gson;
 import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
-import com.siemens.datalayer.connector.test.ConnectorOtherInterfacesEndpoint;
 import com.siemens.datalayer.connector.test.InterfaceTests;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
@@ -15,10 +14,8 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Epic("SDL Connector")
 @Feature("auth for webservice")
@@ -42,9 +39,9 @@ public class AuthForWebserviceTests {
 
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
         // 和connector-configure（clear all cache接口）清除缓存
-        ConnectorOtherInterfacesEndpoint.clearRedisCaches();
-        ConnectorOtherInterfacesEndpoint.clearAllCaches();
-        ConnectorOtherInterfacesEndpoint.clearRedisCache();
+        ConnectorEndpoint.clearRedisCaches();
+        ConnectorEndpoint.clearAllCaches();
+        ConnectorEndpoint.clearRedisCache();
 
         ConnectorConfigureEndpoint.clearAllCache();
 
@@ -99,9 +96,9 @@ public class AuthForWebserviceTests {
     public void authForWebserviceWrite(Map<String, String> paramMaps){
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
         // 和connector-configure（clear all cache接口）清除缓存
-        ConnectorOtherInterfacesEndpoint.clearRedisCaches();
-        ConnectorOtherInterfacesEndpoint.clearAllCaches();
-        ConnectorOtherInterfacesEndpoint.clearRedisCache();
+        ConnectorEndpoint.clearRedisCaches();
+        ConnectorEndpoint.clearAllCaches();
+        ConnectorEndpoint.clearRedisCache();
 
         ConnectorConfigureEndpoint.clearAllCache();
 

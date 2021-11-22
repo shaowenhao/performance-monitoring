@@ -37,7 +37,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.body(body)
                 .filter(new AllureRestAssured())
-                .post("/api/v2/graph/entities");
+                .post("/api/v2/graphs/entities");
         return response;
     }
 
@@ -53,7 +53,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.body(body)
                 .filter(new AllureRestAssured())
-                .put("/api/v2/graph/entities");
+                .put("/api/v2/graphs/entities");
 
         return response;
     }
@@ -68,7 +68,7 @@ public class EntityManagementEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                .get("/api/v2/graph/entities/" + entityId);
+                .get("/api/v2/graphs/entities/" + entityId);
 
         return response;
     }
@@ -87,7 +87,7 @@ public class EntityManagementEndpoint {
 
 	    Response response = httpRequest.params(parameters)
                                        .filter(new AllureRestAssured())
-                                       .get("/api/v2/graph/entities");
+                                       .get("/api/v2/graphs/entities");
 	    return response;
     }
 
@@ -106,13 +106,13 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.params(parameters)
                 .filter(new AllureRestAssured())
-                .get("/api/v2/graph/entities/search");
+                .get("/api/v2/graphs/entities/search");
         return response;
     }
 
     // Entity Endpoint: deleteEntity via entityId
 	@Step("Send a request of 'deleteEntity'")
-    public static Response deleteEntity(String entityIds)
+    public static Response deleteEntities(String entityIds)
     {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
@@ -121,7 +121,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.queryParam("entityIds", entityIds)
         							   .filter(new AllureRestAssured())
-        							   .delete("/api/v2/graph/entities");
+        							   .delete("/api/v2/graphs/entities");
 
         return response;
     }
@@ -138,7 +138,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.body(body)
                 .filter(new AllureRestAssured())
-                .post("/api/v2/graph/relations");
+                .post("/api/v2/graphs/relations");
         return response;
     }
 
@@ -154,7 +154,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.body(body)
                 .filter(new AllureRestAssured())
-                .post("/api/v2/graph/relations");
+                .post("/api/v2/graphs/relations");
         return response;
     }
 
@@ -168,7 +168,7 @@ public class EntityManagementEndpoint {
         RequestSpecification httpRequest = RestAssured.given();
 
         Response response = httpRequest.filter(new AllureRestAssured())
-                .get("/api/v2/graph/relations/"+relationId);
+                .get("/api/v2/graphs/relations/"+relationId);
 
         return response;
     }
@@ -183,7 +183,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.queryParam("labels", labels)
                 .filter(new AllureRestAssured())
-                .get("/api/v2/graph/relations");
+                .get("/api/v2/graphs/relations");
 
         return response;
     }
@@ -199,7 +199,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.queryParam("relationIds", relationIds)
                 .filter(new AllureRestAssured())
-                .delete("/api/v2/graph/relations");
+                .delete("/api/v2/graphs/relations");
 
         return response;
     }

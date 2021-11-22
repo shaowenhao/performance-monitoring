@@ -186,8 +186,11 @@ public class testEnvironmentConstants {
 	public static final String IOT_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_DEV_CONNECTOR_PORT = "32019";
 
+	public static final String IOT_DEV_CONNECTOR_REALTIME_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_DEV_CONNECTOR_REALTIME_PORT = "31301";
+
 	public static final String IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.85";
-	public static final String IOT_DEV_CONNECTOR_CONFIGURE_PORT = "30864";
+	public static final String IOT_DEV_CONNECTOR_CONFIGURE_PORT = "30032";
 
 	public static final String IOT_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_DEV_APIENGINE_PORT = "32552";

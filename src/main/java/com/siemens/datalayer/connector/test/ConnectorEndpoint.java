@@ -1,14 +1,12 @@
 package com.siemens.datalayer.connector.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import java.util.HashMap;
 
 public class ConnectorEndpoint {
 	
@@ -129,99 +127,49 @@ public class ConnectorEndpoint {
 				                       .post("api/connectors/dmlData");
 		return response;
 	}
-	
-	// Entity Interface: searchModelSchemaByName
-	@Step("Send a request of 'searchModelSchemaByName'")
-	public static Response searchModelSchemaByName(String domain, String name)
+
+	// Test Developer Tools:clearRedisCaches
+	@Step("send a request of 'clearRedisCaches'")
+	public static Response clearRedisCaches()
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-//		RestAssured.basePath = "api/v1/entity/searchModelSchemaByName";
-		
-		RequestSpecification httpRequest = RestAssured.given();
-		httpRequest.header("Content-Type", "application/json");
-		// httpRequest.header("version", "1.0");
-		
-		HashMap<String, String> parameters = new HashMap<>();
 
-		// System.out.println(domain_name);
-		if (domain.equals("default")) {
-			parameters.put("domainName", domain_name);
-		}
-		else if (!domain.isEmpty()) {
-			parameters.put("domainName", domain);
-		}
-		
-		if (!name.isEmpty()) parameters.put("name", name);
-		
-		Response response = httpRequest.queryParams(parameters)
-									   .filter(new AllureRestAssured())
-									   .get("/api/entities/modelSchemaByName");
-		
+		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("content-type","application/json");
+
+		Response response = httpRequest.filter(new AllureRestAssured())
+				.get("/api/cache-tools/redis-clearance");
 		return response;
 	}
 
-	// Developer Tools: CheckSuperMapper
-	public static Response checkSuperMapper()
-	{
-		RestAssured.baseURI = BASE_URL;
-		RestAssured.port = Integer.valueOf(port).intValue();
-//		RestAssured.basePath = "api/dev-tools/checkSuperMapper";
-		
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("accept", "*/*");
-        
-        Response response = httpRequest.get("api/dev-tools/checkSuperMapper");
-        
-        return response;
-	}
-	
-	// Developer Tools: clearAllCaches
+	// Test Developer Tools:clearAllCaches
+	@Step("send a request of 'clearAllCaches'")
 	public static Response clearAllCaches()
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-//		RestAssured.basePath = "api/dev-tools/clear-caches";
-		
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("accept", "*/*");
-        
-        Response response = httpRequest.get("api/dev-tools/clear-caches");
-        
-        return response;
+
+		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("content-type","application/json");
+
+		Response response = httpRequest.filter(new AllureRestAssured())
+				.get("/api/dev-tools/caches-clearance");
+		return response;
 	}
-	
-	// Developer Tools: executeSQL
-	public static Response executeSQL(String sql)
+
+	// Test Developer Tools:clearRedisCache
+	@Step("send a request of 'clearRedisCache'")
+	public static Response clearRedisCache()
 	{
 		RestAssured.baseURI = BASE_URL;
 		RestAssured.port = Integer.valueOf(port).intValue();
-//		RestAssured.basePath = "api/dev-tools/execute-sql";
-		
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("accept", "*/*");
-        
-		Response response = httpRequest.queryParam("name", sql) 
-									   .filter(new AllureRestAssured())
-                					   .get("api/dev-tools/execute-sql");
-        
-        return response;
-	}
-	
-	// Mapper Rule Interface: insert test data name
-	public static Response insertTestDataName()
-	{
-		RestAssured.baseURI = BASE_URL;
-		RestAssured.port = Integer.valueOf(port).intValue();
-//		RestAssured.basePath = "api/mapper/test";
-		
-        RequestSpecification httpRequest = RestAssured.given();
-        httpRequest.header("accept", "*/*");
-        
-        Response response = httpRequest.get("api/mapper/test");
-        
-        return response;
-	}
 
+		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("content-type","application/json");
 
+		Response response = httpRequest.filter(new AllureRestAssured())
+				.get("/api/dev-tools/redisCache-clearance");
+		return response;
+	}
 }

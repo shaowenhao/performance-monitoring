@@ -1,28 +1,23 @@
 package com.siemens.datalayer.connector.test;
 
-import java.sql.Connection;
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.siemens.datalayer.connector.model.GetAllEntitiesNameResponse;
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
+import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
-
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.siemens.datalayer.connector.model.*;
-import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
-import com.siemens.datalayer.utils.CommonCheckFunctions;
-import com.siemens.datalayer.utils.ExcelDataProviderClass;
-
-import org.apache.commons.lang3.StringUtils;
-import org.testng.Assert;
-
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
+import java.util.*;
 
 @Epic("SDL Connector")
 @Feature("Rest API")
@@ -51,66 +46,6 @@ public class InterfaceTests {
 
 	  //Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
 	}
-
-	/*
-	@Test(priority = 0, description = "Test connector interface:check the usability of all entities through request 'getConceptModelDataByCondition'")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'Get All Entities name' request to get all the available entity names, then check the usability of all entities")
-	@Story("Connector Interface:Get All Entities name and check the usability")
-	public void checkAllEntitiesName()
-	{
-		Response response = ConnectorEndpoint.getAllEntitiesName();
-		List<String> allEntities = response.jsonPath().getList("data");
-		for (String entityItem : allEntities)
-		{
-			HashMap<String, String> parameters = new HashMap<>();
-			parameters.put("name",entityItem);
-			System.out.println(entityItem);
-			response = ConnectorEndpoint.getConceptModelDataByCondition(parameters);
-			Assert.assertEquals("Operate success.",response.jsonPath().getString("message"));
-		}
-	}
-
-	@Test (priority = 0, description = "Test entity interface: Get concept model definition by model name.")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'searchModelSchemaByName' request to read out the model schema of the entity specified in the name parameter.")
-	@Story("Connector Interface: Search model schema by name")
-  	public void SearchModelSchemaByName()
-  	{
-	  Response response = ConnectorEndpoint.getAllEntitiesName();
-
-	  JsonPath jsonPathEvaluator = response.jsonPath();
-	 
-	  List<String> allEntities = jsonPathEvaluator.getList("data");
-		  
-	  response = ConnectorEndpoint.searchModelSchemaByName("default", allEntities.get(0));
-	
-	  // This is an example of extracting information from the response message via Json path  
-	  Assert.assertEquals("Operate success.", response.jsonPath().getString("message"));
-  	}
-  
-	@Test (priority = 0, description = "Test connector interface: Get all entities name and then check its concept model.")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a 'Get All Entities name' request to get all the available entity names, then read out the model schema of every entity.")
-	@Story("Connector Interface: Search model schema by name")
-  	public void SearchModelSchemaForAllEntities()
-  	{
-	  Response response = ConnectorEndpoint.getAllEntitiesName();
-	  
-	  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
-	  
-	  JsonPath jsonPathEvaluator = response.jsonPath();
-
-	  List<String> allEntities = jsonPathEvaluator.getList("data");
-	  
-	  for(String entityItem : allEntities)
-	  {
-		  response = ConnectorEndpoint.searchModelSchemaByName("default", entityItem);
-		  
-		  Assert.assertEquals(response.getStatusCode(), 200, "Correct status code returned");
-	  }
-  	}
-   */
   
 	@Test (	priority = 0, 
 			description = "Test connector interface: Get concept model data by condition.", 
@@ -212,6 +147,42 @@ public class InterfaceTests {
 		}
 
   	}
+
+	@Test(priority = 0, description = "Test Developer Tools:clearRedisCaches.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'clearRedisCaches' request")
+	@Story("Test Developer Tools:clearRedisCaches")
+	public void clearRedisCaches()
+	{
+		Response response = ConnectorEndpoint.clearRedisCaches();
+		JsonPath jsonPath = response.jsonPath();
+
+		Assert.assertEquals("Operate success.",jsonPath.getString("message"));
+	}
+
+	@Test(priority = 0, description = "Test Developer Tools:clearRedisCache.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'clearRedisCache' request")
+	@Story("Test Developer Tools:clearRedisCache")
+	public void clearRedisCache()
+	{
+		Response response = ConnectorEndpoint.clearRedisCache();
+		JsonPath jsonPath = response.jsonPath();
+
+		Assert.assertEquals("Operate success.",jsonPath.getString("message"));
+	}
+
+	@Test(priority = 0, description = "Test Developer Tools:clearAllCaches.")
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'clearAllCaches' request")
+	@Story("Test Developer Tools:clearAllCaches")
+	public void clearAllCaches()
+	{
+		Response response = ConnectorEndpoint.clearAllCaches();
+		JsonPath jsonPath = response.jsonPath();
+
+		Assert.assertEquals("Operate success.",jsonPath.getString("message"));
+	}
 
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)

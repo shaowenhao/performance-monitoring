@@ -8,6 +8,9 @@ public class testConfigurationClass {
 	private String connector_base_url = null;
 	private String connector_port = null;
 
+	private String connectorRealtime_base_url = null;
+	private String connectorRealtime_port = null;
+
 	private String connectorConfigure_base_url = null;
 	private String connectorConfigure_port = null;
 
@@ -22,14 +25,29 @@ public class testConfigurationClass {
 
 	private String relationalDatabase_properties = null;
 
-	Boolean runConnectorOtherInterfacesTest = false;
-	private String connectorOtherInterfacesTestClass = null;
+	private String apiService_base_url = null;
+	private String apiService_port = null;
+	private String pre_asset = null;
+	private String pre_data = null;
+	private String rabbitmq_host = null;
+	private String rabbitmq_port = null;
+	private String rabbitmq_username = null;
+	private String rabbitmq_password = null;
+	private String rabbitmq_virtual_host = null;
+	private String rabbitmq_timeout = null;
+	private String rabbitmq_exchange = null;
+
+	private String entityManagement_base_url = null;
+	private String entityManagement_port = null;
+
+	private String subscriptionManagement_base_url = null;
+	private String subscriptionManagement_port = null;
+
+	Boolean runConnectorRealtimeTest = false;
+	private String connectorRealtimeTestClass = null;
 
 	Boolean runConnectorConfigureTest = false;
 	private String connectorConfigureTestClass = null;
-	
-	Boolean runUserQueryTest = false;	
-	private String userQueryTestClass = null;
 
 	Boolean runRelationalDatabaseTest = false;
 	private String relationalDatabaseTestClass = null;
@@ -49,29 +67,17 @@ public class testConfigurationClass {
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
 
-	Boolean runApiServiceTest = false;
-	private String apiService_base_url = null;
-	private String apiService_port = null;	
-	private String pre_asset = null;
-	private String pre_data = null;
-	private String rabbitmq_host = null;
-	private String rabbitmq_port = null;
-	private String rabbitmq_username = null;
-	private String rabbitmq_password = null;
-	private String rabbitmq_virtual_host = null;
-	private String rabbitmq_timeout = null;
-	private String rabbitmq_exchange = null;
-	
-	Boolean runEntityMgmtTest = false;
-	private String entityManagement_base_url = null;
-	private String entityManagement_port = null;	
-	
-	Boolean runSubscriptionMgmtTest = false;
-	private String subscriptionManagement_base_url = null;
-	private String subscriptionManagement_port = null;
-
 	Boolean runAppClientAuthenticationForK8sTest = false;
 	private String appClientAuthenticationForK8sTestClass = null;
+
+	Boolean runUserQueryTest = false;
+	private String userQueryTestClass = null;
+
+	Boolean runApiServiceTest = false;
+	
+	Boolean runEntityMgmtTest = false;
+	
+	Boolean runSubscriptionMgmtTest = false;
 	
 	public void setConfigName(String name) {
 		this.configName = name;
@@ -98,6 +104,18 @@ public class testConfigurationClass {
 	public String getConnectorPort() {
 		return this.connector_port;
 	}
+
+	// setConnectorRealtimeTest、getConnectorRealtimeBaseURL、getConnectorRealtimePort
+	// 这三个方法针对获取data-layer-connector-realtime的地址、端口号 而添加
+	public void setConnectorRealtimeTest(String base_url,String port)
+	{
+		this.connectorRealtime_base_url = base_url;
+		this.connectorRealtime_port = port;
+	}
+
+	public String getConnectorRealtimeBaseURL(){return this.connectorRealtime_base_url;}
+
+	public String getConnectorRealtimePort(){return this.connectorRealtime_port;}
 
 	// setConnectorConfigureTest、getConnectorConfigureBaseURL、getConnectorConfigurePort
 	// 这三个方法针对获取data-layer-connector-configure的地址、端口号 而添加
@@ -179,18 +197,23 @@ public class testConfigurationClass {
 		return this.mongodb_databasename;
 	}
 
-	// getRunConnectorOtherInterfacesTset、setConnectorOtherInterfacesTestClass、getConnectorOtherInterfacesTestClass
-	// 这三个方法针对connector，除了“Connector Interface”的其他接口的测试
-	public Boolean getRunConnectorOtherInterfacesTset()
+	// getRunConnectorRealtimeTest、getConnectorRealtimeTestClass、getRunConnectorConfigureTest
+	// 这三个方法针对connector-realtime接口的测试 而添加
+	public Boolean getRunConnectorRealtimeTest()
 	{
-		return this.runConnectorOtherInterfacesTest;
+		return this.runConnectorRealtimeTest;
 	}
-	public void setConnectorOtherInterfacesTestClass(String runConnectorOtherInterfacesTestClassName)
+
+	public void setConnectorRealtimeTestClass(String connectorRealtimeTestClassName)
 	{
-		this.runConnectorOtherInterfacesTest = true;
-		this.connectorOtherInterfacesTestClass = runConnectorOtherInterfacesTestClassName;
+		this.runConnectorRealtimeTest = true;
+		this.connectorRealtimeTestClass = connectorRealtimeTestClassName;
 	}
-	public String getConnectorOtherInterfacesTestClass(){return this.connectorOtherInterfacesTestClass;}
+
+	public String getConnectorRealtimeTestClass()
+	{
+		return this.connectorRealtimeTestClass;
+	}
 
 	// getRunConnectorConfigureTest、setConnectorConfigureTestClass、getConnectorConfigureTestClass
 	// 这三个方法针对connector-configure接口的测试 而添加
@@ -198,11 +221,13 @@ public class testConfigurationClass {
 	{
 		return this.runConnectorConfigureTest;
 	}
-	public void setConnectorConfigureTestClass(String runConnectorConfigureTestClassName)
+
+	public void setConnectorConfigureTestClass(String connectorConfigureTestClassName)
 	{
 		this.runConnectorConfigureTest = true;
-		this.connectorConfigureTestClass = runConnectorConfigureTestClassName;
+		this.connectorConfigureTestClass = connectorConfigureTestClassName;
 	}
+
 	public String getConnectorConfigureTestClass()
 	{
 		return this.connectorConfigureTestClass;
@@ -222,89 +247,6 @@ public class testConfigurationClass {
 	public String getUserQueryTestClass() {
 		return this.userQueryTestClass;
 	}
-    //这三个方法针对Web服务作为数据源的测试 而添加
-
-	public Boolean getRunWebServiceAsDataSourcesTest() {
-		return this.runWebServiceAsDataSourcesTest;
-	}
-
-	public String getWebServiceAsDataSourcesTestClass() {
-		return this.webServiceAsDataSourcesTestClass;
-	}
-
-	public void setWebServiceAsDataSourcesTestClass(String webServiceAsDataSourcesTestClassName) {
-		this.runWebServiceAsDataSourcesTest = true;
-		this.webServiceAsDataSourcesTestClass = webServiceAsDataSourcesTestClassName;
-	}
-
-	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
-	// 这三个方法针对“关系型数据库做为数据源”的测试 而添加
-	public Boolean getRunRelationalDatabaseTest()
-	{
-		return this.runRelationalDatabaseTest;
-	}
-
-	public void setRelationalDatabaseTestClass(String relationalDatabaseTestClassName)
-	{
-		this.runRelationalDatabaseTest = true;
-		this.relationalDatabaseTestClass = relationalDatabaseTestClassName;
-	}
-
-	public String getRelationalDatabaseTestClass()
-	{
-		return this.relationalDatabaseTestClass;
-	}
-
-	// getRunRestfulAsDataSourcesTests、setRestfulAsDataSourcesTestClass、getRestfulAsDataSourcesTestClass
-	// 这三个方法针对“restful做为数据源”的测试 而添加
-	public Boolean getRunRestfulAsDataSourcesTest()
-	{
-		return this.runRestfulAsDataSourcesTest;
-	}
-
-	public void setRestfulAsDataSourcesTestClass(String restfulAsDataSourcesTestClassName)
-	{
-		this.runRestfulAsDataSourcesTest = true;
-		this.restfulAsDataSourcesTestClass = restfulAsDataSourcesTestClassName;
-	}
-
-	public String getRestfulAsDataSourcesTestClass() {return this.restfulAsDataSourcesTestClass;}
-
-	// getRunAuthForRestfulWriteTest、setAuthForRestfulWriteTestClass、getAuthForRestfulWriteTestClass
-	// 这三个方法针对“auth for restful write”的测试 而添加
-	public Boolean getRunAuthForRestfulWriteTest(){return this.runAuthForRestfulWriteTest;}
-
-	public void setAuthForRestfulWriteTestClass(String authForRestfulWriteTestClassName)
-	{
-		this.runAuthForRestfulWriteTest = true;
-		this.authForRestfulWriteTestClass = authForRestfulWriteTestClassName;
-	}
-
-	public String getAuthForRestfulWriteTestClass(){return this.authForRestfulWriteTestClass;}
-
-	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
-	// 这三个方法针对“auth for restful read”的测试 而添加
-	public Boolean getRunAuthForRestfulReadTest(){return this.runAuthForRestfulReadTest;}
-
-	public void setAuthForRestfulReadTestClass(String authForRestfulReadTestClassName)
-	{
-		this.runAuthForRestfulReadTest = true;
-		this.authForRestfulReadTestClass = authForRestfulReadTestClassName;
-	}
-
-	public String getAuthForRestfulReadTestClass(){return this.authForRestfulReadTestClass;}
-
-	// getRunAuthForWebserviceTest、setAuthForWebserviceTestClass、getAuthForWebserviceTestClass
-	// 这三个方法针对“auth for webservice”的测试 而添加
-	public Boolean getRunAuthForWebserviceTest(){return this.runAuthForWebserviceTest;}
-
-	public void setAuthForWebserviceTestClass(String authForWebserviceTestClassName)
-	{
-		this.runAuthForWebserviceTest = true;
-		this.authForWebserviceTestClass = authForWebserviceTestClassName;
-	}
-
-	public String getAuthForWebserviceTestClass(){return this.authForWebserviceTestClass;};
 
 	public void setApiServiceTest(String base_url, String port) {
 		this.runApiServiceTest = true;
@@ -433,6 +375,89 @@ public class testConfigurationClass {
 	public String getSubscriptionManagementPort() {
 		return this.subscriptionManagement_port;
 	}
+
+	//这三个方法针对Web服务作为数据源的测试 而添加
+	public Boolean getRunWebServiceAsDataSourcesTest() {
+		return this.runWebServiceAsDataSourcesTest;
+	}
+
+	public String getWebServiceAsDataSourcesTestClass() {
+		return this.webServiceAsDataSourcesTestClass;
+	}
+
+	public void setWebServiceAsDataSourcesTestClass(String webServiceAsDataSourcesTestClassName) {
+		this.runWebServiceAsDataSourcesTest = true;
+		this.webServiceAsDataSourcesTestClass = webServiceAsDataSourcesTestClassName;
+	}
+
+	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
+	// 这三个方法针对“关系型数据库做为数据源”的测试 而添加
+	public Boolean getRunRelationalDatabaseTest()
+	{
+		return this.runRelationalDatabaseTest;
+	}
+
+	public void setRelationalDatabaseTestClass(String relationalDatabaseTestClassName)
+	{
+		this.runRelationalDatabaseTest = true;
+		this.relationalDatabaseTestClass = relationalDatabaseTestClassName;
+	}
+
+	public String getRelationalDatabaseTestClass()
+	{
+		return this.relationalDatabaseTestClass;
+	}
+
+	// getRunRestfulAsDataSourcesTests、setRestfulAsDataSourcesTestClass、getRestfulAsDataSourcesTestClass
+	// 这三个方法针对“restful做为数据源”的测试 而添加
+	public Boolean getRunRestfulAsDataSourcesTest()
+	{
+		return this.runRestfulAsDataSourcesTest;
+	}
+
+	public void setRestfulAsDataSourcesTestClass(String restfulAsDataSourcesTestClassName)
+	{
+		this.runRestfulAsDataSourcesTest = true;
+		this.restfulAsDataSourcesTestClass = restfulAsDataSourcesTestClassName;
+	}
+
+	public String getRestfulAsDataSourcesTestClass() {return this.restfulAsDataSourcesTestClass;}
+
+	// getRunAuthForRestfulWriteTest、setAuthForRestfulWriteTestClass、getAuthForRestfulWriteTestClass
+	// 这三个方法针对“auth for restful write”的测试 而添加
+	public Boolean getRunAuthForRestfulWriteTest(){return this.runAuthForRestfulWriteTest;}
+
+	public void setAuthForRestfulWriteTestClass(String authForRestfulWriteTestClassName)
+	{
+		this.runAuthForRestfulWriteTest = true;
+		this.authForRestfulWriteTestClass = authForRestfulWriteTestClassName;
+	}
+
+	public String getAuthForRestfulWriteTestClass(){return this.authForRestfulWriteTestClass;}
+
+	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
+	// 这三个方法针对“auth for restful read”的测试 而添加
+	public Boolean getRunAuthForRestfulReadTest(){return this.runAuthForRestfulReadTest;}
+
+	public void setAuthForRestfulReadTestClass(String authForRestfulReadTestClassName)
+	{
+		this.runAuthForRestfulReadTest = true;
+		this.authForRestfulReadTestClass = authForRestfulReadTestClassName;
+	}
+
+	public String getAuthForRestfulReadTestClass(){return this.authForRestfulReadTestClass;}
+
+	// getRunAuthForWebserviceTest、setAuthForWebserviceTestClass、getAuthForWebserviceTestClass
+	// 这三个方法针对“auth for webservice”的测试 而添加
+	public Boolean getRunAuthForWebserviceTest(){return this.runAuthForWebserviceTest;}
+
+	public void setAuthForWebserviceTestClass(String authForWebserviceTestClassName)
+	{
+		this.runAuthForWebserviceTest = true;
+		this.authForWebserviceTestClass = authForWebserviceTestClassName;
+	}
+
+	public String getAuthForWebserviceTestClass(){return this.authForWebserviceTestClass;};
 
 	// getRunAppClientAuthenticationForK8sTest、setAppClientAuthenticationForK8sTestClass、getAppClientAuthenticationForK8sTestClass
 	// 这三个方法针对“App client authentication for k8s”的测试 而添加
@@ -618,9 +643,6 @@ public class testConfigurationClass {
 
 				// 赋值：this.runConnectorConfigureTest = true;
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
-
-				// 赋值：this.runConnectorOtherInterfacesTest = true;
-				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 				
 				break;
 			
@@ -662,6 +684,9 @@ public class testConfigurationClass {
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_PORT);
 
+				setConnectorRealtimeTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_BASE_URL,
+						testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_PORT);
+
 				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
 						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
 
@@ -688,11 +713,11 @@ public class testConfigurationClass {
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
 
+				// 赋值：this.runConnectorRealtimeTest = true;
+				setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
+
 				// 赋值：this.runConnectorConfigureTest = true;
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
-
-				// 赋值：this.runConnectorOtherInterfacesTest = true;
-				setConnectorOtherInterfacesTestClass("com.siemens.datalayer.connector.test.ConnectorOtherInterfacesTests");
 
 				break;
 

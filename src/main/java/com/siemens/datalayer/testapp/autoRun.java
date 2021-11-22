@@ -53,12 +53,17 @@ public class autoRun {
 		connectorTest.setParameters(connectorTestParams);
 		myClasses.add(connectorTest);
 
-		//Add test class for connectorOtherInterfacesTest
-		if (testConfig.getRunConnectorOtherInterfacesTset())
+		// Add test class for connectorRealtimeTest
+		if (testConfig.getRunConnectorRealtimeTest())
 		{
-			XmlClass connectorOtherInterfacesTests = new XmlClass(testConfig.getConnectorOtherInterfacesTestClass());
-			connectorOtherInterfacesTests.setParameters(connectorTestParams);
-			myClasses.add(connectorOtherInterfacesTests);
+			XmlClass connectorRealtimeTests = new XmlClass(testConfig.getConnectorRealtimeTestClass());
+
+			Map<String,String> connectorRealtimeTestParams = new HashMap<>();
+			connectorRealtimeTestParams.put("base_url",testConfig.getConnectorRealtimeBaseURL());
+			connectorRealtimeTestParams.put("port",testConfig.getConnectorRealtimePort());
+
+			connectorRealtimeTests.setParameters(connectorRealtimeTestParams);
+			myClasses.add(connectorRealtimeTests);
 		}
 
 		//Add test class for connectorConfigureTest
@@ -337,6 +342,9 @@ public class autoRun {
 					
 					testParameters.put("dataFileForConnectorTest", projectName+"-connector-test-data.xlsx");			
 					testParameters.put("dataFileForApiEngineTest", projectName+"-api-engine-test-data.xlsx");
+
+					if (testConfig.getRunConnectorRealtimeTest())
+						testParameters.put("dataFileForConnectorRealtimeTest",projectName+"-connector-realtime-test-data.xlsx");
 
 					if(testConfig.getRunConnectorConfigureTest())
 						testParameters.put("dataFileForConnectorConfigureTest",projectName+"-connector-configure-test-data.xlsx");

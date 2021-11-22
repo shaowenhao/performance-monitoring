@@ -55,7 +55,7 @@ public class EntityManagementTests {
 		}
 
 		if (!entityIdToBeDeleteList.isEmpty())
-			EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+			EntityManagementEndpoint.deleteEntities(String.join(",",entityIdToBeDeleteList));
 
 		// delete the relations if the label of relation in List relationLabelToBeDeleteList
 		List<String> relationIdToBeDeleteList = new ArrayList<>();
@@ -90,7 +90,7 @@ public class EntityManagementTests {
 			{
 				for (String entityId : entity.getValue())
 				{
-					Response response = EntityManagementEndpoint.deleteEntity(entityId);
+					Response response = EntityManagementEndpoint.deleteEntities(entityId);
 					// System.out.println(response.jsonPath().prettify());
 
 					if (response.jsonPath().getString("code").equals(sucessfulRspCode)==false)
@@ -138,10 +138,10 @@ public class EntityManagementTests {
 		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
 		// check the response data size
-		checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+		// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 
 		// check the response data whether matches the request
-		if(paramMaps.get("description").contains("good request"))
+		if(paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 			List<Map<String,Object>> responseEntityList = null;
@@ -154,6 +154,10 @@ public class EntityManagementTests {
 
 			responseEntityList = response.jsonPath().getList("data");
 
+			// check the response data size
+			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+
+			// check the response data whether matches the request
 			checkEntityResponseData(requestBodyList,responseEntityList);
 		}
 	}
@@ -178,7 +182,7 @@ public class EntityManagementTests {
 		// beforeReplacementBodyString：excel读取出的bodyString
 		String beforeReplacementBodyString = paramMaps.get("body");
 
-		if (paramMaps.get("description").contains("good request"))
+		if (paramMaps.get("description").contains("good request")  || paramMaps.get("description").contains("good/bad request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 
@@ -215,7 +219,7 @@ public class EntityManagementTests {
 			Response response = EntityManagementEndpoint.updateEntities(beforeReplacementBodyString);
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+			// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 		}
 	}
 
@@ -351,7 +355,7 @@ public class EntityManagementTests {
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'deleteEntity' request to entity endpoint interface.")
 	@Story("Entity End Point: deleteEntity")
-	public void deleteEntity(Map<String, String> paramMaps)
+	public void deleteEntities(Map<String, String> paramMaps)
 	{
 		// Check if the entity to be deleted really exists, if not create it
 		if (paramMaps.containsKey("pre-execution"))
@@ -380,7 +384,7 @@ public class EntityManagementTests {
 				System.out.println(entityIdToBeDeleteList);
 
 				// 此时的entityIdToBeDeleteList已经替换成了真实的entity id
-				Response response = EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+				Response response = EntityManagementEndpoint.deleteEntities(String.join(",",entityIdToBeDeleteList));
 
 				checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
@@ -395,7 +399,7 @@ public class EntityManagementTests {
 		}
 		else
 		{
-			Response response = EntityManagementEndpoint.deleteEntity(String.join(",",entityIdToBeDeleteList));
+			Response response = EntityManagementEndpoint.deleteEntities(String.join(",",entityIdToBeDeleteList));
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 		}
 	}
@@ -454,9 +458,9 @@ public class EntityManagementTests {
 		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
 		// check the response data size
-		checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+		// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 
-		if(paramMaps.get("description").contains("good request"))
+		if(paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 			List<Map<String,Object>> responseEntityList = null;
@@ -522,7 +526,7 @@ public class EntityManagementTests {
 		}
 		System.out.println("beforeReplacementBodyString:" + beforeReplacementBodyString);
 
-		if (paramMaps.get("description").contains("good request"))
+		if (paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
 		{
 			List<Map<String, Object>> requestBodyList = null;
 
@@ -560,7 +564,7 @@ public class EntityManagementTests {
 			Response response = EntityManagementEndpoint.updateRelations(beforeReplacementBodyString);
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+			// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 		}
 	}
 

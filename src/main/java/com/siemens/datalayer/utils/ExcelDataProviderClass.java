@@ -1,12 +1,12 @@
 package com.siemens.datalayer.utils;
 
+import org.testng.ITestContext;
+import org.testng.annotations.DataProvider;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.testng.ITestContext;
-import org.testng.annotations.*;
 
 public class ExcelDataProviderClass {
 	
@@ -25,6 +25,24 @@ public class ExcelDataProviderClass {
 			System.out.println("Error occurs when try to open the excel file： " + e.getMessage());
 		}
 		
+		return queryParamCollection.iterator();
+	}
+
+	@DataProvider(name = "connector-realtime-test-data-provider")
+	public static Iterator<Object[]> connectorRealtimeTestDataProvider(Method m, ITestContext iTestContext)
+	{
+		Collection<Object[]> queryParamCollection = new ArrayList<Object[]>();
+
+		String methodName = m.getName();
+		String dataFileName = iTestContext.getCurrentXmlTest().getParameter("dataFileForConnectorRealtimeTest");
+
+		try {
+			ExcelFileReaderClass.readParamFromExcelFile(dataFileName, methodName, queryParamCollection);
+		}
+		catch (Exception e) {
+			System.out.println("Error occurs when try to open the excel file： " + e.getMessage());
+		}
+
 		return queryParamCollection.iterator();
 	}
 
