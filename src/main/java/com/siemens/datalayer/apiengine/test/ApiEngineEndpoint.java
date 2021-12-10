@@ -57,6 +57,21 @@ public class ApiEngineEndpoint {
         return response;
     }
 
+    // API Engine Query Endpoint with HTTPS: getData (graphql interface)
+    @Step("Send a graphql https query request 'getData' to data-layer-api-engine")
+    public static Response postHttpsGraphql(String query,String accessToken) {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given().relaxedHTTPSValidation();
+        httpRequest.header("Authorization","Bearer "+accessToken);
+        Response response = httpRequest.body(query)
+                .contentType("application/json")
+                .filter(new AllureRestAssured())
+                .post("jinzu-test/api-engine/graphql");
+
+        return response;
+    }
     public static Response getGraphqlApiSchema() {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();

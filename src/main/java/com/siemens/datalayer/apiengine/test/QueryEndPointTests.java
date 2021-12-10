@@ -3,6 +3,7 @@ package com.siemens.datalayer.apiengine.test;
 import java.util.*;
 
 import com.google.gson.Gson;
+import com.siemens.datalayer.iot.util.OltuJavaClient;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -159,6 +160,66 @@ public class QueryEndPointTests {
 		}
 	}
 
+
+	@Test ( priority = 0,
+			description = "Test Api-engine Query Endpoint: GraphQL interface with https",
+			dataProvider = "api-engine-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Post a 'getData' https request to graphql query interface.")
+	@Story("Query End Point: Https GraphQL Interface")
+	public void getDataGraphQLHttps(Map<String, String> paramMaps)
+	{
+		// get accessToken firstly
+		String accessToken = OltuJavaClient.getAccessTokenUseClientCredentials(paramMaps.get("accessTokenUrl"),
+				paramMaps.get("clientId"),paramMaps.get("clientSecret"));
+		// query though https with accessToken
+		Response response = ApiEngineEndpoint.postHttpsGraphql(paramMaps.get("query"),accessToken);
+
+		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+		if (paramMaps.get("description").contains("good request"))
+		{
+			HashMap<String, String> queryParameters = new HashMap<>();
+			parseQueryString(paramMaps.get("query"), queryParameters);
+
+			Assert.assertTrue(response.getBody().asString().contains(queryParameters.get("entity")));
+
+			String entityListPath = "data." + queryParameters.get("entity");
+
+			if (paramMaps.get("description").contains("data retrieved"))
+			{
+				List<HashMap<String, String>> entityList = response.jsonPath().getList(entityListPath);
+
+				if (queryParameters.containsKey("condition"))
+				{
+					if (queryParameters.get("condition").contains("},"))
+						checkComplexCondition(queryParameters.get("condition"), queryParameters.get("entity"), response);
+					else
+						Assert.assertTrue(verifySingleCondition(entityListPath, queryParameters.get("condition"), entityList));
+				}
+
+				if (queryParameters.containsKey("field"))
+				{
+					if (queryParameters.get("field").contains("{"))
+					{
+						String fieldStr = queryParameters.get("field");
+						checkSubEntityFields(fieldStr, queryParameters.get("entity"), response);
+					}
+					else // all items are field names
+					{
+						String allFields = queryParameters.get("field");
+						allFields = allFields.replaceAll("\\s+", ",");
+						CommonCheckFunctions.checkDataContainsSpecifiedFields(entityListPath, allFields, entityList);
+					}
+				}
+			}
+			else
+			{
+				Assert.assertNull(response.jsonPath().get(entityListPath), "The response message does not contain any data.");
+			}
+		}
+	}
 	// ---abandoned---
 	@Step("generate api-engine post request")
 	public static String generatePostRequest(String operate,int requestNumber)

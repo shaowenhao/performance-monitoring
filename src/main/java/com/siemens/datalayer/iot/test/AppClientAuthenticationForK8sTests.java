@@ -16,7 +16,7 @@ import java.util.Map;
 public class AppClientAuthenticationForK8sTests {
     @Parameters({"baseUrlWithAuth", "portWithAuth"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorEndpoint(@Optional("http://140.231.89.106") String baseUrlWithAuth, @Optional("32441") String portWithAuth) {
+    public void setConnectorEndpoint(@Optional("https://demo.technology.siemens.cloud") String baseUrlWithAuth, @Optional("10443") String portWithAuth) {
         AppClientAuthenticationEndpoint.setBaseUrl(baseUrlWithAuth);
         AppClientAuthenticationEndpoint.setPort(portWithAuth);
     }

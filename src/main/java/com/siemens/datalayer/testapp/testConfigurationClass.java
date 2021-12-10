@@ -17,6 +17,9 @@ public class testConfigurationClass {
 	private String apiEngine_base_url = null;
 	private String apiEngine_port = null;
 
+	private String apiEngine_https_base_url = null;
+	private String apiEngine_https_port = null;
+
 	private String mongodb_host = null;
 	private String mongodb_port = null;
 	private String mongodb_username = null;
@@ -78,7 +81,13 @@ public class testConfigurationClass {
 	Boolean runEntityMgmtTest = false;
 	
 	Boolean runSubscriptionMgmtTest = false;
-	
+
+	Boolean runApiEngineHttpsTest = false;
+
+	public Boolean getRunApiEngineHttpsTest() {
+		return runApiEngineHttpsTest;
+	}
+
 	public void setConfigName(String name) {
 		this.configName = name;
 	}
@@ -134,13 +143,25 @@ public class testConfigurationClass {
 		this.apiEngine_base_url = base_url;
 		this.apiEngine_port = port;
 	}
-	
+
 	public String getApiEngineBaseURL() {
 		return this.apiEngine_base_url;
 	}
-	
+
 	public String getApiEnginePort() {
 		return this.apiEngine_port;
+	}
+
+	public void setApiEngineHttpsTest(String base_url, String port) {
+		this.runApiEngineHttpsTest = true;
+		this.apiEngine_https_base_url = base_url;
+		this.apiEngine_https_port = port;
+	}
+	public String getApiEngineHttpsBaseURL() {
+		return this.apiEngine_https_base_url;
+	}
+	public String getApiEngineHttpsPort() {
+		return this.apiEngine_https_port;
 	}
 
 	// setRelationalDatabaseTest、getRelationalDatabaseProperties
@@ -470,7 +491,8 @@ public class testConfigurationClass {
 	}
 
 	public String getAppClientAuthenticationForK8sTestClass(){return this.appClientAuthenticationForK8sTestClass;}
-	
+
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -650,18 +672,25 @@ public class testConfigurationClass {
 				setConnectorTest(testEnvironmentConstants.JINZU_DOMAIN_NAME,
 						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_BASE_URL, 
 						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_PORT);
-	
-				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL, 
-						 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
-				
+
+				// 注释掉http请求的部分
+				//				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL,
+				//						 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
+
+				//https请求
+				setApiEngineHttpsTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_BASE_URL,
+						testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_PORT);
+
 				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
-				
+
 				setEntityMgmtTest(testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);
 
 				// 赋值：this.runAppClientAuthenticationForK8sTest = true;
 				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
-				
+
+
+
 				break;
 			
 			case ("jinzu-prod"):
