@@ -684,6 +684,12 @@ public class testConfigurationClass {
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_CONNECTOR_PORT);
 
+				setMongoDBHost(testEnvironmentConstants.IOT_DEV_MONGODB_HOST);
+				setMongoDBPort(testEnvironmentConstants.IOT_DEV_MONGODB_PORT);
+				setMongoDBUserName(testEnvironmentConstants.IOT_DEV_MONGODB_USERNAME);
+				setMongoDBPassword(testEnvironmentConstants.IOT_DEV_MONGODB_PASSWORD);
+				setMongoDBDatabaseName(testEnvironmentConstants.IOT_DEV_MONGODB_DATABASENAME);
+
 				setConnectorRealtimeTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_BASE_URL,
 						testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_PORT);
 

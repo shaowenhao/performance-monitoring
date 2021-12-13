@@ -61,6 +61,11 @@ public class autoRun {
 			Map<String,String> connectorRealtimeTestParams = new HashMap<>();
 			connectorRealtimeTestParams.put("base_url",testConfig.getConnectorRealtimeBaseURL());
 			connectorRealtimeTestParams.put("port",testConfig.getConnectorRealtimePort());
+			connectorRealtimeTestParams.put("mongodb_host",testConfig.getMongoDBHost());
+			connectorRealtimeTestParams.put("mongodb_port",testConfig.getMongoDBPort());
+			connectorRealtimeTestParams.put("mongodb_username",testConfig.getMongoDBUserName());
+			connectorRealtimeTestParams.put("mongodb_password",testConfig.getMongoDBPassword());
+			connectorRealtimeTestParams.put("mongodb_databasename",testConfig.getMongoDBDatabaseName());
 
 			connectorRealtimeTests.setParameters(connectorRealtimeTestParams);
 			myClasses.add(connectorRealtimeTests);
