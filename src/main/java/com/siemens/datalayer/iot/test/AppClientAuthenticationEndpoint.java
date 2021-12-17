@@ -27,10 +27,11 @@ public class AppClientAuthenticationEndpoint {
     @Step("send a request of 'getSchema' without authentication")
     public static Response getSchema()
     {
+
         RestAssured.baseURI = baseUrl;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = given();
+        RequestSpecification httpRequest = given().relaxedHTTPSValidation();
         httpRequest.header("content-type","application/json");
 
         Response response = httpRequest.filter(new AllureRestAssured())
@@ -48,7 +49,7 @@ public class AppClientAuthenticationEndpoint {
         RestAssured.baseURI = baseUrl;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = given();
+        RequestSpecification httpRequest = given().relaxedHTTPSValidation();
         httpRequest.header("Authorization","Bearer "+accessToken);
         httpRequest.header("content-type","application/json");
 
@@ -82,7 +83,7 @@ public class AppClientAuthenticationEndpoint {
         RestAssured.baseURI = baseUrl;
         RestAssured.port = Integer.valueOf(port).intValue();
 
-        RequestSpecification httpRequest = given();
+        RequestSpecification httpRequest = given().relaxedHTTPSValidation();
         httpRequest.header("Authorization","Bearer "+accessToken);
         httpRequest.header("content-type","application/json");
 

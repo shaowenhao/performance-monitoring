@@ -85,21 +85,31 @@ public class autoRun {
 			myClasses.add(connectorConfigureTests);
 		}
 
+
 		//Add test class for ApiEngine
+		// jinzu-test apiengine only use https to access
 		XmlClass apiEngineTest = new XmlClass("com.siemens.datalayer.apiengine.test.QueryEndPointTests");
 		
 		Map<String,String> apiEngineTestParams = new LinkedHashMap<String,String> ();
-		apiEngineTestParams.put("base_url", testConfig.getApiEngineBaseURL());
-		apiEngineTestParams.put("port", testConfig.getApiEnginePort());
-		
-		//Exclude Restful API test methods
-		/* List<String> excludeMethods = new ArrayList<String>();
-		excludeMethods.add("getDataEntities");
-
-		apiEngineTest.setExcludedMethods(excludeMethods); */
-		
-		apiEngineTest.setParameters(apiEngineTestParams);
-		myClasses.add(apiEngineTest);
+		if(!testConfig.getRunApiEngineHttpsTest()) {
+			apiEngineTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			apiEngineTestParams.put("port", testConfig.getApiEnginePort());
+			//Exclude getDataGraphQLHttps (https) test methods
+			List<String> excludeMethods = new ArrayList<String>();
+			excludeMethods.add("getDataGraphQLHttps");
+			apiEngineTest.setExcludedMethods(excludeMethods);
+			apiEngineTest.setParameters(apiEngineTestParams);
+			myClasses.add(apiEngineTest);
+		}else{
+			apiEngineTestParams.put("base_url", testConfig.getApiEngineHttpsBaseURL());
+			apiEngineTestParams.put("port", testConfig.getApiEngineHttpsPort());
+			//Exclude getDataGraphQL (http) test methods
+			List<String> excludeMethods = new ArrayList<String>();
+			excludeMethods.add("getDataGraphQL");
+			apiEngineTest.setExcludedMethods(excludeMethods);
+			apiEngineTest.setParameters(apiEngineTestParams);
+			myClasses.add(apiEngineTest);
+		}
 
 		//Add test class for userQueryTest
 		if (testConfig.getRunUserQueryTest())
