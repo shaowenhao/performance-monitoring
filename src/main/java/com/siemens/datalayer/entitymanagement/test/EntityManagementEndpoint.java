@@ -154,7 +154,7 @@ public class EntityManagementEndpoint {
 
         Response response = httpRequest.body(body)
                 .filter(new AllureRestAssured())
-                .post("/api/v2/graphs/relations");
+                .put("/api/v2/graphs/relations");
         return response;
     }
 

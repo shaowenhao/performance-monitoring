@@ -39,7 +39,7 @@ public class EntityManagementTests {
 	    List<String> entityIdToBeDeleteList = new ArrayList<>();
 
 		List<String> entityLabelToBeDeleteList = Arrays.asList("testEntity1","testEntity2","testEntity3",
-				"testEntity4","Device_Modelqwerqwr3r23rwer*()(!@#$%%^&*","testEntity1ForRelation","testEntity2ForRelation");
+				"testEntity4","entity1ForRelation","entity2ForRelation");
 
 		for(String label : entityLabelToBeDeleteList){
 			Response responseOfGetEntities = EntityManagementEndpoint.getEntities(label);
@@ -60,7 +60,7 @@ public class EntityManagementTests {
 		// delete the relations if the label of relation in List relationLabelToBeDeleteList
 		List<String> relationIdToBeDeleteList = new ArrayList<>();
 
-		List<String> relationLabelToBeDeleteList = Arrays.asList("testRelation1","testRelation2","testRelation3");
+		List<String> relationLabelToBeDeleteList = Arrays.asList("testRelation1","testRelation2","testRelation3","testRelation4");
 
 		for(String label : relationLabelToBeDeleteList){
 			Response responseOfGetRelations = EntityManagementEndpoint.getRelations(label);
@@ -137,11 +137,11 @@ public class EntityManagementTests {
 
 		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-		// check the response data size
-		// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+		// check the response warning or error
+		checkResponseWarningError(paramMaps,response);
 
 		// check the response data whether matches the request
-		if(paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
+		if(paramMaps.get("description").contains("good request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 			List<Map<String,Object>> responseEntityList = null;
@@ -182,7 +182,7 @@ public class EntityManagementTests {
 		// beforeReplacementBodyString：excel读取出的bodyString
 		String beforeReplacementBodyString = paramMaps.get("body");
 
-		if (paramMaps.get("description").contains("good request")  || paramMaps.get("description").contains("good/bad request"))
+		if (paramMaps.get("description").contains("good request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 
@@ -201,10 +201,14 @@ public class EntityManagementTests {
 
 			// bodyString：替换成真实id了的bodyString
 			String bodyString = com.alibaba.fastjson.JSONObject.toJSONString(requestBodyList);
+			System.out.println("bodyString: " + bodyString);
 
 			Response response = EntityManagementEndpoint.updateEntities(bodyString);
+			System.out.println(response.jsonPath().prettify());
 
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			checkResponseWarningError(paramMaps,response);
 
 			// check the response data size
 			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
@@ -217,9 +221,11 @@ public class EntityManagementTests {
 		else
 		{
 			Response response = EntityManagementEndpoint.updateEntities(beforeReplacementBodyString);
+			System.out.println(response.jsonPath().prettify());
+
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-			// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+			checkResponseWarningError(paramMaps,response);
 		}
 	}
 
@@ -457,10 +463,9 @@ public class EntityManagementTests {
 
 		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
-		// check the response data size
-		// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
+		checkResponseWarningError(paramMaps,response);
 
-		if(paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
+		if(paramMaps.get("description").contains("good request"))
 		{
 			List<Map<String,Object>> requestBodyList = null;
 			List<Map<String,Object>> responseEntityList = null;
@@ -526,7 +531,7 @@ public class EntityManagementTests {
 		}
 		System.out.println("beforeReplacementBodyString:" + beforeReplacementBodyString);
 
-		if (paramMaps.get("description").contains("good request") || paramMaps.get("description").contains("good/bad request"))
+		if (paramMaps.get("description").contains("good request"))
 		{
 			List<Map<String, Object>> requestBodyList = null;
 
@@ -548,8 +553,11 @@ public class EntityManagementTests {
 			System.out.println("bodyString:" + bodyString);
 
 			Response response = EntityManagementEndpoint.updateRelations(bodyString);
+			System.out.println(response.jsonPath().prettify());
 
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			checkResponseWarningError(paramMaps,response);
 
 			// check the response data size
 			checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
@@ -562,7 +570,11 @@ public class EntityManagementTests {
 		else
 		{
 			Response response = EntityManagementEndpoint.updateRelations(beforeReplacementBodyString);
+			System.out.println(response.jsonPath().prettify());
+
 			checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+			checkResponseWarningError(paramMaps,response);
 
 			// checkResponseDataSize(paramMaps,response.jsonPath().getList("data").size());
 		}
@@ -847,6 +859,54 @@ public class EntityManagementTests {
 				Assert.assertNull(actualMessage, "The content of operation message is null.");
 			else
 				Assert.assertTrue(actualMessage.contains(requestParameters.get("rspMessage")), "The operation message contains the expected content.");
+		}
+	}
+
+	@Step("Verify the response warning or error")
+	public static void checkResponseWarningError(Map<String, String> requestParameters, Response response)
+	{
+		if (requestParameters.get("description").contains("good request"))
+		{
+			Assert.assertTrue(response.jsonPath().get("data") instanceof List);
+
+			List<Map<String,Object>> dataList = response.jsonPath().getList("data");
+			for (Map<String,Object> dataItem : dataList)
+			{
+				Assert.assertFalse(dataItem.containsKey("warning"));
+				Assert.assertFalse(dataItem.containsKey("error"));
+			}
+		}
+
+		if (requestParameters.containsKey("warning"))
+		{
+			Assert.assertTrue(response.jsonPath().get("data") instanceof Map);
+
+			List<String> expectedwarningList = Arrays.asList(requestParameters.get("warning").split(","));
+
+			List<Map<String,Object>> responsewarningList = response.jsonPath().getList("data.warning");
+
+			List<String> responseRuleList = responsewarningList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+
+			Assert.assertEquals(responseRuleList,expectedwarningList);
+
+			for (String warningItem : expectedwarningList)
+				Assert.assertTrue(responseRuleList.contains(warningItem));
+		}
+
+		if (requestParameters.containsKey("error"))
+		{
+			Assert.assertTrue(response.jsonPath().get("data") instanceof Map);
+
+			List<String> expectedErrorList = Arrays.asList(requestParameters.get("error").split(","));
+
+			List<Map<String,Object>> responseErrorList = response.jsonPath().getList("data.error");
+
+			List<String> responseRuleList = responseErrorList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+
+			Assert.assertEquals(responseRuleList,expectedErrorList);
+
+			for (String errorItem : expectedErrorList)
+				Assert.assertTrue(responseRuleList.contains(errorItem));
 		}
 	}
 
