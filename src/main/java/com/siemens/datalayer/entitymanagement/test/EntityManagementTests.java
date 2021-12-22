@@ -903,7 +903,7 @@ public class EntityManagementTests {
 
 			List<String> responseRuleList = responseErrorList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
 
-			Assert.assertEquals(responseRuleList,expectedErrorList);
+			Assert.assertEquals(responseRuleList.size(),expectedErrorList.size());
 
 			for (String errorItem : expectedErrorList)
 				Assert.assertTrue(responseRuleList.contains(errorItem));
