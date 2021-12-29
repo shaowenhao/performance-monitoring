@@ -15,6 +15,11 @@ import org.testng.annotations.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.core.Is.is;
+
 @Epic("SDL Entity-management")
 @Feature("Entity/ Relation/ Graph End Points")
 
@@ -757,6 +762,39 @@ public class EntityManagementTests {
 		}
 	}
 
+
+	@Test ( alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: publishCheck",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'publishCheck' request to entity endpoint interface.")
+	@Story("Entity End Point: publishCheck")
+	public void publishCheck(Map<String, String> paramMaps){
+		String bodyString = paramMaps.get("body");
+		Response response = EntityManagementEndpoint.publishCheck(bodyString);
+
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+		Map<String,List<String>> data = response.jsonPath().get("data");
+		//check valid publish action without warning and error
+		if(paramMaps.get("description").contains("good request")){
+			assertThat(data.get("warning"),is(empty()));
+			assertThat(data.get("error"),is(empty()));
+		}
+
+		if(paramMaps.containsKey("warningRule")){
+			List<Map<String,Object>> rspWarningList = response.jsonPath().getList("data.warning");
+			List<String> rspWarningRuleList = rspWarningList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+			assertThat(rspWarningRuleList,hasItem(paramMaps.get("warningRule")));
+		}
+
+		if(paramMaps.containsKey("errorRule")){
+			List<Map<String,Object>> rspErrorList = response.jsonPath().getList("data.error");
+			List<String> rspErrorRuleList = rspErrorList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+			assertThat(rspErrorRuleList,hasItem(paramMaps.get("errorRule")));
+		}
+	}
 
 	// Check if the entity with the given location & label really exists, if not try to create it
 	public static void createEntityToBeTest(String preBodyString)
