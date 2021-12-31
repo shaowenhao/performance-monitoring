@@ -1,34 +1,28 @@
+/***
+ * 由于现在mysql的host、port不能暴露出来，regression case跑在gitlab上面，无法连接对应的mysql，所以将连接MySQL，进入MySQL内部比对数据的相关代码都删除。
+ */
 package com.siemens.datalayer.iot.test;
+import com.google.gson.Gson;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
-import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
-
-import com.google.gson.Gson;
-
 import io.qameta.allure.*;
 import io.restassured.response.Response;
-
-import org.apache.commons.collections4.MapUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.Assert;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Epic("SDL Api-engine")
 @Feature("Relational databases as data source,Insert/Update/Delete data source")
 public class RelationalDatabaseTests {
-
-    static Connection connection;
-    static Statement statement;
-
-    static List<String> databaseTableList;
 
     @Parameters({"base_url","port","db_properties"})
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
@@ -36,53 +30,6 @@ public class RelationalDatabaseTests {
     {
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
-
-        // 保持数据库连接不断开，最后在AfterClass(deleteDataForMysql)中关闭数据库连接
-        try
-        {
-            // 连接数据库
-            connection = JdbcMysqlUtil.getConnection(db_properties);
-            if(!connection.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
-
-            // 操作数据库
-            statement = connection.createStatement();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        // 连接数据库的方式
-        // 1、新建数据库配置文件(resources.iot.dev.mysql.db.properties)
-        // 2、获取配置文件信息(com.siemens.datalayer.iot.util.JdbcUtil)
-        // 3、注册数据库驱动
-
-        databaseTableList = new ArrayList<>();
-    }
-
-   @AfterClass(description = "Delete the data written for testing in Mysql")
-    public void deleteDataForMysql()
-    {
-        try
-        {
-            // 需要执行的sql语句，删除testcase中insert的数据，还原现场
-            if(databaseTableList.size() > 0)
-            {
-                for (String databaseTable : databaseTableList)
-                {
-                    // 需要执行的sql语句
-                    String sql = "DELETE FROM " + databaseTable;
-                    statement.execute(sql);
-                }
-            }
-
-            // 断开数据库的连接，释放资源
-            statement.close();
-            connection.close();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     @Test(priority = 0,
@@ -93,14 +40,6 @@ public class RelationalDatabaseTests {
     @Description("Post a 'getData' request to graphql query interface.")
     @Story("insert/delete/update mysql(data source) Scenarios")
     public void postGraphForMysql(Map<String, String> paramMaps) throws JSONException {
-        // 在每个testcase执行前，清空当前数据库
-        // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
-        try{
-            String sql = "DELETE FROM " + paramMaps.get("database");
-            statement.execute(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
 
         // 这两行代码，在testcase最先执行，
         // 作用为：比如update、delete数据库前，需要数据库中有数据
@@ -132,15 +71,13 @@ public class RelationalDatabaseTests {
                         System.out.println("mysql返回code:" + String.valueOf(jo.get("code")) + " , mysql返回data:" + String.valueOf(jo.get("data")));
                         checkResponseCodeOfMysql(paramMaps, String.valueOf(jo.get("code")), String.valueOf(jo.get("data")));
                     }
-
-                    // 若mysql数据insert、update、delete成功，则调用verityExpectedAndActualDataInMysql方法校验预期结果和实际结果
-                    if (paramMaps.get("description").contains("data retrieved")) {
-                        verityExpectedAndActualDataInMysql(paramMaps.get("database"),paramMaps.get("expectResults"));
-
-                        databaseTableList.add(paramMaps.get("database"));
-                    }
                 }
             }
+        }
+
+        // 如果有在mysql里写入数据，则调用deleteDataFromMysql方法清除数据，还原测试环境。
+        if (paramMaps.containsKey("expectedIDWrittenToMysql")) {
+            deleteDataFromMysql(paramMaps);
         }
     }
 
@@ -174,91 +111,33 @@ public class RelationalDatabaseTests {
         }
     }
 
-    @Step("verify the expected results and the actual data stored in MySQL")
-    public static void verityExpectedAndActualDataInMysql(String database,String expectResultsFromExcel)
+    @Step("从MySQL清除数据，还原测试环境")
+    public static void deleteDataFromMysql(Map<String,String> requestParameters)
     {
-        List<Map<String,Object>> expectListFromExcel = new ArrayList<>();
-        if (expectResultsFromExcel != null)
+        // generate graphQL sentence for delete
+        String graphQLSentenceForDelete = null;
+
+        String IDSentence = "";
+        List<String> IDList = Arrays.asList(requestParameters.get("expectedIDWrittenToMysql").split(","));
+
+        for (String ID : IDList)
         {
-            List<String> list = Arrays.asList(expectResultsFromExcel.split("}"));
-
-            List<String> listWithString = new ArrayList<>();
-            for (int i=0;i<list.size();i++)
-                listWithString.add(list.get(i) + "}");
-
-            // 将listWithString中的String格式转换成Map
-            for (int i=0;i<listWithString.size();i++)
-            {
-                Gson gson = new Gson();
-                Map<String,Object> expectListFromExcelItem = new HashMap<>();
-                expectListFromExcelItem = gson.fromJson(listWithString.get(i),expectListFromExcelItem.getClass());
-                expectListFromExcel.add(expectListFromExcelItem);
-            }
-            System.out.println(expectListFromExcel);
+            IDSentence += "\t\t" + "{" + "\n" + "\t\t\t" + "ID:" + ID + "\n" + "\t\t" + "}" + "\n";
         }
 
-        // 定义变量actualListFromMysql：MySQL查询结果，为Map组成的List
-        List<Map<String,Object>> actualListFromMysql = new ArrayList<>();
-        try {
-            String sql = "SELECT * from " + database;
+        graphQLSentenceForDelete = "mutation mutationName{"
+                + "\n\t" + requestParameters.get("database") + "_" + "Delete" + "(input:"
+                + "\n\t" + "["
+                + "\n" + IDSentence
+                + "\t" + "]"
+                + "\n\t\t" + ")"
+                + "\n\t\t" + "{"
+                + "\n\t\t\t" + "json_value"
+                + "\n\t\t\t" + "reserved_field_1"
+                + "\n\t\t\t" + "reserved_field_2"
+                + "\n\t\t" + "}"
+                + "\n" + "}";
 
-            ResultSet rs = statement.executeQuery(sql);
-            ResultSetMetaData metaData = rs.getMetaData();
-
-            while (rs.next()){
-                Map<String,Object> actualListFromMysqlItem = new HashMap<>();
-
-                for (int i=1;i<=metaData.getColumnCount();i++){
-                    String columnName = metaData.getColumnName(i);
-                    Object value = rs.getObject(columnName);
-                    actualListFromMysqlItem.put(columnName,value);
-                }
-                actualListFromMysql.add(actualListFromMysqlItem);
-            }
-
-            rs.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        System.out.println(actualListFromMysql);
-        Assert.assertEquals(expectListFromExcel.size(),actualListFromMysql.size());
-
-        for (int i=0;i<actualListFromMysql.size();i++)
-        {
-            for (Map.Entry<String,Object> actualMapFromMysql : actualListFromMysql.get(i).entrySet())
-            {
-                String rowColumnOfMysqlKey = actualMapFromMysql.getKey();
-                Object rowColumnOfMysqlValue = actualMapFromMysql.getValue();
-
-                if (rowColumnOfMysqlValue instanceof Integer)
-                {
-                    Assert.assertEquals(MapUtils.getInteger(expectListFromExcel.get(i),rowColumnOfMysqlKey),rowColumnOfMysqlValue);
-                }
-
-                else if (rowColumnOfMysqlValue instanceof Float)
-                {
-                    Assert.assertEquals(MapUtils.getFloat(expectListFromExcel.get(i),rowColumnOfMysqlKey), (Float) rowColumnOfMysqlValue,0.001);
-                }
-
-                else if (rowColumnOfMysqlValue instanceof LocalDateTime)
-                {
-                    DateTimeFormatter dfWithT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"); // 格式一
-                    DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd' 'HH:mm:ss"); // 格式二
-
-                    // 将string格式转换成localdatetime格式，原来的格式为“格式一”
-                    LocalDateTime ldt = LocalDateTime.parse(MapUtils.getString(expectListFromExcel.get(i),rowColumnOfMysqlKey),dfWithT);
-
-                    // 将localdatetime格式转换成string格式，使用“格式二”
-                    String login_time = df.format(ldt);
-                    Assert.assertEquals(ldt,rowColumnOfMysqlValue);
-                }
-
-                else
-                {
-                    Assert.assertEquals(expectListFromExcel.get(i).get(rowColumnOfMysqlKey),rowColumnOfMysqlValue);
-                }
-            }
-        }
+        ApiEngineEndpoint.postGraphql(graphQLSentenceForDelete);
     }
 }
