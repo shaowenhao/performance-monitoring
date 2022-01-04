@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Epic("SDL Api-engine")
-@Feature("Restful as data source,write (data source) by simple/complex single/multi entity")
+@Feature("Restful as data source,write (data source) by simple/complex single/multi entity,support transaction control")
 public class RestfulAsDataSourcesTests {
     static Connection connection;
     static Statement statement;
