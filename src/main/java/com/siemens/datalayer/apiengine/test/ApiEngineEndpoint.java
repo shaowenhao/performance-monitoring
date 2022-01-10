@@ -72,6 +72,7 @@ public class ApiEngineEndpoint {
 
         return response;
     }
+
     public static Response getGraphqlApiSchema() {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();

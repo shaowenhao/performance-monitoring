@@ -169,7 +169,7 @@ public class autoRun {
 		 	myClasses.add(authForRestfulWriteTest);
 		 }
 
-		// Add test calss for AuthForRestfulReadTests
+		// Add test class for AuthForRestfulReadTests
 		if (testConfig.getRunAuthForRestfulReadTest())
 		{
 			XmlClass authForRestfulReadTest = new XmlClass(testConfig.getAuthForRestfulReadTestClass());
@@ -182,7 +182,7 @@ public class autoRun {
 			myClasses.add(authForRestfulReadTest);
 		}
 
-		// Add test calss for AuthForWebserviceTests
+		// Add test class for AuthForWebserviceTests
 		if (testConfig.getRunAuthForWebserviceTest())
 		{
 			XmlClass authForWebserviceTest = new XmlClass(testConfig.getAuthForWebserviceTestClass());
@@ -253,6 +253,23 @@ public class autoRun {
 			appClientAuthenticationForK8sTest.setParameters(appClientAuthenticationForK8sTestParams);
 			myClasses.add(appClientAuthenticationForK8sTest);
 		}
+
+		/***
+		 * 以下为data-brain添加：
+		 */
+		// Add test calss for DesigoCCTests
+		if (testConfig.getRunDesigoCCTest())
+		{
+			XmlClass desigoCCTest = new XmlClass(testConfig.getDesigoCCTestClass());
+
+			Map<String,String> desigoCCTestParams = new HashMap<>();
+			desigoCCTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			desigoCCTestParams.put("port",testConfig.getConnectorPort());
+
+			desigoCCTest.setParameters(desigoCCTestParams);
+			myClasses.add(desigoCCTest);
+		}
+
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
@@ -326,7 +343,7 @@ public class autoRun {
 		if (args.length >= 2) // 如果输入的参数的个数大于或等于两个
 		{
 			// asList方法还提供了一个创建固定长度的列表的便捷方法，该列表被初始化为包含多个元素
-			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc");
+			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc","databrain");
 			List<String> environmentList = Arrays.asList("dev", "test", "prod");
 			
 			if ((projectNameList.contains(args[0].toLowerCase())) && (environmentList.contains(args[1].toLowerCase())))

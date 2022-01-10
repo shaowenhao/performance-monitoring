@@ -84,6 +84,12 @@ public class testConfigurationClass {
 
 	Boolean runApiEngineHttpsTest = false;
 
+	/***
+	 * 以下为data-brain添加（包括desigoCC、enlighted等）：
+	 */
+	Boolean runDesigoCCTest = false;
+	private String runDesigoCCTestClass = null;
+
 	public Boolean getRunApiEngineHttpsTest() {
 		return runApiEngineHttpsTest;
 	}
@@ -492,6 +498,20 @@ public class testConfigurationClass {
 
 	public String getAppClientAuthenticationForK8sTestClass(){return this.appClientAuthenticationForK8sTestClass;}
 
+	/***
+	 * 以下为data-brain添加：
+	 */
+	// getRunDesigoCCTest、setRunDesigoCCTestClass、getRunDesigoCCTestClass
+	// 这三个方法针对“read desigoCC history/realtime data”的测试 而添加
+	public Boolean getRunDesigoCCTest(){return this.runDesigoCCTest;}
+
+	public void setDesigoCCTestClass(String runDesigoCCTestClassName)
+	{
+		this.runDesigoCCTest = true;
+		this.runDesigoCCTestClass = runDesigoCCTestClassName;
+	}
+
+	public String getDesigoCCTestClass(){return this.runDesigoCCTestClass;}
 
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
@@ -822,6 +842,17 @@ public class testConfigurationClass {
 				// 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
+
+			case("databrain-dev"):
+				setConnectorTest(testEnvironmentConstants.DATABRAIN_DOMAIN_NAME,
+						testEnvironmentConstants.DATABRAIN_DEV_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.DATABRAIN_DEV_CONNECTOR_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_BASE_URL,
+						testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_PORT);
+
+				// 赋值：this.runDesigoCCTest = true;
+				setDesigoCCTestClass("com.siemens.datalayer.databrain.test.DesigoCCTests");
 
 				break;
 			
