@@ -7,6 +7,7 @@ import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
@@ -28,6 +29,7 @@ public class EntityManagementTests {
 
 	static Map<String, List<String>> testEntityMap;
 	static Map<String,List<String>> testRelationMap;
+	static Map<String,String> testGraphMap;
 
 	@Parameters({"base_url", "port"})
 	@BeforeClass (description = "Configure the host address and communication port of entity-management")
@@ -35,6 +37,7 @@ public class EntityManagementTests {
 	{
 		testEntityMap = new HashMap<>();
 		testRelationMap = new HashMap<>();
+		testGraphMap = new HashMap<>();
 
 		EntityManagementEndpoint.setBaseUrl(base_url);
 		EntityManagementEndpoint.setPort(port);
@@ -44,7 +47,7 @@ public class EntityManagementTests {
 	    List<String> entityIdToBeDeleteList = new ArrayList<>();
 
 		List<String> entityLabelToBeDeleteList = Arrays.asList("testEntity1","testEntity2","testEntity3",
-				"testEntity4","entity1ForRelation","entity2ForRelation");
+				"testEntity4","entity1ForRelation","entity2ForRelation","pc_test1","pc_test2");
 
 		for(String label : entityLabelToBeDeleteList){
 			Response responseOfGetEntities = EntityManagementEndpoint.getEntities(label);
@@ -796,6 +799,77 @@ public class EntityManagementTests {
 		}
 	}
 
+	@Test ( alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: publishGraph",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'publishGraph' request to entity endpoint interface.")
+	@Story("Entity End Point: publishGraph")
+	public void publishGraph(Map<String, String> paramMaps){
+		String bodyString = paramMaps.get("body");
+		Response response = EntityManagementEndpoint.publish(bodyString);
+		if(response.jsonPath().getString("code").equals(sucessfulRspCode)){
+			// 查询entityes 获取laebl和id
+			Response getEntitiesResponse = EntityManagementEndpoint.getEntities(paramMaps.get("entitylabels"));
+			generateTestGrapMap(getEntitiesResponse);
+			//查询relation 获取label和id
+			Response getRelationsResponse = EntityManagementEndpoint.getRelations(paramMaps.get("relationLabels"));
+			System.out.println("debug here:"+getRelationsResponse);
+			generateTestGrapMap(getRelationsResponse);
+		}
+	}
+
+	@Test ( dependsOnMethods = { "publishGraph" },
+			alwaysRun = true,
+			priority = 0,
+			description = "Test Entity-management Entity Endpoint: updateCheck",
+			dataProvider = "entity-management-test-data-provider",
+			dataProviderClass = ExcelDataProviderClass.class)
+	@Severity(SeverityLevel.BLOCKER)
+	@Description("Send a 'updateCheck' request to entity endpoint interface.")
+	@Story("Entity End Point: updateCheck")
+	public void updateCheck(Map<String, String> paramMaps){
+
+		String originalBody = paramMaps.get("body");
+		// replace all placeholders of body
+		String tempBody = StringUtils.replace(originalBody, "$entity_id1", testGraphMap.get("pc_test1"));
+		String replacedEntityBody = StringUtils.replace(tempBody, "$entity_id2", testGraphMap.get("pc_test2"));
+		String updateCheckBody = StringUtils.replace(replacedEntityBody, "$edge_id1", testGraphMap.get("pc_edge1"));
+		System.out.println(updateCheckBody);
+		Response response = EntityManagementEndpoint.publishCheck(updateCheckBody);
+		checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+		Map<String,List<String>> data = response.jsonPath().get("data");
+		//check valid publish action without warning and error
+		if(paramMaps.get("description").contains("good request")){
+			assertThat(data.get("warning"),is(empty()));
+			assertThat(data.get("error"),is(empty()));
+		}
+
+		if(paramMaps.containsKey("warningRule")){
+			List<Map<String,Object>> rspWarningList = response.jsonPath().getList("data.warning");
+			List<String> rspWarningRuleList = rspWarningList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+			assertThat(rspWarningRuleList,hasItem(paramMaps.get("warningRule")));
+		}
+
+		if(paramMaps.containsKey("errorRule")){
+			List<Map<String,Object>> rspErrorList = response.jsonPath().getList("data.error");
+			List<String> rspErrorRuleList = rspErrorList.stream().map(e -> e.get("rule").toString()).collect(Collectors.toList());
+			assertThat(rspErrorRuleList,hasItem(paramMaps.get("errorRule")));
+		}
+	}
+
+	// generate testGrapMap to store label and id
+	public static void generateTestGrapMap(Response Response) {
+		List<Map<String, String>> dataList;
+		dataList = Response.jsonPath().getList("data");
+		for (Map<String, String> properties : dataList) {
+			String label = properties.get("label");
+			String id = properties.get("id");
+			testGraphMap.put(label, id);
+		}
+	}
 	// Check if the entity with the given location & label really exists, if not try to create it
 	public static void createEntityToBeTest(String preBodyString)
 	{
