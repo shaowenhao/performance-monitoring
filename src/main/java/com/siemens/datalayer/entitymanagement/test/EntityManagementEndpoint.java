@@ -219,4 +219,18 @@ public class EntityManagementEndpoint {
         return response;
     }
 
+    @Step("Send a request of 'publishGrahp'")
+    public static Response publish(String publishAction)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.body(publishAction)
+                .filter(new AllureRestAssured())
+                .post("/api/v2/graphs/publish");
+        return response;
+    }
 }

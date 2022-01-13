@@ -218,16 +218,28 @@ public class autoRun {
 		}
 		
 		//Add test class for EntityManagement
+		// snc-test run publish graph and check case
 		if (testConfig.getRunEntityMgmtTest())
 		{
 			XmlClass entityMgmtTest = new XmlClass("com.siemens.datalayer.entitymanagement.test.EntityManagementTests");
-			
-			Map<String,String> entityMgmtTestParams = new LinkedHashMap<String,String> ();
-			entityMgmtTestParams.put("base_url", testConfig.getEntityManagementBaseURL());
-			entityMgmtTestParams.put("port", testConfig.getEntityManagementPort());
-			
-			entityMgmtTest.setParameters(entityMgmtTestParams);
-			myClasses.add(entityMgmtTest); 
+			if(!testConfig.getRunPublishGraphAndCheckTest()) {
+				Map<String, String> entityMgmtTestParams = new LinkedHashMap<String, String>();
+				entityMgmtTestParams.put("base_url", testConfig.getEntityManagementBaseURL());
+				entityMgmtTestParams.put("port", testConfig.getEntityManagementPort());
+				//Exclude test methods
+				List<String> excludeMethods = new ArrayList<String>();
+				excludeMethods.add("publishGraph");
+				excludeMethods.add("updateCheck");
+				entityMgmtTest.setExcludedMethods(excludeMethods);
+				entityMgmtTest.setParameters(entityMgmtTestParams);
+				myClasses.add(entityMgmtTest);
+			}else{
+				Map<String, String> entityMgmtTestParams = new LinkedHashMap<String, String>();
+				entityMgmtTestParams.put("base_url", testConfig.getEntityManagementBaseURL());
+				entityMgmtTestParams.put("port", testConfig.getEntityManagementPort());
+				entityMgmtTest.setParameters(entityMgmtTestParams);
+				myClasses.add(entityMgmtTest);
+			}
 		}
 		
 		//Add test class for SubscriptionManagement

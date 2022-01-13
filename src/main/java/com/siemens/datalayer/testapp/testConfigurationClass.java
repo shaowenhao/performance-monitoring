@@ -84,11 +84,17 @@ public class testConfigurationClass {
 
 	Boolean runApiEngineHttpsTest = false;
 
+	Boolean runPublishGraphAndCheckTest = false;
+
 	/***
 	 * 以下为data-brain添加（包括desigoCC、enlighted等）：
 	 */
 	Boolean runDesigoCCTest = false;
 	private String runDesigoCCTestClass = null;
+
+	public Boolean getRunPublishGraphAndCheckTest() {
+		return runPublishGraphAndCheckTest;
+	}
 
 	public Boolean getRunApiEngineHttpsTest() {
 		return runApiEngineHttpsTest;
@@ -513,6 +519,9 @@ public class testConfigurationClass {
 
 	public String getDesigoCCTestClass(){return this.runDesigoCCTestClass;}
 
+	public void setPublishGraphAndCheckTest(Boolean isRun){
+		this.runPublishGraphAndCheckTest = isRun;
+	}
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -643,7 +652,8 @@ public class testConfigurationClass {
 				
 				setEntityMgmtTest(testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);	
-				
+
+				setPublishGraphAndCheckTest(true);
 				break;
 			
 			case ("snc-prod"):
