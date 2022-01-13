@@ -2,6 +2,7 @@ package com.siemens.datalayer.databrain.test;
 
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
 import com.siemens.datalayer.connector.test.InterfaceTests;
+import com.siemens.datalayer.databrain.util.JdbcClickhouseUtil;
 import com.siemens.datalayer.databrain.util.MyWebSocketClient;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
@@ -15,7 +16,10 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -78,10 +82,65 @@ public class DesigoCCTests {
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
     @Story("read desigoCC realtime data")
     public void desigoCCRealtimeData(Map<String, String> paramMaps)
-            throws IOException, NoSuchAlgorithmException, ExecutionException, InterruptedException, KeyManagementException
-    {
+            throws IOException, NoSuchAlgorithmException, ExecutionException, InterruptedException, KeyManagementException, SQLException {
         // 检查desigoCC实时数据数据源，程序运行requestParameters.get("runningTime")秒，收集实时数据
-        checkDesigoCCRealtimeDatasource(paramMaps);
+        List<Map<String,Object>> expectedPayloadList = checkDesigoCCRealtimeDatasource(paramMaps);
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        if (paramMaps.containsKey("name"))
+            queryParameters.put("name",paramMaps.get("name"));
+        if (paramMaps.containsKey("pageSize"))
+            queryParameters.put("pageSize",paramMaps.get("pageSize"));
+
+        Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
+        System.out.println(response.jsonPath().getString(""));
+
+        InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        Connection connection = JdbcClickhouseUtil.getConnect(paramMaps.get("clickhouseJdbcUrl"));
+        Statement statement = null;
+
+        for (Map<String,Object> expectedPayloadItem : expectedPayloadList)
+        {
+            // int Deleted = (Boolean) expectedPayloadItem.get("Deleted") ? 1:0;
+            int Deleted = Boolean.parseBoolean(expectedPayloadItem.get("Deleted").toString()) ? 1:0;
+            String sqlOfSelectPayloadItem =
+                    "SELECT * FROM chdb.SubscriptionEvent se WHERE " +
+                    "id = '" + expectedPayloadItem.get("id") + "' " + "AND " +
+                    "Deleted = '" + Deleted  + "' " + "AND " +
+                    "EventId = '" + expectedPayloadItem.get("EventId").toString().replaceAll("[.](.*)","") + "' " + "AND " +
+                    "CategoryId = '" + expectedPayloadItem.get("CategoryId").toString().replaceAll("[.](.*)","")  + "' " + "AND " +
+                    "State = '" + expectedPayloadItem.get("State")  + "' " + "AND " +
+                    "Cause = '" + expectedPayloadItem.get("Cause")  + "' " + "AND " +
+                    "CreationTime = '" + expectedPayloadItem.get("CreationTime") + "';";
+            // System.out.println(sqlOfSelectPayloadItem);
+
+            List<Map<String,Object>> actualMessageList = new ArrayList<>();
+
+            try {
+                statement = connection.createStatement();
+                ResultSet results = statement.executeQuery(sqlOfSelectPayloadItem);
+                ResultSetMetaData rsmd = results.getMetaData();
+
+                while (results.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        row.put(rsmd.getColumnName(i), results.getObject(rsmd.getColumnName(i)));
+                    }
+                    actualMessageList.add(row);
+                }
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } finally {
+                assert statement != null;
+                statement.close();
+                // connection.close();
+            }
+            System.out.println("actualMessageList.size(): " + actualMessageList.size());
+            Assert.assertFalse(actualMessageList.isEmpty());
+        }
+        connection.close();
     }
 
     @Step("check desigoCC history datasource")
@@ -101,7 +160,7 @@ public class DesigoCCTests {
     }
 
     @Step("check desigoCC realtime datasource")
-    public static void checkDesigoCCRealtimeDatasource(Map<String, String> requestParameters)
+    public static List<Map<String,Object>> checkDesigoCCRealtimeDatasource(Map<String, String> requestParameters)
             throws IOException, NoSuchAlgorithmException, ExecutionException, InterruptedException, KeyManagementException
     {
 
@@ -143,10 +202,16 @@ public class DesigoCCTests {
         long start = System.currentTimeMillis();
         long end = start + (runningTime)*1000;
 
+        /**
+         * expectedPayloadList存放一段时间（runningTime）内，websocket订阅到的非空数据;
+         * 程序运行期间，expectedPayloadList中的数据会增加，取最后的数据即可
+         */
+        List<Map<String,Object>> expectedPayloadList = new ArrayList<>();
+
         while (true)
         {
             try {
-                MyWebSocketClient.checkMessageFromWebSocket(desigoWssBaseUrl,desigoPort,
+                expectedPayloadList =  MyWebSocketClient.getMessageFromWebSocket(desigoWssBaseUrl,desigoPort,
                         desigoClientProtocol,desigoTransport,
                         desigoConnectionData,connectionToken);
             }catch (InterruptedException | IOException e) {
@@ -157,5 +222,7 @@ public class DesigoCCTests {
                 break;
             }
         }
+        // System.out.println(expectedPayloadList);
+        return expectedPayloadList;
     }
 }

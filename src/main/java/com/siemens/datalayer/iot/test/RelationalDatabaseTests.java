@@ -28,8 +28,13 @@ public class RelationalDatabaseTests {
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
     public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32552") String port,String db_properties)
     {
+        String database = "Mysql_Test";
+        List<String> IDList = Arrays.asList("1","2","3","4","5","6");
+
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
+
+        deleteDataFromMysqlBeforeTest(database,IDList);
     }
 
     @Test(priority = 0,
@@ -76,7 +81,7 @@ public class RelationalDatabaseTests {
         }
 
         // 如果有在mysql里写入数据，则调用deleteDataFromMysql方法清除数据，还原测试环境。
-        if (paramMaps.containsKey("expectedIDWrittenToMysql")) {
+        if (paramMaps.containsKey("expectedRemainingIdInMysql")) {
             deleteDataFromMysql(paramMaps);
         }
     }
@@ -118,7 +123,7 @@ public class RelationalDatabaseTests {
         String graphQLSentenceForDelete = null;
 
         String IDSentence = "";
-        List<String> IDList = Arrays.asList(requestParameters.get("expectedIDWrittenToMysql").split(","));
+        List<String> IDList = Arrays.asList(requestParameters.get("expectedRemainingIdInMysql").split(","));
 
         for (String ID : IDList)
         {
@@ -127,6 +132,34 @@ public class RelationalDatabaseTests {
 
         graphQLSentenceForDelete = "mutation mutationName{"
                 + "\n\t" + requestParameters.get("database") + "_" + "Delete" + "(input:"
+                + "\n\t" + "["
+                + "\n" + IDSentence
+                + "\t" + "]"
+                + "\n\t\t" + ")"
+                + "\n\t\t" + "{"
+                + "\n\t\t\t" + "json_value"
+                + "\n\t\t\t" + "reserved_field_1"
+                + "\n\t\t\t" + "reserved_field_2"
+                + "\n\t\t" + "}"
+                + "\n" + "}";
+
+        ApiEngineEndpoint.postGraphql(graphQLSentenceForDelete);
+    }
+
+    public static void deleteDataFromMysqlBeforeTest(String database,List<String> IDList)
+    {
+        // generate graphQL sentence for delete
+        String graphQLSentenceForDelete = null;
+
+        String IDSentence = "";
+
+        for (String ID : IDList)
+        {
+            IDSentence += "\t\t" + "{" + "\n" + "\t\t\t" + "ID:" + ID + "\n" + "\t\t" + "}" + "\n";
+        }
+
+        graphQLSentenceForDelete = "mutation mutationName{"
+                + "\n\t" + database + "_" + "Delete" + "(input:"
                 + "\n\t" + "["
                 + "\n" + IDSentence
                 + "\t" + "]"

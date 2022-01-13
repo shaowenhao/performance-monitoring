@@ -1,7 +1,7 @@
 package com.siemens.datalayer.databrain.util;
 
 import cn.hutool.core.net.DefaultTrustManager;
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
 import io.qameta.allure.Step;
@@ -17,28 +17,19 @@ import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class MyWebSocketClient {
-
-    private static final String desigoHttpsBaseUrl = "https://md3ktpmc.ad001.siemens.net";
-    private static final String desigoWssBaseUrl = "wss://md3ktpmc.ad001.siemens.net";
-
-    private static final String desigoPort = "61022";
-    private static final String desigoGranttype = "password";
-    private static final String desigoUsername = "defaultadmin";
-    private static final String desigoPassword = "cc";
-
-    private static final String desigoClientProtocol = "1.4";
-    private static final String desigoConnectionData = "[{\"Name\":\"norisHub\"}]";
-
-    private static final String desigoTransport = "webSockets";
-
-    private static final String desigoRequestId = "5f8a3542-b406-41cb-83c2-7f667fbabf52";
-    private static final String desigoPostData = "[\"System1:GmsDevice_1_7210_0.Present_Value\",\"System1:GmsDevice_1_7210_6.Present_Value\"]";
-
-    private static final String connectionToken = "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAATXKgfEYKGkOPiymLX+wD+wAAAAACAAAAAAAQZgAAAAEAACAAAAD7v9qOIdDdB95lLCpCIrDDBFb82hvPELWIIRfcIonznAAAAAAOgAAAAAIAACAAAABvWAzeNzQNezDrgEv7gK6oru+HutxEg99m5LCRnRB+RTAAAADOWsO66erqhGbX3+KqKTckviqykMRkql+scy7E4p8mHSq0qimMd7sQzMRm9SXIlZhAAAAAdo0vT4/Mf6CTjYhCoACcW45exin4LA0hw2PKmNEixMBjWvg2PDJPfwPhVtXyLuqeOUDLmfT8O3hffZmq6QsfNw==";
+    /**
+     * expectedPayloadList存放一段时间（runningTime）内，websocket订阅到的非空数据;
+     * 程序运行期间，expectedPayloadList中的数据会增加，取最后的数据即可
+     */
+    static List<Map<String,Object>> expectedPayloadList = new ArrayList<>();
 
     private static SSLContext unsecuredSslContext()
             throws KeyManagementException, NoSuchAlgorithmException
@@ -106,12 +97,11 @@ public class MyWebSocketClient {
         return response;
     }
 
-    public static void checkMessageFromWebSocket(String wssBaseUrl, String port,
-                                                 String clientProtocol,String transport,
-                                                 String connectionData, String connectionToken)
+    public static List<Map<String,Object>> getMessageFromWebSocket(String wssBaseUrl, String port,
+                                               String clientProtocol, String transport,
+                                               String connectionData, String connectionToken)
             throws NoSuchAlgorithmException, KeyManagementException, ExecutionException, InterruptedException, UnsupportedEncodingException
     {
-
         DefaultAsyncHttpClientConfig.Builder builder = new DefaultAsyncHttpClientConfig.Builder();
 //following codes is borrowed from super class
         /*
@@ -159,12 +149,51 @@ public class MyWebSocketClient {
                             public void onTextFrame(String payload, boolean finalFragment, int rsv) {
                                 WebSocketListener.super.onTextFrame(payload, finalFragment, rsv);
 
-                                JSONObject jsonPayload = JSONObject.parseObject(payload);
+                                // 以下code，重写onTextFrame方法
+                                Gson gson = new Gson();
+                                Map<String,Object> payloadMap = new HashMap<>();
+                                payloadMap = gson.fromJson(payload,payloadMap.getClass());
 
-                                System.out.println(jsonPayload);
-                                System.out.println(jsonPayload.get("M") != null);
+                                /**
+                                 * 以下代码根据MongoDB里的配置，只获取mapper里有的字段
+                                 * */
+
+                                if (payloadMap.containsKey("M"))
+                                    if (payloadMap.get("M") instanceof List)
+                                        if (!((List<?>) payloadMap.get("M")).isEmpty())
+                                            if (((List<?>) payloadMap.get("M")).get(0) instanceof Map)
+                                                if (((Map) ((List<?>) payloadMap.get("M")).get(0)).get("A") instanceof List)
+                                                    if (((List<?>) ((Map) ((List<?>) payloadMap.get("M")).get(0)).get("A")).get(0) instanceof List)
+                                                        if (((List) ((List<?>) ((Map) ((List<?>) payloadMap.get("M")).get(0)).get("A")).get(0)).get(0) instanceof Map)
+                                                        {
+                                                            Map<String,Object> expectedPayloadItem = new HashMap<>();
+                                                            expectedPayloadItem.put("id",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("Id").toString());
+
+                                                            expectedPayloadItem.put("EventId",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("EventId").toString());
+
+                                                            expectedPayloadItem.put("Deleted",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("Deleted").toString());
+
+                                                            expectedPayloadItem.put("CategoryId",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("CategoryId").toString());
+
+                                                            expectedPayloadItem.put("State",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("State").toString());
+
+                                                            expectedPayloadItem.put("Cause",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("Cause").toString());
+
+                                                            expectedPayloadItem.put("CreationTime",((Map<?, ?>) ((List) ((List<?>) ((Map) ((List<?>)
+                                                                    payloadMap.get("M")).get(0)).get("A")).get(0)).get(0)).get("CreationTime").toString());
+
+                                                            expectedPayloadList.add(expectedPayloadItem);
+                                                        }
                             }
                         }
                 ).build()).get();
+        // System.out.println(expectedPayloadList.size());
+        return expectedPayloadList;
     }
 }
