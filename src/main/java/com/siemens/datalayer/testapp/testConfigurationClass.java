@@ -899,6 +899,14 @@ public class testConfigurationClass {
 				// 赋值：this.runDesigoCCTest = true;
 				setDesigoCCTestClass("com.siemens.datalayer.databrain.test.DesigoCCTests");
 
+			case("databrain-test"):
+				setConnectorTest(testEnvironmentConstants.DATABRAIN_DOMAIN_NAME,
+						testEnvironmentConstants.DATABRAIN_TEST_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.DATABRAIN_TEST_CONNECTOR_PORT);
+
+				// 赋值：this.runDesigoCCTest = true;
+				setDesigoCCTestClass("com.siemens.datalayer.databrain.test.DesigoCCTests");
+
 				break;
 			
 			default:
