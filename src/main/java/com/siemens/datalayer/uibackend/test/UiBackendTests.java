@@ -90,7 +90,7 @@ public class UiBackendTests {
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'graphsCheck' request to ui backend endpoint interface.")
-    @Story("Ui-backend End Point: graphsCheck")
+    @Story("Ui-backend End Point: entity graphsCheck")
     public void graphsEntityCheck(Map<String, String> paramMaps){
         String bodyString = paramMaps.get("body");
         Response response = UiBackendEndpoint.graphsCheck(bodyString);
@@ -146,7 +146,7 @@ public class UiBackendTests {
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'graphsPublish' request to ui-backend endpoint interface.")
-    @Story("Ui-backend End Point: graphsCheck")
+    @Story("Ui-backend End Point: relation graphsCheck")
     public void graphsRelationCheck(Map<String, String> paramMaps){
 
         String originalBody = paramMaps.get("body");
