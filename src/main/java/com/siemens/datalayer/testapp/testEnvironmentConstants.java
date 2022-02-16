@@ -117,7 +117,10 @@ public class testEnvironmentConstants {
 	
 	public static final String SNC_TEST_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String SNC_TEST_ENTITY_MANAGEMENT_PORT = "31998";
-	
+
+	public static final String SNC_TEST_UI_BACKEND_BASE_URL = "http://140.231.89.85";
+	public static final String SNC_TEST_UI_BACKEND_PORT = "31280";
+
 	// =========================================================================================
 	// Configuration for snc-prod environment
 	// =========================================================================================

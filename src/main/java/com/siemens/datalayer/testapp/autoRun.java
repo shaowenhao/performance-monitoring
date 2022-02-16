@@ -282,6 +282,7 @@ public class autoRun {
 			myClasses.add(dataBrainFromConnectorTest);
 		}
 
+<<<<<<< HEAD
 		// Add test calss for 'read/write DesigoCC/Enlighted history/realtime data from api-engine'
 		if (testConfig.getRunDataBrainFromApiEngineTest())
 		{
@@ -297,6 +298,18 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
+=======
+       // Add test class for UiBackendTests
+		if(testConfig.getRunUiBackendTest()){
+			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());
+			Map<String,String> uiBackendTestParams = new HashMap<>();
+			uiBackendTestParams.put("base_url",testConfig.getUiBackend_base_url());
+			uiBackendTestParams.put("port",testConfig.getUiBackend_port());
+            uiBackendTestParams.put("entitymgt_port",testConfig.getEntityManagementPort());
+			uiBackendTest.setParameters(uiBackendTestParams);
+			myClasses.add(uiBackendTest);
+		}
+>>>>>>> 89fa24bcbeab4877ceddb31dd1ea298ae057ddfc
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
@@ -415,7 +428,9 @@ public class autoRun {
 					
 					if (testConfig.getRunSubscriptionMgmtTest())
 						testParameters.put("dataFileForSubMgmtTest", projectName+"-subscription-management-test-data.xlsx");
-					
+
+					if (testConfig.getRunUiBackendTest())
+					    testParameters.put("dataFileForUiBackendTest",projectName+"-ui-backend-test-data.xlsx");
 					// Create testNG instance to execute tests
 					autoRun dt = new autoRun();
 					// main函数走到这一步，各配置已经set完成

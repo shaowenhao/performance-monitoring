@@ -95,6 +95,28 @@ public class testConfigurationClass {
 	Boolean runDataBrainFromApiEngineTest = false;
 	private String dataBrainFromApiEngineTestClass = null;
 
+	private String uiBackend_base_url = null;
+
+	public String getUiBackend_base_url() {
+		return uiBackend_base_url;
+	}
+
+	public String getUiBackend_port() {
+		return uiBackend_port;
+	}
+
+	private String uiBackend_port = null;
+	Boolean runUiBackendTest = false;
+	private String runUiBackendTestClass = null;
+
+	public Boolean getRunUiBackendTest() {
+		return runUiBackendTest;
+	}
+
+	public String getRunUiBackendTestClass() {
+		return runUiBackendTestClass;
+	}
+
 	public Boolean getRunPublishGraphAndCheckTest() {
 		return runPublishGraphAndCheckTest;
 	}
@@ -537,6 +559,15 @@ public class testConfigurationClass {
 	public void setPublishGraphAndCheckTest(Boolean isRun){
 		this.runPublishGraphAndCheckTest = isRun;
 	}
+
+	private void setRunUiBackendTest(String base_url, String port,String runUiBackendTestClass,String entitymgt_port) {
+		this.runUiBackendTest = true;
+		this.runUiBackendTestClass = runUiBackendTestClass;
+		this.uiBackend_base_url = base_url;
+		this.uiBackend_port = port;
+		this.entityManagement_port = entitymgt_port;
+	}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -669,6 +700,10 @@ public class testConfigurationClass {
 						  		  testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);	
 
 				setPublishGraphAndCheckTest(true);
+				setRunUiBackendTest(testEnvironmentConstants.SNC_TEST_UI_BACKEND_BASE_URL,
+						            testEnvironmentConstants.SNC_TEST_UI_BACKEND_PORT,
+						            "com.siemens.datalayer.uibackend.test.UiBackendTests",
+						            testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);
 				break;
 			
 			case ("snc-prod"):
@@ -903,4 +938,6 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
+
+
 }
