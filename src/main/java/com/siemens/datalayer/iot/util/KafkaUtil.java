@@ -23,7 +23,7 @@ public class KafkaUtil {
     public static void send(KafkaProducer<String,String> producer, String topic,String message)
     {
         // producer.send(new ProducerRecord<String,String>(topic,message));
-        producer.send(new ProducerRecord<String, String>(topic, "message_" + 1, message));
-        producer.close();
+        producer.send(new ProducerRecord<String, String>(topic,message));
+        // producer.close();
     }
 }

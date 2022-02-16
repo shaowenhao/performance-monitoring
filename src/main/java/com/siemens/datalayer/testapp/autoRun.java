@@ -269,19 +269,33 @@ public class autoRun {
 		/***
 		 * 以下为data-brain添加：
 		 */
-		// Add test calss for DesigoCCTests
-		if (testConfig.getRunDesigoCCTest())
+		// Add test calss for 'read DesigoCC/Enlighted history/realtime data from connector'
+		if (testConfig.getRunDataBrainFromConnectorTest())
 		{
-			XmlClass desigoCCTest = new XmlClass(testConfig.getDesigoCCTestClass());
+			XmlClass dataBrainFromConnectorTest = new XmlClass(testConfig.getDataBrainFromConnectorTestClass());
 
-			Map<String,String> desigoCCTestParams = new HashMap<>();
-			desigoCCTestParams.put("base_url",testConfig.getConnectorBaseURL());
-			desigoCCTestParams.put("port",testConfig.getConnectorPort());
+			Map<String,String> dataBrainFromConnectorTestParams = new HashMap<>();
+			dataBrainFromConnectorTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			dataBrainFromConnectorTestParams.put("port",testConfig.getConnectorPort());
 
-			desigoCCTest.setParameters(desigoCCTestParams);
-			myClasses.add(desigoCCTest);
+			dataBrainFromConnectorTest.setParameters(dataBrainFromConnectorTestParams);
+			myClasses.add(dataBrainFromConnectorTest);
 		}
 
+		// Add test calss for 'read/write DesigoCC/Enlighted history/realtime data from api-engine'
+		if (testConfig.getRunDataBrainFromApiEngineTest())
+		{
+			XmlClass dataBrainFromApiEngineTest = new XmlClass(testConfig.getDataBrainFromApiEngineTestClass());
+
+			Map<String,String> dataBrainFromApiEngineTestParams = new HashMap<>();
+			dataBrainFromApiEngineTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			dataBrainFromApiEngineTestParams.put("port",testConfig.getApiEnginePort());
+			dataBrainFromApiEngineTestParams.put("baseUrlOfConnector",testConfig.getConnectorBaseURL());
+			dataBrainFromApiEngineTestParams.put("portOfConnector",testConfig.getConnectorPort());
+
+			dataBrainFromApiEngineTest.setParameters(dataBrainFromApiEngineTestParams);
+			myClasses.add(dataBrainFromApiEngineTest);
+		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
@@ -419,5 +433,4 @@ public class autoRun {
 			System.out.println("Please specify the test environment, e.g. 'iems test'");
 		}
 	}
-	
 }

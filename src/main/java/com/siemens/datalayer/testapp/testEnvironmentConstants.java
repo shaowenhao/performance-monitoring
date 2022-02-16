@@ -98,7 +98,7 @@ public class testEnvironmentConstants {
 	// Configuration for snc-dev environment
 	// =========================================================================================
 	public static final String SNC_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
-	public static final String SNC_DEV_CONNECTOR_PORT = "32385";
+	public static final String SNC_DEV_CONNECTOR_PORT = "31551";
 	
 	public static final String SNC_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String SNC_DEV_APIENGINE_PORT = "30985";
@@ -288,4 +288,7 @@ public class testEnvironmentConstants {
 	// =========================================================================================
 	public static final String DATABRAIN_TEST_CONNECTOR_BASE_URL= "http://140.231.89.85";
 	public static final String DATABRAIN_TEST_CONNECTOR_PORT= "30694";
+
+	public static final String DATABRAIN_TEST_APIENGINE_BASE_URL = "http://140.231.89.85";
+	public static final String DATABRAIN_TEST_APIENGINE_PORT = "32084";
 }

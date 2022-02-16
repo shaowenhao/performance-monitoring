@@ -89,8 +89,11 @@ public class testConfigurationClass {
 	/***
 	 * 以下为data-brain添加（包括desigoCC、enlighted等）：
 	 */
-	Boolean runDesigoCCTest = false;
-	private String runDesigoCCTestClass = null;
+	Boolean runDataBrainFromConnectorTest = false;
+	private String dataBrainFromConnectorTestClass = null;
+
+	Boolean runDataBrainFromApiEngineTest = false;
+	private String dataBrainFromApiEngineTestClass = null;
 
 	public Boolean getRunPublishGraphAndCheckTest() {
 		return runPublishGraphAndCheckTest;
@@ -507,17 +510,29 @@ public class testConfigurationClass {
 	/***
 	 * 以下为data-brain添加：
 	 */
-	// getRunDesigoCCTest、setRunDesigoCCTestClass、getRunDesigoCCTestClass
-	// 这三个方法针对“read desigoCC history/realtime data”的测试 而添加
-	public Boolean getRunDesigoCCTest(){return this.runDesigoCCTest;}
+	// getRunDataBrainFromConnectorTest、setDataBrainFromConnectorTestClass、getDataBrainFromConnectorTestClass
+	// 这三个方法针对“read DesigoCC/Enlighted history/realtime data from connector”的测试 而添加
+	public Boolean getRunDataBrainFromConnectorTest(){return this.runDataBrainFromConnectorTest;}
 
-	public void setDesigoCCTestClass(String runDesigoCCTestClassName)
+	public void setDataBrainFromConnectorTestClass(String dataBrainFromConnectorTestClassName)
 	{
-		this.runDesigoCCTest = true;
-		this.runDesigoCCTestClass = runDesigoCCTestClassName;
+		this.runDataBrainFromConnectorTest = true;
+		this.dataBrainFromConnectorTestClass = dataBrainFromConnectorTestClassName;
 	}
 
-	public String getDesigoCCTestClass(){return this.runDesigoCCTestClass;}
+	public String getDataBrainFromConnectorTestClass(){return this.dataBrainFromConnectorTestClass;}
+
+	// getRunDataBrainFromApiEngineTest、setDataBrainFromApiEngineTestClass、getDataBrainFromApiEngineTestClass
+	// 这三个方法针对“read/write DesigoCC/Enlighted history/realtime data from api-engine”的测试 而添加
+	public Boolean getRunDataBrainFromApiEngineTest(){return this.runDataBrainFromApiEngineTest;}
+
+	public void setDataBrainFromApiEngineTestClass(String dataBrainFromApiEngineTestClassName)
+	{
+		this.runDataBrainFromApiEngineTest = true;
+		this.dataBrainFromApiEngineTestClass = dataBrainFromApiEngineTestClassName;
+	}
+
+	public String getDataBrainFromApiEngineTestClass(){return this.dataBrainFromApiEngineTestClass;}
 
 	public void setPublishGraphAndCheckTest(Boolean isRun){
 		this.runPublishGraphAndCheckTest = isRun;
@@ -861,16 +876,22 @@ public class testConfigurationClass {
 				setApiEngineTest(testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_BASE_URL,
 						testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_PORT);
 
-				// 赋值：this.runDesigoCCTest = true;
-				setDesigoCCTestClass("com.siemens.datalayer.databrain.test.DesigoCCTests");
+				// 赋值：this.runDataBrainFromConnectorTest = true;
+				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
 
 			case("databrain-test"):
 				setConnectorTest(testEnvironmentConstants.DATABRAIN_DOMAIN_NAME,
 						testEnvironmentConstants.DATABRAIN_TEST_CONNECTOR_BASE_URL,
 						testEnvironmentConstants.DATABRAIN_TEST_CONNECTOR_PORT);
 
-				// 赋值：this.runDesigoCCTest = true;
-				setDesigoCCTestClass("com.siemens.datalayer.databrain.test.DesigoCCTests");
+				setApiEngineTest(testEnvironmentConstants.DATABRAIN_TEST_APIENGINE_BASE_URL,
+						testEnvironmentConstants.DATABRAIN_TEST_APIENGINE_PORT);
+
+				// 赋值：this.runDataBrainFromConnectorTest = true;
+				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+
+				// 赋值：this.runDataBrainFromApiEngineTest = true;
+				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
 
 				break;
 			

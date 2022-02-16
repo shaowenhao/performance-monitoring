@@ -17,15 +17,12 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Epic("SDL Connector")
-@Feature("read desigoCC history/realtime data")
-public class DesigoCCTests {
+@Feature("read DesigoCC/Enlighted history/realtime data from connector")
+public class DataBrainFromConnectorTests {
     private static final String desigoHttpsBaseUrl = "https://md3ktpmc.ad001.siemens.net";
     private static final String desigoWssBaseUrl = "wss://md3ktpmc.ad001.siemens.net";
 
@@ -42,9 +39,17 @@ public class DesigoCCTests {
     private static final String desigoRequestId = "9565ca41-8556-4dbb-94cc-1b89451a5db5";
     // private static final String desigoPostData = "[\"System1:GmsDevice_1_7210_0.Present_Value\",\"System1:GmsDevice_1_7210_6.Present_Value\"]";
 
+    private static final String enlightedHttpsBaseUrl = "https://md3ktpmc.ad001.siemens.net";
+
+    private static final String enlightedPort = "61040";
+
+    private static final String enlightedApiKey = "ssisix";
+    private static final String enlightedAuthorization = "b7e75692f312b0fe007ad4225f801ac56d022237";
+    private static final String enlightedTs = "1640164835008";
+
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30417") String port)
+    public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30694") String port)
     {
         ConnectorEndpoint.setBaseUrl(base_url);
         ConnectorEndpoint.setPort(port);
@@ -57,14 +62,14 @@ public class DesigoCCTests {
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
     @Story("read desigoCC history data")
-    public void desigoCCHistoryData(Map<String, String> paramMaps)
+    public void readDesigoCCHistoryData(Map<String, String> paramMaps)
     {
         // 检查desigoCC历史数据数据源
         checkDesigoCCHistoryDatasource(paramMaps);
 
         HashMap<String, String> queryParameters = new HashMap<>();
-        if (paramMaps.containsKey("OriginalObjectOrPropertyId"))
-            queryParameters.put("condition","id='" + paramMaps.get("OriginalObjectOrPropertyId") +"'");
+        if (paramMaps.containsKey("condition"))
+            queryParameters.put("condition",paramMaps.get("condition"));
         if (paramMaps.containsKey("name"))
             queryParameters.put("name",paramMaps.get("name"));
 
@@ -81,7 +86,7 @@ public class DesigoCCTests {
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
     @Story("read desigoCC realtime data")
-    public void desigoCCRealtimeData(Map<String, String> paramMaps)
+    public void readDesigoCCRealtimeData(Map<String, String> paramMaps)
             throws IOException, NoSuchAlgorithmException, ExecutionException, InterruptedException, KeyManagementException, SQLException {
         // 检查desigoCC实时数据数据源，程序运行requestParameters.get("runningTime")秒，收集实时数据
         List<Map<String,Object>> expectedPayloadList = checkDesigoCCRealtimeDatasource(paramMaps);
@@ -100,19 +105,24 @@ public class DesigoCCTests {
         Connection connection = JdbcClickhouseUtil.getConnect(paramMaps.get("clickhouseJdbcUrl"));
         Statement statement = null;
 
-        for (Map<String,Object> expectedPayloadItem : expectedPayloadList)
+        Thread.sleep(2*1000);
+        System.out.println(expectedPayloadList);
+
+        Iterator<Map<String,Object>> iterator = expectedPayloadList.iterator();
+        while(iterator.hasNext())
         {
+            Map<String,Object> expectedPayloadItem = iterator.next();
             // int Deleted = (Boolean) expectedPayloadItem.get("Deleted") ? 1:0;
             int Deleted = Boolean.parseBoolean(expectedPayloadItem.get("Deleted").toString()) ? 1:0;
             String sqlOfSelectPayloadItem =
                     "SELECT * FROM chdb.SubscriptionEvent se WHERE " +
-                    "id = '" + expectedPayloadItem.get("id") + "' " + "AND " +
-                    "Deleted = '" + Deleted  + "' " + "AND " +
-                    "EventId = '" + expectedPayloadItem.get("EventId").toString().replaceAll("[.](.*)","") + "' " + "AND " +
-                    "CategoryId = '" + expectedPayloadItem.get("CategoryId").toString().replaceAll("[.](.*)","")  + "' " + "AND " +
-                    "State = '" + expectedPayloadItem.get("State")  + "' " + "AND " +
-                    "Cause = '" + expectedPayloadItem.get("Cause")  + "' " + "AND " +
-                    "CreationTime = '" + expectedPayloadItem.get("CreationTime") + "';";
+                            "id = '" + expectedPayloadItem.get("id") + "' " + "AND " +
+                            "Deleted = '" + Deleted  + "' " + "AND " +
+                            "EventId = '" + expectedPayloadItem.get("EventId").toString().replaceAll("[.](.*)","") + "' " + "AND " +
+                            "CategoryId = '" + expectedPayloadItem.get("CategoryId").toString().replaceAll("[.](.*)","")  + "' " + "AND " +
+                            "State = '" + expectedPayloadItem.get("State")  + "' " + "AND " +
+                            "Cause = '" + expectedPayloadItem.get("Cause")  + "' " + "AND " +
+                            "CreationTime = '" + expectedPayloadItem.get("CreationTime") + "';";
             // System.out.println(sqlOfSelectPayloadItem);
 
             List<Map<String,Object>> actualMessageList = new ArrayList<>();
@@ -140,19 +150,44 @@ public class DesigoCCTests {
             System.out.println("actualMessageList.size(): " + actualMessageList.size());
             Assert.assertFalse(actualMessageList.isEmpty());
         }
+
         connection.close();
+    }
+
+    @Test(	priority = 0,
+            description = "read enlighted history data",
+            dataProvider = "connector-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
+    @Story("read enlighted history data")
+    public void readEnlightedHistoryData(Map<String, String> paramMaps)
+    {
+        // 检查desigoCC历史数据数据源
+        checkEnlightedHistoryDatasource(paramMaps);
+
+        HashMap<String, String> queryParameters = new HashMap<>();
+        if (paramMaps.containsKey("condition"))
+            queryParameters.put("condition",paramMaps.get("condition"));
+        if (paramMaps.containsKey("name"))
+            queryParameters.put("name",paramMaps.get("name"));
+
+        Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
+        System.out.println(response.jsonPath().getString(""));
+
+        InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
     }
 
     @Step("check desigoCC history datasource")
     public static void checkDesigoCCHistoryDatasource(Map<String, String> requestParameters)
     {
-        Response responseOfGetToken = DesigoCCEndpoint.getToken(desigoHttpsBaseUrl,desigoPort,desigoGranttype,desigoUsername,desigoPassword);
+        Response responseOfGetToken = DataBrainEndpoint.getToken(desigoHttpsBaseUrl,desigoPort,desigoGranttype,desigoUsername,desigoPassword);
 
         // check interface:/api/token
         Assert.assertEquals(responseOfGetToken.getStatusCode(),200);
 
         String accessToken = responseOfGetToken.jsonPath().getString("access_token");
-        Response responseOfGetValue = DesigoCCEndpoint.getValue(desigoHttpsBaseUrl,desigoPort,accessToken,requestParameters.get("OriginalObjectOrPropertyId"));
+        Response responseOfGetValue = DataBrainEndpoint.getValue(desigoHttpsBaseUrl,desigoPort,accessToken,requestParameters.get("OriginalObjectOrPropertyId"));
 
         // check interface:/api/values/System1:GmsDevice_1_7210_4194307.Present_Value
         Assert.assertEquals(responseOfGetValue.getStatusCode(),200);
@@ -172,13 +207,13 @@ public class DesigoCCTests {
          * step4：利用step1获取到的accessToken、step2获取到的、connectionId，调用/api/sr/valuessubscriptions/channelize接口，创建订阅channel
          * step5：利用step1获取到的accessToken、step2获取到的、connectionToken，调用/signalr/connect接口，订阅实时数据
          */
-        Response responseOfGetToken = DesigoCCEndpoint.getToken(desigoHttpsBaseUrl,desigoPort,desigoGranttype,desigoUsername,desigoPassword);
+        Response responseOfGetToken = DataBrainEndpoint.getToken(desigoHttpsBaseUrl,desigoPort,desigoGranttype,desigoUsername,desigoPassword);
 
         // check interface:/api/token
         Assert.assertEquals(responseOfGetToken.getStatusCode(),200);
 
         String accessToken = responseOfGetToken.jsonPath().getString("access_token");
-        Response responseOfSignalrNegotiate = DesigoCCEndpoint.signalrNegotiate(desigoHttpsBaseUrl,desigoPort,accessToken,desigoClientProtocol,desigoConnectionData);
+        Response responseOfSignalrNegotiate = DataBrainEndpoint.signalrNegotiate(desigoHttpsBaseUrl,desigoPort,accessToken,desigoClientProtocol,desigoConnectionData);
 
         // check interface:/signalr/negotiate
         Assert.assertEquals(responseOfSignalrNegotiate.getStatusCode(),200);
@@ -193,7 +228,7 @@ public class DesigoCCTests {
         // check interface:/signalr/start
         Assert.assertEquals(responseOfSignalrStart.getStatusCode(),200);
 
-        Response responseOfValuessubscriptions = DesigoCCEndpoint.eventssubscriptions(desigoHttpsBaseUrl,desigoPort,accessToken,desigoRequestId,connectionId);
+        Response responseOfValuessubscriptions = DataBrainEndpoint.eventssubscriptions(desigoHttpsBaseUrl,desigoPort,accessToken,desigoRequestId,connectionId);
 
         // check interface:/api/sr/eventssubscriptions/channelize
         Assert.assertEquals(responseOfValuessubscriptions.getStatusCode(),200);
@@ -224,5 +259,26 @@ public class DesigoCCTests {
         }
         // System.out.println(expectedPayloadList);
         return expectedPayloadList;
+    }
+
+    @Step("check enlighted  history datasource")
+    // 根据不同的entity，check不同的数据源
+    public static void checkEnlightedHistoryDatasource(Map<String, String> requestParameters)
+    {
+        if (requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date"))
+        {
+            Response responseOfGetSensorDetailsbyFloor = DataBrainEndpoint.getSensorDetailsbyFloor(
+                    enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
+
+            // check interface:/ems/api/org/sensor/v2/stats/floor
+            Assert.assertEquals(responseOfGetSensorDetailsbyFloor.getStatusCode(),200);
+        }
+        else if (requestParameters.containsKey("id"))
+        {
+            Response responseOfGetllFloors = DataBrainEndpoint.getllFloors(enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs);
+
+            // check interface:/ems/api/org/floor/list
+            Assert.assertEquals(responseOfGetllFloors.getStatusCode(),200);
+        }
     }
 }

@@ -9,7 +9,7 @@ import io.restassured.specification.RequestSpecification;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DesigoCCEndpoint {
+public class DataBrainEndpoint {
 
     // desigoCC datasource Endpoint: getToken
     @Step("Send a request of 'getToken'")
@@ -84,6 +84,49 @@ public class DesigoCCEndpoint {
 
         Response response = httpRequest.filter(new AllureRestAssured())
                 .post("/api/sr/eventssubscriptions/channelize" + "/" + requestId + "/" + connectionId);
+
+        return response;
+    }
+
+    // enlighted datasource Endpoint: /ems/api/org/sensor/v2/stats/floor
+    @Step("Send a request of '/ems/api/org/sensor/v2/stats/floor'")
+    public static Response getSensorDetailsbyFloor(String httpsBaseUrl,String port,
+                                                   String apiKey,String authorization,String ts,Map<String, String> requestParameters)
+    {
+        RestAssured.baseURI = httpsBaseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given().relaxedHTTPSValidation();
+        httpRequest.header("Content-Type","application/json");
+        httpRequest.header("ApiKey",apiKey);
+        httpRequest.header("Authorization",authorization);
+        httpRequest.header("ts",ts);
+
+        String floorId = requestParameters.get("floor_id");
+        String fromDate = requestParameters.get("from_date");
+        String toDate = requestParameters.get("to_date");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/ems/api/org/sensor/v2/stats/floor" + "/" + floorId + "/" + fromDate + "/" + toDate);
+
+        return response;
+    }
+
+    // enlighted datasource Endpoint: /ems/api/org/floor/list
+    @Step("Send a request of '/ems/api/org/floor/list'")
+    public static Response getllFloors(String httpsBaseUrl,String port,String apiKey,String authorization,String ts)
+    {
+        RestAssured.baseURI = httpsBaseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given().relaxedHTTPSValidation();
+        httpRequest.header("Content-Type","application/json");
+        httpRequest.header("ApiKey",apiKey);
+        httpRequest.header("Authorization",authorization);
+        httpRequest.header("ts",ts);
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/ems/api/org/floor/list");
 
         return response;
     }
