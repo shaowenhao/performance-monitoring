@@ -282,7 +282,6 @@ public class autoRun {
 			myClasses.add(dataBrainFromConnectorTest);
 		}
 
-<<<<<<< HEAD
 		// Add test calss for 'read/write DesigoCC/Enlighted history/realtime data from api-engine'
 		if (testConfig.getRunDataBrainFromApiEngineTest())
 		{
@@ -298,7 +297,6 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
-=======
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
 			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());
@@ -309,7 +307,7 @@ public class autoRun {
 			uiBackendTest.setParameters(uiBackendTestParams);
 			myClasses.add(uiBackendTest);
 		}
->>>>>>> 89fa24bcbeab4877ceddb31dd1ea298ae057ddfc
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
