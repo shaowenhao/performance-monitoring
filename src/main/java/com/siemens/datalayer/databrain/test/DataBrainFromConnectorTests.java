@@ -261,7 +261,7 @@ public class DataBrainFromConnectorTests {
         return expectedPayloadList;
     }
 
-    @Step("check enlighted  history datasource")
+    @Step("check enlighted history datasource")
     // 根据不同的entity，check不同的数据源
     public static void checkEnlightedHistoryDatasource(Map<String, String> requestParameters)
     {
