@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="data-layer-automation test suite">
+  <listeners>
+    <listener class-name="com.siemens.datalayer.utils.CustomizedTestListener"/>
+  </listeners>
+  <test thread-count="5" verbose="2" name="Regression Tests for iot-test">
+    <parameter name="dataFileForConnectorTest" value="iot-connector-test-data.xlsx"/>
+    <parameter name="dataFileForApiEngineTest" value="iot-api-engine-test-data.xlsx"/>
+    <parameter name="dataFileForEntityMgmtTest" value="iot-entity-management-test-data.xlsx"/>
+    <parameter name="dataFileForSubMgmtTest" value="iot-subscription-management-test-data.xlsx"/>
+    <classes>
+      <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="domain_name" value="IOT"/>
+        <parameter name="port" value="30850"/>
+      </class> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
+      <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30346"/>
+        <methods>
+          <exclude name="getDataGraphQLHttps"/>
+        </methods>
+      </class> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
+      <class name="com.siemens.datalayer.iot.test.RelationalDatabaseTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30346"/>
+        <parameter name="db_properties" value="iot.dev.mysql.db.properties"/>
+      </class> <!-- com.siemens.datalayer.iot.test.RelationalDatabaseTests -->
+      <class name="com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30346"/>
+      </class> <!-- com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests -->
+      <class name="com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30850"/>
+      </class> <!-- com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests -->
+      <class name="com.siemens.datalayer.iot.test.AuthForRestfulWriteTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30346"/>
+      </class> <!-- com.siemens.datalayer.iot.test.AuthForRestfulWriteTests -->
+      <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="31873"/>
+        <methods>
+          <exclude name="publishGraph"/>
+          <exclude name="updateCheck"/>
+        </methods>
+      </class> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
+      <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
+        <parameter name="base_url" value="http://140.231.89.85"/>
+        <parameter name="port" value="30346"/>
+      </class> <!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->
+    </classes>
+  </test> <!-- Regression Tests for iot-test -->
+</suite> <!-- data-layer-automation test suite -->

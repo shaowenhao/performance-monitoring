@@ -1,28 +1,19 @@
 package com.siemens.datalayer.apiengine.test;
 
-import java.util.*;
-
 import com.google.gson.Gson;
 import com.siemens.datalayer.iot.util.OltuJavaClient;
-import org.json.JSONObject;
+import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
+import com.siemens.datalayer.utils.CommonCheckFunctions;
+import com.siemens.datalayer.utils.ExcelDataProviderClass;
+import io.qameta.allure.*;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
-import com.siemens.datalayer.utils.CommonCheckFunctions;
-import com.siemens.datalayer.utils.ExcelDataProviderClass;
-
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.qameta.allure.Step;
-import io.qameta.allure.Story;
-import io.restassured.response.Response;
+import java.util.*;
 
 @Epic("SDL Api-engine")
 @Feature("Query End Point")
@@ -155,7 +146,7 @@ public class QueryEndPointTests {
 			}
 			else
 			{
-				Assert.assertNull(response.jsonPath().get(entityListPath), "The response message does not contain any data.");
+				Assert.assertTrue(response.jsonPath().getList(entityListPath).isEmpty(), "The response message does not contain any data.");
 			}
 		}
 	}
