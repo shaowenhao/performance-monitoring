@@ -588,42 +588,42 @@ public class ApiServiceTests {
 		}
 	}
  
-	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS, 
-		  dataProviderClass = ExcelDataProviderClass.class, 
-		  dataProvider = "api-service-test-data-provider")
-	@Severity(SeverityLevel.BLOCKER)
-	@Description("Send a request to SUT with id and delete subscription.")
-	@Feature("Get subscription data API")
-	@Story("Delete subscription by id") 
-	public void deleteSubscriptions(Map<String, String> paramMaps) 
-	{ 		
-		if (paramMaps.containsKey("deviceList"))
-		{
-			HashMap<String, Object> queryParameters = new HashMap<>(); 
-			readDeviceList(paramMaps, queryParameters);
-			
-			Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters);
-			
-			JsonPath jsonPathEvaluator = response.jsonPath();
-			Assert.assertNotNull(jsonPathEvaluator.get("data"), "Subscription operation is success");
-			
-			paramMaps.put("subscriptionId", jsonPathEvaluator.get("data.replyTo"));
-		}
-		
-		Response response = ApiServiceEndpoint.deleteSubscriptions(paramMaps.get("subscriptionId")); 
-		
-		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-		  
-		if (paramMaps.get("description").contains("good request")) 
-		{
-			Assert.assertNotNull(response.jsonPath().getString("data"));
-			checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
-		} 
-		else 
-		{ 
-			Assert.assertNull(response.jsonPath().getString("data"));
-		} 
-	}
+//	@Test(priority = 0, description = RestConstants.DELETESUBSCRIPTIONS, 
+//		  dataProviderClass = ExcelDataProviderClass.class, 
+//		  dataProvider = "api-service-test-data-provider")
+//	@Severity(SeverityLevel.BLOCKER)
+//	@Description("Send a request to SUT with id and delete subscription.")
+//	@Feature("Get subscription data API")
+//	@Story("Delete subscription by id") 
+//	public void deleteSubscriptions(Map<String, String> paramMaps) 
+//	{ 		
+//		if (paramMaps.containsKey("deviceList"))
+//		{
+//			HashMap<String, Object> queryParameters = new HashMap<>(); 
+//			readDeviceList(paramMaps, queryParameters);
+//			
+//			Response response = ApiServiceEndpoint.subscriptionsWithKPIByDeviceId(queryParameters);
+//			
+//			JsonPath jsonPathEvaluator = response.jsonPath();
+//			Assert.assertNotNull(jsonPathEvaluator.get("data"), "Subscription operation is success");
+//			
+//			paramMaps.put("subscriptionId", jsonPathEvaluator.get("data.replyTo"));
+//		}
+//		
+//		Response response = ApiServiceEndpoint.deleteSubscriptions(paramMaps.get("subscriptionId")); 
+//		
+//		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+//		  
+//		if (paramMaps.get("description").contains("good request")) 
+//		{
+//			Assert.assertNotNull(response.jsonPath().getString("data"));
+//			checkDataFollowsModelSchema(RestConstants.DELETESUBSCRIPTION, response);
+//		} 
+//		else 
+//		{ 
+//			Assert.assertNull(response.jsonPath().getString("data"));
+//		} 
+//	}
 	
 	public boolean validMQData(Response response) throws IOException, TimeoutException 
 	{
