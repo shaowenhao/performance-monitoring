@@ -287,7 +287,7 @@ public class testEnvironmentConstants {
 	public static final String DATABRAIN_DEV_APIENGINE_PORT = "32368";
 
 	// =========================================================================================
-	// Configuration for databrain-dev environment
+	// Configuration for databrain-test environment
 	// =========================================================================================
 	public static final String DATABRAIN_TEST_CONNECTOR_BASE_URL= "http://140.231.89.85";
 	public static final String DATABRAIN_TEST_CONNECTOR_PORT= "30694";
