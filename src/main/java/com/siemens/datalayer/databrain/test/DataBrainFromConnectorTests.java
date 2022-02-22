@@ -49,7 +49,7 @@ public class DataBrainFromConnectorTests {
 
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30694") String port)
+    public void setConnectorEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port)
     {
         ConnectorEndpoint.setBaseUrl(base_url);
         ConnectorEndpoint.setPort(port);

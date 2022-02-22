@@ -900,8 +900,10 @@ public class testConfigurationClass {
 						testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT);
 
 				// 赋值：this.runRelationalDatabaseTest = true;
-				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
+				// setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
+				// setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
+
+				break;
 
 			case("databrain-dev"):
 				setConnectorTest(testEnvironmentConstants.DATABRAIN_DOMAIN_NAME,
@@ -913,6 +915,8 @@ public class testConfigurationClass {
 
 				// 赋值：this.runDataBrainFromConnectorTest = true;
 				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+
+				break;
 
 			case("databrain-test"):
 				setConnectorTest(testEnvironmentConstants.DATABRAIN_DOMAIN_NAME,
