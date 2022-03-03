@@ -942,6 +942,4 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
-
-
 }
