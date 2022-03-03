@@ -1,5 +1,8 @@
 package com.siemens.datalayer.databrain.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
 import com.siemens.datalayer.connector.test.InterfaceTests;
 import com.siemens.datalayer.databrain.util.JdbcClickhouseUtil;
@@ -166,16 +169,19 @@ public class DataBrainFromConnectorTests {
         // 检查desigoCC历史数据数据源
         checkEnlightedHistoryDatasource(paramMaps);
 
-        HashMap<String, String> queryParameters = new HashMap<>();
-        if (paramMaps.containsKey("condition"))
-            queryParameters.put("condition",paramMaps.get("condition"));
-        if (paramMaps.containsKey("name"))
-            queryParameters.put("name",paramMaps.get("name"));
+        if(!paramMaps.containsKey("sensor")){
+            HashMap<String, String> queryParameters = new HashMap<>();
+            if (paramMaps.containsKey("condition"))
+                queryParameters.put("condition",paramMaps.get("condition"));
+            if (paramMaps.containsKey("name"))
+                queryParameters.put("name",paramMaps.get("name"));
 
-        Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
-        System.out.println(response.jsonPath().getString(""));
+            Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
+            System.out.println(response.jsonPath().getString(""));
 
-        InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+            InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+        }
+
     }
 
     @Step("check desigoCC history datasource")
@@ -265,7 +271,7 @@ public class DataBrainFromConnectorTests {
     // 根据不同的entity，check不同的数据源
     public static void checkEnlightedHistoryDatasource(Map<String, String> requestParameters)
     {
-        if (requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date"))
+        if (requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date") && !requestParameters.containsKey("sensor"))
         {
             Response responseOfGetSensorDetailsbyFloor = DataBrainEndpoint.getSensorDetailsbyFloor(
                     enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
@@ -279,6 +285,26 @@ public class DataBrainFromConnectorTests {
 
             // check interface:/ems/api/org/floor/list
             Assert.assertEquals(responseOfGetllFloors.getStatusCode(),200);
+        }
+        //验证sensor 为Object 或者 Array
+        else if(requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date") && requestParameters.containsKey("sensor")){
+            Response response = DataBrainEndpoint.getSensorDetailsbyFloor(
+                    enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
+            String responseStr = response.jsonPath().getString("");
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode node = mapper.readTree(responseStr);
+                if(requestParameters.get("sensor").equals("isObj")){
+                    String actualId = node.get("sensor").get("id").asText();
+                    Assert.assertEquals(actualId,requestParameters.get("sensor_id"));
+                }else if (requestParameters.get("sensor").equals("isArray")){
+                    String actualId = node.get("sensor").get(0).get("id").asText();
+                    Assert.assertEquals(actualId,requestParameters.get("sensor_id"));
+                }
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
