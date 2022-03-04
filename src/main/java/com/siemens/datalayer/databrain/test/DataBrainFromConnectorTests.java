@@ -271,7 +271,7 @@ public class DataBrainFromConnectorTests {
     // 根据不同的entity，check不同的数据源
     public static void checkEnlightedHistoryDatasource(Map<String, String> requestParameters)
     {
-        if (requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date") && !requestParameters.containsKey("sensor"))
+        if (requestParameters.containsKey("name") && requestParameters.get("name").equals("EnlightedSensorDetails"))
         {
             Response responseOfGetSensorDetailsbyFloor = DataBrainEndpoint.getSensorDetailsbyFloor(
                     enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
@@ -279,7 +279,7 @@ public class DataBrainFromConnectorTests {
             // check interface:/ems/api/org/sensor/v2/stats/floor
             Assert.assertEquals(responseOfGetSensorDetailsbyFloor.getStatusCode(),200);
         }
-        else if (requestParameters.containsKey("id"))
+        else if (requestParameters.containsKey("name") && requestParameters.get("name").equals("Floor"))
         {
             Response responseOfGetllFloors = DataBrainEndpoint.getllFloors(enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs);
 
@@ -287,7 +287,7 @@ public class DataBrainFromConnectorTests {
             Assert.assertEquals(responseOfGetllFloors.getStatusCode(),200);
         }
         //验证sensor 为Object 或者 Array
-        else if(requestParameters.containsKey("floor_id") && requestParameters.containsKey("from_date") && requestParameters.containsKey("to_date") && requestParameters.containsKey("sensor")){
+        else if(requestParameters.containsKey("sensor")){
             Response response = DataBrainEndpoint.getSensorDetailsbyFloor(
                     enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
             String responseStr = response.jsonPath().getString("");
