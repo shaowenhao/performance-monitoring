@@ -291,6 +291,7 @@ public class DataBrainFromConnectorTests {
             Response response = DataBrainEndpoint.getSensorDetailsbyFloor(
                     enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
             String responseStr = response.prettyPrint();
+
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode node = mapper.readTree(responseStr);
