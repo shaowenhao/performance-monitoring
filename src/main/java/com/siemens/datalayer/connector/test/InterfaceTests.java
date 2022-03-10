@@ -2,8 +2,10 @@ package com.siemens.datalayer.connector.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.connector.model.GetAllEntitiesNameResponse;
+import com.siemens.datalayer.databrain.test.DataBrainEndpoint;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
@@ -69,13 +71,13 @@ public class InterfaceTests {
 	  
 	  Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
 	  
-	  checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));  
-	  
+	  checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+		List<HashMap<String, String>> rspDataList;
+		String listPath = "data";
 	  if (paramMaps.get("description").contains("data retrieved"))
-	  {	  
-		  List<HashMap<String, String>> rspDataList;
-		  
-		  String listPath = "data";
+	  {
+
 		  if (response.getBody().asString().contains("totalPages")) listPath += ".data"; // 只有分页时，路径才会变成data.data，其他时候为data
 		  
 		  rspDataList = response.jsonPath().getList(listPath); // 获取列表
@@ -145,6 +147,25 @@ public class InterfaceTests {
 			Assert.assertTrue(
 					response.jsonPath().getList("data") == null || response.jsonPath().getList("data").size() == 0);
 		}
+
+	  if(paramMaps.containsKey("condition")){
+	  	// check response was object or jasonArray with different conditions
+		  if(paramMaps.get("condition").contains("floor_id") && paramMaps.get("condition").contains("date")){
+			  String responseStr = response.prettyPrint();
+			  ObjectMapper mapper = new ObjectMapper();
+			  rspDataList = response.jsonPath().getList(listPath);
+			  try {
+				  JsonNode node = mapper.readTree(responseStr);
+				  if(paramMaps.get("sensor").equals("isObj")){
+					  Assert.assertEquals(rspDataList.size(),1);
+				  }else if (paramMaps.get("sensor").equals("isArray")){
+					  Assert.assertTrue(rspDataList.size() > 1,"response result was not an collention");
+				  }
+			  } catch (JsonProcessingException e) {
+				  e.printStackTrace();
+			  }
+		  }
+	  }
 
   	}
 
