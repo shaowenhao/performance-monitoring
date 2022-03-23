@@ -98,6 +98,7 @@ public class DataBrainEndpoint {
 
         RequestSpecification httpRequest = RestAssured.given().relaxedHTTPSValidation();
         httpRequest.header("Content-Type","application/json");
+        httpRequest.header("Accept","application/json");
         httpRequest.header("ApiKey",apiKey);
         httpRequest.header("Authorization",authorization);
         httpRequest.header("ts",ts);

@@ -290,7 +290,8 @@ public class DataBrainFromConnectorTests {
         else if(requestParameters.containsKey("sensor")){
             Response response = DataBrainEndpoint.getSensorDetailsbyFloor(
                     enlightedHttpsBaseUrl,enlightedPort,enlightedApiKey,enlightedAuthorization,enlightedTs,requestParameters);
-            String responseStr = response.jsonPath().getString("");
+            String responseStr = response.prettyPrint();
+
             ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonNode node = mapper.readTree(responseStr);
