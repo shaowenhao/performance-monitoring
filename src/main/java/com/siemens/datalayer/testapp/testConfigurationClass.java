@@ -61,6 +61,9 @@ public class testConfigurationClass {
 	Boolean runAuthForRestfulWriteTest = false;
 	private String authForRestfulWriteTestClass = null;
 
+	Boolean runRestfulAsDataSourcesEnhanceTest = false;
+	private String restfulAsDataSourcesEnhanceTestClass = null;
+
 	Boolean runAuthForRestfulReadTest = false;
 	private String authForRestfulReadTestClass = null;
 
@@ -493,6 +496,18 @@ public class testConfigurationClass {
 
 	public String getAuthForRestfulWriteTestClass(){return this.authForRestfulWriteTestClass;}
 
+	// getRunRestfulAsDataSourcesEnhanceTest、setRestfulAsDataSourcesEnhanceTestClass、getRestfulAsDataSourcesEnhanceTestClass
+	// 这三个方法针对“transfer of flexible parameters of restful driver”的测试 而添加
+	public Boolean getRunRestfulAsDataSourcesEnhanceTest(){return this.runRestfulAsDataSourcesEnhanceTest;}
+
+	public void setRestfulAsDataSourcesEnhanceTestClass(String restfulAsDataSourcesEnhanceTestClassName)
+	{
+		this.runRestfulAsDataSourcesEnhanceTest = true;
+		this.restfulAsDataSourcesEnhanceTestClass = restfulAsDataSourcesEnhanceTestClassName;
+	}
+
+	public String getRestfulAsDataSourcesEnhanceTestClass(){return this.restfulAsDataSourcesEnhanceTestClass;};
+
 	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
 	// 这三个方法针对“auth for restful read”的测试 而添加
 	public Boolean getRunAuthForRestfulReadTest(){return this.runAuthForRestfulReadTest;}
@@ -914,7 +929,10 @@ public class testConfigurationClass {
 						testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_PORT);
 
 				// 赋值：this.runDataBrainFromConnectorTest = true;
-				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+				// setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+
+				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
+				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
 
 				break;
 

@@ -169,6 +169,19 @@ public class autoRun {
 		 	myClasses.add(authForRestfulWriteTest);
 		 }
 
+		 // And test class for restfulAsDataSourcesEnhanceTests
+		if (testConfig.getRunRestfulAsDataSourcesEnhanceTest())
+		{
+			XmlClass restfulAsDataSourcesEnhanceTest = new XmlClass(testConfig.getRestfulAsDataSourcesEnhanceTestClass());
+
+			Map<String,String> restfulAsDataSourcesEnhanceTestParams = new HashMap<>();
+			restfulAsDataSourcesEnhanceTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			restfulAsDataSourcesEnhanceTestParams.put("port", testConfig.getApiEnginePort());
+
+			restfulAsDataSourcesEnhanceTest.setParameters(restfulAsDataSourcesEnhanceTestParams);
+			myClasses.add(restfulAsDataSourcesEnhanceTest);
+		}
+
 		// Add test class for AuthForRestfulReadTests
 		if (testConfig.getRunAuthForRestfulReadTest())
 		{
