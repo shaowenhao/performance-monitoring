@@ -1,25 +1,20 @@
 package com.siemens.datalayer.iot.util;
 
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
-// 获取到db.properties文件中的数据库信息
 public class JdbcMysqlUtil {
-    // 私有变量
     private static String driver;
     private static String url;
     private static String user;
     private static String password;
 
-    // 返回数据库连接
-    public static Connection getConnection(String file){
-        try{
+    public static Connection getConnection(String file) {
+        try {
             // 1.新建属性集对象
             Properties properties = new Properties();
 
@@ -35,7 +30,7 @@ public class JdbcMysqlUtil {
             user = properties.getProperty("user");
             password = properties.getProperty("password");
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -55,4 +50,3 @@ public class JdbcMysqlUtil {
         return null;
     }
 }
-

@@ -12,6 +12,9 @@ public class testEnvironmentConstants {
 	// =========================================================================================
 	public static final String IEMS_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_CONNECTOR_PORT = "32577";
+
+	public static final String IEMS_DEV_CONNECTOR_REALTIME_BASE_URL = "http://140.231.89.85";
+	public static final String IEMS_DEV_CONNECTOR_REALTIME_PORT = "31789";
 	
 	public static final String IEMS_DEV_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_APIENGINE_PORT = "32510";	
@@ -29,6 +32,12 @@ public class testEnvironmentConstants {
 	public static final String IEMS_DEV_RABBITMQ_VIRTUALHOST = "/";
 	public static final String IEMS_DEV_RABBITMQ_TIMEOUT = "30";
 	public static final String IEMS_DEV_RABBITMQ_EXCHANGE = "datalayer.exchange.out";
+
+	public static final String IEMS_DEV_MONGODB_HOST = "140.231.89.85";
+	public static final String IEMS_DEV_MONGODB_PORT = "31558";
+	public static final String IEMS_DEV_MONGODB_USERNAME = "mongodb";
+	public static final String IEMS_DEV_MONGODB_PASSWORD = "mongodb";
+	public static final String IEMS_DEV_MONGODB_DATABASENAME = "admin";
 	
 	public static final String IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_ENTITY_MANAGEMENT_PORT = "31706";

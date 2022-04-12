@@ -598,8 +598,14 @@ public class testConfigurationClass {
 				setConnectorTest(testEnvironmentConstants.IEMS_DOMAIN_NAME,
 								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_BASE_URL,
 								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_PORT);
+
+				setMongoDBHost(testEnvironmentConstants.IEMS_DEV_MONGODB_HOST);
+				setMongoDBPort(testEnvironmentConstants.IEMS_DEV_MONGODB_PORT);
+				setMongoDBUserName(testEnvironmentConstants.IEMS_DEV_MONGODB_USERNAME);
+				setMongoDBPassword(testEnvironmentConstants.IEMS_DEV_MONGODB_PASSWORD);
+				setMongoDBDatabaseName(testEnvironmentConstants.IEMS_DEV_MONGODB_DATABASENAME);
 				
-				setApiEngineTest(testEnvironmentConstants.IEMS_DEV_APIENGINE_BASE_URL, 
+				setApiEngineTest(testEnvironmentConstants.IEMS_DEV_APIENGINE_BASE_URL,
 								 testEnvironmentConstants.IEMS_DEV_APIENGINE_PORT);
 				
 				// 赋值：this.runApiServiceTest = true
@@ -623,6 +629,9 @@ public class testConfigurationClass {
 				// 赋值：this.runSubscriptionMgmtTest = true;
 				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
+
+				// 赋值：this.runDataBrainFromApiEngineTest = true;
+				// setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
 				
 				break;
 			
@@ -844,7 +853,7 @@ public class testConfigurationClass {
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
 
 				// 赋值：this.runConnectorRealtimeTest = true;
-				setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
+				// setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
 
 				// 赋值：this.runConnectorConfigureTest = true;
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
@@ -929,10 +938,13 @@ public class testConfigurationClass {
 						testEnvironmentConstants.DATABRAIN_DEV_APIENGINE_PORT);
 
 				// 赋值：this.runDataBrainFromConnectorTest = true;
-				// setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
 
 				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
 				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
+
+				// 赋值：this.runDataBrainFromApiEngineTest = true;
+				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
 
 				break;
 

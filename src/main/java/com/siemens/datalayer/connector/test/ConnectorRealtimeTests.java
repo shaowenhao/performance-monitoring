@@ -28,6 +28,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * 1、测试接口范围包括connector-realtime-"Plugin Controller"/"Plugin Toolkit Controller"两部分
+ * 2、覆盖功能：
+ * 1）real-time plugin
+ * 2）数据源->clickhouse的实时数据通路
+ * */
+
 @Epic("SDL Connector Realtime")
 @Feature("'CORE-Data connector realtime")
 public class ConnectorRealtimeTests {
@@ -62,6 +69,26 @@ public class ConnectorRealtimeTests {
 
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector-realtime", base_url + ":" + port);
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("MongoDB_url", mongodbHost + ":" + mongodbPort );
+    }
+
+    @Test(  alwaysRun = true,
+            priority = 0,
+            description = "Test Connector-realtime Plugin Controller: findAllPlugins")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'findAllPlugins' request to plugin controller interface.")
+    @Story("Plugin Controller: findAllPlugins")
+    public void findAllPlugins()
+    {
+        Response response = ConnectorRealtimeEndpoint.findAllPlugins();
+
+        Map<String,String> mongodbParams = new HashMap<>();
+        mongodbParams.put("mongodbHost",mongodbHost);
+        mongodbParams.put("mongodbPort",mongodbPort);
+        mongodbParams.put("mongodbUsername",mongodbUsername);
+        mongodbParams.put("mongodbPassword",mongodbPassword);
+        mongodbParams.put("mongodbDatabasename",mongodbDatabasename);
+
+        checkNumberOfPlugins(mongodbParams,response);
     }
 
     @Test(  alwaysRun = true,
@@ -101,6 +128,7 @@ public class ConnectorRealtimeTests {
             file = new File("src/main/resources/plugin/" + paramMaps.get("file"));
 
         Response response = ConnectorRealtimeEndpoint.loadBundle(file);
+        System.out.println(response.jsonPath().prettify());
 
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
@@ -147,6 +175,7 @@ public class ConnectorRealtimeTests {
                 if (preRequestParams.containsKey("file"))
                     file = new File("src/main/resources/plugin/" + preRequestParams.get("file"));
                 Response responseOfLoadBundle = ConnectorRealtimeEndpoint.loadBundle(file);
+                System.out.println("responseOfLoadBundle: " + responseOfLoadBundle.jsonPath().prettify());
             }
         }
 
@@ -162,10 +191,12 @@ public class ConnectorRealtimeTests {
             for (Map<String,String> preRequestParams : preRequestParamsList)
             {
                 Response responseOfPluginOperation = ConnectorRealtimeEndpoint.pluginOperation(preRequestParams.get("operator"),preRequestParams.get("pluginId"));
+                System.out.println("responseOfPluginOperation: "+ responseOfPluginOperation);
             }
         }
 
         Response response = ConnectorRealtimeEndpoint.pluginOperation(paramMaps.get("operator"),paramMaps.get("pluginId"));
+        System.out.println(response.jsonPath().prettify());
 
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
@@ -181,26 +212,6 @@ public class ConnectorRealtimeTests {
             // 校验load的plugin在mongodb中的存储情况
             checkPluginState(mongodbParams,paramMaps);
         }
-    }
-
-    @Test(  alwaysRun = true,
-            priority = 0,
-            description = "Test Connector-realtime Plugin Controller: findAllPlugins")
-    @Severity(SeverityLevel.BLOCKER)
-    @Description("Send a 'findAllPlugins' request to plugin controller interface.")
-    @Story("Plugin Controller: findAllPlugins")
-    public void findAllPlugins()
-    {
-        Response response = ConnectorRealtimeEndpoint.findAllPlugins();
-
-        Map<String,String> mongodbParams = new HashMap<>();
-        mongodbParams.put("mongodbHost",mongodbHost);
-        mongodbParams.put("mongodbPort",mongodbPort);
-        mongodbParams.put("mongodbUsername",mongodbUsername);
-        mongodbParams.put("mongodbPassword",mongodbPassword);
-        mongodbParams.put("mongodbDatabasename",mongodbDatabasename);
-
-        checkNumberOfPlugins(mongodbParams,response);
     }
 
     @Test(  alwaysRun = true,
@@ -232,6 +243,7 @@ public class ConnectorRealtimeTests {
                 if (preRequestParams.containsKey("file"))
                     file = new File("src/main/resources/plugin/" + preRequestParams.get("file"));
                 Response responseOfLoadBundle = ConnectorRealtimeEndpoint.loadBundle(file);
+                System.out.println("responseOfLoadBundle: " + responseOfLoadBundle.jsonPath().prettify());
             }
         }
 
@@ -247,10 +259,12 @@ public class ConnectorRealtimeTests {
             for (Map<String,String> preRequestParams : preRequestParamsList)
             {
                 Response responseOfPluginOperation = ConnectorRealtimeEndpoint.pluginOperation(preRequestParams.get("operator"),preRequestParams.get("pluginId"));
+                System.out.println("responseOfPluginOperation: " + responseOfPluginOperation.jsonPath().prettify());
             }
         }
 
         Response response = ConnectorRealtimeEndpoint.getPluginInformation(paramMaps.get("pluginId"));
+        System.out.println(response.jsonPath().prettify());
 
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
 
@@ -262,7 +276,6 @@ public class ConnectorRealtimeTests {
             mongodbParams.put("mongodbUsername",mongodbUsername);
             mongodbParams.put("mongodbPassword",mongodbPassword);
             mongodbParams.put("mongodbDatabasename",mongodbDatabasename);
-
 
             checkPluginInformation(mongodbParams,paramMaps,response);
         }
@@ -420,6 +433,7 @@ public class ConnectorRealtimeTests {
             if (pluginItem.get("pluginId") != null && pluginItem.get("pluginId").equals(requestPluginId))
             {
                 responseOfPluginUnload = ConnectorRealtimeEndpoint.pluginOperation("UNLOAD",requestPluginId);
+                System.out.println("unload the same plugin: \n" + responseOfPluginUnload.jsonPath().prettify());
             }
 
             // If there is any driver running with the same driver type,stop it first by call api at plugin/{pluginId}
@@ -428,6 +442,7 @@ public class ConnectorRealtimeTests {
                 if (!pluginItem.get("pluginId").equals(requestPluginId))
                 {
                     responseOfPluginStop = ConnectorRealtimeEndpoint.pluginOperation("STOP",pluginItem.get("pluginId"));
+                    System.out.println("stop the same driver type: \n" + responseOfPluginStop.jsonPath().prettify());
                 }
             }
         }
@@ -516,6 +531,8 @@ public class ConnectorRealtimeTests {
 
         List<Map<String,String>> actualPluginsList = response.jsonPath().getList("data");
 
+        System.out.println("actualPluginsList.size(): " + actualPluginsList.size());
+        System.out.println("expectedPluginsList.size(): " + expectedPluginsList.size());
         Assert.assertEquals(actualPluginsList.size(),expectedPluginsList.size());
     }
 

@@ -13,14 +13,16 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.*;
 
 @Epic("SDL Api-engine")
 @Feature("read/write DesigoCC/Enlighted history/realtime data from api-engine")
 public class DataBrainFromApiEngineTests {
+    static Connection connection;
+    static Statement statement;
+
     @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector"})
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
     public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32084") String port,
@@ -51,6 +53,35 @@ public class DataBrainFromApiEngineTests {
                     response.jsonPath().getString("message"));
 
             checkResponseData(paramMaps,response);
+        }
+    }
+
+    @Test(	priority = 0,
+            description = "generate grapgQL to query history data",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class
+            )
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'getData' request to graphql query interface.")
+    @Story("generate grapgQL to query history data")
+    public void queryPostgresqlData(Map<String, String> paramMaps)
+    {
+        if (paramMaps.containsKey("query")) {
+            String query = paramMaps.get("query");
+            System.out.println(query);
+            Response response = ApiEngineEndpoint.postGraphql(query);
+            System.out.println(response.jsonPath().prettify());
+
+            // 校验返回的response的最外层的statusCode，code，message
+            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"),
+                    response.jsonPath().getString("message"));
+
+            if (paramMaps.containsKey("entity"))
+            {
+                String path = "data." + paramMaps.get("entity");
+                List<Map<String,Object>> responseDataList = response.jsonPath().getList(path);
+                Assert.assertTrue(responseDataList.size() >= 1);
+            }
         }
     }
 
