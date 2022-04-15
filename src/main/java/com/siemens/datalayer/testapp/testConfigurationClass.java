@@ -897,6 +897,9 @@ public class testConfigurationClass {
 				// 赋值：this.runAuthForRestfulWriteTest = true
 				setAuthForRestfulWriteTestClass("com.siemens.datalayer.iot.test.AuthForRestfulWriteTests");
 
+				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
+				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
+
 				break;
 
 			case("iot-prod"):

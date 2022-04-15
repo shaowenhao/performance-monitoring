@@ -57,18 +57,17 @@ public class RestfulAsDataSourcesEnhanceTests {
         if (requestParameters.containsKey("rspData"))
         {
             // 转换成Map
+            System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
             Map<String,Object> actualResponseData = response.jsonPath().getMap("data");
-            System.out.println(actualResponseData);
 
             // 转换成Map
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(new TypeToken<Map<String, Object>>() {
                     }.getType(), new MapTypeAdapter()).create();
 
-            System.out.println(requestParameters.get("rspData"));
+            System.out.println("requestParameters.get(\"rspData\"): " + "\n" + requestParameters.get("rspData"));
             Map<String, Object> expectedResponseData = gson.fromJson(requestParameters.get("rspData"), new TypeToken<Map<String, Object>>() {
             }.getType());
-            System.out.println(expectedResponseData);
 
             Assert.assertTrue(objectEquals(actualResponseData,expectedResponseData));
             // Assert.assertEquals(actualResponseData,expectedResponseData);
