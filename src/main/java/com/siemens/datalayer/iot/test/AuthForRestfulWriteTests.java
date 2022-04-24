@@ -23,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Epic("SDL Api-engine")
-@Feature("auth for restful write")
+@Feature("restful as datasource")
 public class AuthForRestfulWriteTests {
     @Parameters({"base_url","port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-api-engine;")
@@ -34,12 +34,12 @@ public class AuthForRestfulWriteTests {
     }
 
     @Test(priority = 0,
-            description = "insert/update/delete restful(data source) with auth Scenarios",
+            description = "\"restful with auth\" as the data source, write (data source) by single entity",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Restful as data source,write (data source) by single entity with auth")
+    @Story("auth for restful write")
     public void authForRestfulWrite(Map<String, String> paramMaps){
 
         if (paramMaps.containsKey("graphQLSentence") && paramMaps.get("graphQLSentence").contains("$authInfo")){

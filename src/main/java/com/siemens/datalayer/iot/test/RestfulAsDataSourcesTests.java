@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Epic("SDL Api-engine")
-@Feature("Restful as data source,write (data source) by simple/complex single/multi entity,support transaction control")
+@Feature("restful as datasource")
 public class RestfulAsDataSourcesTests {
     static Connection connection;
     static Statement statement;
@@ -110,12 +110,12 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "insert/update/delete restful(data source) Scenarios",
+            description = "write (data source) by single simple/complex entity",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Restful as data source,write (data source) by single simple/complex entity")
+    @Story("support transaction control,single entity")
     public void restfulTransactionSingleEntity(Map<String, String> paramMaps) throws JSONException {
 
         String entityName = paramMaps.get("entityName");
@@ -198,12 +198,12 @@ public class RestfulAsDataSourcesTests {
     }
 
     @Test(priority = 0,
-            description = "insert/update/delete restful(data source) Scenarios",
+            description = "write (data source) by multi simple/complex entity",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Restful as data source,write (data source) by multi simple/complex entity")
+    @Story("support transaction control,multi entity")
     public void restfulTransactionMultiEntity(Map<String, String> paramMaps) {
 
         List<String> entityList = Arrays.asList(paramMaps.get("entityName").split(","));

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Epic("SDL Api-engine")
-@Feature("Restful as data source,transfer of flexible parameters of restful driver")
+@Feature("restful as datasource")
 public class RestfulAsDataSourcesEnhanceTests {
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-api-engine;")
@@ -39,7 +39,7 @@ public class RestfulAsDataSourcesEnhanceTests {
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Restful as data source,transfer of flexible parameters of restful driver")
+    @Story("transfer of flexible parameters such as \"in\",\"and\",\"or\" of restful driver")
     public void transferOfFlexibleParams(Map<String, String> paramMaps) throws JSONException {
         if (paramMaps.containsKey("graphQLSentence")) {
             String query = paramMaps.get("graphQLSentence");

@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @Epic("SDL Connector")
-@Feature("Webservice as Datasource")
+@Feature("webservice as data source")
 public class WebServiceAsDataSourcesTests {
 
     @Parameters({"base_url", "port"})
@@ -30,12 +30,12 @@ public class WebServiceAsDataSourcesTests {
 
 
     @Test(priority = 0,
-            description = "Test connector interface: DML insert operator.",
+            description = "webservice as data source,query data source",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'dmlInsertOperator' request with insert info and check the response message.")
-    @Story("Connector Interface: dml data insert operator")
+    @Story("webservice as data source,query data source")
     public void dmlDataInsert(Map<String, String> paramMaps) {
 
         String insertinfo = paramMaps.get("insertinfo");

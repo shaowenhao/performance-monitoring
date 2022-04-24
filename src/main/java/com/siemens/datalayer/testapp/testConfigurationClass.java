@@ -631,7 +631,7 @@ public class testConfigurationClass {
 										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
-				// setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
+				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
 				
 				break;
 			
@@ -942,9 +942,6 @@ public class testConfigurationClass {
 
 				// 赋值：this.runDataBrainFromConnectorTest = true;
 				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
-
-				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
-				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");

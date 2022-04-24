@@ -83,6 +83,8 @@ public class DataBrainFromApiEngineTests {
                 Assert.assertTrue(responseDataList.size() >= 1);
             }
         }
+        else
+            Assert.assertTrue(paramMaps.containsKey("query"));
     }
 
     @Step("校验/graphql接口返回的数据跟直接调用connector接口返回的数据是否一致")
