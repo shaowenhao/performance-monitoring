@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Epic("SDL Connector")
-@Feature("auth for webservice")
+@Feature("webservice as data source")
 public class AuthForWebserviceTests {
 
     @Parameters({"base_url", "port"})
@@ -29,12 +29,12 @@ public class AuthForWebserviceTests {
     }
 
     @Test(	priority = 0,
-            description = "get webservice(data source) with auth Scenarios",
+            description = "\"webservice with auth\" as the data source, read (data source) by single entity",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
-    @Story("Webservice as data source,read (data source) by single entity with auth")
+    @Story("auth for webservice read")
     public void authForWebserviceRead(Map<String, String> paramMaps){
 
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
@@ -87,12 +87,12 @@ public class AuthForWebserviceTests {
     }
 
     @Test(	priority = 0,
-            description = "insert webservice(data source) with auth Scenarios",
+            description = "\"webservice with auth\" as the data source, write (data source) by single entity",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
-    @Story("Webservice as data source,insert (data source) by single entity with auth")
+    @Story("auth for webservice write")
     public void authForWebserviceWrite(Map<String, String> paramMaps){
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
         // 和connector-configure（clear all cache接口）清除缓存

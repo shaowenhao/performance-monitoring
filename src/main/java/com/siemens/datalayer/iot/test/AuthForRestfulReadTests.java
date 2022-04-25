@@ -29,12 +29,12 @@ public class AuthForRestfulReadTests {
     }
 
     @Test(	priority = 0,
-            description = "get restful(data source) with auth Scenarios",
+            description = "\"restful with auth\" as the data source, read (data source) by single entity",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
-    @Story("Restful as data source,read (data source) by single entity with auth")
+    @Story("auth for restful read")
     public void authForRestfulRead(Map<String, String> paramMaps){
 
         // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
