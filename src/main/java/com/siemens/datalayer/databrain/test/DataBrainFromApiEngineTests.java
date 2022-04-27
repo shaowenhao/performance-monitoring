@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Epic("SDL Api-engine")
-@Feature("read/write DesigoCC/Enlighted history/realtime data from api-engine")
+@Feature("verify data brain function")
 public class DataBrainFromApiEngineTests {
     static Connection connection;
     static Statement statement;
@@ -65,14 +65,14 @@ public class DataBrainFromApiEngineTests {
     }
 
     @Test(	priority = 0,
-            description = "generate grapgQL to query history data",
+            description = "verify smart space function",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class
             )
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("generate grapgQL to query history data")
-    public void queryPostgresqlData(Map<String, String> paramMaps)
+    @Story("verify smart space function")
+    public void verifySmartSpaceFunction(Map<String, String> paramMaps)
     {
         // 执行case之前，需调用connector-configure（clear all cache接口）清除缓存
         ConnectorConfigureEndpoint.clearAllCache();
@@ -93,12 +93,15 @@ public class DataBrainFromApiEngineTests {
             QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"),
                     response.jsonPath().getString("message"));
 
-            if (paramMaps.containsKey("entity") && !paramMaps.containsKey("rspCodeOfDatasource") && !paramMaps.containsKey("rspMessageOfDatasource"))
+            // 如果是query语句，检验返回的数据不少于一条
+            if (paramMaps.containsKey("entity") && !paramMaps.containsKey("rspCodeOfDatasource")
+                    && !paramMaps.containsKey("rspMessageOfDatasource"))
             {
                 String path = "data." + paramMaps.get("entity");
                 List<Map<String,Object>> responseDataList = response.jsonPath().getList(path);
                 Assert.assertTrue(responseDataList.size() >= 1);
             }
+            // 如果是mutation，校验返回的第二层的code/data
             else if (paramMaps.containsKey("entity") && paramMaps.containsKey("rspCodeOfDatasource") && paramMaps.containsKey("rspMessageOfDatasource"))
             {
                 String pathOfRspCodeOfDatasource = null;
