@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Epic("SDL Connector")
-@Feature("auth for restful read")
+@Feature("restful as datasource")
 public class AuthForRestfulReadTests {
 
     @Parameters({"base_url", "port"})

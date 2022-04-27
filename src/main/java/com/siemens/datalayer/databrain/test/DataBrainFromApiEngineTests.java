@@ -3,6 +3,7 @@ package com.siemens.datalayer.databrain.test;
 import com.alibaba.fastjson.JSONObject;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
+import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
@@ -15,7 +16,10 @@ import org.testng.annotations.Test;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Epic("SDL Api-engine")
 @Feature("read/write DesigoCC/Enlighted history/realtime data from api-engine")
@@ -23,16 +27,20 @@ public class DataBrainFromApiEngineTests {
     static Connection connection;
     static Statement statement;
 
-    @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector"})
+    @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector","baseUrlOfConnectorConfigure","portOfConnectorConfigure"})
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
-    public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32084") String port,
-                                     @Optional("http://140.231.89.85")  String baseUrlOfConnector,@Optional("30694") String portOfConnector)
+    public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32510") String port,
+                                     @Optional("http://140.231.89.85")  String baseUrlOfConnector,@Optional("32577") String portOfConnector,
+                                     @Optional("http://140.231.89.85")  String baseUrlOfConnectorConfigure,@Optional("30674") String portOfConnectorConfigure)
     {
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
 
         ConnectorEndpoint.setBaseUrl(baseUrlOfConnector);
         ConnectorEndpoint.setPort(portOfConnector);
+
+        ConnectorConfigureEndpoint.setBaseUrl(baseUrlOfConnectorConfigure);
+        ConnectorConfigureEndpoint.setPort(portOfConnectorConfigure);
     }
 
     @Test(	priority = 0,
@@ -66,6 +74,15 @@ public class DataBrainFromApiEngineTests {
     @Story("generate grapgQL to query history data")
     public void queryPostgresqlData(Map<String, String> paramMaps)
     {
+        // 执行case之前，需调用connector-configure（clear all cache接口）清除缓存
+        ConnectorConfigureEndpoint.clearAllCache();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (paramMaps.containsKey("query")) {
             String query = paramMaps.get("query");
             System.out.println(query);
@@ -76,15 +93,28 @@ public class DataBrainFromApiEngineTests {
             QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"),
                     response.jsonPath().getString("message"));
 
-            if (paramMaps.containsKey("entity"))
+            if (paramMaps.containsKey("entity") && !paramMaps.containsKey("rspCodeOfDatasource") && !paramMaps.containsKey("rspMessageOfDatasource"))
             {
                 String path = "data." + paramMaps.get("entity");
                 List<Map<String,Object>> responseDataList = response.jsonPath().getList(path);
                 Assert.assertTrue(responseDataList.size() >= 1);
             }
+            else if (paramMaps.containsKey("entity") && paramMaps.containsKey("rspCodeOfDatasource") && paramMaps.containsKey("rspMessageOfDatasource"))
+            {
+                String pathOfRspCodeOfDatasource = null;
+                String pathOfRspMessageOfDatasource = null;
+                if (paramMaps.get("query").contains("Update"))
+                {
+                    pathOfRspCodeOfDatasource = "data." + paramMaps.get("entity") + "_Update.json_value[0].code";
+                    pathOfRspMessageOfDatasource = "data." + paramMaps.get("entity") + "_Update.json_value[0].data";
+                }
+                String actualRspCodeOfDatasource = response.jsonPath().getString(pathOfRspCodeOfDatasource);
+                String actualRspMessageOfDatasource = response.jsonPath().getString(pathOfRspMessageOfDatasource);
+
+                Assert.assertEquals(actualRspCodeOfDatasource,paramMaps.get("rspCodeOfDatasource"));
+                Assert.assertTrue(actualRspMessageOfDatasource.contains(paramMaps.get("rspMessageOfDatasource")));
+            }
         }
-        else
-            Assert.assertTrue(paramMaps.containsKey("query"));
     }
 
     @Step("校验/graphql接口返回的数据跟直接调用connector接口返回的数据是否一致")

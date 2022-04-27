@@ -599,6 +599,9 @@ public class testConfigurationClass {
 								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_BASE_URL,
 								 testEnvironmentConstants.IEMS_DEV_CONNECTOR_PORT);
 
+				setConnectorConfigureTest(testEnvironmentConstants.IEMS_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						testEnvironmentConstants.IEMS_DEV_CONNECTOR_CONFIGURE_PORT);
+
 				setMongoDBHost(testEnvironmentConstants.IEMS_DEV_MONGODB_HOST);
 				setMongoDBPort(testEnvironmentConstants.IEMS_DEV_MONGODB_PORT);
 				setMongoDBUserName(testEnvironmentConstants.IEMS_DEV_MONGODB_USERNAME);

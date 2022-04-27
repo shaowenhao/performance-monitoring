@@ -13,6 +13,9 @@ public class testEnvironmentConstants {
 	public static final String IEMS_DEV_CONNECTOR_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_CONNECTOR_PORT = "32577";
 
+	public static final String IEMS_DEV_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.85";
+	public static final String IEMS_DEV_CONNECTOR_CONFIGURE_PORT = "30674";
+
 	public static final String IEMS_DEV_CONNECTOR_REALTIME_BASE_URL = "http://140.231.89.85";
 	public static final String IEMS_DEV_CONNECTOR_REALTIME_PORT = "31789";
 	

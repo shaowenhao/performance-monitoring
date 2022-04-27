@@ -305,6 +305,8 @@ public class autoRun {
 			dataBrainFromApiEngineTestParams.put("port",testConfig.getApiEnginePort());
 			dataBrainFromApiEngineTestParams.put("baseUrlOfConnector",testConfig.getConnectorBaseURL());
 			dataBrainFromApiEngineTestParams.put("portOfConnector",testConfig.getConnectorPort());
+			dataBrainFromApiEngineTestParams.put("baseUrlOfConnectorConfigure",testConfig.getConnectorConfigureBaseURL());
+			dataBrainFromApiEngineTestParams.put("portOfConnectorConfigure",testConfig.getConnectorConfigurePort());
 
 			dataBrainFromApiEngineTest.setParameters(dataBrainFromApiEngineTestParams);
 			myClasses.add(dataBrainFromApiEngineTest);
