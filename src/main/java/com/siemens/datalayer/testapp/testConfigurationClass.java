@@ -76,6 +76,9 @@ public class testConfigurationClass {
 	Boolean runAppClientAuthenticationForK8sTest = false;
 	private String appClientAuthenticationForK8sTestClass = null;
 
+	Boolean runPostgreSQLAsDataSourceTest = false;
+	private String postgreSQLAsDataSourceTestClass = null;
+
 	Boolean runUserQueryTest = false;
 	private String userQueryTestClass = null;
 
@@ -583,6 +586,18 @@ public class testConfigurationClass {
 		this.entityManagement_port = entitymgt_port;
 	}
 
+	// getRunPostgreSQLAsDataSourceTest、setPostgreSQLAsDataSourceTestClass、getPostgreSQLAsDataSourceTestClass
+	// 这三个方法针对“read/write PostgresSQL(data source) Scenarios”的测试 而添加
+	public Boolean getRunPostgreSQLAsDataSourceTest(){return this.runPostgreSQLAsDataSourceTest;}
+
+	public void setPostgreSQLAsDataSourceTestClass(String postgreSQLAsDataSourceTestClass)
+	{
+		this.runPostgreSQLAsDataSourceTest = true;
+		this.postgreSQLAsDataSourceTestClass = postgreSQLAsDataSourceTestClass;
+	}
+
+	public String getPostgreSQLAsDataSourceTestClass(){return this.postgreSQLAsDataSourceTestClass;}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -868,6 +883,9 @@ public class testConfigurationClass {
 						testEnvironmentConstants.IOT_TEST_CONNECTOR_BASE_URL,
 						testEnvironmentConstants.IOT_TEST_CONNECTOR_PORT);
 
+				setConnectorConfigureTest(testEnvironmentConstants.IOT_TEST_CONNECTOR_CONFIGURE_BASE_URL,
+						testEnvironmentConstants.IOT_TEST_CONNECTOR_CONFIGURE_PORT);
+
 				setApiEngineTest(testEnvironmentConstants.IOT_TEST_APIENGINE_BASE_URL,
 						testEnvironmentConstants.IOT_TEST_APIENGINE_PORT);
 
@@ -891,17 +909,24 @@ public class testConfigurationClass {
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseTest(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
-				// 赋值：this.runWebServiceAsDataSourcesTest = true;
-				setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
-
 				// 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
+
+				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
+				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
+
+				// 赋值：this.runAuthForRestfulReadTest = true;
+				setAuthForRestfulReadTestClass("com.siemens.datalayer.iot.test.AuthForRestfulReadTests");
 
 				// 赋值：this.runAuthForRestfulWriteTest = true
 				setAuthForRestfulWriteTestClass("com.siemens.datalayer.iot.test.AuthForRestfulWriteTests");
 
-				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
-				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
+				// 赋值：this.runWebServiceAsDataSourcesTest = true;
+				setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
+
+
+				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
+				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
 				break;
 

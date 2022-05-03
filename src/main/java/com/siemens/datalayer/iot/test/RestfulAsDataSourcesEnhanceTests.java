@@ -60,14 +60,13 @@ public class RestfulAsDataSourcesEnhanceTests {
             System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
             Map<String,Object> actualResponseData = response.jsonPath().getMap("data");
 
-            // 转换成Map
+            // 转换成Map，重写TypeAdapter方法为MapTypeAdapter，解决String转换成Map<String,Object>时，会将整数型数据自动添加小数点的问题
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(new TypeToken<Map<String, Object>>() {
                     }.getType(), new MapTypeAdapter()).create();
 
             System.out.println("requestParameters.get(\"rspData\"): " + "\n" + requestParameters.get("rspData"));
-            Map<String, Object> expectedResponseData = gson.fromJson(requestParameters.get("rspData"), new TypeToken<Map<String, Object>>() {
-            }.getType());
+            Map<String, Object> expectedResponseData = gson.fromJson(requestParameters.get("rspData"), new TypeToken<Map<String, Object>>() {}.getType());
 
             Assert.assertTrue(objectEquals(actualResponseData,expectedResponseData));
             // Assert.assertEquals(actualResponseData,expectedResponseData);

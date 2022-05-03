@@ -242,6 +242,9 @@ public class testEnvironmentConstants {
 	public static final String IOT_TEST_CONNECTOR_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_TEST_CONNECTOR_PORT = "30850";
 
+	public static final String IOT_TEST_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.85";
+	public static final String IOT_TEST_CONNECTOR_CONFIGURE_PORT = "32350";
+
 	public static final String IOT_TEST_APIENGINE_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_TEST_APIENGINE_PORT = "30346";
 	public static final String IOT_TEST_DB_PROPERTIES = "iot.dev.mysql.db.properties"; //和iot-demo-dev环境用的同一个MySQL

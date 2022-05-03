@@ -190,6 +190,8 @@ public class autoRun {
 			Map<String,String> authForRestfulReadTestParams = new HashMap<>();
 			authForRestfulReadTestParams.put("base_url",testConfig.getConnectorBaseURL());
 			authForRestfulReadTestParams.put("port",testConfig.getConnectorPort());
+			authForRestfulReadTestParams.put("baseUrlOfConnectorConfigure",testConfig.getConnectorConfigureBaseURL());
+			authForRestfulReadTestParams.put("portOfConnectorConfigure",testConfig.getConnectorConfigurePort());
 
 			authForRestfulReadTest.setParameters(authForRestfulReadTestParams);
 			myClasses.add(authForRestfulReadTest);
@@ -295,7 +297,7 @@ public class autoRun {
 			myClasses.add(dataBrainFromConnectorTest);
 		}
 
-		// Add test calss for 'read/write DesigoCC/Enlighted history/realtime data from api-engine'
+		// Add test class for 'read/write DesigoCC/Enlighted history/realtime data from api-engine'
 		if (testConfig.getRunDataBrainFromApiEngineTest())
 		{
 			XmlClass dataBrainFromApiEngineTest = new XmlClass(testConfig.getDataBrainFromApiEngineTestClass());
@@ -321,6 +323,19 @@ public class autoRun {
             uiBackendTestParams.put("entitymgt_port",testConfig.getEntityManagementPort());
 			uiBackendTest.setParameters(uiBackendTestParams);
 			myClasses.add(uiBackendTest);
+		}
+
+		// Add test class for 'read/write PostgresSQL(data source) Scenarios'
+		if (testConfig.getRunPostgreSQLAsDataSourceTest())
+		{
+			XmlClass postgreSQLAsDataSourceTest = new XmlClass(testConfig.getPostgreSQLAsDataSourceTestClass());
+
+			Map<String,String> postgreSQLAsDataSourceTestParams = new HashMap<>();
+			postgreSQLAsDataSourceTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			postgreSQLAsDataSourceTestParams.put("port",testConfig.getApiEnginePort());
+
+			postgreSQLAsDataSourceTest.setParameters(postgreSQLAsDataSourceTestParams);
+			myClasses.add(postgreSQLAsDataSourceTest);
 		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 

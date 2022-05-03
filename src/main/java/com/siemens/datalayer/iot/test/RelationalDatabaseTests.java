@@ -43,7 +43,7 @@ public class RelationalDatabaseTests {
           dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("mysql as data source,Insert/Update/Delete data source")
+    @Story("mysql as data source,write data source")
     public void postGraphForMysql(Map<String, String> paramMaps) throws JSONException {
 
         // 这两行代码，在testcase最先执行，

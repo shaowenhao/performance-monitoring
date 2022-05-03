@@ -21,11 +21,15 @@ import java.util.concurrent.TimeUnit;
 @Feature("restful as datasource")
 public class AuthForRestfulReadTests {
 
-    @Parameters({"base_url", "port"})
+    @Parameters({"base_url", "port","baseUrlOfConnectorConfigure","portOfConnectorConfigure"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30850") String port) {
+    public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30850") String port,
+                                     @Optional("http://140.231.89.85")  String baseUrlOfConnectorConfigure,@Optional("32350") String portOfConnectorConfigure) {
         ConnectorEndpoint.setBaseUrl(base_url);
         ConnectorEndpoint.setPort(port);
+
+        ConnectorConfigureEndpoint.setBaseUrl(baseUrlOfConnectorConfigure);
+        ConnectorConfigureEndpoint.setPort(portOfConnectorConfigure);
     }
 
     @Test(	priority = 0,
