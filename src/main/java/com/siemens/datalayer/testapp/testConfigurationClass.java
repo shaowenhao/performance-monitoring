@@ -73,6 +73,9 @@ public class testConfigurationClass {
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
 
+	Boolean runRealtimeDataSourcesTest = false;
+	private String realtimeDataSourcesTestClass = null;
+
 	Boolean runAppClientAuthenticationForK8sTest = false;
 	private String appClientAuthenticationForK8sTestClass = null;
 
@@ -509,6 +512,14 @@ public class testConfigurationClass {
 		this.restfulAsDataSourcesEnhanceTestClass = restfulAsDataSourcesEnhanceTestClassName;
 	}
 
+
+	public Boolean getRunRealtimeDataSourcesTestEnhanceTest(){return this.runRealtimeDataSourcesTest;}
+
+	public void setRealtimeAsDataSourcesEnhanceTestClass(String realtimeAsDataSourcesEnhanceTestClassName)
+	{
+		this.runRealtimeDataSourcesTest = true;
+		this.realtimeDataSourcesTestClass = realtimeAsDataSourcesEnhanceTestClassName;
+	}
 	public String getRestfulAsDataSourcesEnhanceTestClass(){return this.restfulAsDataSourcesEnhanceTestClass;};
 
 	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
@@ -928,6 +939,8 @@ public class testConfigurationClass {
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
 				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
+				// 赋值：this.runRealtimeDataSourcesTest = true;
+				setRealtimeAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RealtimeDatabaseTests");
 				break;
 
 			case("iot-prod"):
