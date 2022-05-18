@@ -1,5 +1,6 @@
 package com.siemens.datalayer.databrain.test;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
@@ -8,6 +9,7 @@ import com.siemens.datalayer.connector.test.ConnectorEndpoint;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
+import org.apache.commons.collections4.MapUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
@@ -16,10 +18,7 @@ import org.testng.annotations.Test;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Epic("SDL Api-engine")
 @Feature("verify data brain function")
@@ -74,6 +73,9 @@ public class DataBrainFromApiEngineTests {
     @Story("verify smart space function")
     public void verifySmartSpaceFunction(Map<String, String> paramMaps)
     {
+        ConnectorEndpoint.clearAllCaches();
+        ConnectorEndpoint.clearRedisCache();
+        ConnectorEndpoint.clearRedisCaches();
         // 执行case之前，需调用connector-configure（clear all cache接口）清除缓存
         ConnectorConfigureEndpoint.clearAllCache();
 
@@ -94,22 +96,26 @@ public class DataBrainFromApiEngineTests {
                     response.jsonPath().getString("message"));
 
             // 如果是query语句，检验返回的数据不少于一条
-            if (paramMaps.containsKey("entity") && !paramMaps.containsKey("rspCodeOfDatasource")
+            if (paramMaps.containsKey("entities") && !paramMaps.containsKey("rspCodeOfDatasource")
                     && !paramMaps.containsKey("rspMessageOfDatasource"))
             {
-                String path = "data." + paramMaps.get("entity");
-                List<Map<String,Object>> responseDataList = response.jsonPath().getList(path);
-                Assert.assertTrue(responseDataList.size() >= 1);
+
+                List<String> pathList = Arrays.asList(paramMaps.get("entities").trim().split("->"));
+
+                Map<String,Object> responseMap = response.jsonPath().getMap("data");
+
+                System.out.println(pathList);
+                verifyResponse(responseMap,pathList);
             }
             // 如果是mutation，校验返回的第二层的code/data
-            else if (paramMaps.containsKey("entity") && paramMaps.containsKey("rspCodeOfDatasource") && paramMaps.containsKey("rspMessageOfDatasource"))
+            else if (paramMaps.containsKey("entities") && paramMaps.containsKey("rspCodeOfDatasource") && paramMaps.containsKey("rspMessageOfDatasource"))
             {
                 String pathOfRspCodeOfDatasource = null;
                 String pathOfRspMessageOfDatasource = null;
                 if (paramMaps.get("query").contains("Update"))
                 {
-                    pathOfRspCodeOfDatasource = "data." + paramMaps.get("entity") + "_Update.json_value[0].code";
-                    pathOfRspMessageOfDatasource = "data." + paramMaps.get("entity") + "_Update.json_value[0].data";
+                    pathOfRspCodeOfDatasource = "data." + paramMaps.get("entities") + "_Update.json_value[0].code";
+                    pathOfRspMessageOfDatasource = "data." + paramMaps.get("entities") + "_Update.json_value[0].data";
                 }
                 String actualRspCodeOfDatasource = response.jsonPath().getString(pathOfRspCodeOfDatasource);
                 String actualRspMessageOfDatasource = response.jsonPath().getString(pathOfRspMessageOfDatasource);
@@ -155,5 +161,53 @@ public class DataBrainFromApiEngineTests {
                 Assert.assertEquals(actualDataItem.get("code"),0);
             }
         }
+    }
+
+    @Step("判断response中是否返回符合条件的数据")
+    public static void verifyResponse(Map<String, Object> object, List<String> patternList)
+    {
+        Boolean bool = matchCondition(object,patternList);
+
+        Assert.assertTrue(bool != false);
+    }
+
+    public static boolean matchCondition(Map<String, Object> object, List<String> patternList) {
+        if (CollectionUtil.isEmpty(patternList) || MapUtils.isEmpty(object)) {
+            return false;
+        }
+        return isNotEmpty(getValue(object, patternList, 0));
+    }
+
+    public static Object getValue(Object object, List<String> patternList, int patternIndex) {
+        if (object == null) {
+            return null;
+        }
+        // String currentPattern = patternList.size() > patternIndex ? patternList.get(patternIndex) : null;
+        if (patternList.size() == patternIndex) {
+            return object;
+        } else {
+            String currentPattern = patternList.get(patternIndex);
+            if (object instanceof Map) {
+                return getValue(
+                        MapUtils.getObject((Map<String, Object>)object, currentPattern),
+                        patternList,
+                        patternIndex + 1);
+            } else if (object instanceof List) {
+                return ((List)object)
+                        .stream()
+                        .map(item -> getValue(item, patternList, patternIndex))
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null);
+            } else {
+                System.out.println("currentPattern: " + currentPattern);
+                return null;
+                //throw new RuntimeException(String.format("can't access key :% , because object is not a map %s, %s", currentPattern, o.getClass().getSimpleName(), o));
+            }
+        }
+    }
+
+    public static boolean isNotEmpty(Object object) {
+        return object instanceof List ? CollectionUtil.isNotEmpty((List)object) : object != null;
     }
 }

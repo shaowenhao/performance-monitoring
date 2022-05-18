@@ -5,12 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.connector.model.GetAllEntitiesNameResponse;
-import com.siemens.datalayer.databrain.test.DataBrainEndpoint;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
@@ -169,7 +167,7 @@ public class InterfaceTests {
 
   	}
 
-	@Test(priority = 0, description = "Test Developer Tools:clearRedisCaches.")
+	/* @Test(priority = 0, description = "Test Developer Tools:clearRedisCaches.")
 	@Severity(SeverityLevel.BLOCKER)
 	@Description("Send a 'clearRedisCaches' request")
 	@Story("Test Developer Tools:clearRedisCaches")
@@ -203,7 +201,7 @@ public class InterfaceTests {
 		JsonPath jsonPath = response.jsonPath();
 
 		Assert.assertEquals("Operate success.",jsonPath.getString("message"));
-	}
+	} */
 
 	@Step("Verify the status code, operation code, and message")
 	public static void checkResponseCode(Map<String, String> requestParameters, int actualStatusCode, String actualCode, String actualMessage)

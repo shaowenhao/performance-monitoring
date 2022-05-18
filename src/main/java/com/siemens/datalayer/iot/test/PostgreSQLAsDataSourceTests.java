@@ -156,6 +156,7 @@ public class PostgreSQLAsDataSourceTests {
             QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(),
                     response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
+            // 校验接口返回的rspData
             checkResponseData(paramMaps,response);
 
             // 现在的testcase，每个都有参数database
@@ -192,7 +193,7 @@ public class PostgreSQLAsDataSourceTests {
         }
     }
 
-    @Step("verify the expected results and the actual data stored in MySQL")
+    @Step("verify the expected results and the actual data stored in PostgreSQL")
     public static void verityExpectedAndActualDataInPostgreSQL(String database, String expectResultsFromExcel)
     {
         List<Map<String,Object>> expectListFromExcel = new ArrayList<>();

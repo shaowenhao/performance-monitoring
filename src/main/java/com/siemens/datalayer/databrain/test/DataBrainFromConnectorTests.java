@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Epic("SDL Connector")
-@Feature("read DesigoCC/Enlighted history/realtime data from connector")
+@Feature("Verify data brain function")
 public class DataBrainFromConnectorTests {
     private static final String desigoHttpsBaseUrl = "https://md3ktpmc.ad001.siemens.net";
     private static final String desigoWssBaseUrl = "wss://md3ktpmc.ad001.siemens.net";
@@ -59,36 +59,40 @@ public class DataBrainFromConnectorTests {
     }
 
     @Test(	priority = 0,
-            description = "read desigoCC history data",
+            description = "Query data brain data",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
-    @Story("read desigoCC history data")
-    public void readDesigoCCHistoryData(Map<String, String> paramMaps)
+    @Story("Query data brain data")
+    public void queryDataBrainData(Map<String, String> paramMaps)
     {
         // 检查desigoCC历史数据数据源
-        checkDesigoCCHistoryDatasource(paramMaps);
+        // checkDesigoCCHistoryDatasource(paramMaps);
 
         HashMap<String, String> queryParameters = new HashMap<>();
-        if (paramMaps.containsKey("condition"))
-            queryParameters.put("condition",paramMaps.get("condition"));
-        if (paramMaps.containsKey("name"))
-            queryParameters.put("name",paramMaps.get("name"));
+
+        if (paramMaps.containsKey("condition")) 		queryParameters.put("condition", paramMaps.get("condition"));
+        if (paramMaps.containsKey("domainName")) 		queryParameters.put("domainName", paramMaps.get("domainName"));
+        if (paramMaps.containsKey("name")) 			queryParameters.put("name", paramMaps.get("name"));
+        if (paramMaps.containsKey("fields")) 			queryParameters.put("fields", paramMaps.get("fields"));
+        if (paramMaps.containsKey("order")) 			queryParameters.put("order", paramMaps.get("order"));
+        if (paramMaps.containsKey("pageIndex")) 		queryParameters.put("pageIndex", paramMaps.get("pageIndex"));
+        if (paramMaps.containsKey("pageSize")) 		queryParameters.put("pageSize", paramMaps.get("pageSize"));
+        if (paramMaps.containsKey("timeout")) 		queryParameters.put("timeout", paramMaps.get("timeout"));
 
         Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
-        System.out.println(response.jsonPath().getString(""));
 
         InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
     }
 
     @Test(	priority = 0,
-            description = "read desigoCC realtime data",
+            description = "Verify whether Desigo CC realtime data is correctly written to clickhouse",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getConceptModelDataByCondition' request with specified parameters and check the response message.")
-    @Story("read desigoCC realtime data")
+    @Story("Verify whether Desigo CC realtime data is correctly written to clickhouse")
     public void readDesigoCCRealtimeData(Map<String, String> paramMaps)
             throws IOException, NoSuchAlgorithmException, ExecutionException, InterruptedException, KeyManagementException, SQLException {
         // 检查desigoCC实时数据数据源，程序运行requestParameters.get("runningTime")秒，收集实时数据
@@ -157,7 +161,7 @@ public class DataBrainFromConnectorTests {
         connection.close();
     }
 
-    @Test(	priority = 0,
+    /* @Test(	priority = 0,
             description = "read enlighted history data",
             dataProvider = "connector-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
@@ -182,7 +186,7 @@ public class DataBrainFromConnectorTests {
             InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
         }
 
-    }
+    } */
 
     @Step("check desigoCC history datasource")
     public static void checkDesigoCCHistoryDatasource(Map<String, String> requestParameters)
