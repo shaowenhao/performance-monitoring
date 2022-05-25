@@ -267,7 +267,7 @@ public class DataBrainFromApiEngineTests {
             // 动态生成graphql语句，包括替换开始时间（如当前时间前5个小时）、结束时间（当前时间）
             DateTimeFormatter dfWithT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-            LocalDateTime endTime = LocalDateTime.now();
+            LocalDateTime endTime = LocalDateTime.now().plusHours(8);
             LocalDateTime startTime = endTime.minusHours(1);
 
             String query = paramMaps.get("query");

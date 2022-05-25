@@ -679,8 +679,8 @@ public class testConfigurationClass {
 								 testEnvironmentConstants.IEMS_DEV_APIENGINE_PORT);
 				
 				// 赋值：this.runApiServiceTest = true
-				setApiServiceTest(testEnvironmentConstants.IEMS_DEV_APISERVICE_BASE_URL,
-								  testEnvironmentConstants.IEMS_DEV_APISERVICE_PORT);
+				/* setApiServiceTest(testEnvironmentConstants.IEMS_DEV_APISERVICE_BASE_URL,
+								  testEnvironmentConstants.IEMS_DEV_APISERVICE_PORT); */
 				
 				setPreAsset(testEnvironmentConstants.IEMS_PRE_ASSET);
 				setPreData(testEnvironmentConstants.IEMS_PRE_DATA);
@@ -694,11 +694,11 @@ public class testConfigurationClass {
 				setRabbitMQExchange(testEnvironmentConstants.IEMS_DEV_RABBITMQ_EXCHANGE);
 
 				// 赋值：this.runEntityMgmtTest = true;
-				setEntityMgmtTest(testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL,
-								  testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_PORT);
+				/* setEntityMgmtTest(testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_BASE_URL,
+								  testEnvironmentConstants.IEMS_DEV_ENTITY_MANAGEMENT_PORT); */
 				// 赋值：this.runSubscriptionMgmtTest = true;
-				setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
-										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
+				/* setSubscriptionMgmtTest(testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+										testEnvironmentConstants.IEMS_DEV_SUBSCRIPTION_MANAGEMENT_PORT); */
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
