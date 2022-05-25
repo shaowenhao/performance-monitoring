@@ -104,6 +104,9 @@ public class testConfigurationClass {
 	Boolean runDataBrainFromApiEngineTest = false;
 	private String dataBrainFromApiEngineTestClass = null;
 
+	Boolean runAnsteelFromApiEngineTest = false;
+	private String ansteelFromApiEngineTestClass = null;
+
 	private String uiBackend_base_url = null;
 
 	public String getUiBackend_base_url() {
@@ -609,6 +612,21 @@ public class testConfigurationClass {
 
 	public String getPostgreSQLAsDataSourceTestClass(){return this.postgreSQLAsDataSourceTestClass;}
 
+	/***
+	 * 以下为ansteel添加：
+	 */
+	// getRunAnsteelFromApiEngineTest、setAnsteelFromApiEngineTestClass、getAnsteelFromApiEngineTestClass
+	// 这三个方法针对“”的测试 而添加
+	public Boolean getRunAnsteelFromApiEngineTest(){return this.runAnsteelFromApiEngineTest;}
+
+	public void setAnsteelFromApiEngineTestClass(String ansteelFromApiEngineTestClassName)
+	{
+		this.runAnsteelFromApiEngineTest = true;
+		this.ansteelFromApiEngineTestClass = ansteelFromApiEngineTestClassName;
+	}
+
+	public String getAnsteelFromApiEngineTestClass(){return this.ansteelFromApiEngineTestClass;}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -1002,6 +1020,22 @@ public class testConfigurationClass {
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
+
+				break;
+
+			case("ansteel-test"):
+				setConnectorTest(testEnvironmentConstants.ANSTEEL_DOMAIN_NAME,
+						testEnvironmentConstants.ANSTEEL_TEST_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_TEST_CONNECTOR_PORT);
+
+				setConnectorConfigureTest(testEnvironmentConstants.ANSTEEL_TEST_CONNECTOR_CONFIGURE_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_TEST_CONNECTOR_CONFIGURE_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.ANSTEEL_TEST_APIENGINE_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_TEST_APIENGINE_PORT);
+
+				// 赋值：this.runAnsteelFromApiEngineTest = true;
+				setAnsteelFromApiEngineTestClass("com.siemens.datalayer.ansteel.test.AnsteelFromApiEngineTests");
 
 				break;
 			

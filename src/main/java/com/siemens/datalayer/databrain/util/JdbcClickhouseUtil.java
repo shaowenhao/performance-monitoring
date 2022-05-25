@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public class JdbcClickhouseUtil {
     // 返回数据库连接
-    public static Connection getConnect(String address){
+    public static Connection getConnection(String address){
         ClickHouseProperties properties = new ClickHouseProperties();
         ClickHouseDataSource clickHouseDataSource = new ClickHouseDataSource(address, properties);
 
@@ -24,7 +24,6 @@ public class JdbcClickhouseUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 }

@@ -109,7 +109,7 @@ public class DataBrainFromConnectorTests {
 
         InterfaceTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
 
-        Connection connection = JdbcClickhouseUtil.getConnect(paramMaps.get("clickhouseJdbcUrl"));
+        Connection connection = JdbcClickhouseUtil.getConnection(paramMaps.get("clickhouseJdbcUrl"));
         Statement statement = null;
 
         Thread.sleep(2*1000);

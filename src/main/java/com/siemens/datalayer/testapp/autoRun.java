@@ -314,6 +314,10 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
+		/***
+		 * 以下为ansteel添加：
+		 */
+
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
 			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());
@@ -336,6 +340,18 @@ public class autoRun {
 
 			postgreSQLAsDataSourceTest.setParameters(postgreSQLAsDataSourceTestParams);
 			myClasses.add(postgreSQLAsDataSourceTest);
+		}
+
+		if (testConfig.getRunAnsteelFromApiEngineTest())
+		{
+			XmlClass ansteelFromApiEngineTest = new XmlClass(testConfig.getAnsteelFromApiEngineTestClass());
+
+			Map<String,String> ansteelFromApiEngineTestParams = new HashMap<>();
+			ansteelFromApiEngineTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			ansteelFromApiEngineTestParams.put("port",testConfig.getApiEnginePort());
+
+			ansteelFromApiEngineTest.setParameters(ansteelFromApiEngineTestParams);
+			myClasses.add(ansteelFromApiEngineTest);
 		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 
@@ -410,7 +426,7 @@ public class autoRun {
 		if (args.length >= 2) // 如果输入的参数的个数大于或等于两个
 		{
 			// asList方法还提供了一个创建固定长度的列表的便捷方法，该列表被初始化为包含多个元素
-			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc","databrain");
+			List<String> projectNameList = Arrays.asList("iot", "jinzu", "iems", "snc","databrain","ansteel");
 			List<String> environmentList = Arrays.asList("dev", "test", "prod");
 			
 			if ((projectNameList.contains(args[0].toLowerCase())) && (environmentList.contains(args[1].toLowerCase())))

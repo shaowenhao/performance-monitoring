@@ -66,7 +66,7 @@ public class PostgreSQLAsDataSourceTests {
         {
             System.out.println(databaseTableList);
             // 需要执行的sql语句，删除testcase中insert的数据，还原现场
-            /* if(databaseTableList.size() > 0)
+            if(databaseTableList.size() > 0)
             {
                 for (String databaseTable : databaseTableList)
                 {
@@ -74,7 +74,7 @@ public class PostgreSQLAsDataSourceTests {
                     String sql = "DELETE FROM " + databaseTable;
                     statement.execute(sql);
                 }
-            } */
+            }
 
             // 断开数据库的连接，释放资源
             statement.close();
