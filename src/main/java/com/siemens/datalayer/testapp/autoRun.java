@@ -314,9 +314,22 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
+<<<<<<< HEAD
 		/***
 		 * 以下为ansteel添加：
 		 */
+=======
+		//
+		if(testConfig.getRunLpgTransformLoadTest()){
+			XmlClass lpgTransformLoadTest = new XmlClass(testConfig.getRunLpgTransformTestClass());
+
+			Map<String,String> lpgTransformLoadTestTestParams = new HashMap<>();
+			lpgTransformLoadTestTestParams.put("base_url",testConfig.getLpgTransformLoad_base_url());
+			lpgTransformLoadTestTestParams.put("port",testConfig.getLpgTransformLoad_port());
+			lpgTransformLoadTest.setParameters(lpgTransformLoadTestTestParams);
+			myClasses.add(lpgTransformLoadTest);
+		}
+>>>>>>> 248169329e24468082c729a367a87eb3783129b2
 
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
