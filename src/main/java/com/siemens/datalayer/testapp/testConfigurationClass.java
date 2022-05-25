@@ -635,12 +635,11 @@ public class testConfigurationClass {
 
 	public String getPostgreSQLAsDataSourceTestClass(){return this.postgreSQLAsDataSourceTestClass;}
 
-<<<<<<< HEAD
 	/***
 	 * 以下为ansteel添加：
 	 */
 	// getRunAnsteelFromApiEngineTest、setAnsteelFromApiEngineTestClass、getAnsteelFromApiEngineTestClass
-	// 这三个方法针对“”的测试 而添加
+	// 这三个方法针对“verify ansteel function”的测试 而添加
 	public Boolean getRunAnsteelFromApiEngineTest(){return this.runAnsteelFromApiEngineTest;}
 
 	public void setAnsteelFromApiEngineTestClass(String ansteelFromApiEngineTestClassName)
@@ -650,8 +649,6 @@ public class testConfigurationClass {
 	}
 
 	public String getAnsteelFromApiEngineTestClass(){return this.ansteelFromApiEngineTestClass;}
-=======
->>>>>>> 248169329e24468082c729a367a87eb3783129b2
 
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/

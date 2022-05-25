@@ -314,12 +314,6 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
-<<<<<<< HEAD
-		/***
-		 * 以下为ansteel添加：
-		 */
-=======
-		//
 		if(testConfig.getRunLpgTransformLoadTest()){
 			XmlClass lpgTransformLoadTest = new XmlClass(testConfig.getRunLpgTransformTestClass());
 
@@ -329,7 +323,6 @@ public class autoRun {
 			lpgTransformLoadTest.setParameters(lpgTransformLoadTestTestParams);
 			myClasses.add(lpgTransformLoadTest);
 		}
->>>>>>> 248169329e24468082c729a367a87eb3783129b2
 
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
@@ -355,6 +348,7 @@ public class autoRun {
 			myClasses.add(postgreSQLAsDataSourceTest);
 		}
 
+		// Add test class for 'verify ansteel function'
 		if (testConfig.getRunAnsteelFromApiEngineTest())
 		{
 			XmlClass ansteelFromApiEngineTest = new XmlClass(testConfig.getAnsteelFromApiEngineTestClass());
