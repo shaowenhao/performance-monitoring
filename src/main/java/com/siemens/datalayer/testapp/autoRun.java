@@ -314,6 +314,17 @@ public class autoRun {
 			myClasses.add(dataBrainFromApiEngineTest);
 		}
 
+		//
+		if(testConfig.getRunLpgTransformLoadTest()){
+			XmlClass lpgTransformLoadTest = new XmlClass(testConfig.getRunLpgTransformTestClass());
+
+			Map<String,String> lpgTransformLoadTestTestParams = new HashMap<>();
+			lpgTransformLoadTestTestParams.put("base_url",testConfig.getLpgTransformLoad_base_url());
+			lpgTransformLoadTestTestParams.put("port",testConfig.getLpgTransformLoad_port());
+			lpgTransformLoadTest.setParameters(lpgTransformLoadTestTestParams);
+			myClasses.add(lpgTransformLoadTest);
+		}
+
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
 			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());

@@ -106,6 +106,11 @@ public class testConfigurationClass {
 
 	private String uiBackend_base_url = null;
 
+	boolean runLpgTransformTest = false;
+	private String lpgTransformLoad_base_url = null;
+	private String runLpgTransformTestClass = null;
+	private String lpgTransformLoad_port = null;
+
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
 	}
@@ -597,6 +602,24 @@ public class testConfigurationClass {
 		this.entityManagement_port = entitymgt_port;
 	}
 
+	public String getLpgTransformLoad_base_url() {
+		return lpgTransformLoad_base_url;
+	}
+
+	public String getLpgTransformLoad_port() {
+		return lpgTransformLoad_port;
+	}
+
+	private void setRunLpgTransformLoadTest(String base_url, String port, String runLpgTransformLoadTestClass) {
+		this.runLpgTransformTest = true;
+		this.runLpgTransformTestClass = runLpgTransformLoadTestClass;
+		this.lpgTransformLoad_base_url = base_url;
+		this.lpgTransformLoad_port = port;
+	}
+	public Boolean getRunLpgTransformLoadTest(){return this.runLpgTransformTest;}
+
+	public String getRunLpgTransformTestClass(){return this.runLpgTransformTestClass;}
+
 	// getRunPostgreSQLAsDataSourceTest、setPostgreSQLAsDataSourceTestClass、getPostgreSQLAsDataSourceTestClass
 	// 这三个方法针对“read/write PostgresSQL(data source) Scenarios”的测试 而添加
 	public Boolean getRunPostgreSQLAsDataSourceTest(){return this.runPostgreSQLAsDataSourceTest;}
@@ -608,6 +631,7 @@ public class testConfigurationClass {
 	}
 
 	public String getPostgreSQLAsDataSourceTestClass(){return this.postgreSQLAsDataSourceTestClass;}
+
 
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
@@ -757,6 +781,10 @@ public class testConfigurationClass {
 						            testEnvironmentConstants.SNC_TEST_UI_BACKEND_PORT,
 						            "com.siemens.datalayer.uibackend.test.UiBackendTests",
 						            testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);
+				//测试 layer-lpg-transform-load service
+                setRunLpgTransformLoadTest(testEnvironmentConstants.SNC_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
+											testEnvironmentConstants.SNC_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
+											"com.siemens.datalayer.snc.test.LpgTransformLoadTests");
 				break;
 			
 			case ("snc-prod"):
