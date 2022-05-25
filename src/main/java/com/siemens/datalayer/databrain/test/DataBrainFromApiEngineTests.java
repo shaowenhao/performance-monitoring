@@ -385,11 +385,11 @@ public class DataBrainFromApiEngineTests {
             String sql = requestParameters.get("sqlStatement");
             if (sql.contains("$startTime"))
             {
-                sql = sql.replace("$startTime",dfWithT.format(startTime));
+                sql = sql.replace("$startTime",dfWithT.format(startTime.minusHours(8)));
             }
             if (sql.contains("endTime"))
             {
-                sql = sql.replace("$endTime",dfWithT.format(endTime));
+                sql = sql.replace("$endTime",dfWithT.format(endTime.minusHours(8)));
             }
             System.out.println(sql);
 
