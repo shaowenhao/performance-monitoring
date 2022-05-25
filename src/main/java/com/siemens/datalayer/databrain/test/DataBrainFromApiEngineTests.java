@@ -265,19 +265,18 @@ public class DataBrainFromApiEngineTests {
 
         if (paramMaps.containsKey("query")) {
             // 动态生成graphql语句，包括替换开始时间（如当前时间前5个小时）、结束时间（当前时间）
-            DateTimeFormatter dfWithT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
-            LocalDateTime endTime = LocalDateTime.now().plusHours(8);
-            LocalDateTime startTime = endTime.minusHours(1);
+            String endTime = String.valueOf(System.currentTimeMillis());
+            String startTime = String.valueOf(System.currentTimeMillis()-3600000);
 
-            String query = paramMaps.get("query");
+                    String query = paramMaps.get("query");
             if (query.contains("$startTime"))
             {
-                query = query.replace("$startTime",dfWithT.format(startTime));
+                query = query.replace("$startTime", startTime);
             }
             if (query.contains("endTime"))
             {
-                query = query.replace("$endTime",dfWithT.format(endTime));
+                query = query.replace("$endTime",endTime);
             }
             System.out.println(query);
 
@@ -350,7 +349,7 @@ public class DataBrainFromApiEngineTests {
     }
 
     @Step("判断response返回的数据跟clickhouse中查询的结果是否一致")
-    public static void verifyIfResponseMatchesClickhouse(Response response,Map<String,String> requestParameters,LocalDateTime startTime,LocalDateTime endTime)
+    public static void verifyIfResponseMatchesClickhouse(Response response,Map<String,String> requestParameters,String startTime,String endTime)
     {
         List<String> pathList = Arrays.asList(requestParameters.get("entities").trim().split("->"));
         Map<String,Object> responseMap = response.jsonPath().getMap("data");
@@ -385,11 +384,11 @@ public class DataBrainFromApiEngineTests {
             String sql = requestParameters.get("sqlStatement");
             if (sql.contains("$startTime"))
             {
-                sql = sql.replace("$startTime",dfWithT.format(startTime));
+                sql = sql.replace("$startTime",String.valueOf(Long.parseLong(startTime)/1000));
             }
             if (sql.contains("endTime"))
             {
-                sql = sql.replace("$endTime",dfWithT.format(endTime));
+                sql = sql.replace("$endTime",String.valueOf(Long.parseLong(endTime)/1000));
             }
             System.out.println(sql);
 
