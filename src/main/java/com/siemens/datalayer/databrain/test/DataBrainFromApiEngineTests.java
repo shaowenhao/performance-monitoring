@@ -16,6 +16,8 @@ import org.testng.annotations.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -436,8 +438,12 @@ public class DataBrainFromApiEngineTests {
                         // 将localdatetime格式转换成string格式，使用“格式二”
                         String dataLayerTimeWithT = dfWithT.format(ld);
 
-                        System.out.println(((Map) ((List<?>) myObject).get(i)).get("captureTime") + "," + dataLayerTimeWithT);
-                        Assert.assertEquals(((Map) ((List<?>) myObject).get(i)).get("captureTime"),dataLayerTimeWithT);
+                        OffsetDateTime ts = ((Timestamp)listFromClickhouse.get(i).get("dataLayerTime")).toInstant().atOffset(ZoneOffset.ofHours(8));
+                        String clickHouseDateTimeString = ts.format(dfWithT);
+                        clickHouseDateTimeString = clickHouseDateTimeString.replace("\\+08:00", "");
+
+                        System.out.println(((Map) ((List<?>) myObject).get(i)).get("captureTime") + ", " + clickHouseDateTimeString);
+                        Assert.assertEquals(((Map) ((List<?>) myObject).get(i)).get("captureTime"),clickHouseDateTimeString);
                     }
 
                     /**
