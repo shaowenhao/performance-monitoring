@@ -15,7 +15,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.*;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -308,6 +307,10 @@ public class DataBrainFromApiEngineTests {
         Object myObject = matchCondition(object,patternList);
 
         Assert.assertTrue(myObject != null);
+        if (myObject instanceof ArrayList)
+        {
+            Assert.assertFalse(((ArrayList<?>) myObject).isEmpty());
+        }
     }
 
     public static Object matchCondition(Map<String, Object> object, List<String> patternList) {
@@ -432,12 +435,6 @@ public class DataBrainFromApiEngineTests {
 
                     if (listFromClickhouse.get(i).get("dataLayerTime") instanceof Timestamp)
                     {
-                        // 将string格式转换成localdatetime格式，原来的格式为“格式一”
-                        LocalDateTime ld = LocalDateTime.parse((CharSequence) listFromClickhouse.get(i).get("dataLayerTime").toString(),df);
-
-                        // 将localdatetime格式转换成string格式，使用“格式二”
-                        String dataLayerTimeWithT = dfWithT.format(ld);
-
                         OffsetDateTime ts = ((Timestamp)listFromClickhouse.get(i).get("dataLayerTime")).toInstant().atOffset(ZoneOffset.ofHours(8));
                         String clickHouseDateTimeString = ts.format(dfWithT);
                         clickHouseDateTimeString = clickHouseDateTimeString.replace("\\+08:00", "");
