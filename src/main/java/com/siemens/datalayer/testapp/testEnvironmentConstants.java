@@ -318,7 +318,19 @@ public class testEnvironmentConstants {
 	public static final String ANSTEEL_DOMAIN_NAME = "ANSTEEL";
 
 	// =========================================================================================
-	// Configuration for databrain-dev environment
+	// Configuration for ansteel-test environment
+	// =========================================================================================
+	public static final String ANSTEEL_DEV_CONNECTOR_BASE_URL= "http://140.231.89.106";
+	public static final String ANSTEEL_DEV_CONNECTOR_PORT= "32464";
+
+	public static final String ANSTEEL_DEV_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.106";
+	public static final String ANSTEEL_DEV_CONNECTOR_CONFIGURE_PORT = "30400";
+
+	public static final String ANSTEEL_DEV_APIENGINE_BASE_URL = "http://140.231.89.106";
+	public static final String ANSTEEL_DEV_APIENGINE_PORT = "30115";
+
+	// =========================================================================================
+	// Configuration for ansteel-test environment
 	// =========================================================================================
 	public static final String ANSTEEL_TEST_CONNECTOR_BASE_URL= "http://140.231.89.106";
 	public static final String ANSTEEL_TEST_CONNECTOR_PORT= "31751";

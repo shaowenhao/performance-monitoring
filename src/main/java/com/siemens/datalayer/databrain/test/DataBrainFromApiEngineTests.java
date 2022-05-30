@@ -266,11 +266,10 @@ public class DataBrainFromApiEngineTests {
 
         if (paramMaps.containsKey("query")) {
             // 动态生成graphql语句，包括替换开始时间（如当前时间前5个小时）、结束时间（当前时间）
-
-            String endTime = String.valueOf(System.currentTimeMillis());
             String startTime = String.valueOf(System.currentTimeMillis()-3600000);
+            String endTime = String.valueOf(System.currentTimeMillis());
 
-                    String query = paramMaps.get("query");
+            String query = paramMaps.get("query");
             if (query.contains("$startTime"))
             {
                 query = query.replace("$startTime", startTime);
@@ -384,8 +383,6 @@ public class DataBrainFromApiEngineTests {
 
         try {
             // 动态生成sql语句，包括替换开始时间（当前时间前5个小时）、结束时间（当前时间）
-            DateTimeFormatter dfWithT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
             String sql = requestParameters.get("sqlStatement");
             if (sql.contains("$startTime"))
             {

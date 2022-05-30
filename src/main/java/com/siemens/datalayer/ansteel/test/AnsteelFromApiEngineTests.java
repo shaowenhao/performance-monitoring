@@ -20,8 +20,14 @@ import java.util.*;
 @Epic("SDL Api-engine")
 @Feature("verify ansteel function")
 public class AnsteelFromApiEngineTests {
-    static Connection connection;
-    static Statement statement;
+    static Connection connectionOfClickhouse;
+    static Statement statementOfClickhouse;
+
+    static Connection connectionOfPostgreDatacleaning;
+    static Statement statementOfPostgreDatacleaning;
+
+    static Connection connectionOfPostgreDatamanagement;
+    static Statement statementOfPostgreDatamanagement;
 
     @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector","baseUrlOfConnectorConfigure","portOfConnectorConfigure"})
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
@@ -41,13 +47,29 @@ public class AnsteelFromApiEngineTests {
         // 保持数据库连接不断开，最后在AfterClass(deleteDataForMysql)中关闭数据库连接
         try
         {
-            // 连接数据库
-            connection = JdbcMysqlUtil.getConnection("ansteel.test.clickhouse.db.properties");
-            if(!connection.isClosed())
-                System.out.println("Succeeded connecting to the Database!");
+            // 连接clickhouse
+            connectionOfClickhouse = JdbcMysqlUtil.getConnection("ansteel.dev.clickhouse.db.properties");
+            if(!connectionOfClickhouse.isClosed())
+                System.out.println("Succeeded connecting to the clickhouse!");
 
             // 操作数据库
-            statement = connection.createStatement();
+            statementOfClickhouse = connectionOfClickhouse.createStatement();
+
+            // 连接postgreSQL-datacleaning数据库
+            connectionOfPostgreDatacleaning = JdbcMysqlUtil.getConnection("ansteel.dev.postgresql.datacleaning.db.properties");
+            if(!connectionOfPostgreDatacleaning.isClosed())
+                System.out.println("Succeeded connecting to the postgreSQL-datacleaning!");
+
+            // 操作数据库
+            statementOfPostgreDatacleaning = connectionOfPostgreDatacleaning.createStatement();
+
+            // 连接postgreSQL-datacleaning数据库
+            connectionOfPostgreDatamanagement = JdbcMysqlUtil.getConnection("ansteel.dev.postgresql.datamanagement.db.properties");
+            if(!connectionOfPostgreDatamanagement.isClosed())
+                System.out.println("Succeeded connecting to the postgreSQL-datamanagement!");
+
+            // 操作数据库
+            statementOfPostgreDatamanagement = connectionOfPostgreDatamanagement.createStatement();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -60,8 +82,14 @@ public class AnsteelFromApiEngineTests {
         try
         {
             // 断开数据库的连接，释放资源
-            statement.close();
-            connection.close();
+            statementOfClickhouse.close();
+            connectionOfClickhouse.close();
+
+            statementOfPostgreDatacleaning.close();
+            connectionOfPostgreDatacleaning.close();
+
+            statementOfPostgreDatamanagement.close();
+            connectionOfPostgreDatamanagement.close();
             System.out.println("disconnect database...");
 
         } catch (SQLException throwables) {
@@ -70,13 +98,13 @@ public class AnsteelFromApiEngineTests {
     }
 
     @Test(	priority = 0,
-            description = "verify smart space function",
+            description = "Verify ansteel function with fixed graph",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class
     )
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Verify smart space function with fixed graph,")
+    @Story("Verify ansteel function with fixed graph")
     public void verifyAnsteelWithfixedGraph(Map<String, String> paramMaps) {
         ConnectorEndpoint.clearAllCaches();
         ConnectorEndpoint.clearRedisCache();
@@ -111,6 +139,7 @@ public class AnsteelFromApiEngineTests {
                 verifyResponse(responseMap,pathList);
             }
 
+            // 判断response返回的数据跟数据库中查询的结果是否一致
             if (paramMaps.containsKey("sqlStatement"))
             {
                 verifyIfResponseMatchesClickhouse(response,paramMaps);
@@ -166,7 +195,7 @@ public class AnsteelFromApiEngineTests {
         return object instanceof List ? CollectionUtil.isNotEmpty((List)object) : object != null;
     }
 
-    @Step("判断response返回的数据跟clickhouse中查询的结果是否一致")
+    @Step("判断response返回的数据跟数据库中查询的结果是否一致")
     public static void verifyIfResponseMatchesClickhouse(Response response, Map<String,String> requestParameters)
     {
         List<String> pathList = Arrays.asList(requestParameters.get("entities").trim().split("->"));
@@ -195,11 +224,27 @@ public class AnsteelFromApiEngineTests {
 
         List<Map<String,Object>> listFromClickhouse = new ArrayList<>();
 
-        try {
-            String sql = requestParameters.get("sqlStatement");
+        String sql = requestParameters.get("sqlStatement");
 
-            ResultSet rs = statement.executeQuery(sql);
-            ResultSetMetaData metaData = rs.getMetaData();
+        try {
+            ResultSet rs = null;
+            ResultSetMetaData metaData = null;
+            if (requestParameters.get("database").equals("chdb"))
+            {
+                rs = statementOfClickhouse.executeQuery(sql);
+                metaData = rs.getMetaData();
+            }
+            else if (requestParameters.get("database").equals("datacleaning"))
+            {
+                rs = statementOfPostgreDatacleaning.executeQuery(sql);
+                metaData = rs.getMetaData();
+            }
+
+            else if (requestParameters.get("database").equals("datamanagement"))
+            {
+                rs = statementOfPostgreDatamanagement.executeQuery(sql);
+                metaData = rs.getMetaData();
+            }
 
             while (rs.next()){
                 Map<String,Object> listFromClickhouseItem = new HashMap<>();

@@ -1050,6 +1050,22 @@ public class testConfigurationClass {
 
 				break;
 
+			case("ansteel-dev"):
+				setConnectorTest(testEnvironmentConstants.ANSTEEL_DOMAIN_NAME,
+						testEnvironmentConstants.ANSTEEL_DEV_CONNECTOR_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_DEV_CONNECTOR_PORT);
+
+				setConnectorConfigureTest(testEnvironmentConstants.ANSTEEL_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_DEV_CONNECTOR_CONFIGURE_PORT);
+
+				setApiEngineTest(testEnvironmentConstants.ANSTEEL_DEV_APIENGINE_BASE_URL,
+						testEnvironmentConstants.ANSTEEL_DEV_APIENGINE_PORT);
+
+				// 赋值：this.runAnsteelFromApiEngineTest = true;
+				setAnsteelFromApiEngineTestClass("com.siemens.datalayer.ansteel.test.AnsteelFromApiEngineTests");
+
+				break;
+
 			case("ansteel-test"):
 				setConnectorTest(testEnvironmentConstants.ANSTEEL_DOMAIN_NAME,
 						testEnvironmentConstants.ANSTEEL_TEST_CONNECTOR_BASE_URL,
