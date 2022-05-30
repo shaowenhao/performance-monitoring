@@ -142,7 +142,7 @@ public class AnsteelFromApiEngineTests {
             // 判断response返回的数据跟数据库中查询的结果是否一致
             if (paramMaps.containsKey("sqlStatement"))
             {
-                verifyIfResponseMatchesClickhouse(response,paramMaps);
+                verifyIfResponseMatchesResultInDB(response,paramMaps);
             }
         }
     }
@@ -196,7 +196,7 @@ public class AnsteelFromApiEngineTests {
     }
 
     @Step("判断response返回的数据跟数据库中查询的结果是否一致")
-    public static void verifyIfResponseMatchesClickhouse(Response response, Map<String,String> requestParameters)
+    public static void verifyIfResponseMatchesResultInDB(Response response, Map<String,String> requestParameters)
     {
         List<String> pathList = Arrays.asList(requestParameters.get("entities").trim().split("->"));
         Map<String,Object> responseMap = response.jsonPath().getMap("data");
@@ -222,7 +222,7 @@ public class AnsteelFromApiEngineTests {
             myObject = nodeList;
         }
 
-        List<Map<String,Object>> listFromClickhouse = new ArrayList<>();
+        List<Map<String,Object>> listFromDatabase = new ArrayList<>();
 
         String sql = requestParameters.get("sqlStatement");
 
@@ -254,7 +254,7 @@ public class AnsteelFromApiEngineTests {
                     Object value = rs.getObject(columnName);
                     listFromClickhouseItem.put(columnName,value);
                 }
-                listFromClickhouse.add(listFromClickhouseItem);
+                listFromDatabase.add(listFromClickhouseItem);
             }
 
             rs.close();
@@ -262,12 +262,12 @@ public class AnsteelFromApiEngineTests {
             throwables.printStackTrace();
         }
 
-        // 如果myObject（接口返回的response中提取）为ArrayList，判断跟clickhouse中查询的结果是否一致
+        // 如果myObject（接口返回的response中提取）为ArrayList，判断跟database中查询的结果是否一致
         if (myObject instanceof ArrayList)
         {
             System.out.println("myObject).size(): " + ((ArrayList<?>) myObject).size());
-            System.out.println("listFromClickhouse.size(): " + listFromClickhouse.size());
-            Assert.assertEquals(((ArrayList<?>) myObject).size(),listFromClickhouse.size());
+            System.out.println("listFromDatabase.size(): " + listFromDatabase.size());
+            Assert.assertEquals(((ArrayList<?>) myObject).size(),listFromDatabase.size());
 
             for (int i=0;i<((ArrayList<?>) myObject).size();i++)
             {
@@ -279,19 +279,19 @@ public class AnsteelFromApiEngineTests {
                         String rowColumnOfMyObjectKey = entry.getKey();
                         Object rowColumnOfMyObjectValue = entry.getValue();
 
-                        Object rowColumnOfClickValue = listFromClickhouse.get(i).get(rowColumnOfMyObjectKey);
+                        Object rowColumnOfClickValue = listFromDatabase.get(i).get(rowColumnOfMyObjectKey);
 
-                        if (listFromClickhouse.get(i).containsKey(rowColumnOfMyObjectKey))
+                        if (listFromDatabase.get(i).containsKey(rowColumnOfMyObjectKey))
                         {
                             // System.out.println(rowColumnOfMyObjectKey + ", " + rowColumnOfMyObjectValue + ", " + rowColumnOfClickValue);
                             if (rowColumnOfClickValue instanceof Integer)
                             {
-                                Assert.assertEquals(rowColumnOfMyObjectValue,MapUtils.getInteger(listFromClickhouse.get(i),rowColumnOfMyObjectKey));
+                                Assert.assertEquals(rowColumnOfMyObjectValue,MapUtils.getInteger(listFromDatabase.get(i),rowColumnOfMyObjectKey));
                             }
 
                             else if (rowColumnOfClickValue instanceof java.lang.Float)
                             {
-                                Assert.assertEquals(Float.parseFloat(rowColumnOfMyObjectValue.toString()),MapUtils.getFloat(listFromClickhouse.get(i),rowColumnOfMyObjectKey),0.001);
+                                Assert.assertEquals(Float.parseFloat(rowColumnOfMyObjectValue.toString()),MapUtils.getFloat(listFromDatabase.get(i),rowColumnOfMyObjectKey),0.001);
                             }
 
                             else if (rowColumnOfClickValue == null || rowColumnOfClickValue.equals(""))
@@ -300,7 +300,7 @@ public class AnsteelFromApiEngineTests {
                             }
 
                             else
-                                Assert.assertEquals(rowColumnOfMyObjectValue,listFromClickhouse.get(i).get(rowColumnOfMyObjectKey));
+                                Assert.assertEquals(rowColumnOfMyObjectValue,listFromDatabase.get(i).get(rowColumnOfMyObjectKey));
                         }
                     }
                 }
