@@ -13,7 +13,7 @@ Build Test Suite:
   stage: build
   tags:
     - docker
-  image: maven:3.8
+  image: maven:3-openjdk-18
   variables:
     MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
   script:
