@@ -1,6 +1,9 @@
 package com.siemens.datalayer.ansteel.test;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
 import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
@@ -105,7 +108,7 @@ public class AnsteelFromApiEngineTests {
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
     @Story("Verify ansteel function with fixed graph")
-    public void verifyAnsteelWithfixedGraph(Map<String, String> paramMaps) {
+    public void verifyAnsteelWithfixedGraph(Map<String, String> paramMaps) throws JsonProcessingException {
         ConnectorEndpoint.clearAllCaches();
         ConnectorEndpoint.clearRedisCache();
         ConnectorEndpoint.clearRedisCaches();
@@ -144,7 +147,38 @@ public class AnsteelFromApiEngineTests {
             {
                 verifyIfResponseMatchesResultInDB(response,paramMaps);
             }
+            // 验证 温度仿真模块 link_Event entity 存在满足条件的数据
+            if(paramMaps.containsKey("nestedEntityWithCondition")){
+                String rootPath = "data."+ paramMaps.get("entities");
+                String nestedEntityWithCondition = paramMaps.get("nestedEntityWithCondition");
+
+                verifyIfExistedNestedEntityWithEquakCondition( paramMaps,response,rootPath,nestedEntityWithCondition);
+
+            }
         }
+    }
+
+    public static void verifyIfExistedNestedEntityWithEquakCondition(Map<String, String> paramMaps, Response response, String rootPath, String nestedEntityWithCondition) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String,Object>> entityList = response.jsonPath().getList(rootPath);
+        String[] itemList = nestedEntityWithCondition.split(",");
+        long link_event_num = entityList.stream().filter(e -> {
+            Object link_event = e.get(itemList[0]);
+            if(Objects.nonNull(link_event))
+            {
+                if(paramMaps.get("description").contains("(_eq and)")){
+                    for (Map<String, Object> objectMap : (List<Map<String, Object>>) link_event) {
+                        if(objectMap.get(itemList[1]).equals(itemList[2]) && objectMap.get(itemList[3]).equals(itemList[4])){
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }).count();
+        System.out.println("link event nums:" +link_event_num);
+        Assert.assertTrue(link_event_num > 0);
     }
 
     @Step("判断response中是否返回所有的层级结构")
