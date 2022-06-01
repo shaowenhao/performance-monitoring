@@ -151,14 +151,12 @@ public class AnsteelFromApiEngineTests {
             if(paramMaps.containsKey("nestedEntityWithCondition")){
                 String rootPath = "data."+ paramMaps.get("entities");
                 String nestedEntityWithCondition = paramMaps.get("nestedEntityWithCondition");
-
-                verifyIfExistedNestedEntityWithEquakCondition( paramMaps,response,rootPath,nestedEntityWithCondition);
-
+                verifyIfExistedNestedEntityWithEqualCondition( paramMaps,response,rootPath,nestedEntityWithCondition);
             }
         }
     }
 
-    public static void verifyIfExistedNestedEntityWithEquakCondition(Map<String, String> paramMaps, Response response, String rootPath, String nestedEntityWithCondition) throws JsonProcessingException {
+    public static void verifyIfExistedNestedEntityWithEqualCondition(Map<String, String> paramMaps, Response response, String rootPath, String nestedEntityWithCondition) throws JsonProcessingException {
 
         ObjectMapper mapper = new ObjectMapper();
         List<Map<String,Object>> entityList = response.jsonPath().getList(rootPath);
