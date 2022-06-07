@@ -233,13 +233,60 @@ public class DataBrainFromApiEngineTests {
     }
 
     @Test(	priority = 0,
-            description = "Verify smart space function(except realtime function)",
+            description = "Verify smart space other query function(except realtime function/property function)",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class
+    )
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'getData' request to graphql query interface.")
+    @Story("Verify smart space other query function(except realtime function/property function)")
+    public void verifySmartSpaceWenSiQueryFunc(Map<String, String> paramMaps) throws JSONException
+    {
+        ConnectorEndpoint.clearAllCaches();
+        ConnectorEndpoint.clearRedisCache();
+        ConnectorEndpoint.clearRedisCaches();
+        // 执行case之前，需调用connector-configure（clear all cache接口）清除缓存
+        ConnectorConfigureEndpoint.clearAllCache();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (paramMaps.containsKey("query")) {
+            String query = paramMaps.get("query");
+            System.out.println("query:");
+            System.out.println(query);
+            Response response = ApiEngineEndpoint.postGraphql(query);
+            System.out.println("response.jsonPath().prettify():");
+            System.out.println(response.jsonPath().prettify());
+
+            // 校验返回的response的最外层的statusCode，code，message
+            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"),
+                    response.jsonPath().getString("message"));
+
+            // 如果是query语句，判断response中是否返回所有的层级结构
+            if (paramMaps.containsKey("entities") && !paramMaps.containsKey("rspCodeOfDatasource")
+                    && !paramMaps.containsKey("rspMessageOfDatasource"))
+            {
+                List<String> pathList = Arrays.asList(paramMaps.get("entities").trim().split("->"));
+                Map<String,Object> responseMap = response.jsonPath().getMap("data");
+
+                System.out.println(pathList);
+                verifyResponssIncludingAllHierarchical(responseMap,pathList);
+            }
+        }
+    }
+
+    @Test(	priority = 0,
+            description = "Verify smart space property function",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class
             )
     @Severity(SeverityLevel.BLOCKER)
     @Description("Post a 'getData' request to graphql query interface.")
-    @Story("Verify smart space function(except realtime function)")
+    @Story("Verify smart space property function")
     public void verifySmartSpacePropertyFunc(Map<String, String> paramMaps) throws JSONException
     {
         ConnectorEndpoint.clearAllCaches();
