@@ -9,6 +9,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.siemens.datalayer.iot.util.JdbcMongodbUtil;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 
@@ -70,25 +71,54 @@ public class ConnectorConfigureTests {
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getAllCacheConfigs' request to Cache Config controller interface.")
     @Story("Cache Config Controller: allCacheConfigs")
-     public void getAllCacheConfigs(){
+     public void allCacheConfigs(){
         Response response = ConnectorConfigureEndpoint.getAllCacheConfigs();
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkNumberOfCacheConfig(response,mongodbParams);
+    }
+
+
+
+    @Test (	priority = 0,
+            description = "Test Cache Config Controller: moduleCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'getModuleCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: moduleCacheConfig")
+    public void moduleCacheConfig(Map<String, String> paramMaps){
+        String moduleName = paramMaps.get("moduleName");
+        Response response = ConnectorConfigureEndpoint.getModuleCaheConfig(moduleName);
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        checkNumberOfModuleCacheConfig( response, mongodbParams,paramMaps);
+    }
+
+
+    public Map<String, String> initializeMongoParams() {
         Map<String,String> mongodbParams = new HashMap<>();
         mongodbParams.put("mongodbHost",mongodbHost);
         mongodbParams.put("mongodbPort",mongodbPort);
         mongodbParams.put("mongodbUsername",mongodbUsername);
         mongodbParams.put("mongodbPassword",mongodbPassword);
         mongodbParams.put("mongodbDatabasename",mongodbDatabasename);
-        checkNumberOfCacheConfig(response,mongodbParams);
+        return mongodbParams;
     }
 
-    @Step ("verify the number of Cache Config")
-    private static void checkNumberOfCacheConfig(Response response, Map<String, String> mongodbParams) {
-
+    public static MongoDatabase getMongoDatabase(Map<String, String> mongodbParams) {
         MongoDatabase mongoDatabase = JdbcMongodbUtil.getConnect(mongodbParams.get("mongodbHost"),
                 Integer.valueOf(mongodbParams.get("mongodbPort")).intValue(),
                 mongodbParams.get("mongodbUsername"),
                 mongodbParams.get("mongodbPassword"),
                 mongodbParams.get("mongodbDatabasename"));
+        return mongoDatabase;
+    }
+
+    @Step ("verify the number of Cache Config")
+    private static void checkNumberOfCacheConfig(Response response, Map<String, String> mongodbParams) {
+
+        MongoDatabase mongoDatabase = getMongoDatabase(mongodbParams);
         MongoCollection<Document> cacheConfigCollection = mongoDatabase.getCollection("CacheConfig");
         FindIterable<Document> findIterable = cacheConfigCollection.find();
         MongoCursor<Document> iterator = findIterable.iterator();
@@ -109,6 +139,21 @@ public class ConnectorConfigureTests {
         }
         List<Map<String,String>> actualCacheConfigList = response.jsonPath().getList("data");
         Assert.assertEquals(actualCacheConfigList.size(),expectedCacheConfigList.size());
+    }
+
+    @Step ("verify the number of Module Cache Config")
+    private static void checkNumberOfModuleCacheConfig(Response response, Map<String, String> mongodbParams,Map<String, String> paramMaps) {
+        MongoDatabase mongoDatabase = getMongoDatabase(mongodbParams);
+        MongoCollection<Document> cacheConfigCollection = mongoDatabase.getCollection("CacheConfig");
+        FindIterable<Document> findIterable = cacheConfigCollection.find(Filters.eq("module", paramMaps.get("moduleName")));
+        MongoCursor<Document> iterator = findIterable.iterator();
+        List<Map<String,String>> expectedModuleCacheConfigList = new ArrayList<>();
+        while (iterator.hasNext()){
+            Map<String,String> expectedModuleCacheConfig = JSON.parseObject(iterator.next().toJson(), Map.class);
+            expectedModuleCacheConfigList.add(expectedModuleCacheConfig);
+        }
+        List<Map<String,String>> actualModuleCacheConfigList = response.jsonPath().getList("data");
+        Assert.assertEquals(actualModuleCacheConfigList.size(),expectedModuleCacheConfigList.size());
     }
 
     /* @AfterClass(description = "clean up test connectors,locators...")

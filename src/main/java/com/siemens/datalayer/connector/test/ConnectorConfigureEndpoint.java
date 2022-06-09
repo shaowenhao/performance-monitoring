@@ -146,4 +146,20 @@ public class ConnectorConfigureEndpoint {
 
         return response;
     }
+
+    //Cache Config Controller:moduleCacheConfig
+    @Step("Send a request of 'getModuleCacheConfig'")
+    public static Response getModuleCaheConfig(String moduleName)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache-config/" + moduleName );
+
+        return response;
+    }
 }

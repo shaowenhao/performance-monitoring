@@ -906,8 +906,8 @@ public class testConfigurationClass {
 				setConnectorRealtimeTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_BASE_URL,
 						testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_PORT);
 
-				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
-						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
+//				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+//						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
 
 				setApiEngineTest(testEnvironmentConstants.IOT_DEV_APIENGINE_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_APIENGINE_PORT);
@@ -936,7 +936,7 @@ public class testConfigurationClass {
 				// setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
 
 				// 赋值：this.runConnectorConfigureTest = true;
-				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				//setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 
 				break;
 
