@@ -824,8 +824,8 @@ public class testConfigurationClass {
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_BASE_URL, 
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_PORT);
 
-//				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
-//						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
+				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
@@ -843,8 +843,13 @@ public class testConfigurationClass {
 
 				// 赋值：this.runConnectorConfigureTest = true;
 				//cache重构后 ConnectorConfigure没有clear all cache接口
-				//setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
-				
+				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				setMongoDBHost(testEnvironmentConstants.JINZU_DEV_MONGODB_HOST);
+				setMongoDBPort(testEnvironmentConstants.JINZU_DEV_MONGODB_PORT);
+				setMongoDBUserName(testEnvironmentConstants.JINZU_DEV_MONGODB_USERNAME);
+				setMongoDBPassword(testEnvironmentConstants.JINZU_DEV_MONGODB_PASSWORD);
+				setMongoDBDatabaseName(testEnvironmentConstants.JINZU_DEV_MONGODB_DATABASENAME);
+
 				break;
 			
 			case ("jinzu-test"):

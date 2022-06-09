@@ -81,6 +81,11 @@ public class autoRun {
 			connectorConfigureTestParams.put("port",testConfig.getConnectorConfigurePort());
 			connectorConfigureTestParams.put("domain_name",testConfig.getDomainName());
 
+			connectorConfigureTestParams.put("mongodb_host",testConfig.getMongoDBHost());
+			connectorConfigureTestParams.put("mongodb_port",testConfig.getMongoDBPort());
+			connectorConfigureTestParams.put("mongodb_username",testConfig.getMongoDBUserName());
+			connectorConfigureTestParams.put("mongodb_password",testConfig.getMongoDBPassword());
+			connectorConfigureTestParams.put("mongodb_databasename",testConfig.getMongoDBDatabaseName());
 			connectorConfigureTests.setParameters(connectorConfigureTestParams);
 			myClasses.add(connectorConfigureTests);
 		}
