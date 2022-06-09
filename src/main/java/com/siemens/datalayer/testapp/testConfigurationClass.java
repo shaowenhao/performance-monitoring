@@ -824,8 +824,8 @@ public class testConfigurationClass {
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_BASE_URL, 
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_PORT);
 
-				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
-						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
+//				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+//						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
@@ -842,7 +842,8 @@ public class testConfigurationClass {
 				setAuthForWebserviceTestClass("com.siemens.datalayer.iot.test.AuthForWebserviceTests");
 
 				// 赋值：this.runConnectorConfigureTest = true;
-				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				//cache重构后 ConnectorConfigure没有clear all cache接口
+				//setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 				
 				break;
 			
