@@ -242,7 +242,7 @@ public class testEnvironmentConstants {
 	// Configuration for iot-test environment
 	// =========================================================================================
 	public static final String IOT_TEST_CONNECTOR_BASE_URL = "http://140.231.89.106";
-	public static final String IOT_TEST_CONNECTOR_PORT = "301060";
+	public static final String IOT_TEST_CONNECTOR_PORT = "30850";
 
 	public static final String IOT_TEST_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.106";
 	public static final String IOT_TEST_CONNECTOR_CONFIGURE_PORT = "32350";
