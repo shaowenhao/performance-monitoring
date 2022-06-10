@@ -198,4 +198,19 @@ public class ConnectorConfigureEndpoint {
 
         return response;
     }
+
+    // Cache Config Controller:deleteCacheConfig
+    @Step("Send a request of 'deleteConnector'")
+    public static Response deleteCacheConfig(String moduleName,String name)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/cache-config/" + moduleName +"/" + name);
+        return response;
+    }
 }

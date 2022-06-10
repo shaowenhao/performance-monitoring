@@ -136,6 +136,26 @@ public class ConnectorConfigureTests {
     }
 
 
+    @Test (	dependsOnMethods = { "saveCacheConfig","updateCacheConfig" },
+            priority = 0,
+            description = "Test Cache Config Controller: deleteCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'deleteCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: deleteCacheConfig")
+    public void deleteCacheConfig(Map<String, String> paramMaps){
+        String moduleName = paramMaps.get("moduleName");
+        String name = paramMaps.get("name");
+        Response response = ConnectorConfigureEndpoint.deleteCacheConfig(moduleName,name);
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        response = ConnectorConfigureEndpoint.getModuleCaheConfig(moduleName);
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkNumberOfModuleCacheConfig( response, mongodbParams,paramMaps);
+    }
+
+
     public Map<String, String> initializeMongoParams() {
         Map<String,String> mongodbParams = new HashMap<>();
         mongodbParams.put("mongodbHost",mongodbHost);
@@ -193,6 +213,8 @@ public class ConnectorConfigureTests {
             expectedModuleCacheConfigList.add(expectedModuleCacheConfig);
         }
         List<Map<String,String>> actualModuleCacheConfigList = response.jsonPath().getList("data");
+        System.out.println("actualSize:" + actualModuleCacheConfigList.size());
+        System.out.println("expectedSize:" + expectedModuleCacheConfigList.size());
         Assert.assertEquals(actualModuleCacheConfigList.size(),expectedModuleCacheConfigList.size());
     }
 
