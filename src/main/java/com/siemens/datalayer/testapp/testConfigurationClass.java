@@ -114,6 +114,9 @@ public class testConfigurationClass {
 	private String runLpgTransformTestClass = null;
 	private String lpgTransformLoad_port = null;
 
+	private boolean runApiEngineCacheControllerTest = false;
+	private String apiEngineCacheControllerTestClass = null;
+
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
 	}
@@ -650,6 +653,21 @@ public class testConfigurationClass {
 
 	public String getAnsteelFromApiEngineTestClass(){return this.ansteelFromApiEngineTestClass;}
 
+
+	// add for api-engine cache controller
+	public boolean getRunApiEngineCacheControllerTest() {
+		return this.runApiEngineCacheControllerTest;
+	}
+
+	public void setApiEngineCacheControllerTestClass(String cacheControllerTestClassName) {
+		this.runApiEngineCacheControllerTest =  true;
+		this.apiEngineCacheControllerTestClass = cacheControllerTestClassName;
+	}
+
+	public String getApiEngineCacheControllerTestClass(){
+		return this.apiEngineCacheControllerTestClass;
+	}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -850,6 +868,8 @@ public class testConfigurationClass {
 				setMongoDBPassword(testEnvironmentConstants.JINZU_DEV_MONGODB_PASSWORD);
 				setMongoDBDatabaseName(testEnvironmentConstants.JINZU_DEV_MONGODB_DATABASENAME);
 
+				//赋值：this.runCacheControllerTest = true;
+				setApiEngineCacheControllerTestClass("com.siemens.datalayer.apiengine.test.ApiEngineCacheControllerTests");
 				break;
 			
 			case ("jinzu-test"):
@@ -1096,4 +1116,6 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
+
+
 }

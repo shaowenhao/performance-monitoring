@@ -366,6 +366,22 @@ public class autoRun {
 			myClasses.add(ansteelFromApiEngineTest);
 		}
 
+		// add test class for 'api engine cache controller'
+		if (testConfig.getRunApiEngineCacheControllerTest())
+		{
+			XmlClass apiEngineCacheControllerTest = new XmlClass(testConfig.getApiEngineCacheControllerTestClass());
+
+			Map<String,String> apiEngineCacheControllerTestParams = new HashMap<>();
+			apiEngineCacheControllerTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			apiEngineCacheControllerTestParams.put("port",testConfig.getApiEnginePort());
+			apiEngineCacheControllerTestParams.put("baseUrlOfEntityManagement",testConfig.getEntityManagementBaseURL());
+			apiEngineCacheControllerTestParams.put("portOfEntityManagement",testConfig.getEntityManagementPort());
+
+
+			apiEngineCacheControllerTest.setParameters(apiEngineCacheControllerTestParams);
+			myClasses.add(apiEngineCacheControllerTest);
+		}
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
