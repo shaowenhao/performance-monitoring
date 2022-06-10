@@ -113,6 +113,29 @@ public class ConnectorConfigureTests {
     }
 
 
+    @Test (	dependsOnMethods = { "saveCacheConfig" },
+            priority = 0,
+            description = "Test Cache Config Controller: updateCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'updateCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: updateCacheConfig")
+    public void updateCacheConfig(Map<String, String> paramMaps){
+        Response response = ConnectorConfigureEndpoint.getModuleCaheConfig(paramMaps.get("moduleName"));
+        String id = response.jsonPath().getString("data[0].id");
+        System.out.println("id:"+id);
+        String body = paramMaps.get("body").replace("$id", id);
+        System.out.println("body:"+body);
+        response = ConnectorConfigureEndpoint.updateCacheConfig(body);
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+        if(paramMaps.get("updated_expiredAfterLastAccess") != null){
+            Assert.assertEquals(paramMaps.get("updated_expiredAfterLastAccess"),response.jsonPath().getString("data.expiredAfterLastAccess"));
+        }
+
+    }
+
+
     public Map<String, String> initializeMongoParams() {
         Map<String,String> mongodbParams = new HashMap<>();
         mongodbParams.put("mongodbHost",mongodbHost);

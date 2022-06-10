@@ -179,4 +179,23 @@ public class ConnectorConfigureEndpoint {
 
         return response;
     }
+
+
+    // Cache Config Controller:updateCacheConfig
+    @Step("Send a request of 'updateCacheConfig'")
+    public static Response updateCacheConfig(String body){
+        JSONObject jsonObject = JSONObject.parseObject(body);
+
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .put("/cache-config" );
+
+        return response;
+    }
 }
