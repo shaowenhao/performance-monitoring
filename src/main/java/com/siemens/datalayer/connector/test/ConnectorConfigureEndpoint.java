@@ -162,4 +162,21 @@ public class ConnectorConfigureEndpoint {
 
         return response;
     }
+
+    //Cache Config Controller:saveCacheConfig
+    @Step("Send a request of 'saveCacheConfig'")
+    public static Response saveCacheConfig(String body)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/cache-config");
+
+        return response;
+    }
 }

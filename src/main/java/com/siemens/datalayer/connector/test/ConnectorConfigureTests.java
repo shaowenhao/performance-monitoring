@@ -96,6 +96,23 @@ public class ConnectorConfigureTests {
     }
 
 
+    @Test (	priority = 0,
+            description = "Test Cache Config Controller: saveCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'saveCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: saveCacheConfig")
+    public void saveCacheConfig(Map<String, String> paramMaps){
+        Response response = ConnectorConfigureEndpoint.saveCacheConfig(paramMaps.get("body"));
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        String actualModelName = response.jsonPath().getString("data.module");
+        String expectedModuleName = paramMaps.get("moduleName");
+        Assert.assertEquals(actualModelName,expectedModuleName);
+    }
+
+
     public Map<String, String> initializeMongoParams() {
         Map<String,String> mongodbParams = new HashMap<>();
         mongodbParams.put("mongodbHost",mongodbHost);
