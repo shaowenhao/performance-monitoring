@@ -29,6 +29,10 @@ public class JdbcMysqlUtil {
             url = properties.getProperty("url");
             user = properties.getProperty("user");
             password = properties.getProperty("password");
+            System.out.println(driver);
+            System.out.println(url);
+            System.out.println(user);
+            System.out.println(password);
 
         } catch (IOException e) {
             e.printStackTrace();
