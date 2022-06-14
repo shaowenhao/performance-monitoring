@@ -81,6 +81,11 @@ public class autoRun {
 			connectorConfigureTestParams.put("port",testConfig.getConnectorConfigurePort());
 			connectorConfigureTestParams.put("domain_name",testConfig.getDomainName());
 
+			connectorConfigureTestParams.put("mongodb_host",testConfig.getMongoDBHost());
+			connectorConfigureTestParams.put("mongodb_port",testConfig.getMongoDBPort());
+			connectorConfigureTestParams.put("mongodb_username",testConfig.getMongoDBUserName());
+			connectorConfigureTestParams.put("mongodb_password",testConfig.getMongoDBPassword());
+			connectorConfigureTestParams.put("mongodb_databasename",testConfig.getMongoDBDatabaseName());
 			connectorConfigureTests.setParameters(connectorConfigureTestParams);
 			myClasses.add(connectorConfigureTests);
 		}
@@ -359,6 +364,22 @@ public class autoRun {
 
 			ansteelFromApiEngineTest.setParameters(ansteelFromApiEngineTestParams);
 			myClasses.add(ansteelFromApiEngineTest);
+		}
+
+		// add test class for 'api engine cache controller'
+		if (testConfig.getRunApiEngineCacheControllerTest())
+		{
+			XmlClass apiEngineCacheControllerTest = new XmlClass(testConfig.getApiEngineCacheControllerTestClass());
+
+			Map<String,String> apiEngineCacheControllerTestParams = new HashMap<>();
+			apiEngineCacheControllerTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			apiEngineCacheControllerTestParams.put("port",testConfig.getApiEnginePort());
+			apiEngineCacheControllerTestParams.put("baseUrlOfEntityManagement",testConfig.getEntityManagementBaseURL());
+			apiEngineCacheControllerTestParams.put("portOfEntityManagement",testConfig.getEntityManagementPort());
+
+
+			apiEngineCacheControllerTest.setParameters(apiEngineCacheControllerTestParams);
+			myClasses.add(apiEngineCacheControllerTest);
 		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 

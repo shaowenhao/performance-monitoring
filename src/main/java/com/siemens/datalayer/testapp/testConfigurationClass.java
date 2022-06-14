@@ -114,6 +114,9 @@ public class testConfigurationClass {
 	private String runLpgTransformTestClass = null;
 	private String lpgTransformLoad_port = null;
 
+	private boolean runApiEngineCacheControllerTest = false;
+	private String apiEngineCacheControllerTestClass = null;
+
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
 	}
@@ -650,6 +653,21 @@ public class testConfigurationClass {
 
 	public String getAnsteelFromApiEngineTestClass(){return this.ansteelFromApiEngineTestClass;}
 
+
+	// add for api-engine cache controller
+	public boolean getRunApiEngineCacheControllerTest() {
+		return this.runApiEngineCacheControllerTest;
+	}
+
+	public void setApiEngineCacheControllerTestClass(String cacheControllerTestClassName) {
+		this.runApiEngineCacheControllerTest =  true;
+		this.apiEngineCacheControllerTestClass = cacheControllerTestClassName;
+	}
+
+	public String getApiEngineCacheControllerTestClass(){
+		return this.apiEngineCacheControllerTestClass;
+	}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -824,8 +842,8 @@ public class testConfigurationClass {
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_BASE_URL, 
 								 testEnvironmentConstants.JINZU_DEV_CONNECTOR_PORT);
 
-//				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
-//						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
+				setConnectorConfigureTest(testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+						                  testEnvironmentConstants.JINZU_DEV_CONNECTOR_CONFIGURE_PORT);
 			
 				setApiEngineTest(testEnvironmentConstants.JINZU_DEV_APIENGINE_BASE_URL, 
 						 		 testEnvironmentConstants.JINZU_DEV_APIENGINE_PORT);
@@ -843,8 +861,15 @@ public class testConfigurationClass {
 
 				// 赋值：this.runConnectorConfigureTest = true;
 				//cache重构后 ConnectorConfigure没有clear all cache接口
-				//setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
-				
+				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				setMongoDBHost(testEnvironmentConstants.JINZU_DEV_MONGODB_HOST);
+				setMongoDBPort(testEnvironmentConstants.JINZU_DEV_MONGODB_PORT);
+				setMongoDBUserName(testEnvironmentConstants.JINZU_DEV_MONGODB_USERNAME);
+				setMongoDBPassword(testEnvironmentConstants.JINZU_DEV_MONGODB_PASSWORD);
+				setMongoDBDatabaseName(testEnvironmentConstants.JINZU_DEV_MONGODB_DATABASENAME);
+
+				//赋值：this.runCacheControllerTest = true;
+				setApiEngineCacheControllerTestClass("com.siemens.datalayer.apiengine.test.ApiEngineCacheControllerTests");
 				break;
 			
 			case ("jinzu-test"):
@@ -901,8 +926,8 @@ public class testConfigurationClass {
 				setConnectorRealtimeTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_BASE_URL,
 						testEnvironmentConstants.IOT_DEV_CONNECTOR_REALTIME_PORT);
 
-				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
-						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
+//				setConnectorConfigureTest(testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_BASE_URL,
+//						                  testEnvironmentConstants.IOT_DEV_CONNECTOR_CONFIGURE_PORT);
 
 				setApiEngineTest(testEnvironmentConstants.IOT_DEV_APIENGINE_BASE_URL,
 						         testEnvironmentConstants.IOT_DEV_APIENGINE_PORT);
@@ -931,7 +956,7 @@ public class testConfigurationClass {
 				// setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
 
 				// 赋值：this.runConnectorConfigureTest = true;
-				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				//setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 
 				break;
 
@@ -1091,4 +1116,6 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
+
+
 }

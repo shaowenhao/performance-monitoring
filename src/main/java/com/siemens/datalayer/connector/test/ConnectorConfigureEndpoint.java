@@ -130,4 +130,87 @@ public class ConnectorConfigureEndpoint {
 
         return response;
     }
+
+    //Cache Config Controller:allCacheConfigs
+    @Step("Send a request of 'getAllCacheConfigs'")
+    public static Response getAllCacheConfigs()
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache-config" );
+
+        return response;
+    }
+
+    //Cache Config Controller:moduleCacheConfig
+    @Step("Send a request of 'getModuleCacheConfig'")
+    public static Response getModuleCaheConfig(String moduleName)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache-config/" + moduleName );
+
+        return response;
+    }
+
+    //Cache Config Controller:saveCacheConfig
+    @Step("Send a request of 'saveCacheConfig'")
+    public static Response saveCacheConfig(String body)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .post("/cache-config");
+
+        return response;
+    }
+
+
+    // Cache Config Controller:updateCacheConfig
+    @Step("Send a request of 'updateCacheConfig'")
+    public static Response updateCacheConfig(String body){
+        JSONObject jsonObject = JSONObject.parseObject(body);
+
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.body(body)
+                .filter(new AllureRestAssured())
+                .put("/cache-config" );
+
+        return response;
+    }
+
+    // Cache Config Controller:deleteCacheConfig
+    @Step("Send a request of 'deleteConnector'")
+    public static Response deleteCacheConfig(String moduleName,String name)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/cache-config/" + moduleName +"/" + name);
+        return response;
+    }
 }

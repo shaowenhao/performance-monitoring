@@ -1,11 +1,22 @@
 package com.siemens.datalayer.connector.test;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.siemens.datalayer.iot.util.JdbcMongodbUtil;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 
+import org.bson.Document;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -19,22 +30,192 @@ import java.util.*;
 @Feature("Rest api")
 public class ConnectorConfigureTests {
     static List<String> connectorNamesList;
+    private String mongodbHost;
+    private String mongodbPort;
+    private String mongodbUsername;
+    private String mongodbPassword;
+    private String mongodbDatabasename;
 
-    @Parameters({"base_url", "port", "domain_name"})
+    @Parameters({"base_url", "port", "domain_name","mongodb_host","mongodb_port","mongodb_username","mongodb_password","mongodb_databasename"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorConfigureEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name){
+    public void setConnectorConfigureEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name,
+                                              @Optional("") String mongodb_host,@Optional("") String mongodb_port,
+                                              @Optional("") String mongodb_username,@Optional("") String mongodb_password,
+                                              @Optional("") String mongodb_databasename){
         connectorNamesList = new ArrayList<>();
 
         ConnectorConfigureEndpoint.setBaseUrl(base_url);
         ConnectorConfigureEndpoint.setPort(port);
         ConnectorConfigureEndpoint.setDomainName(domain_name);
+
+        mongodbHost = mongodb_host;
+        mongodbPort = mongodb_port;
+        mongodbUsername = mongodb_username;
+        mongodbPassword = mongodb_password;
+        mongodbDatabasename =mongodb_databasename;
+
         AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connector-configure", base_url + ":" + port);
+        AllureEnvironmentPropertiesWriter.addEnvironmentItem("MongoDB_url", mongodbHost + ":" + mongodbPort );
 
         /* List<String> connectorNamesToBeCreatedList = Arrays.asList("TESTCONNECTORREFACTOR","TESTCONNECTORREFACTOR_1");
         for (String connectorName : connectorNamesToBeCreatedList)
         {
             Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
         } */
+    }
+
+
+    @Test(  alwaysRun = true,
+            priority = 0,
+            description = "Test Cache Config Controller: allCacheConfigs")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'getAllCacheConfigs' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: allCacheConfigs")
+     public void allCacheConfigs(){
+        Response response = ConnectorConfigureEndpoint.getAllCacheConfigs();
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkNumberOfCacheConfig(response,mongodbParams);
+    }
+
+
+
+    @Test (	priority = 0,
+            description = "Test Cache Config Controller: moduleCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'getModuleCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: moduleCacheConfig")
+    public void moduleCacheConfig(Map<String, String> paramMaps){
+        String moduleName = paramMaps.get("moduleName");
+        Response response = ConnectorConfigureEndpoint.getModuleCaheConfig(moduleName);
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        checkNumberOfModuleCacheConfig( response, mongodbParams,paramMaps);
+    }
+
+
+    @Test (	priority = 0,
+            description = "Test Cache Config Controller: saveCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'saveCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: saveCacheConfig")
+    public void saveCacheConfig(Map<String, String> paramMaps){
+        Response response = ConnectorConfigureEndpoint.saveCacheConfig(paramMaps.get("body"));
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        String actualModelName = response.jsonPath().getString("data.module");
+        String expectedModuleName = paramMaps.get("moduleName");
+        Assert.assertEquals(actualModelName,expectedModuleName);
+    }
+
+
+    @Test (	dependsOnMethods = { "saveCacheConfig" },
+            priority = 0,
+            description = "Test Cache Config Controller: updateCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'updateCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: updateCacheConfig")
+    public void updateCacheConfig(Map<String, String> paramMaps){
+        Response response = ConnectorConfigureEndpoint.getModuleCaheConfig(paramMaps.get("moduleName"));
+        String id = response.jsonPath().getString("data[0].id");
+        System.out.println("id:"+id);
+        String body = paramMaps.get("body").replace("$id", id);
+        System.out.println("body:"+body);
+        response = ConnectorConfigureEndpoint.updateCacheConfig(body);
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+        if(paramMaps.get("updated_expiredAfterLastAccess") != null){
+            Assert.assertEquals(paramMaps.get("updated_expiredAfterLastAccess"),response.jsonPath().getString("data.expiredAfterLastAccess"));
+        }
+
+    }
+
+
+    @Test (	dependsOnMethods = { "saveCacheConfig","updateCacheConfig" },
+            priority = 0,
+            description = "Test Cache Config Controller: deleteCacheConfigs",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Send a 'deleteCacheConfig' request to Cache Config controller interface.")
+    @Story("Cache Config Controller: deleteCacheConfig")
+    public void deleteCacheConfig(Map<String, String> paramMaps){
+        String moduleName = paramMaps.get("moduleName");
+        String name = paramMaps.get("name");
+        Response response = ConnectorConfigureEndpoint.deleteCacheConfig(moduleName,name);
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        response = ConnectorConfigureEndpoint.getModuleCaheConfig(moduleName);
+        Map<String, String> mongodbParams = initializeMongoParams();
+        checkNumberOfModuleCacheConfig( response, mongodbParams,paramMaps);
+    }
+
+
+    public Map<String, String> initializeMongoParams() {
+        Map<String,String> mongodbParams = new HashMap<>();
+        mongodbParams.put("mongodbHost",mongodbHost);
+        mongodbParams.put("mongodbPort",mongodbPort);
+        mongodbParams.put("mongodbUsername",mongodbUsername);
+        mongodbParams.put("mongodbPassword",mongodbPassword);
+        mongodbParams.put("mongodbDatabasename",mongodbDatabasename);
+        return mongodbParams;
+    }
+
+    public static MongoDatabase getMongoDatabase(Map<String, String> mongodbParams) {
+        MongoDatabase mongoDatabase = JdbcMongodbUtil.getConnect(mongodbParams.get("mongodbHost"),
+                Integer.valueOf(mongodbParams.get("mongodbPort")).intValue(),
+                mongodbParams.get("mongodbUsername"),
+                mongodbParams.get("mongodbPassword"),
+                mongodbParams.get("mongodbDatabasename"));
+        return mongoDatabase;
+    }
+
+    @Step ("verify the number of Cache Config")
+    private static void checkNumberOfCacheConfig(Response response, Map<String, String> mongodbParams) {
+
+        MongoDatabase mongoDatabase = getMongoDatabase(mongodbParams);
+        MongoCollection<Document> cacheConfigCollection = mongoDatabase.getCollection("CacheConfig");
+        FindIterable<Document> findIterable = cacheConfigCollection.find();
+        MongoCursor<Document> iterator = findIterable.iterator();
+        ObjectMapper mapper = new ObjectMapper();
+        List<Map<String,Object>> expectedCacheConfigList = new ArrayList<>();
+
+        while (iterator.hasNext()){
+            Document document = iterator.next();
+            String documentJson = document.toJson();
+            try {
+                Map<String, Object> expectedCacheConfig = mapper.readValue(documentJson, new TypeReference<Map<String, Object>>() {
+                });
+                expectedCacheConfigList.add(expectedCacheConfig);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+        }
+        List<Map<String,String>> actualCacheConfigList = response.jsonPath().getList("data");
+        Assert.assertEquals(actualCacheConfigList.size(),expectedCacheConfigList.size());
+    }
+
+    @Step ("verify the number of Module Cache Config")
+    private static void checkNumberOfModuleCacheConfig(Response response, Map<String, String> mongodbParams,Map<String, String> paramMaps) {
+        MongoDatabase mongoDatabase = getMongoDatabase(mongodbParams);
+        MongoCollection<Document> cacheConfigCollection = mongoDatabase.getCollection("CacheConfig");
+        FindIterable<Document> findIterable = cacheConfigCollection.find(Filters.eq("module", paramMaps.get("moduleName")));
+        MongoCursor<Document> iterator = findIterable.iterator();
+        List<Map<String,String>> expectedModuleCacheConfigList = new ArrayList<>();
+        while (iterator.hasNext()){
+            Map<String,String> expectedModuleCacheConfig = JSON.parseObject(iterator.next().toJson(), Map.class);
+            expectedModuleCacheConfigList.add(expectedModuleCacheConfig);
+        }
+        List<Map<String,String>> actualModuleCacheConfigList = response.jsonPath().getList("data");
+        System.out.println("actualSize:" + actualModuleCacheConfigList.size());
+        System.out.println("expectedSize:" + expectedModuleCacheConfigList.size());
+        Assert.assertEquals(actualModuleCacheConfigList.size(),expectedModuleCacheConfigList.size());
     }
 
     /* @AfterClass(description = "clean up test connectors,locators...")
@@ -48,7 +229,7 @@ public class ConnectorConfigureTests {
         }
     } */
 
-    @Test(priority = 0, description = "Test Developer Tools:clear all cache.")
+  /*  @Test(priority = 0, description = "Test Developer Tools:clear all cache.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'clear all cache' request")
     @Story("Test Developer Tools:clear all cache")
@@ -59,7 +240,7 @@ public class ConnectorConfigureTests {
 
         Assert.assertEquals("Operate success.",jsonPath.getString("message"));
     }
-
+  */
     /* @Test(priority = 0, description = "Test connector-domain-controller:getAllConnectors.")
     @Severity(SeverityLevel.BLOCKER)
     @Description("Send a 'getAllConnectors' request to read out all the available connectors names.")
