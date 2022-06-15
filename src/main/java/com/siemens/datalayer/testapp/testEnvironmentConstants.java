@@ -174,6 +174,8 @@ public class testEnvironmentConstants {
 	public static final String JINZU_DEV_MONGODB_PASSWORD = "mongodb";
 	public static final String JINZU_DEV_MONGODB_DATABASENAME = "admin";
 
+	public static final String JINZU_DEV_CONNECTOR_REALTIE_BASE_URL = "http://140.231.89.106";
+	public static final String JINZU_DEV_CONNECTOR_REALTIME_PORT = "32563";
 	// =========================================================================================
 	// Configuration for jinzu-test environment
 	// =========================================================================================
