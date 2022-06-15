@@ -27,26 +27,23 @@ import java.util.*;
 
 enum PropertyEnum{
 
-    CO2_Sensor("mock_room4_CO2_sensor_1",
-            "b1951f0279d046568289342c624eea8f","CO2_Sensor","Desigocc"),
-
-    CO2_Sensor1("System1:GmsDevice_4_7130_121634835.RAQual_Present_Value",
+    CO2_Sensor("System1:GmsDevice_4_7130_121634835.RAQual_Present_Value",
             "5d11b970dfdb4b4fb68c20af04fa87af","CO2_Sensor","Desigocc"),
+
+    CO2_Sensor1("mock_room4_CO2_sensor_1",
+            "b1951f0279d046568289342c624eea8f","CO2_Sensor","Desigocc"),
 
     CO2_Sensor2("mock_room3_CO2_sensor_1",
             "ea0de84bd76b4146be6ce1237b5bb14f","CO2_Sensor","Desigocc"),
 
-    GreenLeaf_Mode_Command("System1:GmsDevice_4_7130_16777322.Present_Value",
-            "095a804d31584d4bb7762ade3d1b3047","GreenLeaf_Mode_Command","Desigocc"),
+    Humidity_Sensor("mock_room3_humidity_sensor_1",
+            "9e0e90dbea284bfab43f7f05bec47352","Humidity_Sensor","Desigocc"),
 
-    Humidity_Sensor("System1:GmsDevice_4_7130_121634835.RHuRel_Present_Value",
+    Humidity_Sensor1("System1:GmsDevice_4_7130_121634835.RHuRel_Present_Value",
             "9e4ab0cc4fb24f40ad8b80facdeb017b","Humidity_Sensor","Desigocc"),
 
-    Humidity_Sensor1("mock_room4_humidity_sensor_1",
+    Humidity_Sensor2("mock_room4_humidity_sensor_1",
             "d46f466bda9d40c5914bf74862343b63","Humidity_Sensor","Desigocc"),
-
-    Humidity_Sensor2("mock_room3_humidity_sensor_1",
-            "9e0e90dbea284bfab43f7f05bec47352","Humidity_Sensor","Desigocc"),
 
     Luminance_Setpoint("System1:GmsDevice_4_7130_1090519068.Present_Value",
             "73b97708f1404419a1e10b31baba725a","Luminance_Setpoint","Desigocc"),
@@ -81,20 +78,20 @@ enum PropertyEnum{
     Position_Command("System1:GmsDevice_4_7130_1082130448.Present_Value.Height",
             "0db848bd91874e8aac289a03b5e18c6b","Position_Command","Desigocc"),
 
-    Power_Sensor("mock_room4_power_sensor_1",
-            "dcfb6e452da64f7aa23e07077faf725e","Power_Sensor","Desigocc"),
-
-    Power_Sensor1("mock_room3_power_sensor_1",
+    Power_Sensor("mock_room3_power_sensor_1",
             "19a54042c65a40a58fd5761908a8e735","Power_Sensor","Desigocc"),
+
+    Power_Sensor1("mock_room4_power_sensor_1",
+            "dcfb6e452da64f7aa23e07077faf725e","Power_Sensor","Desigocc"),
 
     Speed_Setpoint("System1:GmsDevice_4_7130_121634914.FanMultiSpd_Present_Value",
             "e248aeb1cdb74be2b3f0b9957ea3d6f5","Speed_Setpoint","Desigocc"),
 
-    Temperature_Sensor("mock_room4_temperature_sensor_1",
-            "eae7e8266e0242ffb9b8a6f9bb1e0927","Temperature_Sensor","Desigocc"),
-
-    Temperature_Sensor1("mock_room3_temperature_sensor_1",
+    Temperature_Sensor("mock_room3_temperature_sensor_1",
             "7a4110475690416aad33cb845cccf6f0","Temperature_Sensor","Desigocc"),
+
+    Temperature_Sensor1("mock_room4_temperature_sensor_1",
+            "eae7e8266e0242ffb9b8a6f9bb1e0927","Temperature_Sensor","Desigocc"),
 
     Temperature_Sensor2("System1:GmsDevice_4_7130_121634835.RTemp_Present_Value",
             "ec2510822ef64bebac25f028bd3e147c","Temperature_Sensor","Desigocc"),
@@ -102,11 +99,11 @@ enum PropertyEnum{
     Temperature_Setpoint("System1:GmsDevice_4_7130_121634849.SpTR_Present_Value",
             "c873ae9f77a54bf2af2b91d924038cfd","Temperature_Setpoint","Desigocc"),
 
-    TVOC_Sensor("mock_room3_TVOC_sensor_1",
-            "b102b5f3b1294011ac212d641eff7eb9","TVOC_Sensor","Desigocc"),
-
-    TVOC_Sensor1("mock_room4_TVOC_sensor_1",
+    TVOC_Sensor("mock_room4_TVOC_sensor_1",
             "04967aeef6bd4600bad7019be2b74a4e","TVOC_Sensor","Desigocc"),
+
+    TVOC_Sensor1("mock_room3_TVOC_sensor_1",
+            "b102b5f3b1294011ac212d641eff7eb9","TVOC_Sensor","Desigocc"),
 
     Luminance_Sensor("2",
             "e5f0eb45ff8f47dd800214e56a2b6eef","Luminance_Sensor","Enlighted"),
@@ -120,14 +117,23 @@ enum PropertyEnum{
     Temperature_Sensor3("2",
             "b20b01a19aa8455f8d9275d32a1450dd","Temperature_Sensor","Enlighted"),
 
-    CO2_Sensor3("24e124128a486491",
+    CO2_Sensor3("24e124710b514794",
+            "625232f47b3b4369a595f708886bc54d","CO2_Sensor","iotgateway"),
+
+    CO2_Sensor4("24e124128a486491",
             "abd4823004544adab6b2a8ed92ca6b33","CO2_Sensor","iotgateway"),
 
-    Humidity_Sensor3("24e124128a486491",
+    Humidity_Sensor3("24e124710b514794",
+            "1efe90e970a640b6b1d840c3ccf02cdc","Humidity_Sensor","iotgateway"),
+
+    Humidity_Sensor4("24e124128a486491",
             "63fc159fb0b3419ca1bd14d86eaf43e9","Humidity_Sensor","iotgateway"),
 
     Luminance_Sensor1("24e124128a486491",
             "394edf421c4a43da941b9002bc942f60","Luminance_Sensor","iotgateway"),
+
+    Luminance_Sensor2("24e124710b514794",
+            "b8a6aa3cde244e3a9a25d7af1bdde406","Luminance_Sensor","iotgateway"),
 
     Occupancy_Sensor3("24e124600b251195",
             "ad776315e61d42a58c30e6f9ebd19d52","Occupancy_Sensor","iotgateway"),
@@ -138,10 +144,19 @@ enum PropertyEnum{
     Pressure_Sensor("24e124128a486491",
             "2d182a01a6bb4bef920fc08debac2f69","Pressure_Sensor","iotgateway"),
 
+    Pressure_Sensor1("24e124710b514794",
+            "7619cfef340c49f08e475fb1bd0d534f","Pressure_Sensor","iotgateway"),
+
     Temperature_Sensor4("24e124128a486491",
             "5540e6f7753941908379ddc8ecb43ffd","Temperature_Sensor","iotgateway"),
 
-    TVOC_Sensor2("24e124128a486491",
+    Temperature_Sensor5("24e124710b514794",
+            "6a00e9a5db4a465091eb0062ad2963c9","Temperature_Sensor","iotgateway"),
+
+    TVOC_Sensor2("24e124710b514794",
+            "7d08b8c7001340de8843257ebc3bcba2","TVOC_Sensor","iotgateway"),
+
+    TVOC_Sensor3("24e124128a486491",
             "87cebf00987844849ad130af5fe39971","TVOC_Sensor","iotgateway"),
             ;
 
