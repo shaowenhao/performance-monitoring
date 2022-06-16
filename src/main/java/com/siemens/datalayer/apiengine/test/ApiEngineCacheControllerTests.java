@@ -106,6 +106,12 @@ public class ApiEngineCacheControllerTests {
         }).count();
         System.out.println("entityCount:" + entityCount);
 
+        //避免查kgCache为空 做一些延时
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //查询name为kgCache的allCacheKeys
         String name = paramMaps.get("name");
         response = ApiEngineCacheControllerEndpoint.getAllCacheKeys(name);
