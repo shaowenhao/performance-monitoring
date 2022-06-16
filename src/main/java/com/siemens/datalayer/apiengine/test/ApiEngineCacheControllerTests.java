@@ -118,7 +118,7 @@ public class ApiEngineCacheControllerTests {
         List<String> keyList = response.jsonPath().getList("data");
         //获取包含 getNodesByLabel信息的key
         String actualKey = null;
-        if(keyList.size()==2){
+        if(!keyList.isEmpty()){
             for (String key : keyList) {
                 if(key.contains("getNodesByLabel")){
                     actualKey = key;
