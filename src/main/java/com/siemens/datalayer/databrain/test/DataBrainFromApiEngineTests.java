@@ -398,8 +398,8 @@ public class DataBrainFromApiEngineTests {
             Map<String,Object> responseMap = response.jsonPath().getMap("data");
 
             // 判断response中是否返回所有的层级结构
-            System.out.println(pathList);
-            verifyResponssIncludingAllHierarchical(responseMap,pathList);
+            // System.out.println(pathList);
+            // verifyResponssIncludingAllHierarchical(responseMap,pathList);
         }
     }
 
