@@ -382,6 +382,17 @@ public class autoRun {
 			myClasses.add(apiEngineCacheControllerTest);
 		}
 
+		// add test class for 'connector realtime cache controller'
+		if (testConfig.getRunConnectorRealtimeCacheControllerTest())
+		{
+			XmlClass connectorRealtimeCacheControllerTest = new XmlClass(testConfig.getConnectorRealtimeCacheControllerTestClass());
+
+			Map<String,String> connectorRealtimeCacheControllerTestParams = new HashMap<>();
+			connectorRealtimeCacheControllerTestParams.put("base_url",testConfig.getConnectorRealtimeBaseURL());
+			connectorRealtimeCacheControllerTestParams.put("port",testConfig.getConnectorRealtimePort());
+			connectorRealtimeCacheControllerTest.setParameters(connectorRealtimeCacheControllerTestParams);
+			myClasses.add(connectorRealtimeCacheControllerTest);
+		}
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 

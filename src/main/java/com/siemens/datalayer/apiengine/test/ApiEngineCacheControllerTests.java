@@ -106,13 +106,19 @@ public class ApiEngineCacheControllerTests {
         }).count();
         System.out.println("entityCount:" + entityCount);
 
+        //避免查kgCache为空 做一些延时
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //查询name为kgCache的allCacheKeys
         String name = paramMaps.get("name");
         response = ApiEngineCacheControllerEndpoint.getAllCacheKeys(name);
         List<String> keyList = response.jsonPath().getList("data");
         //获取包含 getNodesByLabel信息的key
         String actualKey = null;
-        if(keyList.size()==2){
+        if(!keyList.isEmpty()){
             for (String key : keyList) {
                 if(key.contains("getNodesByLabel")){
                     actualKey = key;
