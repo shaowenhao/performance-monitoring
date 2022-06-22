@@ -593,7 +593,7 @@ public class DataBrainFromApiEngineTests {
         // 如果myObject（接口返回的response中提取）为ArrayList，判断跟clickhouse中查询的结果是否一致
         if (myObject instanceof ArrayList)
         {
-            System.out.println("myObject).size(): " + ((List<?>) myObject).size());
+            System.out.println("myObject.size(): " + ((List<?>) myObject).size());
             System.out.println("listFromClickhouse.size(): " + listFromClickhouse.size());
             Assert.assertEquals(((List<?>) myObject).size(),listFromClickhouse.size());
 
