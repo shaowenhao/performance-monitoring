@@ -1114,7 +1114,7 @@ public class testConfigurationClass {
 						testEnvironmentConstants.DATABRAIN_PROD_APIENGINE_PORT);
 
 				// 赋值：this.runDataBrainFromConnectorTest = true;
-				setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
+				// setDataBrainFromConnectorTestClass("com.siemens.datalayer.databrain.test.DataBrainFromConnectorTests");
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
