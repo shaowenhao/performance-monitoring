@@ -20,7 +20,8 @@ public class testEnvironmentConstants {
 	public static final String IEMS_DEV_CONNECTOR_REALTIME_PORT = "31789";
 	
 	public static final String IEMS_DEV_APIENGINE_BASE_URL = "http://140.231.89.106";
-	public static final String IEMS_DEV_APIENGINE_PORT = "32510";	
+	public static final String IEMS_DEV_APIENGINE_PORT = "32510";
+	public static final String IEMS_DEV_DB_PROPERTIES = "iems.dev.clickhouse.db.properties";
 	
 	public static final String IEMS_DEV_APISERVICE_BASE_URL = "http://140.231.89.106";
 	public static final String IEMS_DEV_APISERVICE_PORT = "30684";
@@ -319,6 +320,19 @@ public class testEnvironmentConstants {
 
 	public static final String DATABRAIN_TEST_APIENGINE_BASE_URL = "http://140.231.89.106";
 	public static final String DATABRAIN_TEST_APIENGINE_PORT = "32084";
+
+	// =========================================================================================
+	// Configuration for databrain-prod environment
+	// =========================================================================================
+	public static final String DATABRAIN_PROD_CONNECTOR_BASE_URL= "http://140.231.89.106";
+	public static final String DATABRAIN_PROD_CONNECTOR_PORT= "30393";
+
+	public static final String DATABRAIN_PROD_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.106";
+	public static final String DATABRAIN_PROD_CONNECTOR_CONFIGURE_PORT = "30280";
+
+	public static final String DATABRAIN_PROD_APIENGINE_BASE_URL = "http://140.231.89.106";
+	public static final String DATABRAIN_PROD_APIENGINE_PORT = "30992";
+	public static final String DATABRAIN_PROD_DB_PROPERTIES = "databrain.prod.clickhouse.db.properties";
 
 	// #########################################################################################
 	// ansteel demo Project

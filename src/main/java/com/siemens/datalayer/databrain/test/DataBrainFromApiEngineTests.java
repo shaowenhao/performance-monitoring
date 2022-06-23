@@ -201,11 +201,12 @@ public class DataBrainFromApiEngineTests {
     static Connection connection;
     static Statement statement;
 
-    @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector","baseUrlOfConnectorConfigure","portOfConnectorConfigure"})
+    @Parameters({"base_url","port","baseUrlOfConnector","portOfConnector","baseUrlOfConnectorConfigure","portOfConnectorConfigure","db_properties"})
     @BeforeClass(description = "Configure the host address,communication port and database properties file of data-layer-api-engine;")
     public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32510") String port,
                                      @Optional("http://140.231.89.85")  String baseUrlOfConnector,@Optional("32577") String portOfConnector,
-                                     @Optional("http://140.231.89.85")  String baseUrlOfConnectorConfigure,@Optional("30674") String portOfConnectorConfigure)
+                                     @Optional("http://140.231.89.85")  String baseUrlOfConnectorConfigure,@Optional("30674") String portOfConnectorConfigure,
+                                     String db_properties)
     {
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
@@ -220,7 +221,7 @@ public class DataBrainFromApiEngineTests {
         try
         {
             // 连接数据库
-            connection = JdbcMysqlUtil.getConnection("iems.dev.clickhouse.db.properties");
+            connection = JdbcMysqlUtil.getConnection(db_properties);
             if(!connection.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
 
