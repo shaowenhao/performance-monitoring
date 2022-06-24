@@ -108,7 +108,7 @@ public class ApiEngineCacheControllerTests {
 
         //避免查kgCache为空 做一些延时
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
