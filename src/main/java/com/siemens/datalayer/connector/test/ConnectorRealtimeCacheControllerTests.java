@@ -72,7 +72,7 @@ public class ConnectorRealtimeCacheControllerTests<d> {
         String message = "{\"process\":\"FCE0164\",\"event\":\"in\",\"coreId\":\"N1234567890\",\"device\":\"test" + dayOfMonth + "\",\"timestamp\":\"\"} ";
         KafkaUtil.send(producer,topic, message);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
