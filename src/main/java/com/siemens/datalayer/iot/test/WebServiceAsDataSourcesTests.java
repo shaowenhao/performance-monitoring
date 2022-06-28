@@ -26,6 +26,7 @@ public class WebServiceAsDataSourcesTests {
     public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30850") String port) {
         ConnectorEndpoint.setBaseUrl(base_url);
         ConnectorEndpoint.setPort(port);
+
     }
 
 
@@ -37,6 +38,9 @@ public class WebServiceAsDataSourcesTests {
     @Description("Send a 'dmlInsertOperator' request with insert info and check the response message.")
     @Story("webservice as data source,query data source")
     public void dmlDataInsert(Map<String, String> paramMaps) {
+
+        // add clean connecotr cache to make it more stable
+        ConnectorEndpoint.clearAllCaches();
 
         String insertinfo = paramMaps.get("insertinfo");
         Response response = ConnectorEndpoint.dmlInsertOperator(insertinfo);
