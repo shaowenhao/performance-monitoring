@@ -48,6 +48,21 @@ public class ConnectorConfigureEndpoint {
         return response;
     }
 
+    // Test Developer Tools:deleteCache
+    @Step("send a request of 'deleteCache'")
+    public static Response deleteCache(String name)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/cache/" + name);
+
+        return response;
+    }
 
    // connector-domain-controller:getAllConnectors
     @Step("Send a request of 'getAllConnectors'")

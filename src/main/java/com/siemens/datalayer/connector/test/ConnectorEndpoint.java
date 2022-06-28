@@ -172,4 +172,19 @@ public class ConnectorEndpoint {
 				.get("/api/dev-tools/redisCache-clearance");
 		return response;
 	}
+
+	// Test Developer Tools:clearRedisCache
+	@Step("send a request of 'clean up all caches'")
+	public static Response cleanUpAllCaches()
+	{
+		RestAssured.baseURI = BASE_URL;
+		RestAssured.port = Integer.valueOf(port).intValue();
+
+		RequestSpecification httpRequest = RestAssured.given();
+		httpRequest.header("content-type","application/json");
+
+		Response response = httpRequest.filter(new AllureRestAssured())
+				.delete("/api/cache/allCaches");
+		return response;
+	}
 }

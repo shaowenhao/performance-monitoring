@@ -12,9 +12,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Epic("SDL Connector")
@@ -41,13 +39,29 @@ public class AuthForRestfulReadTests {
     @Story("auth for restful read")
     public void authForRestfulRead(Map<String, String> paramMaps){
 
-        // 执行case之前，需调用connector（clearRedisCaches、clearAllCaches、clearRedisCache接口）
-        // 和connector-configure（clear all cache接口）清除缓存
-        ConnectorEndpoint.clearRedisCaches();
-        ConnectorEndpoint.clearAllCaches();
-        ConnectorEndpoint.clearRedisCache();
+        // 执行case之前，需调用connector（cleanUpAllCaches接口）
+        // 和connector-configure（deleteCache接口）清除缓存
+        ConnectorEndpoint.cleanUpAllCaches();
 
-        ConnectorConfigureEndpoint.clearAllCache();
+        List<String> nameList = Arrays.asList(
+                "MongoDao",
+                "appAuth",
+                "conceptSchema",
+                "connector",
+                "dataSource",
+                "engine",
+                "entityConfig",
+                "mapper",
+                "mapperCondition",
+                "mapperRule",
+                "metaManagement",
+                "plugin",
+                "rule",
+                "transaction");
+        for (String name : nameList)
+        {
+            ConnectorConfigureEndpoint.deleteCache(name);
+        }
 
         try {
             TimeUnit.SECONDS.sleep(10);
