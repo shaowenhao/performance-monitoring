@@ -26,6 +26,9 @@ public class WebServiceAsDataSourcesTests {
     public void setConnectorEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30850") String port) {
         ConnectorEndpoint.setBaseUrl(base_url);
         ConnectorEndpoint.setPort(port);
+
+        // add clean connecotr cache to make it more stable
+        ConnectorEndpoint.clearAllCaches();
     }
 
 

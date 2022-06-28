@@ -154,7 +154,7 @@ public class ConnectorEndpoint {
 		httpRequest.header("content-type","application/json");
 
 		Response response = httpRequest.filter(new AllureRestAssured())
-				.get("/api/dev-tools/caches-clearance");
+				.delete("/api/cache/allCaches");
 		return response;
 	}
 
