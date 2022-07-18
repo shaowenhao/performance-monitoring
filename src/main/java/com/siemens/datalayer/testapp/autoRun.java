@@ -394,6 +394,20 @@ public class autoRun {
 			connectorRealtimeCacheControllerTest.setParameters(connectorRealtimeCacheControllerTestParams);
 			myClasses.add(connectorRealtimeCacheControllerTest);
 		}
+
+		// Add test class for 'test which verify rspdata'
+		if (testConfig.getRunTestWhichVerifyRspdataTest())
+		{
+			XmlClass testWhichVerifyRspdataTest = new XmlClass(testConfig.getTestWhichVerifyRspdataTestClass());
+
+			Map<String,String> testWhichVerifyRspdataTestParams = new HashMap<>();
+			testWhichVerifyRspdataTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			testWhichVerifyRspdataTestParams.put("port",testConfig.getApiEnginePort());
+
+			testWhichVerifyRspdataTest.setParameters(testWhichVerifyRspdataTestParams);
+			myClasses.add(testWhichVerifyRspdataTest);
+		}
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 

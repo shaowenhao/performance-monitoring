@@ -82,6 +82,9 @@ public class testConfigurationClass {
 	Boolean runPostgreSQLAsDataSourceTest = false;
 	private String postgreSQLAsDataSourceTestClass = null;
 
+	Boolean runTestWhichVerifyRspdataTest = false;
+	private String TestWhichVerifyRspdataTestClass = null;
+
 	Boolean runUserQueryTest = false;
 	private String userQueryTestClass = null;
 
@@ -685,6 +688,18 @@ public class testConfigurationClass {
 		return this.connectorRealtimeCacheControllerTestClass;
 	}
 
+	// getRunTestWhichVerifyRspdataTest、setTestWhichVerifyRspdataTestClass、getTestWhichVerifyRspdataTestClass
+	// 这三个方法针对“test which verify rspdata”的测试 而添加
+	public Boolean getRunTestWhichVerifyRspdataTest(){return this.runTestWhichVerifyRspdataTest;}
+
+	public void setTestWhichVerifyRspdataTestClass(String TestWhichVerifyRspdataTestClassName)
+	{
+		this.runTestWhichVerifyRspdataTest = true;
+		this.TestWhichVerifyRspdataTestClass = TestWhichVerifyRspdataTestClassName;
+	}
+
+	public String getTestWhichVerifyRspdataTestClass(){return this.TestWhichVerifyRspdataTestClass;}
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -1038,6 +1053,9 @@ public class testConfigurationClass {
 
 				// 赋值：this.runRealtimeDataSourcesTest = true;
 				setRealtimeAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RealtimeDatabaseTests");
+
+				// 赋值：
+				setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
 				break;
 
 			case("iot-prod"):
