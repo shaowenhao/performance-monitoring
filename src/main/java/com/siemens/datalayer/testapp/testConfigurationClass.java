@@ -333,7 +333,8 @@ public class testConfigurationClass {
 	}
 
 	public void setApiServiceTest(String base_url, String port) {
-		this.runApiServiceTest = true;
+//		iems-api service is not used by customer
+		this.runApiServiceTest = false;
 		this.apiService_base_url = base_url;
 		this.apiService_port = port;
 	}
