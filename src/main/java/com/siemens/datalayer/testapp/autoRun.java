@@ -413,8 +413,8 @@ public class autoRun {
 			XmlClass clickhouseAsDataSourceTest = new XmlClass(testConfig.getClickhouseAsDataSourcesTestClass());
 
 			Map<String,String> clickhouseAsDataSourceTestParams = new HashMap<>();
-			clickhouseAsDataSourceTestParams.put("base_url",testConfig.getApiEngineBaseURL());
-			clickhouseAsDataSourceTestParams.put("port",testConfig.getApiEnginePort());
+			clickhouseAsDataSourceTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			clickhouseAsDataSourceTestParams.put("port",testConfig.getConnectorPort());
 
 			clickhouseAsDataSourceTest.setParameters(clickhouseAsDataSourceTestParams);
 			myClasses.add(clickhouseAsDataSourceTest);
