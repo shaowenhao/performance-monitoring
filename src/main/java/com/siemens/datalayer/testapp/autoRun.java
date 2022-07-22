@@ -408,6 +408,18 @@ public class autoRun {
 			myClasses.add(testWhichVerifyRspdataTest);
 		}
 
+		//Add test class for 'query on ClickHouse DB'
+		if(testConfig.getRunClickhouseAsDataSourcesTest()){
+			XmlClass clickhouseAsDataSourceTest = new XmlClass(testConfig.getClickhouseAsDataSourcesTestClass());
+
+			Map<String,String> clickhouseAsDataSourceTestParams = new HashMap<>();
+			clickhouseAsDataSourceTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			clickhouseAsDataSourceTestParams.put("port",testConfig.getApiEnginePort());
+
+			clickhouseAsDataSourceTest.setParameters(clickhouseAsDataSourceTestParams);
+			myClasses.add(clickhouseAsDataSourceTest);
+		}
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 

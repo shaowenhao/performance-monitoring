@@ -17,7 +17,7 @@ import java.util.*;
 
 @Epic("SDL Connector")
 @Feature("realtime database as data source")
-public class RealtimeDatabaseTests {
+public class ClickhouseAsDataSourceTests {
 
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
@@ -204,7 +204,7 @@ public class RealtimeDatabaseTests {
                 String conditionStr = paramMaps.get("condition");
                 String conditionStrLower = conditionStr.toLowerCase();
                 if (!conditionStrLower.contains(" and ") && !conditionStrLower.contains(" or ")) {
-                    RealtimeDatabaseTests.Condition condition = new RealtimeDatabaseTests.Condition(conditionStr);
+                    ClickhouseAsDataSourceTests.Condition condition = new ClickhouseAsDataSourceTests.Condition(conditionStr);
                     if (StringUtils.isNumeric(condition.getField())) {
                         // no need to check this condition, such as condition is 1=2
                         System.out.println("No need to check this condition (" + conditionStr + ")");

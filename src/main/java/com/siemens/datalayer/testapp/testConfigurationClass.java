@@ -73,8 +73,8 @@ public class testConfigurationClass {
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
 
-	Boolean runRealtimeDataSourcesTest = false;
-	private String realtimeDataSourcesTestClass = null;
+	Boolean runClickhouseAsDataSourcesTest = false;
+	private String clickhouseAsDataSourcesTestClass = null;
 
 	Boolean runAppClientAuthenticationForK8sTest = false;
 	private String appClientAuthenticationForK8sTestClass = null;
@@ -531,13 +531,18 @@ public class testConfigurationClass {
 	}
 
 
-	public Boolean getRunRealtimeDataSourcesTestEnhanceTest(){return this.runRealtimeDataSourcesTest;}
+	public Boolean getRunClickhouseAsDataSourcesTest(){return this.runClickhouseAsDataSourcesTest;}
 
-	public void setRealtimeAsDataSourcesEnhanceTestClass(String realtimeAsDataSourcesEnhanceTestClassName)
+	public void setClickhouseAsDataSourceTestClass(String clickhouseAsDataSourcesTestClassName)
 	{
-		this.runRealtimeDataSourcesTest = true;
-		this.realtimeDataSourcesTestClass = realtimeAsDataSourcesEnhanceTestClassName;
+		this.runClickhouseAsDataSourcesTest = true;
+		this.clickhouseAsDataSourcesTestClass = clickhouseAsDataSourcesTestClassName;
 	}
+	
+	public String getClickhouseAsDataSourcesTestClass(){
+		return this.clickhouseAsDataSourcesTestClass;
+	}
+
 	public String getRestfulAsDataSourcesEnhanceTestClass(){return this.restfulAsDataSourcesEnhanceTestClass;};
 
 	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
@@ -1052,8 +1057,8 @@ public class testConfigurationClass {
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
 				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
-				// 赋值：this.runRealtimeDataSourcesTest = true;
-				setRealtimeAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RealtimeDatabaseTests");
+				// 赋值：this.runClickhouseAsDataSourcesTest = true;
+				setClickhouseAsDataSourceTestClass("com.siemens.datalayer.iot.test.ClickhouseAsDataSourceTests");
 
 				// 赋值：
 				setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
