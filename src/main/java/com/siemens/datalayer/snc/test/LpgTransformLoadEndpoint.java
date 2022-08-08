@@ -41,4 +41,19 @@ public class LpgTransformLoadEndpoint {
 
         return response;
     }
+
+    // Lpg-Transform-Load Endpoint: list all graph names
+    @Step("Send a query request to list all graph names")
+    public static Response listAllGraphNames() {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("Content-Type", "application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/graph/instances/graph-names");
+
+        return response;
+    }
 }

@@ -117,6 +117,10 @@ public class testConfigurationClass {
 	private String runLpgTransformTestClass = null;
 	private String lpgTransformLoad_port = null;
 
+	// add for lpg dynamic graph test
+	boolean runDynamicGraphTest = false;
+	private String runDynamicGraphTestClass = null;
+
 	private boolean runApiEngineCacheControllerTest = false;
 	private String apiEngineCacheControllerTestClass = null;
 
@@ -638,6 +642,17 @@ public class testConfigurationClass {
 
 	public String getRunLpgTransformTestClass(){return this.runLpgTransformTestClass;}
 
+	// add for lpg service dynamic graph testing
+	private void setRunDynamicGraphTest(String base_url, String port, String runDynamicGraphTestClass){
+		this.runDynamicGraphTest = true;
+		this.runDynamicGraphTestClass = runDynamicGraphTestClass;
+		this.lpgTransformLoad_base_url = base_url;
+		this.lpgTransformLoad_port =  port;
+	}
+
+	public Boolean getRunDynamicGraphTest(){return this.runDynamicGraphTest;}
+
+	public String getRunDynamicGraphTestClass(){return this.runDynamicGraphTestClass;}
 	// getRunPostgreSQLAsDataSourceTest、setPostgreSQLAsDataSourceTestClass、getPostgreSQLAsDataSourceTestClass
 	// 这三个方法针对“read/write PostgresSQL(data source) Scenarios”的测试 而添加
 	public Boolean getRunPostgreSQLAsDataSourceTest(){return this.runPostgreSQLAsDataSourceTest;}
@@ -1062,6 +1077,10 @@ public class testConfigurationClass {
 
 				// 赋值：
 				setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
+
+				setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
+										testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
+										"com.siemens.datalayer.iot.test.DynamicGraphTests");
 				break;
 
 			case("iot-prod"):

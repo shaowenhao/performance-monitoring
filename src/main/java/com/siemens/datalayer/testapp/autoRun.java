@@ -330,6 +330,15 @@ public class autoRun {
 			myClasses.add(lpgTransformLoadTest);
 		}
 
+		if(testConfig.getRunDynamicGraphTest()){
+			XmlClass dynamicGraphTest = new XmlClass(testConfig.getRunDynamicGraphTestClass());
+			Map<String,String> dynamicGraphTestParams = new HashMap<>();
+			dynamicGraphTestParams.put("base_url",testConfig.getLpgTransformLoad_base_url());
+			dynamicGraphTestParams.put("port",testConfig.getLpgTransformLoad_port());
+			dynamicGraphTest.setParameters(dynamicGraphTestParams);
+			myClasses.add(dynamicGraphTest);
+		}
+
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
 			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());
