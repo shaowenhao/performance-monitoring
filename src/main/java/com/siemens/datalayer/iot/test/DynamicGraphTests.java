@@ -17,6 +17,11 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Map;
 
+import static com.siemens.datalayer.entitymanagement.test.EntityManagementTests.checkResponseCode;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasItems;
+
 @Epic("SDL Lpg-transform-load")
 public class DynamicGraphTests {
 
@@ -26,32 +31,76 @@ public class DynamicGraphTests {
     {
         LpgTransformLoadEndpoint.setBaseUrl(base_url);
         LpgTransformLoadEndpoint.setPort(port);
+
+        LpgTransformLoadEndpoint.deleteInstanceGraph("test6761");
     }
 
     @Test(priority = 0,
-            description = "",
+            description = "check list Graph Names",
             dataProvider = "entity-management-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Instance-kg-generation-service")
     @Story("check dynamic graph")
     public void listGraphNames(Map<String, String> paramMaps){
-       // System.out.println(paramMaps.get("response"));
+
         Response response = LpgTransformLoadEndpoint.listAllGraphNames();
+
         checkGraphNamesList(paramMaps, response);
+        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
     }
+
+
+
+    @Test(dependsOnMethods = { "listGraphNames"},
+            alwaysRun = true,
+            priority = 0,
+            description = "create an instance Graph",
+            dataProvider = "entity-management-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Instance-kg-generation-service")
+    @Story("creat instance graph")
+    public void createInstanceGraph(Map<String, String> paramMaps){
+
+        String graphName = paramMaps.get("graphName");
+        Response response = LpgTransformLoadEndpoint.createInstanceGraph(graphName);
+        checkGraphNamesList(paramMaps,response);
+        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+    }
+
+    @Test(dependsOnMethods = { "createInstanceGraph"},
+            alwaysRun = true,
+            priority = 0,
+            description = "create an Kg",
+            dataProvider = "entity-management-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Instance-kg-generation-service")
+    @Story("creat kg")
+    public void generateKg(Map<String, String> paramMaps){
+
+        String graphName = paramMaps.get("graphName");
+        String entityLabels =  paramMaps.get("entityLabels");
+        String graphql = paramMaps.get("graphql");
+        Response response = LpgTransformLoadEndpoint.generateKg(entityLabels, graphName, graphql);
+        response.prettyPrint();
+        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+    }
+
 
     public void checkGraphNamesList(Map<String, String> paramMaps, Response response) {
         List<String> actualGraphList = response.jsonPath().getList("data");
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<String> expectedList = null;
-        try {
-           expectedList = objectMapper.readValue(paramMaps.get("response"), new TypeReference<List<String>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        Assert.assertEquals(actualGraphList,expectedList);
+
+        String[] expectContainsGraphNames = paramMaps.get("responseData").split(",");
+
+//        try {
+//           expectedList = objectMapper.readValue(paramMaps.get("responseData"), new TypeReference<List<String>>() {
+//            });
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+        assertThat(actualGraphList,hasItems(expectContainsGraphNames));
     }
 
 }
