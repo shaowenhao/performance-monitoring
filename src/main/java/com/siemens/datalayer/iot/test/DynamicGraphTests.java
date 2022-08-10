@@ -16,11 +16,13 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.siemens.datalayer.entitymanagement.test.EntityManagementTests.checkResponseCode;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.core.AllOf.allOf;
 
 @Epic("SDL Lpg-transform-load")
 public class DynamicGraphTests {
@@ -86,6 +88,13 @@ public class DynamicGraphTests {
         Response response = LpgTransformLoadEndpoint.generateKg(entityLabels, graphName, graphql);
         response.prettyPrint();
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+        // check instance kg status, here use entitylabels as keyword when its single value, if entityLabels was multi value need defined new keyword
+        Response searchResponse = LpgTransformLoadEndpoint.searchGraph(graphName, entityLabels);
+
+        int actualInsranceKgNums = checkInstancekgNum(searchResponse, entityLabels);
+        System.out.println("ActualKgNum:" + actualInsranceKgNums);
+        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
+        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
     }
 
 
@@ -103,4 +112,16 @@ public class DynamicGraphTests {
         assertThat(actualGraphList,hasItems(expectContainsGraphNames));
     }
 
+    public static int checkInstancekgNum(Response response,String keyWord){
+
+        List<Map<String,Object>> dataList = response.jsonPath().getList("data");
+        List<Map<String, Object>> filterList = dataList.stream().filter(e -> {
+            String value = (String) e.get("label");
+            return  value.startsWith(keyWord);
+        }).filter(e->{
+            Map<String,String> properties = (Map<String,String>) e.get("properties");
+            return  properties.get("metadata_node_type").equals("instance");
+        }).collect(Collectors.toList());
+        return filterList.size();
+    }
 }

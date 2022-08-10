@@ -117,15 +117,18 @@ public class LpgTransformLoadEndpoint {
 
     // Lpg-Transform-Load Endpoint: search graph
     @Step("Send a query request to get instance-kg grapph")
-    public static Response searchGraph() {
+    public static Response searchGraph(String graphName, String keyWord) {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
 
         RequestSpecification httpRequest = RestAssured.given();
         httpRequest.header("Content-Type", "application/json");
-
-        Response response = httpRequest.filter(new AllureRestAssured())
-                .get("/api/graph/instances/graphs");
+        Map<String,String> parameters = new HashMap<String,String>();
+        parameters.put("graphName",graphName);
+        parameters.put("keyword",keyWord);
+        Response response = httpRequest.params(parameters)
+                .filter(new AllureRestAssured())
+                .get("/api/graph/instances/search");
 
         return response;
     }
