@@ -133,4 +133,18 @@ public class LpgTransformLoadEndpoint {
         return response;
     }
 
+    @Step("Send a request to generate instance kg though kafka")
+    public static Response generateInstanceKg(String kafkaData)
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+        RequestSpecification httpRequest = RestAssured.given();
+
+        //Specify a multi-value form parameter
+        Response response = httpRequest
+                .body(kafkaData)
+                .filter(new AllureRestAssured())
+                .post("/api/graph/instance/generate/kafka");
+        return response;
+    }
 }

@@ -35,6 +35,7 @@ public class DynamicGraphTests {
         LpgTransformLoadEndpoint.setPort(port);
 
         LpgTransformLoadEndpoint.deleteInstanceGraph("test6761");
+        LpgTransformLoadEndpoint.deleteInstanceGraph("testkafka");
     }
 
     @Test(priority = 0,
@@ -79,7 +80,7 @@ public class DynamicGraphTests {
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Instance-kg-generation-service")
-    @Story("creat kg")
+    @Story("creat kg though graphql")
     public void generateKg(Map<String, String> paramMaps){
 
         String graphName = paramMaps.get("graphName");
@@ -92,6 +93,33 @@ public class DynamicGraphTests {
         Response searchResponse = LpgTransformLoadEndpoint.searchGraph(graphName, entityLabels);
 
         int actualInsranceKgNums = checkInstancekgNum(searchResponse, entityLabels);
+        System.out.println("ActualKgNum:" + actualInsranceKgNums);
+        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
+        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
+    }
+
+    @Test(
+            priority = 2,
+            description = "generate instance Kg",
+            dataProvider = "entity-management-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Feature("Instance-kg-generation-service")
+    @Story("generate instance kg though kafka")
+    public void generateInstanceKg(Map<String, String> paramMaps){
+
+        String kafkaData = paramMaps.get("kafkaData");
+        Response response = LpgTransformLoadEndpoint.generateInstanceKg(kafkaData);
+        response.prettyPrint();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+
+        Response searchResponse = LpgTransformLoadEndpoint.searchGraph("testkafka", "sdl_b");
+        int actualInsranceKgNums = checkInstancekgNum(searchResponse, "sdl_b");
         System.out.println("ActualKgNum:" + actualInsranceKgNums);
         System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
         Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
