@@ -330,6 +330,15 @@ public class autoRun {
 			myClasses.add(lpgTransformLoadTest);
 		}
 
+		if(testConfig.getRunDynamicGraphTest()){
+			XmlClass dynamicGraphTest = new XmlClass(testConfig.getRunDynamicGraphTestClass());
+			Map<String,String> dynamicGraphTestParams = new HashMap<>();
+			dynamicGraphTestParams.put("base_url",testConfig.getLpgTransformLoad_base_url());
+			dynamicGraphTestParams.put("port",testConfig.getLpgTransformLoad_port());
+			dynamicGraphTest.setParameters(dynamicGraphTestParams);
+			myClasses.add(dynamicGraphTest);
+		}
+
        // Add test class for UiBackendTests
 		if(testConfig.getRunUiBackendTest()){
 			XmlClass uiBackendTest = new XmlClass(testConfig.getRunUiBackendTestClass());
@@ -406,6 +415,18 @@ public class autoRun {
 
 			testWhichVerifyRspdataTest.setParameters(testWhichVerifyRspdataTestParams);
 			myClasses.add(testWhichVerifyRspdataTest);
+		}
+
+		//Add test class for 'query on ClickHouse DB'
+		if(testConfig.getRunClickhouseAsDataSourcesTest()){
+			XmlClass clickhouseAsDataSourceTest = new XmlClass(testConfig.getClickhouseAsDataSourcesTestClass());
+
+			Map<String,String> clickhouseAsDataSourceTestParams = new HashMap<>();
+			clickhouseAsDataSourceTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			clickhouseAsDataSourceTestParams.put("port",testConfig.getConnectorPort());
+
+			clickhouseAsDataSourceTest.setParameters(clickhouseAsDataSourceTestParams);
+			myClasses.add(clickhouseAsDataSourceTest);
 		}
 
 		//Attach the list of test classes to the XmlTest Object created earlier. 

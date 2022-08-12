@@ -73,8 +73,8 @@ public class testConfigurationClass {
 	Boolean runWebServiceAsDataSourcesTest = false;
 	private String webServiceAsDataSourcesTestClass = null;
 
-	Boolean runRealtimeDataSourcesTest = false;
-	private String realtimeDataSourcesTestClass = null;
+	Boolean runClickhouseAsDataSourcesTest = false;
+	private String clickhouseAsDataSourcesTestClass = null;
 
 	Boolean runAppClientAuthenticationForK8sTest = false;
 	private String appClientAuthenticationForK8sTestClass = null;
@@ -116,6 +116,10 @@ public class testConfigurationClass {
 	private String lpgTransformLoad_base_url = null;
 	private String runLpgTransformTestClass = null;
 	private String lpgTransformLoad_port = null;
+
+	// add for lpg dynamic graph test
+	boolean runDynamicGraphTest = false;
+	private String runDynamicGraphTestClass = null;
 
 	private boolean runApiEngineCacheControllerTest = false;
 	private String apiEngineCacheControllerTestClass = null;
@@ -531,13 +535,18 @@ public class testConfigurationClass {
 	}
 
 
-	public Boolean getRunRealtimeDataSourcesTestEnhanceTest(){return this.runRealtimeDataSourcesTest;}
+	public Boolean getRunClickhouseAsDataSourcesTest(){return this.runClickhouseAsDataSourcesTest;}
 
-	public void setRealtimeAsDataSourcesEnhanceTestClass(String realtimeAsDataSourcesEnhanceTestClassName)
+	public void setClickhouseAsDataSourceTestClass(String clickhouseAsDataSourcesTestClassName)
 	{
-		this.runRealtimeDataSourcesTest = true;
-		this.realtimeDataSourcesTestClass = realtimeAsDataSourcesEnhanceTestClassName;
+		this.runClickhouseAsDataSourcesTest = true;
+		this.clickhouseAsDataSourcesTestClass = clickhouseAsDataSourcesTestClassName;
 	}
+	
+	public String getClickhouseAsDataSourcesTestClass(){
+		return this.clickhouseAsDataSourcesTestClass;
+	}
+
 	public String getRestfulAsDataSourcesEnhanceTestClass(){return this.restfulAsDataSourcesEnhanceTestClass;};
 
 	// getRunAuthForRestfulReadTest、setAuthForRestfulReadTestClass、getAuthForRestfulReadTestClass
@@ -633,6 +642,17 @@ public class testConfigurationClass {
 
 	public String getRunLpgTransformTestClass(){return this.runLpgTransformTestClass;}
 
+	// add for lpg service dynamic graph testing
+	private void setRunDynamicGraphTest(String base_url, String port, String runDynamicGraphTestClass){
+		this.runDynamicGraphTest = true;
+		this.runDynamicGraphTestClass = runDynamicGraphTestClass;
+		this.lpgTransformLoad_base_url = base_url;
+		this.lpgTransformLoad_port =  port;
+	}
+
+	public Boolean getRunDynamicGraphTest(){return this.runDynamicGraphTest;}
+
+	public String getRunDynamicGraphTestClass(){return this.runDynamicGraphTestClass;}
 	// getRunPostgreSQLAsDataSourceTest、setPostgreSQLAsDataSourceTestClass、getPostgreSQLAsDataSourceTestClass
 	// 这三个方法针对“read/write PostgresSQL(data source) Scenarios”的测试 而添加
 	public Boolean getRunPostgreSQLAsDataSourceTest(){return this.runPostgreSQLAsDataSourceTest;}
@@ -1052,11 +1072,15 @@ public class testConfigurationClass {
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
 				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
-				// 赋值：this.runRealtimeDataSourcesTest = true;
-				setRealtimeAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RealtimeDatabaseTests");
+				// 赋值：this.runClickhouseAsDataSourcesTest = true;
+				setClickhouseAsDataSourceTestClass("com.siemens.datalayer.iot.test.ClickhouseAsDataSourceTests");
 
 				// 赋值：
 				setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
+
+				setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
+										testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
+										"com.siemens.datalayer.iot.test.DynamicGraphTests");
 				break;
 
 			case("iot-prod"):
