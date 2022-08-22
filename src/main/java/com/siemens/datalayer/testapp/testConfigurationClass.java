@@ -126,6 +126,8 @@ public class testConfigurationClass {
 
 	private boolean runConnectorRealtimeCacheControllerTest = false;
 	private String connectorRealtimeCacheControllerTestClass = null;
+	private String connectorCacheControllerTestClass = null;
+	private boolean runConnectorCacheControllerTest = false;
 
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
@@ -709,6 +711,20 @@ public class testConfigurationClass {
 		return this.connectorRealtimeCacheControllerTestClass;
 	}
 
+	// add for connector  cache controller
+	public boolean getRunConnectorCacheControllerTest() {
+		return this.runConnectorCacheControllerTest;
+	}
+
+	public void setConnectorCacheControllerTestClass(String connectorCacheControllerTestClassName){
+		this.runConnectorCacheControllerTest =  true;
+		this.connectorCacheControllerTestClass = connectorCacheControllerTestClassName;
+	}
+
+	public String getConnectorCacheControllerTestClass(){
+		return this.connectorCacheControllerTestClass;
+	}
+
 	// getRunTestWhichVerifyRspdataTest、setTestWhichVerifyRspdataTestClass、getTestWhichVerifyRspdataTestClass
 	// 这三个方法针对“test which verify rspdata”的测试 而添加
 	public Boolean getRunTestWhichVerifyRspdataTest(){return this.runTestWhichVerifyRspdataTest;}
@@ -930,6 +946,9 @@ public class testConfigurationClass {
 
 				//赋值：this.runConnectorRealtimeCacheControllerTest = true;
 				setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
+
+				//赋值：this.runConnectorCacheControllerTest = true;
+				setConnectorCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorCacheControllerTests");
 				break;
 
 

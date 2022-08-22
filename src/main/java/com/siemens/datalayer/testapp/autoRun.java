@@ -404,6 +404,18 @@ public class autoRun {
 			myClasses.add(connectorRealtimeCacheControllerTest);
 		}
 
+		// add test class for 'connector cache controller'
+		if (testConfig.getRunConnectorCacheControllerTest())
+		{
+			XmlClass connectorCacheControllerTest = new XmlClass(testConfig.getConnectorCacheControllerTestClass());
+
+			Map<String,String> connectorCacheControllerTestParams = new HashMap<>();
+			connectorCacheControllerTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			connectorCacheControllerTestParams.put("port",testConfig.getConnectorPort());
+			connectorCacheControllerTest.setParameters(connectorCacheControllerTestParams);
+			myClasses.add(connectorCacheControllerTest);
+		}
+
 		// Add test class for 'test which verify rspdata'
 		if (testConfig.getRunTestWhichVerifyRspdataTest())
 		{
