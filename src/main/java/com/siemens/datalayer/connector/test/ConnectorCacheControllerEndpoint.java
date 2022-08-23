@@ -38,5 +38,71 @@ public class ConnectorCacheControllerEndpoint {
         return response;
     }
 
+    //Cache Controller: cacheStatistics
+    @Step("Send a request of 'cacheStatistics'")
+    public static Response getCacheStatistics(String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
 
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/cache/" + name + "/statistics");
+
+        return response;
+    }
+
+    //Cache Controller: allCacheKeys
+    @Step("Send a request of 'getallCacheKeys'")
+    public static Response getAllCacheKeys(String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/cache/"+ name + "/keys");
+
+        return response;
+    }
+
+    //Cache Controller: getCacheValue
+    @Step("Send a request of 'getCacheValue'")
+    public static Response getCacheValue(String key, String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/api/cache/"+ name + "/" +key);
+
+        return response;
+    }
+
+    //Cache Controller: clean up all caches
+    @Step("Send a request of 'deleteAllCaches'")
+    public static Response deleteAllCaches() {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/cache/allCaches");
+        return response;
+    }
+
+    //Cache Controller: delete cache by cache name
+    @Step("Send a request of 'deleteCache'")
+    public static Response deleteCache(String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/api/cache/"+ name);
+        return response;
+    }
 }
