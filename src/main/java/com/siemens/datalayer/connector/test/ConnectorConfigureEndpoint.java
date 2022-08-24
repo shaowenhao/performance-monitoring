@@ -228,4 +228,62 @@ public class ConnectorConfigureEndpoint {
                 .delete("/cache-config/" + moduleName +"/" + name);
         return response;
     }
+
+    //Cache Controller: allCacheNames
+    @Step("Send a request of 'getAllCacheNames'")
+    public static Response getAllCacheNames() {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("cache/names");
+
+        return response;
+    }
+
+    //Cache Controller: cacheStatistics
+    @Step("Send a request of 'cacheStatistics'")
+    public static Response getCacheStatistics(String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache/" + name + "/statistics");
+
+        return response;
+    }
+
+    //Cache Controller: allCacheKeys
+    @Step("Send a request of 'getallCacheKeys'")
+    public static Response getAllCacheKeys(String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache/"+ name + "/keys");
+
+        return response;
+    }
+
+    //Cache Controller: getCacheValue
+    @Step("Send a request of 'getCacheValue'")
+    public static Response getCacheValue(String key, String name) {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .get("/cache/"+ name + "/" +key);
+
+        return response;
+    }
+
+
 }
