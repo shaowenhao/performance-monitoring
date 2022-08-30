@@ -80,7 +80,8 @@ public class autoRun {
 			connectorConfigureTestParams.put("base_url",testConfig.getConnectorConfigureBaseURL());
 			connectorConfigureTestParams.put("port",testConfig.getConnectorConfigurePort());
 			connectorConfigureTestParams.put("domain_name",testConfig.getDomainName());
-
+			connectorConfigureTestParams.put("baseUrlOfConnector",testConfig.getConnectorBaseURL());
+			connectorConfigureTestParams.put("portOfConnector",testConfig.getConnectorPort());
 			connectorConfigureTestParams.put("mongodb_host",testConfig.getMongoDBHost());
 			connectorConfigureTestParams.put("mongodb_port",testConfig.getMongoDBPort());
 			connectorConfigureTestParams.put("mongodb_username",testConfig.getMongoDBUserName());
@@ -402,6 +403,18 @@ public class autoRun {
 			connectorRealtimeCacheControllerTestParams.put("port",testConfig.getConnectorRealtimePort());
 			connectorRealtimeCacheControllerTest.setParameters(connectorRealtimeCacheControllerTestParams);
 			myClasses.add(connectorRealtimeCacheControllerTest);
+		}
+
+		// add test class for 'connector cache controller'
+		if (testConfig.getRunConnectorCacheControllerTest())
+		{
+			XmlClass connectorCacheControllerTest = new XmlClass(testConfig.getConnectorCacheControllerTestClass());
+
+			Map<String,String> connectorCacheControllerTestParams = new HashMap<>();
+			connectorCacheControllerTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			connectorCacheControllerTestParams.put("port",testConfig.getConnectorPort());
+			connectorCacheControllerTest.setParameters(connectorCacheControllerTestParams);
+			myClasses.add(connectorCacheControllerTest);
 		}
 
 		// Add test class for 'test which verify rspdata'

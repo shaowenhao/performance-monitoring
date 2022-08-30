@@ -26,6 +26,11 @@ import org.testng.annotations.Optional;
 
 import java.util.*;
 
+import static com.siemens.datalayer.connector.test.InterfaceTests.checkResponseCode;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+
 @Epic("SDL Connector configure")
 @Feature("Rest api")
 public class ConnectorConfigureTests {
@@ -36,9 +41,10 @@ public class ConnectorConfigureTests {
     private String mongodbPassword;
     private String mongodbDatabasename;
 
-    @Parameters({"base_url", "port", "domain_name","mongodb_host","mongodb_port","mongodb_username","mongodb_password","mongodb_databasename"})
+    @Parameters({"base_url", "port", "domain_name","baseUrlOfConnector","portOfConnector","mongodb_host","mongodb_port","mongodb_username","mongodb_password","mongodb_databasename"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-connector")
-    public void setConnectorConfigureEndpoint(@Optional("http://localhost") String base_url, @Optional("9001") String port, String domain_name,
+    public void setConnectorConfigureEndpoint(@Optional("http://140.231.89.106") String base_url, @Optional("32644") String port, @Optional("JinZu")String domain_name,
+                                              @Optional("http://140.231.89.106") String baseUrlOfConnector,@Optional("31439") String portOfConnector,
                                               @Optional("") String mongodb_host,@Optional("") String mongodb_port,
                                               @Optional("") String mongodb_username,@Optional("") String mongodb_password,
                                               @Optional("") String mongodb_databasename){
@@ -47,6 +53,9 @@ public class ConnectorConfigureTests {
         ConnectorConfigureEndpoint.setBaseUrl(base_url);
         ConnectorConfigureEndpoint.setPort(port);
         ConnectorConfigureEndpoint.setDomainName(domain_name);
+
+        ConnectorEndpoint.setBaseUrl(baseUrlOfConnector);
+        ConnectorEndpoint.setPort(portOfConnector);
 
         mongodbHost = mongodb_host;
         mongodbPort = mongodb_port;
@@ -62,6 +71,74 @@ public class ConnectorConfigureTests {
         {
             Response response = ConnectorConfigureEndpoint.deleteConnector(connectorName);
         } */
+    }
+
+
+    //设置低优先级最后跑相关case
+    @Test(priority = 2,
+            description = "Test Connector-Configure Cache Controller: allCacheNames",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'getAllCacheNames' request to connector-configure cache controller interface.")
+    @Story("Connector-configure Cache Controller: cache interface")
+    public void getAllCacheNames(Map<String, String> paramMaps) {
+
+        Response response = ConnectorConfigureEndpoint.getAllCacheNames();
+        response.prettyPrint();
+        List<String> actualCacheNameList = response.jsonPath().getList("data");
+        String dataList = paramMaps.get("dataList");
+        String[] expectedCacheNames = dataList.split(",");
+        assertThat(actualCacheNameList,is(hasItems(expectedCacheNames)));
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+    }
+
+    @Test(priority = 2,
+            description = "Test Connector-configure Cache Controller: get cache key and value",
+            dataProvider = "connector-configure-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'getAllCacheKeys and getCacheValue' request to connector-configure cache controller interface.")
+    @Story("Connector-configure Cache Controller: cache interface")
+    public void getCacheKeyAndValue(Map<String, String> paramMaps) {
+
+        String cacheName = paramMaps.get("cacheName");
+        // 先清掉所有cache
+        ConnectorConfigureEndpoint.deleteCache(cacheName);
+        HashMap<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("name",paramMaps.get("entityName"));
+        // 调用connector查询 触发cache
+        Response response = ConnectorEndpoint.getConceptModelDataByCondition(queryParameters);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //根据cacheKey查询statictics
+        response = ConnectorConfigureEndpoint.getCacheStatistics(cacheName);
+        response.prettyPrint();
+        checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+        // 根据cacheKey查询 cacheValue
+        response = ConnectorConfigureEndpoint.getAllCacheKeys(cacheName);
+        response.prettyPrint();
+        List<String> dataList = response.jsonPath().getList("data");
+        for (String cacheKeys : dataList) {
+                String[] split = cacheKeys.split("::");
+                String actualCacheKey = split[1];
+                response = ConnectorConfigureEndpoint.getCacheValue(actualCacheKey, cacheName);
+                response.prettyPrint();
+                checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+            }
+
+        //根据cacheName清cache
+        response = ConnectorConfigureEndpoint.deleteCache(cacheName);
+        response.prettyPrint();
+        //查询cacheKey被清空
+        response = ConnectorConfigureEndpoint.getAllCacheKeys(cacheName);
+        response.prettyPrint();
+        dataList = response.jsonPath().getList("data");
+        Assert.assertTrue(dataList.size() == 0);
     }
 
 
@@ -154,7 +231,6 @@ public class ConnectorConfigureTests {
         Map<String, String> mongodbParams = initializeMongoParams();
         checkNumberOfModuleCacheConfig( response, mongodbParams,paramMaps);
     }
-
 
     public Map<String, String> initializeMongoParams() {
         Map<String,String> mongodbParams = new HashMap<>();
