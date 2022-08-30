@@ -47,6 +47,35 @@ public class testWhichVerifyRspdata {
         }
     }
 
+    @Test(priority = 0,
+            description = "test which include multi data source",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'getData' request to graphql query interface.")
+    @Story("test which include multi data source")
+    public void testMultiDataSource(Map<String, String> paramMaps) throws JSONException {
+        if (paramMaps.containsKey("pre-execution")) {
+            String query = paramMaps.get("pre-execution");
+            Response response = ApiEngineEndpoint.postGraphql(query);
+        }
+
+        if (paramMaps.containsKey("graphQLSentence")) {
+            String query = paramMaps.get("graphQLSentence");
+            Response response = ApiEngineEndpoint.postGraphql(query);
+
+            // 校验返回的response的最外层的statusCode，code，message
+            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+            checkResponseData(paramMaps,response);
+        }
+
+        if (paramMaps.containsKey("after-execution")) {
+            String query = paramMaps.get("after-execution");
+            Response response = ApiEngineEndpoint.postGraphql(query);
+        }
+    }
+
     @Step("校验接口返回的rspData")
     public static void checkResponseData(Map<String,String> requestParameters, Response response) throws JSONException {
         if (requestParameters.containsKey("rspData"))

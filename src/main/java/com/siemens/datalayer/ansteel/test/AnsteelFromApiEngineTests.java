@@ -2,7 +2,6 @@ package com.siemens.datalayer.ansteel.test;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
@@ -51,7 +50,7 @@ public class AnsteelFromApiEngineTests {
         try
         {
             // 连接clickhouse
-            connectionOfClickhouse = JdbcMysqlUtil.getConnection("ansteel.dev.clickhouse.db.properties");
+            connectionOfClickhouse = JdbcMysqlUtil.getConnection("ansteel.test.clickhouse.db.properties");
             if(!connectionOfClickhouse.isClosed())
                 System.out.println("Succeeded connecting to the clickhouse!");
 
@@ -257,6 +256,7 @@ public class AnsteelFromApiEngineTests {
         List<Map<String,Object>> listFromDatabase = new ArrayList<>();
 
         String sql = requestParameters.get("sqlStatement");
+        System.out.println("sql: "+sql);
 
         try {
             ResultSet rs = null;
