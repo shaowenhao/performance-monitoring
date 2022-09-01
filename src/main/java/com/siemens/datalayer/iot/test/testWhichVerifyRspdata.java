@@ -55,25 +55,28 @@ public class testWhichVerifyRspdata {
     @Description("Post a 'getData' request to graphql query interface.")
     @Story("test which include multi data source")
     public void testMultiDataSource(Map<String, String> paramMaps) throws JSONException {
+        Response response = null;
+
         if (paramMaps.containsKey("pre-execution")) {
             String query = paramMaps.get("pre-execution");
-            Response response = ApiEngineEndpoint.postGraphql(query);
+            Response responseOfPreExecution = ApiEngineEndpoint.postGraphql(query);
         }
 
         if (paramMaps.containsKey("graphQLSentence")) {
             String query = paramMaps.get("graphQLSentence");
-            Response response = ApiEngineEndpoint.postGraphql(query);
-
-            // 校验返回的response的最外层的statusCode，code，message
-            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
-
-            checkResponseData(paramMaps,response);
+            response = ApiEngineEndpoint.postGraphql(query);
+            System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
         }
 
         if (paramMaps.containsKey("after-execution")) {
             String query = paramMaps.get("after-execution");
-            Response response = ApiEngineEndpoint.postGraphql(query);
+            Response responseOfAfterExecution = ApiEngineEndpoint.postGraphql(query);
         }
+
+        // 校验返回的response的最外层的statusCode，code，message
+        QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+        checkResponseData(paramMaps,response);
     }
 
     @Step("校验接口返回的rspData")
@@ -81,7 +84,7 @@ public class testWhichVerifyRspdata {
         if (requestParameters.containsKey("rspData"))
         {
             // 转换成Map
-            System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
+            // System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
             Map<String,Object> actualResponseData = response.jsonPath().getMap("data");
 
             // 转换成Map，重写TypeAdapter方法为MapTypeAdapter，解决String转换成Map<String,Object>时，会将整数型数据自动添加小数点的问题

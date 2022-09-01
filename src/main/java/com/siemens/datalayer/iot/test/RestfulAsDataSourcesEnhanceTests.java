@@ -44,6 +44,7 @@ public class RestfulAsDataSourcesEnhanceTests {
         if (paramMaps.containsKey("graphQLSentence")) {
             String query = paramMaps.get("graphQLSentence");
             Response response = ApiEngineEndpoint.postGraphql(query);
+            System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
 
             // 校验返回的response的最外层的statusCode，code，message
             QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
@@ -57,7 +58,7 @@ public class RestfulAsDataSourcesEnhanceTests {
         if (requestParameters.containsKey("rspData"))
         {
             // 转换成Map
-            System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
+            // System.out.println("response.jsonPath().prettify(): " + "\n" +response.jsonPath().prettify());
             Map<String,Object> actualResponseData = response.jsonPath().getMap("data");
 
             // 转换成Map，重写TypeAdapter方法为MapTypeAdapter，解决String转换成Map<String,Object>时，会将整数型数据自动添加小数点的问题
