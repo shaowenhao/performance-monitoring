@@ -135,7 +135,7 @@ public class testEnvironmentConstants {
 	public static final String SNC_TEST_UI_BACKEND_PORT = "32572";
 
 	public static final String SNC_TEST_LPG_TRANSFORM_LOAD_BASE_URL = "http://140.231.89.85";
-	public static final String SNC_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT = "32404";
+	public static final String SNC_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT = "30467";
 	// =========================================================================================
 	// Configuration for snc-prod environment
 	// =========================================================================================

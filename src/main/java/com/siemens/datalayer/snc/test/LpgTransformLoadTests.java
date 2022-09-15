@@ -30,7 +30,7 @@ public class LpgTransformLoadTests {
 
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of data-layer-lpg-transform-load")
-    public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("32404") String port)
+    public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30467") String port)
     {
         LpgTransformLoadEndpoint.setBaseUrl(base_url);
         LpgTransformLoadEndpoint.setPort(port);
