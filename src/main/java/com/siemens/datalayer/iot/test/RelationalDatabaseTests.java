@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Epic("SDL Api-engine")
-@Feature("relational databases as data source")
+@Feature("JDBC databases as data source")
 public class RelationalDatabaseTests {
 
     @Parameters({"base_url","port","db_properties"})
@@ -38,12 +38,12 @@ public class RelationalDatabaseTests {
     }
 
     @Test(priority = 0,
-          description = "mysql as data source,Insert/Update/Delete data source",
+          description = "query/insert/update/delete MySQL(data source)",
           dataProvider = "api-engine-test-data-provider",
           dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Post a 'getData' request to graphql query interface.")
-    @Story("mysql as data source,write data source")
+    @Description("Post a 'query or mutation' request to graphql interface.")
+    @Story("MySQL as data source,read/write data source")
     public void postGraphForMysql(Map<String, String> paramMaps) throws JSONException {
 
         // 这两行代码，在testcase最先执行，

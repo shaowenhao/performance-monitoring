@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
-import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
+import com.siemens.datalayer.iot.util.JdbcDatabaseUtil;
 import com.siemens.datalayer.iot.util.MapTypeAdapter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Epic("SDL Api-engine")
-@Feature("relational databases as data source")
+@Feature("JDBC databases as data source")
 public class PostgreSQLAsDataSourceTests {
 
     static Connection connection;
@@ -40,7 +40,7 @@ public class PostgreSQLAsDataSourceTests {
         try
         {
             // 连接数据库
-            connection = JdbcMysqlUtil.getConnection("iot.test.postgresql.db.properties");
+            connection = JdbcDatabaseUtil.getConnection("iot.test.postgresql.db.properties");
             if(!connection.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
 
@@ -91,7 +91,7 @@ public class PostgreSQLAsDataSourceTests {
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Post a 'getData' request to graphql query interface.")
+    @Description("Post a 'query' request to graphql query interface.")
     @Story("PostgreSQL as data source,read data source")
     public void readPostgreSQL(Map<String, String> paramMaps) throws JSONException {
         // 这两行代码，在testcase最先执行，
@@ -130,7 +130,7 @@ public class PostgreSQLAsDataSourceTests {
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Post a 'getData' request to graphql query interface.")
+    @Description("Post a 'mutation' request to graphql query interface.")
     @Story("PostgreSQL as data source,write data source")
     public void writePostgreSQL(Map<String, String> paramMaps) throws JSONException {
         // 在每个testcase执行前，清空当前数据库

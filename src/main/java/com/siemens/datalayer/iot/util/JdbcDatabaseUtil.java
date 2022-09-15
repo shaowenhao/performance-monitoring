@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class JdbcMysqlUtil {
+public class JdbcDatabaseUtil {
     private static String driver;
     private static String url;
     private static String user;
@@ -19,7 +19,7 @@ public class JdbcMysqlUtil {
             Properties properties = new Properties();
 
             // 2.通过反射，新建字符输入流，读取db.properties文件
-            InputStream input = JdbcMysqlUtil.class.getClassLoader().getResourceAsStream("db_properties/" + file);
+            InputStream input = JdbcDatabaseUtil.class.getClassLoader().getResourceAsStream("db_properties/" + file);
 
             // 3.将输入流中读取到的属性，加载到properties属性集对象中
             properties.load(input);

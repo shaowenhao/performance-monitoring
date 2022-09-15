@@ -125,6 +125,19 @@ public class autoRun {
 			myClasses.add(userQueryTest);
 		}
 
+		// Add test class for JDBCDatabasesTests
+		if (testConfig.getRunJDBCDatabasesTest())
+		{
+			XmlClass JDBCDatabasesTest = new XmlClass(testConfig.getJDBCDatabasesTestClass());
+
+			Map<String,String> JDBCDatabasesTestParams = new HashMap<>();
+			JDBCDatabasesTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			JDBCDatabasesTestParams.put("port", testConfig.getApiEnginePort());
+
+			JDBCDatabasesTest.setParameters(JDBCDatabasesTestParams);
+			myClasses.add(JDBCDatabasesTest);
+		}
+
 		// Add test class for relationalDatabaseTest
 		if (testConfig.getRunRelationalDatabaseTest())
 		{

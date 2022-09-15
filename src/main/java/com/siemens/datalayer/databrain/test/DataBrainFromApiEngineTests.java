@@ -8,7 +8,7 @@ import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
 import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
-import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
+import com.siemens.datalayer.iot.util.JdbcDatabaseUtil;
 import com.siemens.datalayer.iot.util.MapTypeAdapter;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
@@ -221,7 +221,7 @@ public class DataBrainFromApiEngineTests {
         try
         {
             // 连接数据库
-            connection = JdbcMysqlUtil.getConnection(db_properties);
+            connection = JdbcDatabaseUtil.getConnection(db_properties);
             if(!connection.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
 

@@ -7,7 +7,7 @@ import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
 import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.connector.test.ConnectorEndpoint;
-import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
+import com.siemens.datalayer.iot.util.JdbcDatabaseUtil;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
@@ -50,7 +50,7 @@ public class AnsteelFromApiEngineTests {
         try
         {
             // 连接clickhouse
-            connectionOfClickhouse = JdbcMysqlUtil.getConnection("ansteel.test.clickhouse.db.properties");
+            connectionOfClickhouse = JdbcDatabaseUtil.getConnection("ansteel.test.clickhouse.db.properties");
             if(!connectionOfClickhouse.isClosed())
                 System.out.println("Succeeded connecting to the clickhouse!");
 
@@ -58,7 +58,7 @@ public class AnsteelFromApiEngineTests {
             statementOfClickhouse = connectionOfClickhouse.createStatement();
 
             // 连接postgreSQL-datacleaning数据库
-            connectionOfPostgreDatacleaning = JdbcMysqlUtil.getConnection("ansteel.dev.postgresql.datacleaning.db.properties");
+            connectionOfPostgreDatacleaning = JdbcDatabaseUtil.getConnection("ansteel.dev.postgresql.datacleaning.db.properties");
             if(!connectionOfPostgreDatacleaning.isClosed())
                 System.out.println("Succeeded connecting to the postgreSQL-datacleaning!");
 
@@ -66,7 +66,7 @@ public class AnsteelFromApiEngineTests {
             statementOfPostgreDatacleaning = connectionOfPostgreDatacleaning.createStatement();
 
             // 连接postgreSQL-datacleaning数据库
-            connectionOfPostgreDatamanagement = JdbcMysqlUtil.getConnection("ansteel.dev.postgresql.datamanagement.db.properties");
+            connectionOfPostgreDatamanagement = JdbcDatabaseUtil.getConnection("ansteel.dev.postgresql.datamanagement.db.properties");
             if(!connectionOfPostgreDatamanagement.isClosed())
                 System.out.println("Succeeded connecting to the postgreSQL-datamanagement!");
 

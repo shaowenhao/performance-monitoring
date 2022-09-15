@@ -52,6 +52,9 @@ public class testConfigurationClass {
 	Boolean runConnectorConfigureTest = false;
 	private String connectorConfigureTestClass = null;
 
+	Boolean runJDBCDatabasesTest = false;
+	private String JDBCDatabasesTestClass = null;
+
 	Boolean runRelationalDatabaseTest = false;
 	private String relationalDatabaseTestClass = null;
 
@@ -480,6 +483,18 @@ public class testConfigurationClass {
 		this.runWebServiceAsDataSourcesTest = true;
 		this.webServiceAsDataSourcesTestClass = webServiceAsDataSourcesTestClassName;
 	}
+
+	// getRunJDBCDatabasesTest、setJDBCDatabasesTestClass、getJDBCDatabasesTestClass
+	// 这三个方法针对“JDBC数据库做为数据源”的测试 而添加
+	public Boolean getRunJDBCDatabasesTest(){return this.runJDBCDatabasesTest;}
+
+	public void setJDBCDatabasesTestClass(String JDBCDatabasesTestClassName)
+	{
+		this.runJDBCDatabasesTest = true;
+		this.JDBCDatabasesTestClass = JDBCDatabasesTestClassName;
+	}
+
+	public String getJDBCDatabasesTestClass(){return this.JDBCDatabasesTestClass;}
 
 	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
 	// 这三个方法针对“关系型数据库做为数据源”的测试 而添加
@@ -1068,7 +1083,10 @@ public class testConfigurationClass {
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
 
-				// 赋值：this.runRelationalDatabaseTest = true;
+				// 赋值：this.runJDBCDatabasesTest = true;
+				setJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.JDBCDatabasesTests");
+
+				/* // 赋值：this.runRelationalDatabaseTest = true;
 				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
 				setRelationalDatabaseProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
@@ -1099,7 +1117,7 @@ public class testConfigurationClass {
 
 				setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
 										testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
-										"com.siemens.datalayer.iot.test.DynamicGraphTests");
+										"com.siemens.datalayer.iot.test.DynamicGraphTests"); */
 				break;
 
 			case("iot-prod"):

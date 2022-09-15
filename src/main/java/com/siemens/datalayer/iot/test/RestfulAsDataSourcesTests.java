@@ -3,7 +3,7 @@ package com.siemens.datalayer.iot.test;
 import com.google.gson.Gson;
 import com.siemens.datalayer.apiengine.test.ApiEngineEndpoint;
 import com.siemens.datalayer.apiengine.test.QueryEndPointTests;
-import com.siemens.datalayer.iot.util.JdbcMysqlUtil;
+import com.siemens.datalayer.iot.util.JdbcDatabaseUtil;
 import com.siemens.datalayer.utils.ExcelDataProviderClass;
 import io.qameta.allure.*;
 import io.restassured.response.Response;
@@ -47,7 +47,7 @@ public class RestfulAsDataSourcesTests {
         try
         {
             // 连接数据库
-            connectionOfUser = JdbcMysqlUtil.getConnection("iot.dev.h2.user.db.properties");
+            connectionOfUser = JdbcDatabaseUtil.getConnection("iot.dev.h2.user.db.properties");
             if(!connectionOfUser.isClosed())
                 System.out.println("Succeeded connecting to the Database:User!");
 
@@ -60,7 +60,7 @@ public class RestfulAsDataSourcesTests {
 
         try
         {
-            connectionOfProduct = JdbcMysqlUtil.getConnection("iot.dev.h2.product.db.properties");
+            connectionOfProduct = JdbcDatabaseUtil.getConnection("iot.dev.h2.product.db.properties");
             if (!connectionOfProduct.isClosed())
                 System.out.println("Succeeded connecting to the Database:Product!");
 
@@ -71,7 +71,7 @@ public class RestfulAsDataSourcesTests {
 
         try
         {
-            connectionOfPerson = JdbcMysqlUtil.getConnection("iot.dev.h2.person.db.properties");
+            connectionOfPerson = JdbcDatabaseUtil.getConnection("iot.dev.h2.person.db.properties");
             if (!connectionOfPerson.isClosed())
                 System.out.println("Succeeded connecting to the Database:Person!");
 
