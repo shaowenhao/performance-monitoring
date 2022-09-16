@@ -26,6 +26,11 @@
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>
       </class> <!-- com.siemens.datalayer.iot.test.JDBCDatabasesTests -->
+      <class name="com.siemens.datalayer.iot.test.MySQLTests">
+        <parameter name="base_url" value="http://140.231.89.106"/>
+        <parameter name="port" value="30346"/>
+        <parameter name="db_properties" value="iot.dev.mysql.db.properties"/>
+      </class> <!-- com.siemens.datalayer.iot.test.MySQLTests -->
       <!-- <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="31873"/>

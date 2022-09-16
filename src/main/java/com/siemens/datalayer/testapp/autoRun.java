@@ -138,18 +138,18 @@ public class autoRun {
 			myClasses.add(JDBCDatabasesTest);
 		}
 
-		// Add test class for relationalDatabaseTest
-		if (testConfig.getRunRelationalDatabaseTest())
+		// Add test class for mySQLTest
+		if (testConfig.getRunMySQLTest())
 		{
-			XmlClass relationalDatabaseTest = new XmlClass(testConfig.getRelationalDatabaseTestClass());
+			XmlClass mySQLTest = new XmlClass(testConfig.getMySQLTestClass());
 
-			Map<String,String> relationalDatabaseTestParams = new HashMap<>();
-			relationalDatabaseTestParams.put("base_url", testConfig.getApiEngineBaseURL());
-			relationalDatabaseTestParams.put("port", testConfig.getApiEnginePort());
-			relationalDatabaseTestParams.put("db_properties",testConfig.getRelationalDatabaseProperties());
+			Map<String,String> mySQLTestParams = new HashMap<>();
+			mySQLTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			mySQLTestParams.put("port", testConfig.getApiEnginePort());
+			mySQLTestParams.put("db_properties",testConfig.getMySQLProperties());
 
-			relationalDatabaseTest.setParameters(relationalDatabaseTestParams);
-			myClasses.add(relationalDatabaseTest);
+			mySQLTest.setParameters(mySQLTestParams);
+			myClasses.add(mySQLTest);
 		}
 
 		// Add test class for RestfulAsDataSourcesTests
@@ -328,7 +328,7 @@ public class autoRun {
 			dataBrainFromApiEngineTestParams.put("portOfConnector",testConfig.getConnectorPort());
 			dataBrainFromApiEngineTestParams.put("baseUrlOfConnectorConfigure",testConfig.getConnectorConfigureBaseURL());
 			dataBrainFromApiEngineTestParams.put("portOfConnectorConfigure",testConfig.getConnectorConfigurePort());
-			dataBrainFromApiEngineTestParams.put("db_properties",testConfig.getRelationalDatabaseProperties());
+			dataBrainFromApiEngineTestParams.put("db_properties",testConfig.getMySQLProperties());
 
 			dataBrainFromApiEngineTest.setParameters(dataBrainFromApiEngineTestParams);
 			myClasses.add(dataBrainFromApiEngineTest);

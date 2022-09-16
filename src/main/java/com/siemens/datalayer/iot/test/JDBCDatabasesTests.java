@@ -65,7 +65,7 @@ public class JDBCDatabasesTests {
         oracleTableList = new ArrayList<>();
     }
 
-    @AfterClass(description = "Delete the data written for testing in databases")
+    @AfterClass(description = "Delete the data written in databases for the test")
     public void deleteDataForDatabases()
     {
         /**
@@ -107,17 +107,11 @@ public class JDBCDatabasesTests {
 
         // 在每个testcase执行前，清空当前数据库
         // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
-        try {
-            String sql = "DELETE FROM " + paramMaps.get("database");
-            statementOfOracle.execute(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        clearDatabase(paramMaps);
 
-        // 这两行代码，在testcase最先执行，
+        // 在testcase最先执行，
         // 作用为：比如query、update、delete数据库前，需要数据库中有数据
-        if (paramMaps.containsKey("pre-execution"))
-            ApiEngineEndpoint.postGraphql(paramMaps.get("pre-execution"));
+        preExecution(paramMaps);
 
         if (paramMaps.containsKey("graphQLSentence")) {
             String query = paramMaps.get("graphQLSentence");
@@ -132,7 +126,23 @@ public class JDBCDatabasesTests {
         }
     }
 
-    @Step("Verify rspdata returned by the interface")
+    @Step("Clear database")
+    public static void clearDatabase(Map<String,String> requestParameters){
+        try {
+            String sql = "DELETE FROM " + requestParameters.get("database");
+            statementOfOracle.execute(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Step("Prepare test data for query/update/delete")
+    public static void preExecution(Map<String,String> requestParameters) {
+        if (requestParameters.containsKey("pre-execution"))
+            ApiEngineEndpoint.postGraphql(requestParameters.get("pre-execution"));
+    }
+
+    @Step("Verify the data returned by the interface")
     public static void checkResponseData(Map<String,String> requestParameters, Response response) throws JSONException {
         if (requestParameters.containsKey("rspData"))
         {
@@ -210,7 +220,7 @@ public class JDBCDatabasesTests {
         return false;
     }
 
-    @Step("Verify the expected results and the actual data stored in database")
+    @Step("Verify the data expected to be stored in the database and the data actually stored")
     public static void verityExpectedAndActualDataInDatabase(Map<String,String> requestParameters) {
         if (requestParameters.containsKey("expectedDataStoredInDatabase"))
         {

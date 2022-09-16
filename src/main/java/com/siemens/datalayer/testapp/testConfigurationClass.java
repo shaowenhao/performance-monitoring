@@ -26,7 +26,7 @@ public class testConfigurationClass {
 	private String mongodb_password = null;
 	private String mongodb_databasename = null;
 
-	private String relationalDatabase_properties = null;
+	private String mySQL_properties = null;
 
 	private String apiService_base_url = null;
 	private String apiService_port = null;
@@ -55,8 +55,8 @@ public class testConfigurationClass {
 	Boolean runJDBCDatabasesTest = false;
 	private String JDBCDatabasesTestClass = null;
 
-	Boolean runRelationalDatabaseTest = false;
-	private String relationalDatabaseTestClass = null;
+	Boolean runMySQLTest = false;
+	private String mySQLTestClass = null;
 
 	Boolean runRestfulAsDataSourcesTest = false;
 	private String restfulAsDataSourcesTestClass = null;
@@ -236,15 +236,15 @@ public class testConfigurationClass {
 		return this.apiEngine_https_port;
 	}
 
-	// setRelationalDatabaseProperties、getRelationalDatabaseProperties
+	// setMySQLProperties、getMySQLProperties
 	// 这两个方法针对获取数据库的配置 而添加
-	public void setRelationalDatabaseProperties(String properties){
-		this.relationalDatabase_properties = properties;
+	public void setMySQLProperties(String properties){
+		this.mySQL_properties = properties;
 	}
 
-	public String getRelationalDatabaseProperties()
+	public String getMySQLProperties()
 	{
-		return this.relationalDatabase_properties;
+		return this.mySQL_properties;
 	}
 
 	// setMongoDBHost、getMongoDBHost、setMongoDBPort、getMongoDBPort、setMongoDBUserName、getMongoDBUserName
@@ -496,22 +496,22 @@ public class testConfigurationClass {
 
 	public String getJDBCDatabasesTestClass(){return this.JDBCDatabasesTestClass;}
 
-	// getRunRelationalDatabaseTest、setRelationalDatabaseTestClass、getRelationalDatabaseTestClass
-	// 这三个方法针对“关系型数据库做为数据源”的测试 而添加
-	public Boolean getRunRelationalDatabaseTest()
+	// getRunMySQLTest、setMySQLTestClass、getMySQLTestClass
+	// 这三个方法针对“MySQL做为数据源”的测试 而添加
+	public Boolean getRunMySQLTest()
 	{
-		return this.runRelationalDatabaseTest;
+		return this.runMySQLTest;
 	}
 
-	public void setRelationalDatabaseTestClass(String relationalDatabaseTestClassName)
+	public void setMySQLTestClass(String mySQLTestClassName)
 	{
-		this.runRelationalDatabaseTest = true;
-		this.relationalDatabaseTestClass = relationalDatabaseTestClassName;
+		this.runMySQLTest = true;
+		this.mySQLTestClass = mySQLTestClassName;
 	}
 
-	public String getRelationalDatabaseTestClass()
+	public String getMySQLTestClass()
 	{
-		return this.relationalDatabaseTestClass;
+		return this.mySQLTestClass;
 	}
 
 	// getRunRestfulAsDataSourcesTests、setRestfulAsDataSourcesTestClass、getRestfulAsDataSourcesTestClass
@@ -804,7 +804,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
-				setRelationalDatabaseProperties(testEnvironmentConstants.IEMS_DEV_DB_PROPERTIES);
+				setMySQLProperties(testEnvironmentConstants.IEMS_DEV_DB_PROPERTIES);
 				
 				break;
 			
@@ -1044,10 +1044,6 @@ public class testConfigurationClass {
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						                testEnvironmentConstants.IOT_DEV_SUBSCRIPTION_MANAGEMENT_PORT);
 
-				// 赋值：this.runRelationalDatabaseTest = true;
-				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				setRelationalDatabaseProperties(testEnvironmentConstants.IOT_DEV_DB_PROPERTIES);
-
 				// 赋值：this.runConnectorRealtimeTest = true;
 				// setConnectorRealtimeTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeTests");
 
@@ -1086,11 +1082,11 @@ public class testConfigurationClass {
 				// 赋值：this.runJDBCDatabasesTest = true;
 				setJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.JDBCDatabasesTests");
 
-				/* // 赋值：this.runRelationalDatabaseTest = true;
-				setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				setRelationalDatabaseProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
+				// 赋值：this.runMySQLTest = true;
+				setMySQLTestClass("com.siemens.datalayer.iot.test.MySQLTests");
+				setMySQLProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
-				// 赋值：this.runRestfulAsDataSourcesTest = true;
+				/* // 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
 				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
@@ -1144,10 +1140,6 @@ public class testConfigurationClass {
 				setSubscriptionMgmtTest(testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_BASE_URL,
 						testEnvironmentConstants.IOT_PROD_SUBSCRIPTION_MANAGEMENT_PORT);
 
-				// 赋值：this.runRelationalDatabaseTest = true;
-				// setRelationalDatabaseTestClass("com.siemens.datalayer.iot.test.RelationalDatabaseTests");
-				// setRelationalDatabaseTest(testEnvironmentConstants.IOT_PROD_DB_PROPERTIES);
-
 				break;
 
 			case("databrain-dev"):
@@ -1198,7 +1190,7 @@ public class testConfigurationClass {
 
 				// 赋值：this.runDataBrainFromApiEngineTest = true;
 				setDataBrainFromApiEngineTestClass("com.siemens.datalayer.databrain.test.DataBrainFromApiEngineTests");
-				setRelationalDatabaseProperties(testEnvironmentConstants.DATABRAIN_PROD_DB_PROPERTIES);
+				setMySQLProperties(testEnvironmentConstants.DATABRAIN_PROD_DB_PROPERTIES);
 
 				break;
 

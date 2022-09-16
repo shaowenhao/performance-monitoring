@@ -42,7 +42,7 @@ public class ApiEngineEndpoint {
     }
     
     // API Engine Query Endpoint: getData (graphql interface)
-    @Step("Send a graphql query request 'getData' to data-layer-api-engine")
+    @Step("Send a graphql 'query or mutation' request to data-layer-api-engine")
     public static Response postGraphql(String query) {
         RestAssured.baseURI = BASE_URL;
         RestAssured.port = Integer.valueOf(port).intValue();
