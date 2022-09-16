@@ -1086,6 +1086,9 @@ public class testConfigurationClass {
 				setMySQLTestClass("com.siemens.datalayer.iot.test.MySQLTests");
 				setMySQLProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
+				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
+				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
+
 				/* // 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
@@ -1100,10 +1103,6 @@ public class testConfigurationClass {
 
 				// 赋值：this.runWebServiceAsDataSourcesTest = true;
 				setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
-
-
-				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
-				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
 				// 赋值：this.runClickhouseAsDataSourcesTest = true;
 				setClickhouseAsDataSourceTestClass("com.siemens.datalayer.iot.test.ClickhouseAsDataSourceTests");

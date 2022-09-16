@@ -59,7 +59,7 @@ public class PostgreSQLAsDataSourceTests {
         databaseTableList = new ArrayList<>();
     }
 
-    @AfterClass(description = "Delete the data written for testing in Mysql")
+    @AfterClass(description = "Delete the data written in PostgreSQL for the test")
     public void deleteDataForPostgreSQL()
     {
         try
@@ -91,25 +91,16 @@ public class PostgreSQLAsDataSourceTests {
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Post a 'query' request to graphql query interface.")
+    @Description("Post a 'query' request to graphql interface.")
     @Story("PostgreSQL as data source,read data source")
     public void readPostgreSQL(Map<String, String> paramMaps) throws JSONException {
-        // 这两行代码，在testcase最先执行，
-        // 作用为：测试query PostgresSQL之前，先清空数据库，然后调用api-engine /graphql在数据库中插入几条数据
-        if (paramMaps.containsKey("pre-execution") && paramMaps.containsKey("database"))
-        {
-            try{
-                String sql = "DELETE FROM " + paramMaps.get("database");
-                statement.execute(sql);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            ApiEngineEndpoint.postGraphql(paramMaps.get("pre-execution"));
+        // 在每个testcase执行前，清空当前数据库
+        // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
+        clearDatabase(paramMaps);
 
-            if (!databaseTableList.contains(paramMaps.get("database"))) {
-                databaseTableList.add(paramMaps.get("database"));
-            }
-        }
+        // 在testcase最先执行，
+        // 作用为：比如query、update、delete数据库前，需要数据库中有数据
+        preExecution(paramMaps);
 
         if (paramMaps.containsKey("query")) {
             String query = paramMaps.get("query");
@@ -126,11 +117,11 @@ public class PostgreSQLAsDataSourceTests {
 
     @Test(  dependsOnMethods = { "readPostgreSQL"},
             priority = 0,
-            description = "Insert/Update/Delete PostgresSQL(data source)",
+            description = "insert/update/delete Oracle(data source)",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
-    @Description("Post a 'mutation' request to graphql query interface.")
+    @Description("Post a 'mutation' request to graphql interface.")
     @Story("PostgreSQL as data source,write data source")
     public void writePostgreSQL(Map<String, String> paramMaps) throws JSONException {
         // 在每个testcase执行前，清空当前数据库
@@ -173,7 +164,23 @@ public class PostgreSQLAsDataSourceTests {
         }
     }
 
-    @Step("校验接口返回的rspData")
+    @Step("Clear database")
+    public static void clearDatabase(Map<String,String> requestParameters){
+        try {
+            String sql = "DELETE FROM " + requestParameters.get("database");
+            statement.execute(sql);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Step("Prepare test data for query/update/delete")
+    public static void preExecution(Map<String,String> requestParameters) {
+        if (requestParameters.containsKey("pre-execution"))
+            ApiEngineEndpoint.postGraphql(requestParameters.get("pre-execution"));
+    }
+
+    @Step("Verify the data returned by the interface")
     public static void checkResponseData(Map<String,String> requestParameters, Response response) throws JSONException {
         if (requestParameters.containsKey("rspData"))
         {
@@ -193,7 +200,7 @@ public class PostgreSQLAsDataSourceTests {
         }
     }
 
-    @Step("verify the expected results and the actual data stored in PostgreSQL")
+    @Step("Verify the data expected to be stored in the PostgreSQL and the data actually stored")
     public static void verityExpectedAndActualDataInPostgreSQL(String database, String expectResultsFromExcel)
     {
         List<Map<String,Object>> expectListFromExcel = new ArrayList<>();
