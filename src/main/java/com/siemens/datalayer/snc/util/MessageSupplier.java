@@ -17,9 +17,9 @@ public class MessageSupplier implements Supplier<String> {
 
 		// Alarm enity in SNC-TEST, send  following message to kafka with will generated instance-kg
 		// Cyclye不一样 会清掉重新建立instance-kg
-
+        // Context_id was grapname
 			message = "{"
-					+ "	\"context_id\": \"1\",\n"
+					+ "	\"context_id\": \"janusgraph_snc_test_instance_kg\",\n"
 					+ "	\"graphql_count\": \"2\",\n"
 					+ "	\"graphql_id\": \"1\",\n"
 					+ "	\"graphql_id_total_count\": 255,\n"
