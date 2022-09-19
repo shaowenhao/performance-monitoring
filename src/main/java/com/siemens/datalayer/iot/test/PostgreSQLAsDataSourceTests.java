@@ -117,7 +117,7 @@ public class PostgreSQLAsDataSourceTests {
 
     @Test(  dependsOnMethods = { "readPostgreSQL"},
             priority = 0,
-            description = "insert/update/delete Oracle(data source)",
+            description = "insert/update/delete PostgreSQL(data source)",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
     @Severity(SeverityLevel.BLOCKER)
