@@ -18,6 +18,7 @@ import org.testng.annotations.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -27,10 +28,15 @@ import java.util.stream.Collectors;
 @Epic("SDL Api-engine")
 @Feature("JDBC databases as data source")
 public class JDBCDatabasesTests {
+    // for Oracle
     static Connection connectionOfOracle;
     static Statement statementOfOracle;
+    // for SQL Server
+    static Connection connectionOfSqlServer;
+    static Statement statementOfSqlServer;
 
     static List<String> oracleTableList;
+    static List<String> sqlserverTableList;
 
     @Parameters({"base_url","port"})
     @BeforeClass(description = "Configure the host address,communication port of data-layer-api-engine;")
@@ -57,12 +63,31 @@ public class JDBCDatabasesTests {
             throwables.printStackTrace();
         }
 
+        /**
+         连接数据库：SQL Server
+         */
+        // 保持数据库连接不断开，最后在AfterClass(deleteDataForDatabases)中关闭数据库连接
+        try
+        {
+            // 连接数据库
+            connectionOfSqlServer = JdbcDatabaseUtil.getConnection("iot.test.sqlserver.db.properties");
+            if(!connectionOfSqlServer.isClosed())
+                System.out.println("Succeeded connecting to the Database!");
+
+            // 操作数据库
+            statementOfSqlServer = connectionOfSqlServer.createStatement();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         // 连接数据库的方式
         // 1、新建数据库配置文件(resources.iot.dev.mysql.db.properties)
         // 2、获取配置文件信息(com.siemens.datalayer.iot.util.JdbcUtil)
         // 3、注册数据库驱动
 
         oracleTableList = new ArrayList<>();
+        sqlserverTableList = new ArrayList<>();
     }
 
     @AfterClass(description = "Delete the data written in databases for the test")
@@ -88,6 +113,31 @@ public class JDBCDatabasesTests {
             // 断开数据库的连接，释放资源
             statementOfOracle.close();
             connectionOfOracle.close();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        /**
+         还原现场：SQL Server
+         */
+        try
+        {
+            System.out.println(sqlserverTableList);
+            // 需要执行的sql语句，删除testcase中写入的数据，还原现场
+            if(sqlserverTableList.size() > 0)
+            {
+                for (String databaseTable : sqlserverTableList)
+                {
+                    // 需要执行的sql语句
+                    String sql = "DELETE FROM " + databaseTable;
+                    statementOfSqlServer.execute(sql);
+                }
+            }
+
+            // 断开数据库的连接，释放资源
+            statementOfSqlServer.close();
+            connectionOfSqlServer.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -126,13 +176,57 @@ public class JDBCDatabasesTests {
         }
     }
 
+    @Test(priority = 0,
+            description = "query/insert/update/delete SQL Server(data source)",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'query or mutation' request to graphql interface.")
+    @Story("SQL Server as data source,read/write data source")
+    public void readWriteSqlServer(Map<String, String> paramMaps) throws JSONException {
+        if (!sqlserverTableList.contains(paramMaps.get("database")))
+            sqlserverTableList.add(paramMaps.get("database"));
+
+        // 在每个testcase执行前，清空当前数据库
+        // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
+        clearDatabase(paramMaps);
+
+        // 在testcase最先执行，
+        // 作用为：比如query、update、delete数据库前，需要数据库中有数据
+        preExecution(paramMaps);
+
+        if (paramMaps.containsKey("graphQLSentence")) {
+            String query = paramMaps.get("graphQLSentence");
+            Response response = ApiEngineEndpoint.postGraphql(query);
+
+            // 校验返回的response的最外层的statusCode，code，message
+            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+            checkResponseData(paramMaps,response);
+
+            verityExpectedAndActualDataInDatabase(paramMaps);
+        }
+    }
+
     @Step("Clear database")
     public static void clearDatabase(Map<String,String> requestParameters){
-        try {
-            String sql = "DELETE FROM " + requestParameters.get("database");
-            statementOfOracle.execute(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        if (requestParameters.get("graphQLSentence").contains("Oracle"))
+        {
+            try {
+                String sql = "DELETE FROM " + requestParameters.get("database");
+                statementOfOracle.execute(sql);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
+        {
+            try {
+                String sql = "DELETE FROM " + requestParameters.get("database");
+                statementOfSqlServer.execute(sql);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 
@@ -225,6 +319,7 @@ public class JDBCDatabasesTests {
         if (requestParameters.containsKey("expectedDataStoredInDatabase"))
         {
             List<Map<String,Object>> expectListFromExcel = new ArrayList<>();
+            ResultSet rs = null;
 
             // 转换成Map，重写TypeAdapter方法为MapTypeAdapter，解决String转换成List<Map<String,Object>>时，会将整数型数据自动添加小数点的问题
             Gson gson = new GsonBuilder()
@@ -241,7 +336,14 @@ public class JDBCDatabasesTests {
             try {
                 String sql = "SELECT * from " + requestParameters.get("database") + " order by \"ID\" ";
 
-                ResultSet rs = statementOfOracle.executeQuery(sql);
+                if (requestParameters.get("graphQLSentence").contains("Oracle"))
+                {
+                    rs = statementOfOracle.executeQuery(sql);
+                }
+                else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
+                {
+                    rs = statementOfSqlServer.executeQuery(sql);
+                }
                 ResultSetMetaData metaData = rs.getMetaData();
 
                 while (rs.next()){
@@ -273,17 +375,22 @@ public class JDBCDatabasesTests {
 
                     if (rowColumnOfDatabaseValue instanceof Integer)
                     {
-                        Assert.assertEquals(MapUtils.getInteger(expectListFromExcel.get(i),rowColumnOfDatabaseKey),rowColumnOfDatabaseValue);
+                        Assert.assertEquals(rowColumnOfDatabaseValue,MapUtils.getInteger(expectListFromExcel.get(i),rowColumnOfDatabaseKey));
                     }
 
                     else if (rowColumnOfDatabaseValue instanceof BigDecimal)
                     {
-                        Assert.assertEquals(expectListFromExcel.get(i).get(rowColumnOfDatabaseKey).toString(),rowColumnOfDatabaseValue.toString());
+                        Assert.assertEquals(rowColumnOfDatabaseValue.toString(),expectListFromExcel.get(i).get(rowColumnOfDatabaseKey).toString());
                     }
 
                     else if (rowColumnOfDatabaseValue instanceof Float)
                     {
-                        Assert.assertEquals(MapUtils.getFloat(expectListFromExcel.get(i),rowColumnOfDatabaseKey), (Float) rowColumnOfDatabaseValue,0.001);
+                        Assert.assertEquals((Float) rowColumnOfDatabaseValue,MapUtils.getFloat(expectListFromExcel.get(i),rowColumnOfDatabaseKey), 0.001);
+                    }
+
+                    else if (rowColumnOfDatabaseValue instanceof Double)
+                    {
+                        Assert.assertEquals((Double) rowColumnOfDatabaseValue,MapUtils.getDouble(expectListFromExcel.get(i),rowColumnOfDatabaseKey), 0.001);
                     }
 
                     else if (rowColumnOfDatabaseValue instanceof LocalDateTime)
@@ -295,13 +402,20 @@ public class JDBCDatabasesTests {
                         LocalDateTime ldt = LocalDateTime.parse(MapUtils.getString(expectListFromExcel.get(i),rowColumnOfDatabaseKey),dfWithT);
 
                         // 将localdatetime格式转换成string格式，使用“格式二”
-                        String login_time = df.format(ldt);
+                        String loginTime = df.format(ldt);
                         Assert.assertEquals(ldt,rowColumnOfDatabaseValue);
+                    }
+
+                    else if (rowColumnOfDatabaseValue instanceof Timestamp)
+                    {
+                        // Timestamp转String
+                        String loginTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(rowColumnOfDatabaseValue);
+                        Assert.assertEquals(loginTime,expectListFromExcel.get(i).get(rowColumnOfDatabaseKey));
                     }
 
                     else
                     {
-                        Assert.assertEquals(expectListFromExcel.get(i).get(rowColumnOfDatabaseKey),rowColumnOfDatabaseValue);
+                        Assert.assertEquals(rowColumnOfDatabaseValue,expectListFromExcel.get(i).get(rowColumnOfDatabaseKey));
                     }
                 }
             }
