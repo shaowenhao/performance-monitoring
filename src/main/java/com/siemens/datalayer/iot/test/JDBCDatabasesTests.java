@@ -34,9 +34,13 @@ public class JDBCDatabasesTests {
     // for SQL Server
     static Connection connectionOfSqlServer;
     static Statement statementOfSqlServer;
+    // for H2
+    static Connection connectionOfH2;
+    static Statement statementOfH2;
 
     static List<String> oracleTableList;
     static List<String> sqlserverTableList;
+    static List<String> h2TableList;
 
     @Parameters({"base_url","port"})
     @BeforeClass(description = "Configure the host address,communication port of data-layer-api-engine;")
@@ -76,6 +80,24 @@ public class JDBCDatabasesTests {
 
             // 操作数据库
             statementOfSqlServer = connectionOfSqlServer.createStatement();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        /**
+         连接数据库：H2
+         */
+        // 保持数据库连接不断开，最后在AfterClass(deleteDataForDatabases)中关闭数据库连接
+        try
+        {
+            // 连接数据库
+            connectionOfH2 = JdbcDatabaseUtil.getConnection("iot.test.h2.db.properties");
+            if(!connectionOfH2.isClosed())
+                System.out.println("Succeeded connecting to the Database!");
+
+            // 操作数据库
+            statementOfH2 = connectionOfH2.createStatement();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -176,7 +198,7 @@ public class JDBCDatabasesTests {
         }
     }
 
-    @Test(priority = 0,
+    /* @Test(priority = 0,
             description = "query/insert/update/delete SQL Server(data source)",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
@@ -206,7 +228,7 @@ public class JDBCDatabasesTests {
 
             verityExpectedAndActualDataInDatabase(paramMaps);
         }
-    }
+    } */
 
     @Step("Clear database")
     public static void clearDatabase(Map<String,String> requestParameters){
