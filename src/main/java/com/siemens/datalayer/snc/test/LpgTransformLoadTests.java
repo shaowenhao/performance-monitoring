@@ -54,7 +54,7 @@ public class LpgTransformLoadTests {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Response response = LpgTransformLoadEndpoint.getGraph();
+        Response response = LpgTransformLoadEndpoint.searchGraph("release160","Alarm");
         int actualInstancekgNum = checkInstancekgNum(response);
         System.out.println("nums of gererated instance-kg:" + actualInstancekgNum);
         assertThat(actualInstancekgNum,allOf(greaterThanOrEqualTo(1),lessThanOrEqualTo(5)));

@@ -19,7 +19,7 @@ public class MessageSupplier implements Supplier<String> {
 		// Cyclye不一样 会清掉重新建立instance-kg
         // Context_id was grapname
 			message = "{"
-					+ "	\"context_id\": \"janusgraph_snc_test_instance_kg\",\n"
+					+ "	\"context_id\": \"release160\",\n"
 					+ "	\"graphql_count\": \"2\",\n"
 					+ "	\"graphql_id\": \"1\",\n"
 					+ "	\"graphql_id_total_count\": 255,\n"
