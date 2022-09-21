@@ -343,7 +343,7 @@
                             <minimizeJar>true</minimizeJar>
                             <filters>
                                 <filter>
-                                    <artifact>mssql-jdbc:*</artifact>
+                                    <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
@@ -354,7 +354,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>s
         </plugins>
     </build>
 
