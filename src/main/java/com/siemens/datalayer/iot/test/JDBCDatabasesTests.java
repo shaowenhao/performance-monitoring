@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Date;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -92,7 +93,7 @@ public class JDBCDatabasesTests {
         try
         {
             // 连接数据库
-            connectionOfH2 = JdbcDatabaseUtil.getConnection("iot.test.h2.db.properties");
+            connectionOfH2 = JdbcDatabaseUtil.getConnection("iot.dev.h2.user.db.properties");
             if(!connectionOfH2.isClosed())
                 System.out.println("Succeeded connecting to the Database!");
 
@@ -110,6 +111,7 @@ public class JDBCDatabasesTests {
 
         oracleTableList = new ArrayList<>();
         sqlserverTableList = new ArrayList<>();
+        h2TableList = new ArrayList<>();
     }
 
     @AfterClass(description = "Delete the data written in databases for the test")
@@ -164,6 +166,31 @@ public class JDBCDatabasesTests {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        /**
+         还原现场：H2
+         */
+        try
+        {
+            System.out.println(h2TableList);
+            // 需要执行的sql语句，删除testcase中写入的数据，还原现场
+            if(h2TableList.size() > 0)
+            {
+                for (String databaseTable : h2TableList)
+                {
+                    // 需要执行的sql语句
+                    String sql = "DELETE FROM " + databaseTable;
+                    statementOfH2.execute(sql);
+                }
+            }
+
+            // 断开数据库的连接，释放资源
+            statementOfH2.close();
+            connectionOfH2.close();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     @Test(priority = 0,
@@ -198,7 +225,7 @@ public class JDBCDatabasesTests {
         }
     }
 
-    /* @Test(priority = 0,
+    @Test(priority = 0,
             description = "query/insert/update/delete SQL Server(data source)",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
@@ -228,7 +255,39 @@ public class JDBCDatabasesTests {
 
             verityExpectedAndActualDataInDatabase(paramMaps);
         }
-    } */
+    }
+
+    @Test(priority = 0,
+            description = "query/insert/update/delete H2(data source)",
+            dataProvider = "api-engine-test-data-provider",
+            dataProviderClass = ExcelDataProviderClass.class)
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Post a 'query or mutation' request to graphql interface.")
+    @Story("H2 as data source,read/write data source")
+    public void readWriteH2(Map<String, String> paramMaps) throws JSONException {
+        if (!h2TableList.contains(paramMaps.get("database")))
+            h2TableList.add(paramMaps.get("database"));
+
+        // 在每个testcase执行前，清空当前数据库
+        // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
+        clearDatabase(paramMaps);
+
+        // 在testcase最先执行，
+        // 作用为：比如query、update、delete数据库前，需要数据库中有数据
+        preExecution(paramMaps);
+
+        if (paramMaps.containsKey("graphQLSentence")) {
+            String query = paramMaps.get("graphQLSentence");
+            Response response = ApiEngineEndpoint.postGraphql(query);
+
+            // 校验返回的response的最外层的statusCode，code，message
+            QueryEndPointTests.checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
+
+            checkResponseData(paramMaps,response);
+
+            verityExpectedAndActualDataInDatabase(paramMaps);
+        }
+    }
 
     @Step("Clear database")
     public static void clearDatabase(Map<String,String> requestParameters){
@@ -246,6 +305,15 @@ public class JDBCDatabasesTests {
             try {
                 String sql = "DELETE FROM " + requestParameters.get("database");
                 statementOfSqlServer.execute(sql);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        else if (requestParameters.get("graphQLSentence").contains("H2"))
+        {
+            try {
+                String sql = "DELETE FROM " + requestParameters.get("database");
+                statementOfH2.execute(sql);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -366,6 +434,10 @@ public class JDBCDatabasesTests {
                 {
                     rs = statementOfSqlServer.executeQuery(sql);
                 }
+                else if (requestParameters.get("graphQLSentence").contains("H2"))
+                {
+                    rs = statementOfH2.executeQuery(sql);
+                }
                 ResultSetMetaData metaData = rs.getMetaData();
 
                 while (rs.next()){
@@ -394,6 +466,7 @@ public class JDBCDatabasesTests {
                 {
                     String rowColumnOfDatabaseKey = actualMapFromDatabase.getKey();
                     Object rowColumnOfDatabaseValue = actualMapFromDatabase.getValue();
+                    System.out.println(rowColumnOfDatabaseValue.getClass() + "," + expectListFromExcel.get(i).get(rowColumnOfDatabaseKey).getClass());
 
                     if (rowColumnOfDatabaseValue instanceof Integer)
                     {
@@ -432,6 +505,12 @@ public class JDBCDatabasesTests {
                     {
                         // Timestamp转String
                         String loginTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(rowColumnOfDatabaseValue);
+                        Assert.assertEquals(loginTime,expectListFromExcel.get(i).get(rowColumnOfDatabaseKey));
+                    }
+
+                    else if (rowColumnOfDatabaseValue instanceof Date)
+                    {
+                        String loginTime = new SimpleDateFormat("yyyy-MM-dd").format(rowColumnOfDatabaseValue);
                         Assert.assertEquals(loginTime,expectListFromExcel.get(i).get(rowColumnOfDatabaseKey));
                     }
 

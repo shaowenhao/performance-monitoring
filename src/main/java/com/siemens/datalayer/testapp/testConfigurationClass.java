@@ -1089,7 +1089,7 @@ public class testConfigurationClass {
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
 				setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
-				// 赋值：this.runRestfulAsDataSourcesTest = true;
+				/* // 赋值：this.runRestfulAsDataSourcesTest = true;
 				setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
 				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
@@ -1112,7 +1112,7 @@ public class testConfigurationClass {
 
 				setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
 										testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
-										"com.siemens.datalayer.iot.test.DynamicGraphTests");
+										"com.siemens.datalayer.iot.test.DynamicGraphTests"); */
 				break;
 
 			case("iot-prod"):
