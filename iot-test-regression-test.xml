@@ -10,39 +10,39 @@
     <parameter name="dataFileForEntityMgmtTest" value="iot-entity-management-test-data.xlsx"/>
     <parameter name="dataFileForSubMgmtTest" value="iot-subscription-management-test-data.xlsx"/>
     <classes>
-      <class name="com.siemens.datalayer.connector.test.InterfaceTests">
+      <!-- <class name="com.siemens.datalayer.connector.test.InterfaceTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="domain_name" value="IOT"/>
         <parameter name="port" value="30850"/>
-      </class> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
-      <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
+      </class> --> <!-- com.siemens.datalayer.connector.test.InterfaceTests -->
+      <!-- <class name="com.siemens.datalayer.apiengine.test.QueryEndPointTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>
         <methods>
           <exclude name="getDataGraphQLHttps"/>
         </methods>
-      </class> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
+      </class> --> <!-- com.siemens.datalayer.apiengine.test.QueryEndPointTests -->
       <class name="com.siemens.datalayer.iot.test.JDBCDatabasesTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>
       </class> <!-- com.siemens.datalayer.iot.test.JDBCDatabasesTests -->
-      <class name="com.siemens.datalayer.iot.test.MySQLTests">
+      <class name="com.siemens.datalayer.iot.test.OtherJDBCDatabaseTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>
         <parameter name="db_properties" value="iot.dev.mysql.db.properties"/>
-      </class> <!-- com.siemens.datalayer.iot.test.MySQLTests -->
-      <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
+      </class> <!-- com.siemens.datalayer.iot.test.OtherJDBCDatabaseTests -->
+      <!-- <class name="com.siemens.datalayer.entitymanagement.test.EntityManagementTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="31873"/>
         <methods>
           <exclude name="publishGraph"/>
           <exclude name="updateCheck"/>
         </methods>
-      </class> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
-      <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
+      </class> --> <!-- com.siemens.datalayer.entitymanagement.test.EntityManagementTests -->
+      <!-- <class name="com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>
-      </class> <!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->
+      </class> --> <!-- com.siemens.datalayer.subscriptionmanagement.test.SubscriptionManagementTests -->
       <class name="com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests">
         <parameter name="base_url" value="http://140.231.89.106"/>
         <parameter name="port" value="30346"/>

@@ -55,8 +55,8 @@ public class testConfigurationClass {
 	Boolean runJDBCDatabasesTest = false;
 	private String JDBCDatabasesTestClass = null;
 
-	Boolean runMySQLTest = false;
-	private String mySQLTestClass = null;
+	Boolean runOtherJDBCDatabasesTest = false;
+	private String otherJDBCDatabasesTestClass = null;
 
 	Boolean runRestfulAsDataSourcesTest = false;
 	private String restfulAsDataSourcesTestClass = null;
@@ -496,22 +496,22 @@ public class testConfigurationClass {
 
 	public String getJDBCDatabasesTestClass(){return this.JDBCDatabasesTestClass;}
 
-	// getRunMySQLTest、setMySQLTestClass、getMySQLTestClass
-	// 这三个方法针对“MySQL做为数据源”的测试 而添加
-	public Boolean getRunMySQLTest()
+	// getRunOtherJDBCDatabasesTest、setOtherJDBCDatabasesTestClass、getOtherJDBCDatabasesTestClass
+	// 这三个方法针对“otherJDBCDatabases做为数据源”的测试 而添加
+	public Boolean getRunOtherJDBCDatabasesTest()
 	{
-		return this.runMySQLTest;
+		return this.runOtherJDBCDatabasesTest;
 	}
 
-	public void setMySQLTestClass(String mySQLTestClassName)
+	public void setOtherJDBCDatabasesTestClass(String otherJDBCDatabasesTestClassName)
 	{
-		this.runMySQLTest = true;
-		this.mySQLTestClass = mySQLTestClassName;
+		this.runOtherJDBCDatabasesTest = true;
+		this.otherJDBCDatabasesTestClass = otherJDBCDatabasesTestClassName;
 	}
 
-	public String getMySQLTestClass()
+	public String getOtherJDBCDatabasesTestClass()
 	{
-		return this.mySQLTestClass;
+		return this.otherJDBCDatabasesTestClass;
 	}
 
 	// getRunRestfulAsDataSourcesTests、setRestfulAsDataSourcesTestClass、getRestfulAsDataSourcesTestClass
@@ -1082,8 +1082,8 @@ public class testConfigurationClass {
 				// 赋值：this.runJDBCDatabasesTest = true;
 				setJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.JDBCDatabasesTests");
 
-				// 赋值：this.runMySQLTest = true;
-				setMySQLTestClass("com.siemens.datalayer.iot.test.MySQLTests");
+				// 赋值：this.runOtherJDBCDatabasesTest = true;
+				setOtherJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.OtherJDBCDatabaseTests");
 				setMySQLProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;

@@ -33,14 +33,14 @@ public class JDBCDatabasesTests {
     static Connection connectionOfOracle;
     static Statement statementOfOracle;
     // for SQL Server
-    static Connection connectionOfSqlServer;
-    static Statement statementOfSqlServer;
+    // static Connection connectionOfSqlServer;
+    // static Statement statementOfSqlServer;
     // for H2
     static Connection connectionOfH2;
     static Statement statementOfH2;
 
     static List<String> oracleTableList;
-    static List<String> sqlserverTableList;
+    // static List<String> sqlserverTableList;
     static List<String> h2TableList;
 
     @Parameters({"base_url","port"})
@@ -71,7 +71,7 @@ public class JDBCDatabasesTests {
         /**
          连接数据库：SQL Server
          */
-        // 保持数据库连接不断开，最后在AfterClass(deleteDataForDatabases)中关闭数据库连接
+        /* // 保持数据库连接不断开，最后在AfterClass(deleteDataForDatabases)中关闭数据库连接
         try
         {
             // 连接数据库
@@ -84,7 +84,7 @@ public class JDBCDatabasesTests {
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
+        } */
 
         /**
          连接数据库：H2
@@ -110,7 +110,7 @@ public class JDBCDatabasesTests {
         // 3、注册数据库驱动
 
         oracleTableList = new ArrayList<>();
-        sqlserverTableList = new ArrayList<>();
+        // sqlserverTableList = new ArrayList<>();
         h2TableList = new ArrayList<>();
     }
 
@@ -145,7 +145,7 @@ public class JDBCDatabasesTests {
         /**
          还原现场：SQL Server
          */
-        try
+        /* try
         {
             System.out.println(sqlserverTableList);
             // 需要执行的sql语句，删除testcase中写入的数据，还原现场
@@ -165,7 +165,7 @@ public class JDBCDatabasesTests {
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
+        } */
 
         /**
          还原现场：H2
@@ -225,7 +225,7 @@ public class JDBCDatabasesTests {
         }
     }
 
-    @Test(priority = 0,
+    /* @Test(priority = 0,
             description = "query/insert/update/delete SQL Server(data source)",
             dataProvider = "api-engine-test-data-provider",
             dataProviderClass = ExcelDataProviderClass.class)
@@ -255,7 +255,7 @@ public class JDBCDatabasesTests {
 
             verityExpectedAndActualDataInDatabase(paramMaps);
         }
-    }
+    } */
 
     @Test(priority = 0,
             description = "query/insert/update/delete H2(data source)",
@@ -300,7 +300,7 @@ public class JDBCDatabasesTests {
                 throwables.printStackTrace();
             }
         }
-        else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
+        /* else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
         {
             try {
                 String sql = "DELETE FROM " + requestParameters.get("database");
@@ -308,7 +308,7 @@ public class JDBCDatabasesTests {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }
+        } */
         else if (requestParameters.get("graphQLSentence").contains("H2"))
         {
             try {
@@ -430,10 +430,10 @@ public class JDBCDatabasesTests {
                 {
                     rs = statementOfOracle.executeQuery(sql);
                 }
-                else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
+                /* else if (requestParameters.get("graphQLSentence").contains("SqlServer"))
                 {
                     rs = statementOfSqlServer.executeQuery(sql);
-                }
+                } */
                 else if (requestParameters.get("graphQLSentence").contains("H2"))
                 {
                     rs = statementOfH2.executeQuery(sql);

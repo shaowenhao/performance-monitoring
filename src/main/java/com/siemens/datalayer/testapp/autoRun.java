@@ -138,18 +138,18 @@ public class autoRun {
 			myClasses.add(JDBCDatabasesTest);
 		}
 
-		// Add test class for mySQLTest
-		if (testConfig.getRunMySQLTest())
+		// Add test class for OtherJDBCDatabasesTests
+		if (testConfig.getRunOtherJDBCDatabasesTest())
 		{
-			XmlClass mySQLTest = new XmlClass(testConfig.getMySQLTestClass());
+			XmlClass otherJDBCDatabasesTest = new XmlClass(testConfig.getOtherJDBCDatabasesTestClass());
 
-			Map<String,String> mySQLTestParams = new HashMap<>();
-			mySQLTestParams.put("base_url", testConfig.getApiEngineBaseURL());
-			mySQLTestParams.put("port", testConfig.getApiEnginePort());
-			mySQLTestParams.put("db_properties",testConfig.getMySQLProperties());
+			Map<String,String> otherJDBCDatabaseTestParams = new HashMap<>();
+			otherJDBCDatabaseTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			otherJDBCDatabaseTestParams.put("port", testConfig.getApiEnginePort());
+			otherJDBCDatabaseTestParams.put("db_properties",testConfig.getMySQLProperties());
 
-			mySQLTest.setParameters(mySQLTestParams);
-			myClasses.add(mySQLTest);
+			otherJDBCDatabasesTest.setParameters(otherJDBCDatabaseTestParams);
+			myClasses.add(otherJDBCDatabasesTest);
 		}
 
 		// Add test class for RestfulAsDataSourcesTests
