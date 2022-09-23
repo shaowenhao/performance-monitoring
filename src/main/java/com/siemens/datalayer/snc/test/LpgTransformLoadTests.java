@@ -63,7 +63,7 @@ public class LpgTransformLoadTests {
     public static int checkInstancekgNum(Response response){
 
         // check Alarm emtity generated instance-kg, label named stated with Alarm_ and type is instance
-        List<Map<String,Object>> entityList = response.jsonPath().getList("data.entities");
+        List<Map<String,Object>> entityList = response.jsonPath().getList("data");
         List<Map<String, Object>> filterList = entityList.stream().filter(e -> {
             String value = (String) e.get("label");
             return value.startsWith("Alarm_");
