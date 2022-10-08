@@ -977,12 +977,12 @@ public class testConfigurationClass {
 						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_PORT);
 
 				// 注释掉http请求的部分
-				//				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL,
-				//						 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
+								setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL,
+										 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
 
 				//https请求
-				setApiEngineHttpsTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_BASE_URL,
-						testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_PORT);
+//				setApiEngineHttpsTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_BASE_URL,
+//						testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_PORT);
 
 				setUserQueryTestClass("com.siemens.datalayer.jinzu.test.UserQueryTests");
 
