@@ -191,8 +191,8 @@ public class testEnvironmentConstants {
 	public static final String JINZU_TEST_ENTITY_MANAGEMENT_PORT = "32694";
 
 	//https访问apiengine
-	public static final String JINZU_TEST_APIENGINE_HTTPS_BASE_URL = "https://demo.technology.siemens.cloud";
-	public static final String JINZU_TEST_APIENGINE_HTTPS_PORT = "10443";
+	//public static final String JINZU_TEST_APIENGINE_HTTPS_BASE_URL = "https://demo.technology.siemens.cloud";
+	//public static final String JINZU_TEST_APIENGINE_HTTPS_PORT = "10443";
 
 	// =========================================================================================
 	// Configuration for jinzu-prod environment

@@ -152,6 +152,7 @@ public class QueryEndPointTests {
 	}
 
 
+/**
 	@Test ( priority = 0,
 			description = "Test Api-engine Query Endpoint: GraphQL interface with https",
 			dataProvider = "api-engine-test-data-provider",
@@ -211,6 +212,7 @@ public class QueryEndPointTests {
 			}
 		}
 	}
+**/
 	// ---abandoned---
 	@Step("generate api-engine post request")
 	public static String generatePostRequest(String operate,int requestNumber)

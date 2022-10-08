@@ -977,8 +977,8 @@ public class testConfigurationClass {
 						 testEnvironmentConstants.JINZU_TEST_CONNECTOR_PORT);
 
 				// 注释掉http请求的部分
-								setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL,
-										 		 testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
+				setApiEngineTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_BASE_URL,
+						         testEnvironmentConstants.JINZU_TEST_APIENGINE_PORT);
 
 				//https请求
 //				setApiEngineHttpsTest(testEnvironmentConstants.JINZU_TEST_APIENGINE_HTTPS_BASE_URL,
@@ -991,8 +991,6 @@ public class testConfigurationClass {
 
 				// 赋值：this.runAppClientAuthenticationForK8sTest = true;
 				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
-
-
 
 				break;
 			
