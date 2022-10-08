@@ -183,9 +183,9 @@ public class testEnvironmentConstants {
 	public static final String JINZU_TEST_CONNECTOR_BASE_URL = "http://140.231.89.106";
 	public static final String JINZU_TEST_CONNECTOR_PORT = "32710";
 
-	//没有配置istio前http访问apiengine的端口
+	//没有配置istio前http访问apiengine的端口 (istio被去掉用回http)
 	public static final String JINZU_TEST_APIENGINE_BASE_URL = "http://140.231.89.106";
-	public static final String JINZU_TEST_APIENGINE_PORT = "31059";
+	public static final String JINZU_TEST_APIENGINE_PORT = "31143";
 	
 	public static final String JINZU_TEST_ENTITY_MANAGEMENT_BASE_URL = "http://140.231.89.106";
 	public static final String JINZU_TEST_ENTITY_MANAGEMENT_PORT = "32694";
