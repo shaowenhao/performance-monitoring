@@ -455,6 +455,17 @@ public class autoRun {
 			myClasses.add(clickhouseAsDataSourceTest);
 		}
 
+		//Add test class for 'modbus test'
+		if(testConfig.getRunModbusTest()){
+			XmlClass modbusTest = new XmlClass(testConfig.getModbusTestClass());
+
+			Map<String,String> modbusTestParams = new HashMap<>();
+			modbusTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			modbusTestParams.put("port",testConfig.getConnectorPort());
+			modbusTest.setParameters(modbusTestParams);
+			myClasses.add(modbusTest);
+		}
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 

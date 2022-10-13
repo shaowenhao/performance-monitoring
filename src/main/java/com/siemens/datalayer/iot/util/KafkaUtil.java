@@ -1,5 +1,8 @@
 package com.siemens.datalayer.iot.util;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -26,4 +29,18 @@ public class KafkaUtil {
         producer.send(new ProducerRecord<String, String>(topic,message));
         // producer.close();
     }
+
+    public static KafkaConsumer<String,String> createConsumer(String servers){
+        Properties properties = new Properties();
+        properties.put("bootstrap.servers",servers);
+        //group id would be anything
+        properties.put("group.id","b15b33asef");
+        properties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        properties.setProperty("enable.auto.commit", "false");
+        properties.setProperty("auto.offset.reset", "latest");
+        return new KafkaConsumer<String, String>(properties);
+
+    }
+
 }

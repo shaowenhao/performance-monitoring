@@ -134,6 +134,8 @@ public class testConfigurationClass {
 	private String connectorRealtimeCacheControllerTestClass = null;
 	private String connectorCacheControllerTestClass = null;
 	private boolean runConnectorCacheControllerTest = false;
+    private boolean runModbusTest = false;
+    private String modbusTestClss = null;
 
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
@@ -755,6 +757,20 @@ public class testConfigurationClass {
 
 	public String getTestWhichVerifyRspdataTestClass(){return this.TestWhichVerifyRspdataTestClass;}
 
+
+	// add for modbus test scenarios
+	public void setModbusTestClass(String modbusTestClassName) {
+		this.runModbusTest = true;
+		this.modbusTestClss = modbusTestClassName;
+	}
+
+	public String getModbusTestClass(){
+		return this.modbusTestClss;
+	}
+
+	public boolean getRunModbusTest(){
+		return this.runModbusTest;
+	}
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -992,6 +1008,7 @@ public class testConfigurationClass {
 				// 赋值：this.runAppClientAuthenticationForK8sTest = true;
 				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
 
+				setModbusTestClass("com.siemens.datalayer.jinzu.test.ModbusTests");
 				break;
 			
 			case ("jinzu-prod"):
@@ -1236,6 +1253,7 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
+
 
 
 }
