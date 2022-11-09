@@ -1090,47 +1090,47 @@ public class testConfigurationClass {
 				setRabbitMQExchange(testEnvironmentConstants.IOT_TEST_RABBIT_EXCHANGE);
 
 				// 赋值：this.runEntityMgmtTest = true;
-				// setEntityMgmtTest(testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_BASE_URL,
-						// testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_PORT);
+				 setEntityMgmtTest(testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_BASE_URL,
+						 testEnvironmentConstants.IOT_TEST_ENTITY_MANAGEMENT_PORT);
 
 				// 赋值：this.runSubscriptionMgmtTest = true;
-				// setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
-						// testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
+				 setSubscriptionMgmtTest(testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_BASE_URL,
+						 testEnvironmentConstants.IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT);
 
 				// 赋值：this.runJDBCDatabasesTest = true;
-				// setJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.JDBCDatabasesTests");
+				 setJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.JDBCDatabasesTests");
 
 				// 赋值：this.runOtherJDBCDatabasesTest = true;
-				// setOtherJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.OtherJDBCDatabaseTests");
-				// setMySQLProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
+				 setOtherJDBCDatabasesTestClass("com.siemens.datalayer.iot.test.OtherJDBCDatabaseTests");
+				 setMySQLProperties(testEnvironmentConstants.IOT_TEST_DB_PROPERTIES);
 
 				// 赋值：this.runPostgreSQLAsDataSourceTest = true;
-				// setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
+				 setPostgreSQLAsDataSourceTestClass("com.siemens.datalayer.iot.test.PostgreSQLAsDataSourceTests");
 
 				// 赋值：this.runRestfulAsDataSourcesTest = true;
-				// setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
+				 setRestfulAsDataSourcesTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesTests");
 
 				// 赋值：this.runRestfulAsDataSourcesEnhanceTest = true;
 				setRestfulAsDataSourcesEnhanceTestClass("com.siemens.datalayer.iot.test.RestfulAsDataSourcesEnhanceTests");
 
 				// 赋值：this.runAuthForRestfulReadTest = true;
-				// setAuthForRestfulReadTestClass("com.siemens.datalayer.iot.test.AuthForRestfulReadTests");
+				 setAuthForRestfulReadTestClass("com.siemens.datalayer.iot.test.AuthForRestfulReadTests");
 
 				// 赋值：this.runAuthForRestfulWriteTest = true
-				// setAuthForRestfulWriteTestClass("com.siemens.datalayer.iot.test.AuthForRestfulWriteTests");
+				 setAuthForRestfulWriteTestClass("com.siemens.datalayer.iot.test.AuthForRestfulWriteTests");
 
 				// 赋值：this.runWebServiceAsDataSourcesTest = true;
-				// setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
+				 setWebServiceAsDataSourcesTestClass("com.siemens.datalayer.iot.test.WebServiceAsDataSourcesTests");
 
 				// 赋值：this.runClickhouseAsDataSourcesTest = true;
-				// setClickhouseAsDataSourceTestClass("com.siemens.datalayer.iot.test.ClickhouseAsDataSourceTests");
+				 setClickhouseAsDataSourceTestClass("com.siemens.datalayer.iot.test.ClickhouseAsDataSourceTests");
 
 				// 赋值：
-				// setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
+				 setTestWhichVerifyRspdataTestClass("com.siemens.datalayer.iot.test.testWhichVerifyRspdata");
 
-				// setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
-										// testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
-										// "com.siemens.datalayer.iot.test.DynamicGraphTests");
+				 setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
+										 testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
+										 "com.siemens.datalayer.iot.test.DynamicGraphTests");
 
 
 				break;
