@@ -275,7 +275,7 @@ public class testEnvironmentConstants {
 	public static final String IOT_TEST_SUBSCRIPTION_MANAGEMENT_PORT = "30346";
 
 	public static final String IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL = "http://140.231.89.85";
-	public static final String IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT = "31141";
+	public static final String IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT = "32622";
 	// =========================================================================================
 	// Configuration for iot-prod environment
 	// =========================================================================================
