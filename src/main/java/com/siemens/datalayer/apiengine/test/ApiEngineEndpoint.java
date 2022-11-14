@@ -85,4 +85,19 @@ public class ApiEngineEndpoint {
         return response;
     }
 
+    // evictAllCache
+    @Step("send a request to delete all cache'")
+    public static Response evictAllCache()
+    {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("cache");
+        return response;
+    }
+
 }

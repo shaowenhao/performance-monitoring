@@ -24,6 +24,8 @@ public class UserQueryTests {
 	{
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
+        // Add clean cache step on the beginning
+        ApiEngineEndpoint.evictAllCache();
 	}
 
     @Test(priority = 0, description = "查看某个租赁物的详细信息",

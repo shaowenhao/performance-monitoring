@@ -104,6 +104,8 @@ public class QueryEndPointTests {
 	@Story("Query End Point: GraphQL Interface")
 	public void getDataGraphQL(Map<String, String> paramMaps)
 	{
+		// Try to add clean cache step on the beginning
+        ApiEngineEndpoint.evictAllCache();
 		Response response = ApiEngineEndpoint.postGraphql(paramMaps.get("query"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));
