@@ -1010,6 +1010,8 @@ public class testConfigurationClass {
 
 				setModbusTestClass("com.siemens.datalayer.jinzu.test.ModbusTests");
 				// 赋值：this.runConnectorConfigureTest = true;
+				setConnectorConfigureTest(testEnvironmentConstants.JINZU_TEST_CONNECTOR_CONFIGURE_BASE_URL,
+						testEnvironmentConstants.JINZU_TEST_CONNECTOR_CONFIGURE_PORT);
 				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
 				setMongoDBHost(testEnvironmentConstants.JINZU_TEST_MONGODB_HOST);
 				setMongoDBPort(testEnvironmentConstants.JINZU_TEST_MONGODB_PORT);

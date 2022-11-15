@@ -195,6 +195,9 @@ public class testEnvironmentConstants {
 	public static final String JINZU_TEST_MONGODB_USERNAME = "mongodb";
 	public static final String JINZU_TEST_MONGODB_PASSWORD = "mongodb";
 	public static final String JINZU_TEST_MONGODB_DATABASENAME = "admin";
+
+	public static final String JINZU_TEST_CONNECTOR_CONFIGURE_BASE_URL = "http://140.231.89.106";
+	public static final String JINZU_TEST_CONNECTOR_CONFIGURE_PORT = "31361";
 	//https访问apiengine
 	//public static final String JINZU_TEST_APIENGINE_HTTPS_BASE_URL = "https://demo.technology.siemens.cloud";
 	//public static final String JINZU_TEST_APIENGINE_HTTPS_PORT = "10443";
