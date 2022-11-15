@@ -979,7 +979,7 @@ public class testConfigurationClass {
 				setApiEngineCacheControllerTestClass("com.siemens.datalayer.apiengine.test.ApiEngineCacheControllerTests");
 
 				//赋值：this.runConnectorRealtimeCacheControllerTest = true; only configure on jinzu-dev
-				setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
+				//setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
 
 				//赋值：this.runConnectorCacheControllerTest = true;
 				setConnectorCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorCacheControllerTests");
@@ -1024,6 +1024,9 @@ public class testConfigurationClass {
 
 				//赋值：this.runConnectorCacheControllerTest = true;
 				setConnectorCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorCacheControllerTests");
+
+				//赋值：this.runConnectorRealtimeCacheControllerTest = true
+				setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
 				break;
 			
 			case ("jinzu-prod"):
