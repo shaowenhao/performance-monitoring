@@ -978,7 +978,7 @@ public class testConfigurationClass {
 				//赋值：this.runApiEngineCacheControllerTest = true;
 				setApiEngineCacheControllerTestClass("com.siemens.datalayer.apiengine.test.ApiEngineCacheControllerTests");
 
-				//赋值：this.runConnectorRealtimeCacheControllerTest = true;
+				//赋值：this.runConnectorRealtimeCacheControllerTest = true; only configure on jinzu-dev
 				setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
 
 				//赋值：this.runConnectorCacheControllerTest = true;
@@ -1009,6 +1009,19 @@ public class testConfigurationClass {
 				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
 
 				setModbusTestClass("com.siemens.datalayer.jinzu.test.ModbusTests");
+				// 赋值：this.runConnectorConfigureTest = true;
+				setConnectorConfigureTestClass("com.siemens.datalayer.connector.test.ConnectorConfigureTests");
+				setMongoDBHost(testEnvironmentConstants.JINZU_TEST_MONGODB_HOST);
+				setMongoDBPort(testEnvironmentConstants.JINZU_TEST_MONGODB_PORT);
+				setMongoDBUserName(testEnvironmentConstants.JINZU_TEST_MONGODB_USERNAME);
+				setMongoDBPassword(testEnvironmentConstants.JINZU_TEST_MONGODB_PASSWORD);
+				setMongoDBDatabaseName(testEnvironmentConstants.JINZU_TEST_MONGODB_DATABASENAME);
+
+				//赋值：this.runApiEngineCacheControllerTest = true;
+				setApiEngineCacheControllerTestClass("com.siemens.datalayer.apiengine.test.ApiEngineCacheControllerTests");
+
+				//赋值：this.runConnectorCacheControllerTest = true;
+				setConnectorCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorCacheControllerTests");
 				break;
 			
 			case ("jinzu-prod"):
