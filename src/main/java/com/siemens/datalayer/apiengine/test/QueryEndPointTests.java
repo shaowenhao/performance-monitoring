@@ -1,6 +1,7 @@
 package com.siemens.datalayer.apiengine.test;
 
 import com.google.gson.Gson;
+import com.siemens.datalayer.connector.test.ConnectorConfigureEndpoint;
 import com.siemens.datalayer.iot.util.OltuJavaClient;
 import com.siemens.datalayer.utils.AllureEnvironmentPropertiesWriter;
 import com.siemens.datalayer.utils.CommonCheckFunctions;
@@ -20,13 +21,19 @@ import java.util.*;
 
 public class QueryEndPointTests {
 
-	@Parameters({"base_url", "port"})
+	@Parameters({"base_url", "port","baseUrlOfConnectorConfigure","portOfConnectorConfigure"})
 	@BeforeClass (description = "Configure the host address and communication port of data-layer-api-engine")
-	public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30035") String port) 
+	public void setApiEngineEndpoint(@Optional("http://140.231.89.85") String base_url, @Optional("30035") String port,
+									 @Optional("http://140.231.89.106")  String baseUrlOfConnectorConfigure,@Optional("32011") String portOfConnectorConfigure)
 	{
         ApiEngineEndpoint.setBaseUrl(base_url);
         ApiEngineEndpoint.setPort(port);
+
+		ConnectorConfigureEndpoint.setBaseUrl(baseUrlOfConnectorConfigure);
+		ConnectorConfigureEndpoint.setPort(portOfConnectorConfigure);
+
 	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-api-engine", base_url + ":" + port);
+	    AllureEnvironmentPropertiesWriter.addEnvironmentItem("data-layer-connetor-configure", baseUrlOfConnectorConfigure + ":" + portOfConnectorConfigure);
 	}
 
 	// ---abandoned---
@@ -105,7 +112,10 @@ public class QueryEndPointTests {
 	public void getDataGraphQL(Map<String, String> paramMaps)
 	{
 		// Try to add clean cache step on the beginning
-        ApiEngineEndpoint.evictAllCache();
+		ConnectorConfigureEndpoint.clearModuleCaches("data-layer-connector-configure");
+		ConnectorConfigureEndpoint.clearModuleCaches("data-layer-connector");
+		ConnectorConfigureEndpoint.clearModuleCaches("data-layer-api-engine");
+
 		Response response = ApiEngineEndpoint.postGraphql(paramMaps.get("query"));
 		
 		checkResponseCode(paramMaps, response.getStatusCode(), response.jsonPath().getString("code"), response.jsonPath().getString("message"));

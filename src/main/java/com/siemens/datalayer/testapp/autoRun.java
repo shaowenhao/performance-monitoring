@@ -100,6 +100,8 @@ public class autoRun {
 		if(!testConfig.getRunApiEngineHttpsTest()) {
 			apiEngineTestParams.put("base_url", testConfig.getApiEngineBaseURL());
 			apiEngineTestParams.put("port", testConfig.getApiEnginePort());
+			apiEngineTestParams.put("baseUrlOfConnectorConfigure",testConfig.getConnectorConfigureBaseURL());
+			apiEngineTestParams.put("portOfConnectorConfigure",testConfig.getConnectorConfigurePort());
 			//Exclude getDataGraphQLHttps (https) test methods
 			List<String> excludeMethods = new ArrayList<String>();
 			excludeMethods.add("getDataGraphQLHttps");

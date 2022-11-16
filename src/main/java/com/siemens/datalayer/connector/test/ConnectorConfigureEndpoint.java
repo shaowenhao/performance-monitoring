@@ -229,6 +229,20 @@ public class ConnectorConfigureEndpoint {
         return response;
     }
 
+    // Cache Config Controller:clearModuleCaches
+    @Step("Send a request of 'clearModuleCaches'")
+    public static Response clearModuleCaches(String moduleName)
+    {
+        RestAssured.baseURI = baseUrl;
+        RestAssured.port = Integer.valueOf(port).intValue();
+
+        RequestSpecification httpRequest = RestAssured.given();
+        httpRequest.header("content-type","application/json");
+
+        Response response = httpRequest.filter(new AllureRestAssured())
+                .delete("/cache-config/clear/" + moduleName);
+        return response;
+    }
     //Cache Controller: allCacheNames
     @Step("Send a request of 'getAllCacheNames'")
     public static Response getAllCacheNames() {

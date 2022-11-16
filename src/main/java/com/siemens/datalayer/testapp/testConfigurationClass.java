@@ -915,6 +915,9 @@ public class testConfigurationClass {
 				setEntityMgmtTest(testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_BASE_URL,
 						  		  testEnvironmentConstants.SNC_TEST_ENTITY_MANAGEMENT_PORT);	
 
+				setConnectorConfigureTest(testEnvironmentConstants.SNC_TEST_CONNECTOR_CONFIGURE_BASE_URL,
+						          testEnvironmentConstants.SNC_TEST_CONNECTOR_CONFIGURE_PORT);
+
 				setPublishGraphAndCheckTest(true);
 				setRunUiBackendTest(testEnvironmentConstants.SNC_TEST_UI_BACKEND_BASE_URL,
 						            testEnvironmentConstants.SNC_TEST_UI_BACKEND_PORT,
