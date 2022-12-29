@@ -153,6 +153,19 @@ public class autoRun {
 			otherJDBCDatabasesTest.setParameters(otherJDBCDatabaseTestParams);
 			myClasses.add(otherJDBCDatabasesTest);
 		}
+		
+		// Add test class for JDBCDatabasesTests
+		if (testConfig.getRunJdbcDataLayerAsDatasourceTest())
+		{
+			XmlClass jdbcDataLayerAsDatasourceTest = new XmlClass(testConfig.getJdbcDataLayerAsDatasourceTestClass());
+
+			Map<String,String> jdbcDataLayerAsDatasourceTestParams = new HashMap<>();
+			jdbcDataLayerAsDatasourceTestParams.put("base_url", testConfig.getApiEngineBaseURL());
+			jdbcDataLayerAsDatasourceTestParams.put("port", testConfig.getApiEnginePort());
+
+			jdbcDataLayerAsDatasourceTest.setParameters(jdbcDataLayerAsDatasourceTestParams);
+			myClasses.add(jdbcDataLayerAsDatasourceTest);
+		}
 
 		// Add test class for RestfulAsDataSourcesTests
 		if (testConfig.getRunRestfulAsDataSourcesTest())

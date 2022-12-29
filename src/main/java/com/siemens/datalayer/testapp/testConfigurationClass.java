@@ -136,6 +136,9 @@ public class testConfigurationClass {
 	private boolean runConnectorCacheControllerTest = false;
     private boolean runModbusTest = false;
     private String modbusTestClss = null;
+    
+    boolean runJdbcDataLayerAsDatasourceTest = false;
+	private String jdbcDataLayerAsDatasourceTestClass = null;
 
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
@@ -500,6 +503,18 @@ public class testConfigurationClass {
 	}
 
 	public String getJDBCDatabasesTestClass(){return this.JDBCDatabasesTestClass;}
+	
+	// getRunJdbcDataLayerAsDatasourceTest、setJdbcDataLayerAsDatasourceTestClass、getJdbcDataLayerAsDatasourceTestClass
+	// 这三个方法针对“DataLayer做为数据源”的测试 而添加
+	public boolean getRunJdbcDataLayerAsDatasourceTest(){return this.runJdbcDataLayerAsDatasourceTest;}
+
+	public void setJdbcDataLayerAsDatasourceTestClass(String jdbcDataLayerAsDatasourceTestClassName)
+	{
+		this.runJdbcDataLayerAsDatasourceTest = true;
+		this.jdbcDataLayerAsDatasourceTestClass = jdbcDataLayerAsDatasourceTestClassName;
+	}
+
+	public String getJdbcDataLayerAsDatasourceTestClass(){return this.jdbcDataLayerAsDatasourceTestClass;}
 
 	// getRunOtherJDBCDatabasesTest、setOtherJDBCDatabasesTestClass、getOtherJDBCDatabasesTestClass
 	// 这三个方法针对“otherJDBCDatabases做为数据源”的测试 而添加
@@ -1152,6 +1167,9 @@ public class testConfigurationClass {
 				 setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
 										 testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
 										 "com.siemens.datalayer.iot.test.DynamicGraphTests");
+				// 赋值：this.runJdbcDataLayerAsDatasourceTest = true;
+				 setJdbcDataLayerAsDatasourceTestClass("com.siemens.datalayer.iot.test.JDBCDataLayerAsDatasourceTests");
+
 
 
 				break;

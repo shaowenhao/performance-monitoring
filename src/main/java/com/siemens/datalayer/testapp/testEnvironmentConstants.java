@@ -287,6 +287,10 @@ public class testEnvironmentConstants {
 
 	public static final String IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL = "http://140.231.89.85";
 	public static final String IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT = "32622";
+	
+	public static final String IOT_TEST_JDBC_DATALAYER_DB_PROPERTIES = "iot.test.datalayer.db.properties";
+	public static final String IOT_TEST_JDBC_DATALAYER_ORACLE_DB_PROPERTIES = "iot.test.datalayer.oracle.db.properties";
+	
 	// =========================================================================================
 	// Configuration for iot-prod environment
 	// =========================================================================================
