@@ -140,6 +140,9 @@ public class testConfigurationClass {
     boolean runJdbcDataLayerAsDatasourceTest = false;
 	private String jdbcDataLayerAsDatasourceTestClass = null;
 
+	private boolean runRealtimePersistenceTest = false;
+	private String realtimePersistenceTestClass = null;
+
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
 	}
@@ -786,6 +789,22 @@ public class testConfigurationClass {
 	public boolean getRunModbusTest(){
 		return this.runModbusTest;
 	}
+
+	// add for realtime persistence test
+	public void setRealtimePersistenceTestClass(String realtimePersistenceTestClassName) {
+		this.runRealtimePersistenceTest = true;
+		this.realtimePersistenceTestClass = realtimePersistenceTestClassName;
+	}
+
+	public boolean getRunRealtimePersistenceTest() {
+		return runRealtimePersistenceTest;
+	}
+
+	public String getRealtimePersistenceTestClass() {
+		return realtimePersistenceTestClass;
+	}
+
+
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -1045,6 +1064,9 @@ public class testConfigurationClass {
 
 				//赋值：this.runConnectorRealtimeCacheControllerTest = true
 				setConnectorRealtimeCacheControllerTestClass("com.siemens.datalayer.connector.test.ConnectorRealtimeCacheControllerTests");
+
+				//赋值: this.runRealtimePersistenceTest = true
+				setRealtimePersistenceTestClass("com.siemens.datalayer.jinzu.test.RealtimePersistenceTests");
 				break;
 			
 			case ("jinzu-prod"):
@@ -1292,7 +1314,6 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
-
 
 
 }

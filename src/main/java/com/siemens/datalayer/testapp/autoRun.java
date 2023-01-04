@@ -481,6 +481,17 @@ public class autoRun {
 			myClasses.add(modbusTest);
 		}
 
+		//Add test class for 'realtime persistence test'
+		if(testConfig.getRunRealtimePersistenceTest()){
+			XmlClass realtimePersistenceTest = new XmlClass(testConfig.getRealtimePersistenceTestClass());
+
+			Map<String,String> realtimePersistenceTestParams = new HashMap<>();
+			realtimePersistenceTestParams.put("base_url",testConfig.getConnectorBaseURL());
+			realtimePersistenceTestParams.put("port",testConfig.getConnectorPort());
+			realtimePersistenceTest.setParameters(realtimePersistenceTestParams);
+			myClasses.add(realtimePersistenceTest);
+		}
+
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
