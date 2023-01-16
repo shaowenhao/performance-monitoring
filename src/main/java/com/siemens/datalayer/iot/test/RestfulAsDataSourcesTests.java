@@ -228,7 +228,7 @@ public class RestfulAsDataSourcesTests {
                     // 这样做的原因在于：因为是比对整个当前数据库的数据，清空数据后，不会受之前case写入的脏数据的影响。
                     for (String table : tableList) {
                         String deleteSql = "DELETE FROM " + table;
-
+                        System.out.println("----- " + deleteSql);
                         try {
                             preStatement.execute(deleteSql);
                         } catch (SQLException throwables) {
@@ -359,7 +359,7 @@ public class RestfulAsDataSourcesTests {
         }
         System.out.println("actualListFromH2 for " + entityName + "-" + table + ": " + actualListFromH2);
 
-        Assert.assertEquals(expectListFromExcel.size(),actualListFromH2.size());
+        Assert.assertEquals(expectListFromExcel.size(),actualListFromH2.size(),"Data count is not right for entity[" + entityName + "]");
 
         for (int i=0;i<actualListFromH2.size();i++)
         {
@@ -367,7 +367,7 @@ public class RestfulAsDataSourcesTests {
             {
                 String rowColumnOfH2Key = actualMapFromH2.getKey();
                 Object rowColumnOfH2Value = actualMapFromH2.getValue();
-
+                
                 if (rowColumnOfH2Value instanceof Integer)
                 {
                     Assert.assertEquals(MapUtils.getInteger(expectListFromExcel.get(i),rowColumnOfH2Key),rowColumnOfH2Value);
