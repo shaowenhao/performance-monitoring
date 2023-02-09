@@ -32,7 +32,8 @@ import static org.hamcrest.Matchers.is;
 public class ConnectorRealtimeCacheControllerTests<d> {
 
     // server 是 kafka集群 jinzu-test配置了实时流 用的realtime yaml配置 (Mongo配置无效)
-    String servers = "140.231.89.85:31092,140.231.89.85:31093,140.231.89.85:31094,140.231.89.85:31095,140.231.89.85:31096";
+    //String servers = "140.231.89.85:31092,140.231.89.85:31093,140.231.89.85:31094,140.231.89.85:31095,140.231.89.85:31096";
+    String servers = "140.231.89.106:30962";
     String topic = "OUT-EVENT";
     @Parameters({"base_url", "port"})
     @BeforeClass(description = "Configure the host address and communication port of connector realtime cache controller")
