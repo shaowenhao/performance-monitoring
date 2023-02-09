@@ -1043,7 +1043,7 @@ public class testConfigurationClass {
 						  		  testEnvironmentConstants.JINZU_TEST_ENTITY_MANAGEMENT_PORT);
 
 				// 赋值：this.runAppClientAuthenticationForK8sTest = true;
-				setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
+				// setAppClientAuthenticationForK8sTestClass("com.siemens.datalayer.iot.test.AppClientAuthenticationForK8sTests");
 
 				setModbusTestClass("com.siemens.datalayer.jinzu.test.ModbusTests");
 				// 赋值：this.runConnectorConfigureTest = true;
