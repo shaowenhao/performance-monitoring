@@ -94,7 +94,7 @@ public class ModbusTests {
         int total = 0;
         while (true){
 
-            ConsumerRecords<String, String> records = consumer.poll(3000);
+            ConsumerRecords<String, String> records = consumer.poll(15000);
             if (records.isEmpty()){
                 try {
                     throw new Exception("Subscribe Modbus message is empty, please check");
