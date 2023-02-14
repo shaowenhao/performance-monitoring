@@ -16,7 +16,7 @@ import java.util.*;
 
 
 @Epic("SDL Connector")
-@Feature("realtime database as data source")
+@Feature("clickhouse database as data source")
 public class ClickhouseAsDataSourceTests {
 
     @Parameters({"base_url", "port"})
