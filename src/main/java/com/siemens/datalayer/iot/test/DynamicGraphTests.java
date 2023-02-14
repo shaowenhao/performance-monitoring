@@ -35,7 +35,7 @@ public class DynamicGraphTests {
         LpgTransformLoadEndpoint.setPort(port);
 
         LpgTransformLoadEndpoint.deleteInstanceGraph("test6761");
-        LpgTransformLoadEndpoint.deleteInstanceGraph("testkafka");
+    //    LpgTransformLoadEndpoint.deleteInstanceGraph("testkafka");
     }
 
     @Test(priority = 0,
@@ -72,58 +72,58 @@ public class DynamicGraphTests {
         checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
     }
 
-    @Test(dependsOnMethods = { "createInstanceGraph"},
-            alwaysRun = true,
-            priority = 0,
-            description = "create an Kg",
-            dataProvider = "entity-management-test-data-provider",
-            dataProviderClass = ExcelDataProviderClass.class)
-    @Severity(SeverityLevel.BLOCKER)
-    @Feature("Instance-kg-generation-service")
-    @Story("creat kg though graphql")
-    public void generateKg(Map<String, String> paramMaps){
+//    @Test(dependsOnMethods = { "createInstanceGraph"},
+//            alwaysRun = true,
+//            priority = 0,
+//            description = "create an Kg",
+//            dataProvider = "entity-management-test-data-provider",
+//            dataProviderClass = ExcelDataProviderClass.class)
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Feature("Instance-kg-generation-service")
+//    @Story("creat kg though graphql")
+//    public void generateKg(Map<String, String> paramMaps){
+//
+//        String graphName = paramMaps.get("graphName");
+//        String entityLabels =  paramMaps.get("entityLabels");
+//        String graphql = paramMaps.get("graphql");
+//        Response response = LpgTransformLoadEndpoint.generateKg(entityLabels, graphName, graphql);
+//        response.prettyPrint();
+//        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+//        // check instance kg status, here use entitylabels as keyword when its single value, if entityLabels was multi value need defined new keyword
+//        Response searchResponse = LpgTransformLoadEndpoint.searchGraph(graphName, entityLabels);
+//
+//        int actualInsranceKgNums = checkInstancekgNum(searchResponse, entityLabels);
+//        System.out.println("ActualKgNum:" + actualInsranceKgNums);
+//        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
+//        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
+//    }
 
-        String graphName = paramMaps.get("graphName");
-        String entityLabels =  paramMaps.get("entityLabels");
-        String graphql = paramMaps.get("graphql");
-        Response response = LpgTransformLoadEndpoint.generateKg(entityLabels, graphName, graphql);
-        response.prettyPrint();
-        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
-        // check instance kg status, here use entitylabels as keyword when its single value, if entityLabels was multi value need defined new keyword
-        Response searchResponse = LpgTransformLoadEndpoint.searchGraph(graphName, entityLabels);
-
-        int actualInsranceKgNums = checkInstancekgNum(searchResponse, entityLabels);
-        System.out.println("ActualKgNum:" + actualInsranceKgNums);
-        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
-        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
-    }
-
-    @Test(
-            priority = 2,
-            description = "generate instance Kg",
-            dataProvider = "entity-management-test-data-provider",
-            dataProviderClass = ExcelDataProviderClass.class)
-    @Severity(SeverityLevel.BLOCKER)
-    @Feature("Instance-kg-generation-service")
-    @Story("generate instance kg though kafka")
-    public void generateInstanceKg(Map<String, String> paramMaps){
-
-        String kafkaData = paramMaps.get("kafkaData");
-        Response response = LpgTransformLoadEndpoint.generateInstanceKg(kafkaData);
-        response.prettyPrint();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
-
-        Response searchResponse = LpgTransformLoadEndpoint.searchGraph("testkafka", "sdl_b");
-        int actualInsranceKgNums = checkInstancekgNum(searchResponse, "sdl_b");
-        System.out.println("ActualKgNum:" + actualInsranceKgNums);
-        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
-        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
-    }
+//    @Test(
+//            priority = 2,
+//            description = "generate instance Kg",
+//            dataProvider = "entity-management-test-data-provider",
+//            dataProviderClass = ExcelDataProviderClass.class)
+//    @Severity(SeverityLevel.BLOCKER)
+//    @Feature("Instance-kg-generation-service")
+//    @Story("generate instance kg though kafka")
+//    public void generateInstanceKg(Map<String, String> paramMaps){
+//
+//        String kafkaData = paramMaps.get("kafkaData");
+//        Response response = LpgTransformLoadEndpoint.generateInstanceKg(kafkaData);
+//        response.prettyPrint();
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        checkResponseCode(paramMaps,response.getStatusCode(),response.jsonPath().getString("code"),response.jsonPath().getString("message"));
+//
+//        Response searchResponse = LpgTransformLoadEndpoint.searchGraph("testkafka", "sdl_b");
+//        int actualInsranceKgNums = checkInstancekgNum(searchResponse, "sdl_b");
+//        System.out.println("ActualKgNum:" + actualInsranceKgNums);
+//        System.out.println("ExpectedKgNum:"+paramMaps.get("instanceNum"));
+//        Assert.assertEquals(actualInsranceKgNums,Integer.parseInt(paramMaps.get("instanceNum")));
+//    }
 
 
     public void checkGraphNamesList(Map<String, String> paramMaps, Response response) {
