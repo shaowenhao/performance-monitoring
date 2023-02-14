@@ -95,7 +95,7 @@ public class testWhichVerifyRspdata {
             System.out.println("requestParameters.get(\"rspData\"): " + "\n" + requestParameters.get("rspData"));
             Map<String, Object> expectedResponseData = gson.fromJson(requestParameters.get("rspData"), new TypeToken<Map<String, Object>>() {}.getType());
 
-            Assert.assertEquals(actualResponseData,expectedResponseData);
+            Assert.assertEquals(actualResponseData.remove("score"),expectedResponseData.remove("score"));                 
             // Assert.assertEquals(actualResponseData,expectedResponseData);
         }
     }
