@@ -1189,9 +1189,9 @@ public class testConfigurationClass {
 				 setRunDynamicGraphTest(testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BASE_URL,
 										 testEnvironmentConstants.IOT_TEST_LPG_TRANSFORM_LOAD_BACKEND_PORT,
 										 "com.siemens.datalayer.iot.test.DynamicGraphTests");
-				// Temporary disable this test
+
 				 // 赋值：this.runJdbcDataLayerAsDatasourceTest = true;
-				 // setJdbcDataLayerAsDatasourceTestClass("com.siemens.datalayer.iot.test.JDBCDataLayerAsDatasourceTests");
+				  setJdbcDataLayerAsDatasourceTestClass("com.siemens.datalayer.iot.test.JDBCDataLayerAsDatasourceTests");
 
 
 
