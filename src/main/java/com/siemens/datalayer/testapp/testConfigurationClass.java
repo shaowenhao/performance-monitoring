@@ -142,6 +142,8 @@ public class testConfigurationClass {
 
 	private boolean runRealtimePersistenceTest = false;
 	private String realtimePersistenceTestClass = null;
+	private boolean runMapperRuleTest = false;
+	private String mapperRuleTestClass = null;
 
 	public String getUiBackend_base_url() {
 		return uiBackend_base_url;
@@ -805,6 +807,18 @@ public class testConfigurationClass {
 	}
 
 
+	public void setMapperRuleTestClass(String mapperRuleTestClassName) {
+		this.runMapperRuleTest = true;
+		this.mapperRuleTestClass = mapperRuleTestClassName;
+	}
+
+	public boolean getRunMapperRuleTest() {
+		return runMapperRuleTest;
+	}
+
+	public String getMapperRuleTestClass() {
+		return mapperRuleTestClass;
+	}
 	/* 设置配置，包括各pilot对应的dev/test/prod三个环境的connector/api-engine/api-service/entity-management/
 	subscription-management/RabbitMq/
 	返回布尔值，如果testEnvName不在iems-dev/iems-test/iems-prod/snc-dev/snc-test/snc-prod/jinzu-dev/jinzu-test/jinzu-prod中
@@ -1193,6 +1207,8 @@ public class testConfigurationClass {
 				 // 赋值：this.runJdbcDataLayerAsDatasourceTest = true;
 				  setJdbcDataLayerAsDatasourceTestClass("com.siemens.datalayer.iot.test.JDBCDataLayerAsDatasourceTests");
 
+				// 赋值：this.runMapperRuleTest = true;
+				  setMapperRuleTestClass("com.siemens.datalayer.iot.test.MapperRuleTests");
 
 
 				break;
@@ -1315,6 +1331,7 @@ public class testConfigurationClass {
 		setConfigName(testEnvName); // private String configName = testEnvName，如iems-dev
 		return true;
 	}
+
 
 
 }

@@ -492,6 +492,16 @@ public class autoRun {
 			myClasses.add(realtimePersistenceTest);
 		}
 
+		//Add test class for 'mapper rule test'
+		if(testConfig.getRunMapperRuleTest()){
+			XmlClass mapperRuleTest = new XmlClass(testConfig.getMapperRuleTestClass());
+
+			Map<String,String> mapperRuleTestParams = new HashMap<>();
+			mapperRuleTestParams.put("base_url",testConfig.getApiEngineBaseURL());
+			mapperRuleTestParams.put("port",testConfig.getApiEnginePort());
+			mapperRuleTest.setParameters(mapperRuleTestParams);
+			myClasses.add(mapperRuleTest);
+		}
 		//Attach the list of test classes to the XmlTest Object created earlier. 
 		myTest.setXmlClasses(myClasses);   
 
