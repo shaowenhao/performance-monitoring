@@ -524,7 +524,7 @@ public class autoRun {
 		myTestSuite.setFileName(testngXmlName);
 		
 		//Execute the tests
-		myTestSuite.setThreadCount(3);
+		myTestSuite.setThreadCount(1);
 		if (runRegressionTest) testNGInstance.run();
 		
 		//Print the global parameters 
