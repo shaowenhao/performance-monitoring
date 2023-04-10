@@ -68,6 +68,7 @@ Generate Allure Report:
   artifacts:
     paths:
       - allure-report
+  when: always
 
 Allure Server:
   stage: upload-report
@@ -84,6 +85,7 @@ Allure Server:
     - curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/report --header 'Content-Type:application/json' --data-raw '{"reportSpec":{"path":['\"$DL_PROJECT\"','\"$DL_ENV\"'],"executorInfo":{"buildName":'\"$DL_PROJECT-$DL_ENV\"'}},"results":['\"$DL_UUID\"'],"deleteResults":"true"}'
   needs:
     - Run Tests
+  when: always
 
 Artifactory:
   stage: upload-report
@@ -103,3 +105,5 @@ Artifactory:
   artifacts:
     paths:
       - allure-report.zip
+  when: always
+  
