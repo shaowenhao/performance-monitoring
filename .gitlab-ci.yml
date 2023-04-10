@@ -24,8 +24,7 @@ Build Test Suite:
       - .m2/repository/
   artifacts:
     paths:
-      - target/data-layer-automation-*-SNAPSHOT.jar
-      - lib/data-layer-jdbc-driver-1.0.jar
+      - target/semantic-monitoring-*-SNAPSHOT.jar
 
 Run Tests:
   stage: test
@@ -42,8 +41,7 @@ Run Tests:
     - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD -O "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/$DL_PROJECT/$DL_ENV/allure-report.zip" 
     - unzip allure-report.zip || true
     - curl -O https://repo1.maven.org/maven2/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
-    - java -javaagent:aspectjweaver-1.9.2.jar -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar:lib/data-layer-jdbc-driver-1.0.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENV noXML
-#    - java -cp target/data-layer-automation-0.0.1-SNAPSHOT.jar com.siemens.datalayer.testapp.autoRun $DL_PROJECT $DL_ENV noXML
+    - java -javaagent:aspectjweaver-1.9.2.jar -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main $DL_PROJECT_PARAM $DL_ENV_PARAM
     - if [ -d allure-report/history ]; then cp -r allure-report/history allure-results/history; else true; fi
     - zip -r allure-results.zip allure-results
   artifacts:
