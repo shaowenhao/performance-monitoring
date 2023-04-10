@@ -50,6 +50,7 @@ Run Tests:
     paths:
       - allure-results
       - allure-results.zip
+    when: always
 
 Generate Allure Report:
   stage: generate-report
