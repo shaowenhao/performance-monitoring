@@ -69,7 +69,7 @@ public class Main {
 				Alert alert = new EmailAlert("zhang.hui@siemens.com", reportUrl, reportName);
 				System.out.println("Trigger alert [reportUrl: " + reportUrl + "][reportName: " + reportName + "]");
 				alert.execute();
-
+				return;
 			}
 		}
 
