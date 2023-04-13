@@ -78,7 +78,7 @@ Allure Server:
     variables:
       - $DL_PROJECT
       - $DL_ENV
-  image: alpine
+  image: openjdk:8-jdk-alpine
   script:
     - apk update && apk add curl jq
     - export DL_UUID=$(curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/result --form 'allureResults=@./allure-results.zip;type=application/zip' 2>/dev/null | jq -r '.uuid')
