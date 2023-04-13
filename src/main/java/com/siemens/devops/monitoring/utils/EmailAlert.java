@@ -13,8 +13,8 @@ public class EmailAlert implements Alert {
 	public EmailAlert(String to, Configuration configuration) {
 		this.to = to;
 		CaseResultsCollector caseResultsCollector = CustomizedTestListener.getCaseResultsCollector();
-		this.subject = String.valueOf(caseResultsCollector.getFailedCaseCount())
-				+ " cases failed in regression tests for " + configuration.getConfigName();
+		this.subject = String.valueOf(caseResultsCollector.getFailedCaseCount()) + " cases failed for "
+				+ configuration.getConfigName();
 		StringBuilder sb = new StringBuilder();
 		for (String str : caseResultsCollector.getFailedCases()) {
 			sb.append(str);
