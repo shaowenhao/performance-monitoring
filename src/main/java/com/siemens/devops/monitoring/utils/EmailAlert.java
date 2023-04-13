@@ -26,6 +26,12 @@ public class EmailAlert implements Alert {
 		this.content = sb.toString();
 	}
 
+	public EmailAlert(String to, String reportUrl, String reportName) {
+		this.to = to;
+		this.subject = "Test cases report for " + reportName;
+		this.content = "\nReport URL: " + reportUrl + "\n";
+	}
+
 	@Override
 	public void execute() {
 		MailUtil.send(to, subject, content, false);

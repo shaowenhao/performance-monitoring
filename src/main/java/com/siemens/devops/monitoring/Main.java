@@ -63,6 +63,13 @@ public class Main {
 					System.exit(1);
 				}
 				configuration.setAlertType(alertType);
+			} else if ("-sendReport".equalsIgnoreCase(arg)) {
+				String reportUrl = originalArgs[++i];
+				String reportName = originalArgs[++i];
+				Alert alert = new EmailAlert("zhang.hui@siemens.com", reportUrl, reportName);
+				System.out.println("Trigger alert [reportUrl: " + reportUrl + "][reportName: " + reportName + "]");
+				alert.execute();
+
 			}
 		}
 
@@ -173,7 +180,7 @@ public class Main {
 				alert = new TeamsAlert();
 			}
 			if (alert != null) {
-				System.out.println("Trigger alert");
+				System.out.println("Trigger alert [" + this.getConfiguration().getConfigName() + "]");
 				alert.execute();
 			}
 		}
