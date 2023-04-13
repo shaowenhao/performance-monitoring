@@ -50,6 +50,7 @@ Run Tests:
     paths:
       - allure-results
       - allure-results.zip
+      - target/semantic-monitoring-*-SNAPSHOT.jar
     when: always
 
 Generate Allure Report:
