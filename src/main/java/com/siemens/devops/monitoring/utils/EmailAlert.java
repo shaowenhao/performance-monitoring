@@ -26,9 +26,16 @@ public class EmailAlert implements Alert {
 		this.content = sb.toString();
 	}
 
-	public EmailAlert(String to, String reportUrl, String reportName) {
+	public EmailAlert(String to, String reportUrl, String reportName, String reportStatus) {
 		this.to = to;
-		this.subject = "Test cases report for " + reportName;
+		if ("Failed".equalsIgnoreCase(reportStatus)) {
+			this.subject = "[Test failed] " + "report for " + reportName;
+		} else if ("Passed".equalsIgnoreCase(reportStatus)) {
+			this.subject = "[Test succeeded] " + "report for " + reportName;
+		} else {
+			this.subject = "Test report for " + reportName;
+		}
+
 		this.content = "\nReport URL: " + reportUrl + "\n";
 	}
 

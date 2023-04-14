@@ -66,8 +66,10 @@ public class Main {
 			} else if ("-sendReport".equalsIgnoreCase(arg)) {
 				String reportUrl = originalArgs[++i];
 				String reportName = originalArgs[++i];
-				Alert alert = new EmailAlert("zhang.hui@siemens.com", reportUrl, reportName);
-				System.out.println("Trigger alert [reportUrl: " + reportUrl + "][reportName: " + reportName + "]");
+				String reportStatus = originalArgs[++i];
+				Alert alert = new EmailAlert("zhang.hui@siemens.com", reportUrl, reportName, reportStatus);
+				System.out.println("Trigger alert [reportUrl: " + reportUrl + "][reportName: " + reportName
+						+ "][reportStatus: " + reportStatus + "]");
 				alert.execute();
 				return;
 			}
