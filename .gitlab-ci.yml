@@ -44,7 +44,7 @@ Run Tests:
     - curl -O https://repo1.maven.org/maven2/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
     - set +e
     - echo DL_PARAMETERS=$DL_PARAMETERS
-    - java -javaagent:aspectjweaver-1.9.2.jar -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main $DL_PARAMETERS; export exit_code=$?; if [ $exit_code -ne 0 ]; then echo "There are some test cases failed"; fi;
+    - java -javaagent:aspectjweaver-1.9.2.jar -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main $DL_PROJECT_PARAM $DL_ENV_PARAM $DL_ALERT_PARAM; export exit_code=$?; if [ $exit_code -ne 0 ]; then echo "There are some test cases failed"; fi;
     - if [ -d allure-report/history ]; then cp -r allure-report/history allure-results/history; else true; fi
     - zip -r allure-results.zip allure-results
     - exit $exit_code
