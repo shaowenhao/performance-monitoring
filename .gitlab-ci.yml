@@ -55,23 +55,23 @@ Run Tests:
       - target/semantic-monitoring-*-SNAPSHOT.jar
     when: always
 
-Generate Allure Report:
-  stage: generate-report
-  tags:
-    - docker
-  only:
-    variables:
-      - $DL_PROJECT
-      - $DL_ENV
-  image: frankescobar/allure-docker-service
-  variables:
-    MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400"
-  script:
-    - allure generate allure-results
-  artifacts:
-    paths:
-      - allure-report
-  when: always
+# Generate Allure Report:
+#   stage: generate-report
+#   tags:
+#     - docker
+#   only:
+#     variables:
+#       - $DL_PROJECT
+#       - $DL_ENV
+#   image: frankescobar/allure-docker-service
+#   variables:
+#     MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400"
+#   script:
+#     - allure generate allure-results
+#   artifacts:
+#     paths:
+#       - allure-report
+#   when: always
   
 Allure Server:
   stage: upload-report
