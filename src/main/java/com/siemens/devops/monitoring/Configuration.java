@@ -33,7 +33,7 @@ public class Configuration {
 	public Configuration() {
 		runRegressionTest = true;
 		generateTestNGXML = true;
-		enableAlert = true;
+		enableAlert = false;
 		this.putParamOfGlobal(KEY_ENABLE_ALERT, Boolean.toString(enableAlert));
 		alertType = Alert.AlertType.EMAIL;
 		this.putParamOfGlobal(KEY_ALERT_TYPE, alertType.name());
