@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -36,6 +37,9 @@ public class TestManagement {
 
 	@Autowired
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+	@Value("${statisticExpiryInMinute}")
+	private int statisticExpiryInMinute;
 
 	private volatile boolean started = false;
 
@@ -73,7 +77,9 @@ public class TestManagement {
 					Timer timer = Timer.builder("http.request")
 							.tags("url", response.getUrl(), "method", response.getMethod(), "name",
 									httpRequest.getName())
-							.publishPercentiles(0.5, 0.9, 0.95, 0.99).register(meterRegistry);
+							.publishPercentiles(0.5, 0.9, 0.95, 0.99)
+							.distributionStatisticExpiry(Duration.ofMinutes(statisticExpiryInMinute))
+							.register(meterRegistry);
 					timer.record(response.getExecTime(), TimeUnit.MILLISECONDS);
 
 				});

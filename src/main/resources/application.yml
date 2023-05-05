@@ -20,6 +20,8 @@ httpConfig:
   connectTimeout: 10000
   readTimeout: 10000
 
+statisticExpiryInMinute: 30
+
 httpRequests:
 - url: http://140.231.89.106:32760/graphql
   name: 'search processNum equals FCE0166'
