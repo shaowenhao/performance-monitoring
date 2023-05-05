@@ -1,0 +1,45 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+management:
+#  server:
+#    port: 8088
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'
+      base-path: /metrics
+
+#是否开启 swagger-ui
+swagger:
+  enabled: true
+
+httpConfig:
+  connectTimeout: 10000
+  readTimeout: 10000
+
+httpRequests:
+- url: http://140.231.89.106:32760/graphql
+  name: 'search processNum equals FCE0166'
+  type: POST
+  headers:
+    Content-Type: application/json
+  body: '{Event(cond:"{processNum: {_eq: \"FCE0166\"}}") {eventTag device processNum coilNum timestamp}}'
+  expectedCode: 100000
+- url: http://140.231.89.106:32760/graphql
+  name: 'search eventTag equals in'
+  type: POST
+  headers:
+    Content-Type: application/json
+  body: '{Event(cond:"{eventTag: {_eq: \"in\"}}") {eventTag device processNum coilNum timestamp}}'
+  expectedCode: 100000
+- url: http://140.231.89.106:32760/graphql
+  name: 'search device equals FCE1'
+  type: POST
+  headers:
+    Content-Type: application/json
+  body: '{Event(cond:"{device: {_eq: \"FCE1\"}}") {eventTag device processNum coilNum timestamp}}'
+  expectedCode: 100000
+

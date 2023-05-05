@@ -1,136 +1,83 @@
 stages:
   - build
-  - test
-  - scheduled-test
-  - generate-report
-  - upload-report
-  - send-report
+  - containerize
+  - deploy
+  
 variables:
-  HTTP_PROXY: "http://194.138.0.19:9400"
-  HTTPS_PROXY: "http://194.138.0.19:9400"
-  NO_PROXY: "140.231.89.119"
+  project_name: monitor
+  helm_chart: ${HELM_PILOT_CHART_NAME}
+  helm_chart_version: ${DATA_LAYER_CHART_VERSION}-${project_name}-${CI_COMMIT_REF_SLUG}
+  HTTP_PROXY: "http://194.138.0.1:9400/"
+  HTTPS_PROXY: "http://194.138.0.1:9400/"
+  http_proxy: "http://194.138.0.1:9400/"
+  https_proxy: "http://194.138.0.1:9400/"
+  NO_PROXY: loadbalancer.ssi.com,140.231.89.84,140.231.89.119,code.siemens.com,docker.siemens.com,*.siemens.*
+  no_proxy: loadbalancer.ssi.com,140.231.89.119,code.siemens.com,docker.siemens.com,*.siemens.*
 
-Build Test Suite:
+build-artifact:
   stage: build
   tags:
     - docker
-  image: maven:3-openjdk-18
-  variables:
-    MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
-  script:
-    - mvn clean
-    - mvn package -Pnotest
+  image: 140.231.89.84:30003/ctsharp-datalayer/data-layer-gitlab-runner:${RUNNER_IMAGE_VERSION}
   cache:
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - .m2/repository/
+      - .m2/repository
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  script:
+    - cd ${CI_PROJECT_DIR}
+    - mvn clean package -Dmaven.test.skip=true -s $MAVEN_SETTINGS
   artifacts:
+    name: "${CI_JOB_NAME}_${CI_COMMIT_REF_NAME}"
     paths:
-      - target/semantic-monitoring-*-SNAPSHOT.jar
+      - ${CI_PROJECT_DIR}/target/*.jar
 
-Run Tests:
-  stage: test
+build-image:
+  stage: containerize
   tags:
     - docker
-  only:
-    variables:
-      - $DL_PROJECT
-      - $DL_ENV
-  stage: test
-  image: openjdk:8-jdk-alpine
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - apk update && apk add zip curl
-    - curl --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD -O "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/$DL_PROJECT/$DL_ENV/allure-report.zip" 
-    - unzip allure-report.zip || true
-    - curl -O https://repo1.maven.org/maven2/org/aspectj/aspectjweaver/1.9.2/aspectjweaver-1.9.2.jar
-    - set +e
-    - echo DL_PROJECT_PARAM=$DL_PROJECT_PARAM DL_ENV_PARAM=$DL_ENV_PARAM
-    - java -javaagent:aspectjweaver-1.9.2.jar -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main $DL_PROJECT_PARAM $DL_ENV_PARAM; export exit_code=$?; if [ $exit_code -ne 0 ]; then echo "There are some test cases failed"; fi;
-    - if [ -d allure-report/history ]; then cp -r allure-report/history allure-results/history; else true; fi
-    - zip -r allure-results.zip allure-results
-    - exit $exit_code
-  artifacts:
-    paths:
-      - allure-results
-      - allure-results.zip
-      - target/semantic-monitoring-*-SNAPSHOT.jar
-    when: always
+    - cd ${CI_PROJECT_DIR}
+    - cp ${CI_PROJECT_DIR}/target/*.jar .
+    - echo "{\"auths\":{\"$HARBOR_ADDRESS\":{\"username\":\"$HARBOR_USER\",\"password\":\"$HARBOR_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --skip-tls-verify --build-arg jarName=$(ls|grep jar) --dockerfile Dockerfile --destination=${DOCKER_REPO_PREFIX}${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}
+  only:
+    - dev
+    - test
 
-# Generate Allure Report:
-#   stage: generate-report
-#   tags:
-#     - docker
-#   only:
-#     variables:
-#       - $DL_PROJECT
-#       - $DL_ENV
-#   image: frankescobar/allure-docker-service
-#   variables:
-#     MAVEN_OPTS: "-Dhttps.proxyHost=hk1.coia.siemens.net -Dhttps.proxyPort=9400"
-#   script:
-#     - allure generate allure-results
-#   artifacts:
-#     paths:
-#       - allure-report
-#   when: always
-  
-Allure Server:
-  stage: upload-report
+release-by-tag:
+  stage: containerize
   tags:
     - docker
-  only:
-    variables:
-      - $DL_PROJECT
-      - $DL_ENV
-  image: openjdk:8-jdk-alpine
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - apk update && apk add curl jq
-    - export DL_UUID=$(curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/result --form 'allureResults=@./allure-results.zip;type=application/zip' 2>/dev/null | jq -r '.uuid')
-    - echo DL_UUID=$DL_UUID
-    - export RESULT_UUID=$(curl --noproxy '*' --location --request POST http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/api/report --header 'Content-Type:application/json' --data-raw '{"reportSpec":{"path":['\"$DL_PROJECT\"','\"$DL_ENV\"'],"executorInfo":{"buildName":'\"$DL_PROJECT-$DL_ENV\"'}},"results":['\"$DL_UUID\"'],"deleteResults":"true"}' 2>/dev/null | jq -r '.uuid')
-    - echo "export RESULT_UUID=$RESULT_UUID" > upload-report.env
-  needs:
-    - Run Tests
-  artifacts:
-    paths:
-      - upload-report.env
-  when: always
-
-# Artifactory:
-#   stage: upload-report
-#   tags:
-#     - docker
-#   only:
-#     variables:
-#       - $DL_PROJECT
-#       - $DL_ENV
-#   image: alpine
-#   script:
-#     - apk update && apk add zip curl
-#     - zip -r allure-report.zip allure-report
-#     - export MD5SUM=$(md5sum allure-report.zip | awk '{print $1}')
-#     - export SHA1SUM=$(sha1sum allure-report.zip | awk '{print $1}')
-#     - curl  --noproxy '*' -u$PACKAGES_ROBOT_USER:$PACKAGES_ROBOT_PASSWORD --header "X-Checksum-Sha1:${SHA1SUM}" --header "X-Checksum-MD5:${MD5SUM}" -T allure-report.zip "https://packages.digitsphere.siemens.cloud/artifactory/data-layer-generic/data-layer-automation/$DL_PROJECT/$DL_ENV/allure-report.zip"
-#   artifacts:
-#     paths:
-#       - allure-report.zip
-#   when: always
-  
-Send Report:
-  stage: send-report
-  tags:
-    - docker
+    - cp target/*.jar .
+    - echo "{\"auths\":{\"$HARBOR_ADDRESS\":{\"username\":\"$HARBOR_USER\",\"password\":\"$HARBOR_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context . --skip-tls-verify --build-arg jarName=$(ls|grep jar) --destination=${DOCKER_REPO_PREFIX}${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}
   only:
-    variables:
-      - $DL_PROJECT
-      - $DL_ENV
-  image: openjdk:8-jdk-alpine
-  script:
-    - reportenv=$(cat upload-report.env); eval $reportenv;
-    - echo java -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main -sendReport http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/allure/reports/$RESULT_UUID/index.html $DL_PROJECT-$DL_ENV Failed
-    - java -cp target/semantic-monitoring-0.0.1-SNAPSHOT.jar com.siemens.devops.monitoring.Main -sendReport http://$DL_ALLURE_SERVER:$DL_ALLURE_PORT/allure/reports/$RESULT_UUID/index.html $DL_PROJECT-$DL_ENV Failed
-  dependencies:
-    - Allure Server
-    - Run Tests
-  when: on_failure
-  
-  
+    - tags
+    
+#update-helm:
+#  stage: deploy
+#  tags:
+#    - docker
+#  image: 140.231.89.84:30003/ctsharp-datalayer/data-layer-gitlab-runner:latest
+#  script:
+#    - helm repo add --ca-file ${HELM_REPO_CA} --username=${HELM_REPO_USERNAME} --password=${HELM_REPO_PASSWORD} ${HELM_REPO_NAME} ${HELM_REPO}
+#    - helm plugin list
+#    - helm repo update
+#    - helm fetch --version ${helm_chart_version} ${HELM_REPO_NAME}/${helm_chart}
+#    - tar xvf ${helm_chart}-${helm_chart_version}.tgz
+#    - yq w -i ${helm_chart}/values.yaml images.${CI_PROJECT_NAME}.timeStamp  $(date "+%Y%m%d%H%M")
+#    - helm push --ca-file ${HELM_REPO_CA} --username=${HELM_REPO_USERNAME} --password=${HELM_REPO_PASSWORD} ./${helm_chart}/ --version=${helm_chart_version} ${HELM_REPO_NAME}
+#    - helm repo update
+#    - helm upgrade -i --atomic -n=${project_name}-${CI_COMMIT_REF_NAME} --ca-file ${HELM_REPO_CA} --username=${HELM_REPO_USERNAME} --password=${HELM_REPO_PASSWORD} --version=${helm_chart_version} ${helm_chart} ${HELM_REPO_NAME}/${helm_chart}
+#  only:
+#    - dev
+#    - test

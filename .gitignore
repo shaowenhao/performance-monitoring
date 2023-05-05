@@ -1,34 +1,33 @@
-*.egg-info/
-*__pycache__/
-*.pyc
-*.log
-.cache/
-.coverage
-.eggs/
-.tox
-.idea
-.allure/
-*.pytest_cache/
-build/
-dist/
-geckodriver.log
-docs/build/
-venv/
-report/
-logs/
-test-output/
-allure-results/
-allure-reports/
+HELP.md
 target/
-snapshot/
-iems-dev-regression-test.xml
-iems-test-regression-test.xml
-iems-prod-regression-test.xml
-snc-dev-regression-test.xml
-snc-test-regression-test.xml
-snc-prod-regression-test.xml
-jinzu-dev-regression-test.xml
-jinzu-test-regression-test.xml
-jinzu-prod-regression-test.xml
-ansteel-test-regression-test.xml
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
