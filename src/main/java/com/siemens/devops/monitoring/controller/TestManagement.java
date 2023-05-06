@@ -38,19 +38,17 @@ public class TestManagement {
 	@Autowired
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-	@Value("${statisticExpiryInMinute}")
-	private int statisticExpiryInMinute;
-
 	private volatile boolean started = false;
 
 	@ApiOperation("Start metrics")
 	@GetMapping("/startMetrics")
 	public RestResult<Object> startTest(
-			@RequestParam(value = "fixedDelayInSecond", defaultValue = "10", required = false) Integer fixedDelayInSecond) {
+			@RequestParam(value = "fixedDelayInSecond", defaultValue = "10", required = false) Integer fixedDelayInSecond,
+			@RequestParam(value = "statisticExpiryInMinute", defaultValue = "60", required = false) Integer statisticExpiryInMinute) {
 		if (!started) {
 			started = true;
 			logger.info("Start metrics");
-			startMetrics(fixedDelayInSecond);
+			startMetrics(fixedDelayInSecond, statisticExpiryInMinute);
 		} else {
 			logger.info("Metrics has been started");
 		}
@@ -69,7 +67,7 @@ public class TestManagement {
 		return RestResult.sucess();
 	}
 
-	private void startMetrics(Integer fixedDelayInSecond) {
+	private void startMetrics(Integer fixedDelayInSecond, Integer statisticExpiryInMinute) {
 		threadPoolTaskExecutor.execute(() -> {
 			while (started) {
 				service.getRequestList().forEach(httpRequest -> {
