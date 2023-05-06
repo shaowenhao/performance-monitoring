@@ -50,20 +50,35 @@ public class TestManagement {
 			logger.info("Start metrics");
 			startMetrics(fixedDelayInSecond, statisticExpiryInMinute);
 		} else {
-			logger.info("Metrics has been started");
+			logger.info("Metrics had been started");
+			return RestResult.error(-1, "Metrics had been started");
 		}
 		return RestResult.sucess();
 	}
 
 	@ApiOperation("Stop metrics")
 	@GetMapping("/stopMetrics")
-	public RestResult<Object> stopTest() {
+	public RestResult<Object> stopTest(
+			@RequestParam(value = "clearMetrics", defaultValue = "false", required = false) boolean clearMetrics) {
 		if (started) {
 			started = false;
 			logger.info("Stop metrics");
+			if (clearMetrics) {
+				meterRegistry.clear();
+				logger.info("Clear metrics");
+			}
 		} else {
-			logger.info("Metrics has been stopped");
+			logger.info("Metrics had been stopped");
+			return RestResult.error(-1, "Metrics had been stopped");
 		}
+		return RestResult.sucess();
+	}
+
+	@ApiOperation("Clear metrics")
+	@GetMapping("/clearMetrics")
+	public RestResult<Object> clearMetrics() {
+		meterRegistry.clear();
+		logger.info("Clear metrics");
 		return RestResult.sucess();
 	}
 

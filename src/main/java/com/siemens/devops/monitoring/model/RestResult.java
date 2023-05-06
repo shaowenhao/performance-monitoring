@@ -69,15 +69,15 @@ public class RestResult<T> {
 		return new RestResult<>(SUCCESS, message, data);
 	}
 
-	public static RestResult<Void> error(int code, String message) {
+	public static <T> RestResult<T> error(int code, String message) {
 		return new RestResult<>(code, message);
 	}
 
-	public static RestResult<Void> error(int code) {
+	public static <T> RestResult<T> error(int code) {
 		return error(code, FAILED_MSG);
 	}
 
-	public static RestResult<Void> error() {
+	public static <T> RestResult<T> error() {
 		return error(-1, FAILED_MSG);
 	}
 
