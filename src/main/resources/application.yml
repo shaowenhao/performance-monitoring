@@ -12,6 +12,17 @@ management:
         include: 'prometheus'
       base-path: /metrics
 
+logging:
+  level:
+    com.siemens.devops.monitoring: info #日志级别
+  file:
+    name: performance_monitoring.log #文件名 默认位置在当前项目根目录下
+  logback:
+    rollingpolicy:
+      max-file-size: 5MB  #文件大小 超过会创建新文件
+      file-name-pattern: performance_monitoring.%d{yyyy-MM-dd}.%i.log #文件名格式
+
+
 #是否开启 swagger-ui
 swagger:
   enabled: true
@@ -22,24 +33,32 @@ httpConfig:
 
 httpRequests:
 - url: http://140.231.89.106:32760/graphql
-  name: 'search processNum equals FCE0166'
-  type: POST
-  headers:
-    Content-Type: application/json
-  body: '{Event(cond:"{processNum: {_eq: \"FCE0166\"}}") {eventTag device processNum coilNum timestamp}}'
-  expectedCode: 100000
-- url: http://140.231.89.106:32760/graphql
-  name: 'search eventTag equals in'
-  type: POST
-  headers:
-    Content-Type: application/json
-  body: '{Event(cond:"{eventTag: {_eq: \"in\"}}") {eventTag device processNum coilNum timestamp}}'
-  expectedCode: 100000
-- url: http://140.231.89.106:32760/graphql
-  name: 'search device equals FCE1'
+  name: '[api-engine] search events by device equals FCE1'
   type: POST
   headers:
     Content-Type: application/json
   body: '{Event(cond:"{device: {_eq: \"FCE1\"}}") {eventTag device processNum coilNum timestamp}}'
   expectedCode: 100000
+
+- url: http://140.231.89.106:31751/api/connectors/searchData?condition="eventTag" = 'in'&name=Event
+  name: '[connector] search events by eventTag equals in'
+  type: GET
+  expectedCode: 0
+
+- url: http://140.231.89.106:30397/api/v2/graphs/entities
+  name: '[entity-mgmt] search all entities'
+  type: GET
+  headers:
+    Content-Type: application/json
+  expectedCode: 100000
+
+- url: http://140.231.89.106:30747/connector/connectorInfo/ansteelRehearsal_dataManagement_JdbcConnector
+  name: '[connector-configure] search connector information by name'
+  type: GET
+  headers:
+    Content-Type: application/json
+  expectedCode: 0
+
+
+
 
