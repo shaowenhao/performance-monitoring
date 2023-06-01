@@ -40,6 +40,22 @@ httpRequests:
   body: '{Event(cond:"{device: {_eq: \"FCE1\"}}") {eventTag device processNum coilNum timestamp}}'
   expectedCode: 100000
 
+- url: http://140.231.89.106:32760/graphql
+  name: '[api-engine] search all steel size'
+  type: POST
+  headers:
+    Content-Type: application/json
+  body: '{ Process_Steel_Size { steelTypeId steelSize id createTime updateUser createUser updateTime }}'
+  expectedCode: 100000
+
+- url: http://140.231.89.106:32760/graphql
+  name: '[api-engine] search all alarm rule'
+  type: POST
+  headers:
+    Content-Type: application/json
+  body: '{ Process_Alarm_Rule { alarmType expireDate effectiveDate alarmRuleLowerValue alarmRuleValue alarmRuleUpperValue alarmRule id createTime updateUser createUser updateTime }}'
+  expectedCode: 100000
+
 - url: http://140.231.89.106:31751/api/connectors/searchData?condition="eventTag" = 'in'&name=Event
   name: '[connector] search events by eventTag equals in'
   type: GET
@@ -58,7 +74,5 @@ httpRequests:
   headers:
     Content-Type: application/json
   expectedCode: 0
-
-
 
 
