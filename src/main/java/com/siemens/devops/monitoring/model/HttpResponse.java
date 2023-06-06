@@ -10,5 +10,6 @@ public class HttpResponse {
 	private String errMsg;
 	private String timestamp;
 	private long execTime;
-	private Boolean timeout;
+	private boolean timeout;
+	private boolean passed;
 }

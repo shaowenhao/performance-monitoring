@@ -66,6 +66,7 @@ public class HttpRequestService {
 					String.class);
 			etime = System.currentTimeMillis();
 			boolean pass = checkBody(result.getBody(), req);
+			response.setPassed(pass);
 			if (!pass) {
 				etime = stime + extendedValue;
 			}
