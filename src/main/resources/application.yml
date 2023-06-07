@@ -74,5 +74,6 @@ httpRequests:
   headers:
     Content-Type: application/json
   expectedCode: 0
-
+  # monitorPerformance: false
+  # monitorFunction: false
 

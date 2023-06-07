@@ -92,25 +92,34 @@ public class TestManagement {
 	private void startMetrics(Integer fixedDelayInSecond, Integer statisticExpiryInMinuteForPerformance,
 			Integer statisticExpiryInMinuteForFunction) {
 		int windowSizeForFunction = (int) (statisticExpiryInMinuteForFunction * 60 / fixedDelayInSecond);
+		initGaugeMap();
 		threadPoolTaskExecutor.execute(() -> {
-			initGaugeMap();
-
 			while (started) {
 				service.getRequestList().forEach(httpRequest -> {
-					HttpResponse response = service.handleRequest(httpRequest);
-					Timer timer = Timer.builder("http.request")
-							.tags("url", response.getUrl(), "method", response.getMethod(), "name",
-									httpRequest.getName())
-							.publishPercentiles(0.5, 0.9, 0.99)
-							.distributionStatisticExpiry(Duration.ofMinutes(statisticExpiryInMinuteForPerformance))
-							.register(meterRegistry);
-					timer.record(response.getExecTime(), TimeUnit.MILLISECONDS);
+					if (httpRequest.isMonitorPerformance() || httpRequest.isMonitorFunction()) {
+						HttpResponse response = service.handleRequest(httpRequest);
+						if (httpRequest.isMonitorPerformance()) {
+							Timer timer = Timer.builder("http.request")
+									.tags("url", response.getUrl(), "method", response.getMethod(), "name",
+											httpRequest.getName())
+									.publishPercentiles(0.5, 0.9, 0.95, 0.99)
+									.distributionStatisticExpiry(
+											Duration.ofMinutes(statisticExpiryInMinuteForPerformance))
+									.register(meterRegistry);
+							timer.record(response.getExecTime(), TimeUnit.MILLISECONDS);
+						}
+						if (httpRequest.isMonitorFunction()) {
+							String key = generateKey(httpRequest);
+							GaugeForFunction gaugeForFunction = getGaugeMap().get(key);
+							if (gaugeForFunction != null) {
+								gaugeForFunction.compute(getTimeWindowMap(), windowSizeForFunction, key,
+										response.isPassed());
+							} else {
+								logger.error("Does not exist gaugeForFunction, key=" + key);
+							}
 
-					String key = generateKey(httpRequest);
-					StatisticMonitorForFunction statisticMonitorForFunction = getGaugeMap().get(key);
-					statisticMonitorForFunction.compute(getTimeWindowMap(), windowSizeForFunction, key,
-							response.isPassed());
-
+						}
+					}
 				});
 				try {
 					Thread.sleep(fixedDelayInSecond * 1000);
@@ -119,37 +128,38 @@ public class TestManagement {
 				}
 			}
 		});
-
 	}
 
 	private Map<String, CircularFifoQueue<Integer>> timeWindowMap = new ConcurrentHashMap<>();
-	private Map<String, StatisticMonitorForFunction> gaugeMap = new ConcurrentHashMap<>();
+	private Map<String, GaugeForFunction> gaugeMap = new ConcurrentHashMap<>();
 
 	private void clearGaugeMap() {
 		this.gaugeMap.clear();
 		this.timeWindowMap.clear();
 	}
 
-	private Map<String, StatisticMonitorForFunction> initGaugeMap() {
+	private Map<String, GaugeForFunction> initGaugeMap() {
 		service.getRequestList().forEach(httpRequest -> {
-			String key = generateKey(httpRequest);
-			StatisticMonitorForFunction statistic = new StatisticMonitorForFunction();
-			List<Tag> tags = new ArrayList<>();
-			Tag tag = Tag.of("url", httpRequest.getUrlWithParams());
-			tags.add(tag);
-			tag = Tag.of("method", httpRequest.getType());
-			tags.add(tag);
-			tag = Tag.of("name", httpRequest.getName());
-			tags.add(tag);
-			StatisticMonitorForFunction statisticMonitorForFunction = meterRegistry
-					.gauge("http.request.failure.percent", tags, statistic, statistic::getGaugeValue);
-			gaugeMap.put(key, statisticMonitorForFunction);
+			if (httpRequest.isMonitorFunction()) {
+				String key = generateKey(httpRequest);
+				GaugeForFunction statistic = new GaugeForFunction();
+				List<Tag> tags = new ArrayList<>();
+				Tag tag = Tag.of("url", httpRequest.getUrlWithParams());
+				tags.add(tag);
+				tag = Tag.of("method", httpRequest.getType());
+				tags.add(tag);
+				tag = Tag.of("name", httpRequest.getName());
+				tags.add(tag);
+				GaugeForFunction gaugeForFunction = meterRegistry.gauge("http.request.failure.percent", tags, statistic,
+						statistic::getGaugeValue);
+				gaugeMap.put(key, gaugeForFunction);
+			}
 		});
 
 		return gaugeMap;
 	}
 
-	private Map<String, StatisticMonitorForFunction> getGaugeMap() {
+	private Map<String, GaugeForFunction> getGaugeMap() {
 		return this.gaugeMap;
 	}
 
@@ -162,7 +172,7 @@ public class TestManagement {
 		return key;
 	}
 
-	private static class StatisticMonitorForFunction {
+	private static class GaugeForFunction {
 		Logger logger = LoggerFactory.getLogger(this.getClass());
 		private double gaugeValue;
 
@@ -182,8 +192,8 @@ public class TestManagement {
 			gaugeValue = percent;
 		}
 
-		public double getGaugeValue(StatisticMonitorForFunction statisticMonitor) {
-			return statisticMonitor.gaugeValue;
+		public double getGaugeValue(GaugeForFunction gaugeForFunction) {
+			return gaugeForFunction.gaugeValue;
 		}
 	}
 }

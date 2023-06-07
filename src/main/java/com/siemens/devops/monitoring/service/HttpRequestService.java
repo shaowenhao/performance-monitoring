@@ -40,32 +40,32 @@ public class HttpRequestService {
 		return requestsConfig.getHttpRequests();
 	}
 
-	public HttpResponse handleRequest(HttpRequest req) {
+	public HttpResponse handleRequest(HttpRequest request) {
 		// handle headers
 		HttpHeaders headers = new HttpHeaders();
-		if (req.getHeaders() != null && req.getHeaders().size() > 0) {
-			req.getHeaders().entrySet().forEach(header -> {
+		if (request.getHeaders() != null && request.getHeaders().size() > 0) {
+			request.getHeaders().entrySet().forEach(header -> {
 				headers.add(header.getKey(), header.getValue().toString());
 			});
 		}
 
-		HttpEntity httpEntity = new HttpEntity<>(req.getBody(), headers);
+		HttpEntity httpEntity = new HttpEntity<>(request.getBody(), headers);
 		HttpResponse response = new HttpResponse();
-		String url = req.getUrlWithParams();
+		String url = request.getUrlWithParams();
 		response.setUrl(url);
-		response.setMethod(req.getType());
+		response.setMethod(request.getType());
 		response.setErrMsg("");
 		response.setTimeout(false);
 		long stime = System.currentTimeMillis();
 		long etime = stime;
 		response.setTimestamp(getCurrentDate());
 		try {
-			logger.info("name: " + req.getName() + ", url: " + url + ", method: " + req.getType() + ", body: "
-					+ req.getBody());
-			ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.valueOf(req.getType()), httpEntity,
+			logger.info("name: " + request.getName() + ", url: " + url + ", method: " + request.getType() + ", body: "
+					+ request.getBody());
+			ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.valueOf(request.getType()), httpEntity,
 					String.class);
 			etime = System.currentTimeMillis();
-			boolean pass = checkBody(result.getBody(), req);
+			boolean pass = checkBody(result.getBody(), request);
 			response.setPassed(pass);
 			if (!pass) {
 				etime = stime + extendedValue;

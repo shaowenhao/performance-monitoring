@@ -14,6 +14,8 @@ public class HttpRequest {
 	private String body;
 	private String name;
 	private Integer expectedCode;
+	private boolean monitorPerformance = true;
+	private boolean monitorFunction = true;
 
 	public String getUrlWithParams() {
 		String url = (this.getParams() != null && this.getParams().size() > 0)
