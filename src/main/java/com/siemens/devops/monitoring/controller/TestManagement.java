@@ -46,13 +46,15 @@ public class TestManagement {
 	@ApiOperation("Start metrics")
 	@GetMapping("/startMetrics")
 	public RestResult<Object> startTest(
-			@RequestParam(value = "fixedDelayInSecond", defaultValue = "5", required = false) Integer fixedDelayInSecond,
-			@RequestParam(value = "statisticExpiryInMinuteForPerformance", defaultValue = "30", required = false) Integer statisticExpiryInMinuteForPerformance,
-			@RequestParam(value = "statisticExpiryInMinuteForFunction", defaultValue = "5", required = false) Integer statisticExpiryInMinuteForFunction) {
+			@RequestParam(value = "fixedDelayInSecond", defaultValue = "5", required = true) Integer fixedDelayInSecond,
+			@RequestParam(value = "expiryInMinuteForExecTimeQuantile", defaultValue = "60", required = true) Integer expiryInMinuteForExecTimeQuantile,
+			@RequestParam(value = "expiryInMinuteForExecTime", defaultValue = "5", required = true) Integer expiryInMinuteForExecTime,
+			@RequestParam(value = "expiryInMinuteForFailurePercent", defaultValue = "5", required = true) Integer expiryInMinuteForFailurePercent) {
 		if (!started) {
 			started = true;
 			logger.info("Start metrics");
-			startMetrics(fixedDelayInSecond, statisticExpiryInMinuteForPerformance, statisticExpiryInMinuteForFunction);
+			startMetrics(fixedDelayInSecond, expiryInMinuteForExecTimeQuantile, expiryInMinuteForExecTime,
+					expiryInMinuteForFailurePercent);
 		} else {
 			logger.info("Metrics had been started");
 			return RestResult.error(-1, "Metrics had been started");
@@ -89,33 +91,62 @@ public class TestManagement {
 		return RestResult.sucess();
 	}
 
-	private void startMetrics(Integer fixedDelayInSecond, Integer statisticExpiryInMinuteForPerformance,
-			Integer statisticExpiryInMinuteForFunction) {
-		int windowSizeForFunction = (int) (statisticExpiryInMinuteForFunction * 60 / fixedDelayInSecond);
+	private void startMetrics(Integer fixedDelayInSecond, Integer expiryInMinuteForExecTimeQuantile,
+			Integer expiryInMinuteForExecTime, Integer expiryInMinuteForFailurePercent) {
+		int windowSizeForFailurePercent = (int) (expiryInMinuteForFailurePercent * 60 / fixedDelayInSecond);
+		int windowSizeForExecTimeAvg = (int) (expiryInMinuteForExecTime * 60 / fixedDelayInSecond);
+		int windowSizeForExecTimeMax = windowSizeForExecTimeAvg;
+		int windowSizeForExecTimeMin = windowSizeForExecTimeAvg;
 		initGaugeMap();
 		threadPoolTaskExecutor.execute(() -> {
 			while (started) {
 				service.getRequestList().forEach(httpRequest -> {
 					if (httpRequest.isMonitorPerformance() || httpRequest.isMonitorFunction()) {
+						String key = generateKey(httpRequest);
 						HttpResponse response = service.handleRequest(httpRequest);
 						if (httpRequest.isMonitorPerformance()) {
 							Timer timer = Timer.builder("http.request")
 									.tags("url", response.getUrl(), "method", response.getMethod(), "name",
 											httpRequest.getName())
 									.publishPercentiles(0.5, 0.9, 0.95, 0.99)
-									.distributionStatisticExpiry(
-											Duration.ofMinutes(statisticExpiryInMinuteForPerformance))
+									.distributionStatisticExpiry(Duration.ofMinutes(expiryInMinuteForExecTimeQuantile))
 									.register(meterRegistry);
 							timer.record(response.getExecTime(), TimeUnit.MILLISECONDS);
+
+							GaugeForExecTimeAvg gaugeForExecTimeAvg = getGaugeMapForExecTimeAvg().get(key);
+							if (gaugeForExecTimeAvg != null) {
+								gaugeForExecTimeAvg.compute(getTimeWindowMapForExecTimeAvg(), windowSizeForExecTimeAvg,
+										key, response.getExecTime());
+
+							} else {
+								logger.error("Does not exist gaugeForExecTimeAvg, key=" + key);
+							}
+
+							GaugeForExecTimeMax gaugeForExecTimeMax = getGaugeMapForExecTimeMax().get(key);
+							if (gaugeForExecTimeMax != null) {
+								gaugeForExecTimeMax.compute(getTimeWindowMapForExecTimeMax(), windowSizeForExecTimeMax,
+										key, response.getExecTime());
+
+							} else {
+								logger.error("Does not exist gaugeForExecTimeMax, key=" + key);
+							}
+
+							GaugeForExecTimeMin gaugeForExecTimeMin = getGaugeMapForExecTimeMin().get(key);
+							if (gaugeForExecTimeMin != null) {
+								gaugeForExecTimeMin.compute(getTimeWindowMapForExecTimeMin(), windowSizeForExecTimeMin,
+										key, response.getExecTime());
+
+							} else {
+								logger.error("Does not exist gaugeForExecTimeMin, key=" + key);
+							}
 						}
 						if (httpRequest.isMonitorFunction()) {
-							String key = generateKey(httpRequest);
-							GaugeForFunction gaugeForFunction = getGaugeMap().get(key);
-							if (gaugeForFunction != null) {
-								gaugeForFunction.compute(getTimeWindowMap(), windowSizeForFunction, key,
-										response.isPassed());
+							GaugeForFailurePercent gaugeForFailurePercent = getGaugeMapForFailurePercent().get(key);
+							if (gaugeForFailurePercent != null) {
+								gaugeForFailurePercent.compute(getTimeWindowMapForFailurePercent(),
+										windowSizeForFailurePercent, key, response.isPassed());
 							} else {
-								logger.error("Does not exist gaugeForFunction, key=" + key);
+								logger.error("Does not exist gaugeForFailurePercent, key=" + key);
 							}
 
 						}
@@ -130,19 +161,37 @@ public class TestManagement {
 		});
 	}
 
-	private Map<String, CircularFifoQueue<Integer>> timeWindowMap = new ConcurrentHashMap<>();
-	private Map<String, GaugeForFunction> gaugeMap = new ConcurrentHashMap<>();
+	private Map<String, CircularFifoQueue<Integer>> timeWindowMapForFailurePercent = new ConcurrentHashMap<>();
+	private Map<String, GaugeForFailurePercent> gaugeMapForFailurePercent = new ConcurrentHashMap<>();
+
+	private Map<String, CircularFifoQueue<Long>> timeWindowMapForExecTimeAvg = new ConcurrentHashMap<>();
+	private Map<String, GaugeForExecTimeAvg> gaugeMapForExecTimeAvg = new ConcurrentHashMap<>();
+
+	private Map<String, CircularFifoQueue<Long>> timeWindowMapForExecTimeMax = new ConcurrentHashMap<>();
+	private Map<String, GaugeForExecTimeMax> gaugeMapForExecTimeMax = new ConcurrentHashMap<>();
+
+	private Map<String, CircularFifoQueue<Long>> timeWindowMapForExecTimeMin = new ConcurrentHashMap<>();
+	private Map<String, GaugeForExecTimeMin> gaugeMapForExecTimeMin = new ConcurrentHashMap<>();
 
 	private void clearGaugeMap() {
-		this.gaugeMap.clear();
-		this.timeWindowMap.clear();
+		this.gaugeMapForFailurePercent.clear();
+		this.timeWindowMapForFailurePercent.clear();
+
+		this.gaugeMapForExecTimeAvg.clear();
+		this.timeWindowMapForExecTimeAvg.clear();
+
+		this.gaugeMapForExecTimeMax.clear();
+		this.timeWindowMapForExecTimeMax.clear();
+
+		this.gaugeMapForExecTimeMin.clear();
+		this.timeWindowMapForExecTimeMin.clear();
 	}
 
-	private Map<String, GaugeForFunction> initGaugeMap() {
+	private Map<String, GaugeForFailurePercent> initGaugeMap() {
 		service.getRequestList().forEach(httpRequest -> {
 			if (httpRequest.isMonitorFunction()) {
 				String key = generateKey(httpRequest);
-				GaugeForFunction statistic = new GaugeForFunction();
+				GaugeForFailurePercent statisticForFailurePercent = new GaugeForFailurePercent();
 				List<Tag> tags = new ArrayList<>();
 				Tag tag = Tag.of("url", httpRequest.getUrlWithParams());
 				tags.add(tag);
@@ -150,21 +199,59 @@ public class TestManagement {
 				tags.add(tag);
 				tag = Tag.of("name", httpRequest.getName());
 				tags.add(tag);
-				GaugeForFunction gaugeForFunction = meterRegistry.gauge("http.request.failure.percent", tags, statistic,
-						statistic::getGaugeValue);
-				gaugeMap.put(key, gaugeForFunction);
+				GaugeForFailurePercent gaugeForFailurePercent = meterRegistry.gauge("http.request.failure.percent",
+						tags, statisticForFailurePercent, statisticForFailurePercent::getGaugeValue);
+				gaugeMapForFailurePercent.put(key, gaugeForFailurePercent);
+
+				GaugeForExecTimeAvg statisticForExecTimeAvg = new GaugeForExecTimeAvg();
+				GaugeForExecTimeAvg gaugeForExecTimeAvg = meterRegistry.gauge("http.request.duration.seconds.avg", tags,
+						statisticForExecTimeAvg, statisticForExecTimeAvg::getGaugeValue);
+				gaugeMapForExecTimeAvg.put(key, gaugeForExecTimeAvg);
+
+				GaugeForExecTimeMax statisticForExecTimeMax = new GaugeForExecTimeMax();
+				GaugeForExecTimeMax gaugeForExecTimeMax = meterRegistry.gauge("http.request.duration.seconds.max", tags,
+						statisticForExecTimeMax, statisticForExecTimeMax::getGaugeValue);
+				gaugeMapForExecTimeMax.put(key, gaugeForExecTimeMax);
+
+				GaugeForExecTimeMin statisticForExecTimeMin = new GaugeForExecTimeMin();
+				GaugeForExecTimeMin gaugeForExecTimeMin = meterRegistry.gauge("http.request.duration.seconds.min", tags,
+						statisticForExecTimeMin, statisticForExecTimeMin::getGaugeValue);
+				gaugeMapForExecTimeMin.put(key, gaugeForExecTimeMin);
 			}
 		});
-
-		return gaugeMap;
+		return gaugeMapForFailurePercent;
 	}
 
-	private Map<String, GaugeForFunction> getGaugeMap() {
-		return this.gaugeMap;
+	private Map<String, GaugeForFailurePercent> getGaugeMapForFailurePercent() {
+		return this.gaugeMapForFailurePercent;
 	}
 
-	private Map<String, CircularFifoQueue<Integer>> getTimeWindowMap() {
-		return this.timeWindowMap;
+	private Map<String, CircularFifoQueue<Integer>> getTimeWindowMapForFailurePercent() {
+		return this.timeWindowMapForFailurePercent;
+	}
+
+	private Map<String, GaugeForExecTimeAvg> getGaugeMapForExecTimeAvg() {
+		return this.gaugeMapForExecTimeAvg;
+	}
+
+	private Map<String, CircularFifoQueue<Long>> getTimeWindowMapForExecTimeAvg() {
+		return this.timeWindowMapForExecTimeAvg;
+	}
+
+	private Map<String, GaugeForExecTimeMax> getGaugeMapForExecTimeMax() {
+		return this.gaugeMapForExecTimeMax;
+	}
+
+	private Map<String, CircularFifoQueue<Long>> getTimeWindowMapForExecTimeMax() {
+		return this.timeWindowMapForExecTimeMax;
+	}
+
+	private Map<String, GaugeForExecTimeMin> getGaugeMapForExecTimeMin() {
+		return this.gaugeMapForExecTimeMin;
+	}
+
+	private Map<String, CircularFifoQueue<Long>> getTimeWindowMapForExecTimeMin() {
+		return this.timeWindowMapForExecTimeMin;
 	}
 
 	private String generateKey(HttpRequest httpRequest) {
@@ -172,7 +259,7 @@ public class TestManagement {
 		return key;
 	}
 
-	private static class GaugeForFunction {
+	private static class GaugeForFailurePercent {
 		Logger logger = LoggerFactory.getLogger(this.getClass());
 		private double gaugeValue;
 
@@ -183,17 +270,89 @@ public class TestManagement {
 			}
 			CircularFifoQueue<Integer> queue = timeWindowMap.get(key);
 			queue.offer(casePassed ? 0 : 1);
-			int failureTimes = queue.stream().mapToInt(i -> (int) i).sum();
+			int failureTimes = queue.stream().mapToInt(i -> i.intValue()).sum();
 			int execTimes = queue.size();
 			double percent = (double) failureTimes / (double) execTimes;
 			logger.debug("key=" + key);
-			logger.debug("percent=" + percent);
+			logger.debug("failed_case_percent=" + percent);
 			logger.debug("queue=" + queue);
 			gaugeValue = percent;
 		}
 
-		public double getGaugeValue(GaugeForFunction gaugeForFunction) {
-			return gaugeForFunction.gaugeValue;
+		public double getGaugeValue(GaugeForFailurePercent GaugeForFailurePercent) {
+			return GaugeForFailurePercent.gaugeValue;
+		}
+	}
+
+	private static class GaugeForExecTimeAvg {
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		private double gaugeValue;
+
+		public void compute(Map<String, CircularFifoQueue<Long>> timeWindowMap, int windowSize, String key,
+				long durationInMilliSecond) {
+			if (!timeWindowMap.containsKey(key)) {
+				timeWindowMap.put(key, new CircularFifoQueue<Long>(windowSize));
+			}
+			CircularFifoQueue<Long> queue = timeWindowMap.get(key);
+			queue.offer(durationInMilliSecond);
+			double duration = queue.stream().mapToLong(i -> i.longValue()).average().orElse(0);
+			duration = duration / (double) 1000;
+			logger.debug("key=" + key);
+			logger.debug("duration_avg(s)=" + duration);
+			logger.debug("queue=" + queue);
+			gaugeValue = duration;
+		}
+
+		public double getGaugeValue(GaugeForExecTimeAvg gaugeForExecTimeAvg) {
+			return gaugeForExecTimeAvg.gaugeValue;
+		}
+	}
+
+	private static class GaugeForExecTimeMax {
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		private double gaugeValue;
+
+		public void compute(Map<String, CircularFifoQueue<Long>> timeWindowMap, int windowSize, String key,
+				long durationInMilliSecond) {
+			if (!timeWindowMap.containsKey(key)) {
+				timeWindowMap.put(key, new CircularFifoQueue<Long>(windowSize));
+			}
+			CircularFifoQueue<Long> queue = timeWindowMap.get(key);
+			queue.offer(durationInMilliSecond);
+			double duration = queue.stream().mapToLong(i -> i.longValue()).max().orElse(0);
+			duration = duration / (double) 1000;
+			logger.debug("key=" + key);
+			logger.debug("duration_max(s)=" + duration);
+			logger.debug("queue=" + queue);
+			gaugeValue = duration;
+		}
+
+		public double getGaugeValue(GaugeForExecTimeMax gaugeForExecTimeMax) {
+			return gaugeForExecTimeMax.gaugeValue;
+		}
+	}
+
+	private static class GaugeForExecTimeMin {
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		private double gaugeValue;
+
+		public void compute(Map<String, CircularFifoQueue<Long>> timeWindowMap, int windowSize, String key,
+				long durationInMilliSecond) {
+			if (!timeWindowMap.containsKey(key)) {
+				timeWindowMap.put(key, new CircularFifoQueue<Long>(windowSize));
+			}
+			CircularFifoQueue<Long> queue = timeWindowMap.get(key);
+			queue.offer(durationInMilliSecond);
+			double duration = queue.stream().mapToLong(i -> i.longValue()).min().orElse(0);
+			duration = duration / (double) 1000;
+			logger.debug("key=" + key);
+			logger.debug("duration_min(s)=" + duration);
+			logger.debug("queue=" + queue);
+			gaugeValue = duration;
+		}
+
+		public double getGaugeValue(GaugeForExecTimeMin gaugeForExecTimeMin) {
+			return gaugeForExecTimeMin.gaugeValue;
 		}
 	}
 }
