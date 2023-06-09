@@ -203,18 +203,27 @@ public class TestManagement {
 						tags, statisticForFailurePercent, statisticForFailurePercent::getGaugeValue);
 				gaugeMapForFailurePercent.put(key, gaugeForFailurePercent);
 
+				List<Tag> avgTags = new ArrayList<>();
+				avgTags.addAll(tags);
+				avgTags.add(Tag.of("algorithm", "avg"));
 				GaugeForExecTimeAvg statisticForExecTimeAvg = new GaugeForExecTimeAvg();
-				GaugeForExecTimeAvg gaugeForExecTimeAvg = meterRegistry.gauge("http.request.duration.seconds.avg", tags,
+				GaugeForExecTimeAvg gaugeForExecTimeAvg = meterRegistry.gauge("http.request.duration.seconds", avgTags,
 						statisticForExecTimeAvg, statisticForExecTimeAvg::getGaugeValue);
 				gaugeMapForExecTimeAvg.put(key, gaugeForExecTimeAvg);
 
+				List<Tag> maxTags = new ArrayList<>();
+				maxTags.addAll(tags);
+				maxTags.add(Tag.of("algorithm", "max"));
 				GaugeForExecTimeMax statisticForExecTimeMax = new GaugeForExecTimeMax();
-				GaugeForExecTimeMax gaugeForExecTimeMax = meterRegistry.gauge("http.request.duration.seconds.max", tags,
+				GaugeForExecTimeMax gaugeForExecTimeMax = meterRegistry.gauge("http.request.duration.seconds", maxTags,
 						statisticForExecTimeMax, statisticForExecTimeMax::getGaugeValue);
 				gaugeMapForExecTimeMax.put(key, gaugeForExecTimeMax);
 
+				List<Tag> minTags = new ArrayList<>();
+				minTags.addAll(tags);
+				minTags.add(Tag.of("algorithm", "min"));
 				GaugeForExecTimeMin statisticForExecTimeMin = new GaugeForExecTimeMin();
-				GaugeForExecTimeMin gaugeForExecTimeMin = meterRegistry.gauge("http.request.duration.seconds.min", tags,
+				GaugeForExecTimeMin gaugeForExecTimeMin = meterRegistry.gauge("http.request.duration.seconds", minTags,
 						statisticForExecTimeMin, statisticForExecTimeMin::getGaugeValue);
 				gaugeMapForExecTimeMin.put(key, gaugeForExecTimeMin);
 			}
