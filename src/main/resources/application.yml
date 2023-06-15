@@ -33,15 +33,15 @@ httpConfig:
 
 httpRequests:
 - url: http://140.231.89.106:32760/graphql
-  name: '[api-engine] search events by device equals FCE1'
+  name: '[api-engine] search events by device name'
   type: POST
   headers:
     Content-Type: application/json
-  body: '{Event(cond:"{device: {_eq: \"FCE1\"}}") {eventTag device processNum coilNum timestamp}}'
+  body: '{Event(cond:"{device: {_eq: \"DC1\"}}") {eventTag device processNum coilNum timestamp}}'
   expectedCode: 100000
 
 - url: http://140.231.89.106:32760/graphql
-  name: '[api-engine] search all steel size'
+  name: '[api-engine] search steel size under processing'
   type: POST
   headers:
     Content-Type: application/json
@@ -49,27 +49,27 @@ httpRequests:
   expectedCode: 100000
 
 - url: http://140.231.89.106:32760/graphql
-  name: '[api-engine] search all alarm rule'
+  name: '[api-engine] search all alarm rules'
   type: POST
   headers:
     Content-Type: application/json
-  body: '{ Process_Alarm_Rule { alarmType expireDate effectiveDate alarmRuleLowerValue alarmRuleValue alarmRuleUpperValue alarmRule id createTime updateUser createUser updateTime }}'
+  body: '{ Process_Alarm_Rule { alarmType alarmRuleLowerValue alarmRuleValue alarmRuleUpperValue alarmRule id }}'
   expectedCode: 100000
 
-- url: http://140.231.89.106:31751/api/connectors/searchData?condition="eventTag" = 'in'&name=Event
-  name: '[connector] search events by eventTag equals in'
+- url: http://140.231.89.106:31751/api/connectors/searchData?fields=id,layerId,steelType&name=Process_Steel_Type
+  name: '[connector] search steel types under processing'
   type: GET
   expectedCode: 0
 
-- url: http://140.231.89.106:30397/api/v2/graphs/entities
-  name: '[entity-mgmt] search all entities'
+- url: http://140.231.89.106:30397/api/v2/graphs/entities/81961000
+  name: '[entity-mgmt] search entity by id'
   type: GET
   headers:
     Content-Type: application/json
   expectedCode: 100000
 
-- url: http://140.231.89.106:30747/connector/connectorInfo/ansteelRehearsal_dataManagement_JdbcConnector
-  name: '[connector-configure] search connector information by name'
+- url: http://140.231.89.106:30747/mapper/domain/Alarm_Data
+  name: '[connector-configure] search mapper by entity name'
   type: GET
   headers:
     Content-Type: application/json
@@ -77,3 +77,10 @@ httpRequests:
   # monitorPerformance: false
   # monitorFunction: false
 
+# - url: http://140.231.89.106:32760/graphql
+#   name: '[api-engine] search settings by coilNum equals P011C00800 and processNum equals R'
+#   type: POST
+#   headers:
+#     Content-Type: application/json
+#   body: '{ Setting(cond:"{_and:[{coilNum:{_eq:\"P011C00800\"}},{processNum:{_eq:\"R\"}}]}", authInfo:"", order:"value ASC") { id processNum coilNum value timestamp sensorId } }'
+#   expectedCode: 100000
