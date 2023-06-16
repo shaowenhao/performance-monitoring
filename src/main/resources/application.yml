@@ -14,7 +14,7 @@ management:
 
 logging:
   level:
-    com.siemens.devops.monitoring: info #日志级别
+    com.siemens.devops.monitoring: debug #日志级别
   file:
     name: performance_monitoring.log #文件名 默认位置在当前项目根目录下
   logback:
