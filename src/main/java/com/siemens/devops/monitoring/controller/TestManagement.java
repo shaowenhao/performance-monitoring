@@ -117,7 +117,6 @@ public class TestManagement {
 							if (gaugeForExecTimeAvg != null) {
 								gaugeForExecTimeAvg.compute(getTimeWindowMapForExecTimeAvg(), windowSizeForExecTimeAvg,
 										key, response.getExecTime());
-
 							} else {
 								logger.error("Does not exist gaugeForExecTimeAvg, key=" + key);
 							}
@@ -126,7 +125,6 @@ public class TestManagement {
 							if (gaugeForExecTimeMax != null) {
 								gaugeForExecTimeMax.compute(getTimeWindowMapForExecTimeMax(), windowSizeForExecTimeMax,
 										key, response.getExecTime());
-
 							} else {
 								logger.error("Does not exist gaugeForExecTimeMax, key=" + key);
 							}
@@ -135,7 +133,6 @@ public class TestManagement {
 							if (gaugeForExecTimeMin != null) {
 								gaugeForExecTimeMin.compute(getTimeWindowMapForExecTimeMin(), windowSizeForExecTimeMin,
 										key, response.getExecTime());
-
 							} else {
 								logger.error("Does not exist gaugeForExecTimeMin, key=" + key);
 							}
@@ -154,6 +151,14 @@ public class TestManagement {
 										windowSizeForFailurePercent, key, response.isPassed());
 							} else {
 								logger.error("Does not exist gaugeForFailurePercent, key=" + key);
+							}
+
+							GaugeForTransactionStatus gaugeForTransactionStatus = getGaugeMapForTransactionStatus()
+									.get(key);
+							if (gaugeForTransactionStatus != null) {
+								gaugeForTransactionStatus.compute(response.isPassed());
+							} else {
+								logger.error("Does not exist gaugeForTransactionStatus, key=" + key);
 							}
 
 						}
@@ -182,6 +187,8 @@ public class TestManagement {
 
 	private Map<String, GaugeForExecTime> gaugeMapForExecTime = new ConcurrentHashMap<>();
 
+	private Map<String, GaugeForTransactionStatus> gaugeMapForTransactionStatus = new ConcurrentHashMap<>();
+
 	private void clearGaugeMap() {
 		this.gaugeMapForFailurePercent.clear();
 		this.timeWindowMapForFailurePercent.clear();
@@ -196,6 +203,8 @@ public class TestManagement {
 		this.timeWindowMapForExecTimeMin.clear();
 
 		this.gaugeMapForExecTime.clear();
+
+		this.gaugeMapForTransactionStatus.clear();
 	}
 
 	private Map<String, GaugeForFailurePercent> initGaugeMap() {
@@ -245,6 +254,14 @@ public class TestManagement {
 				GaugeForExecTime gaugeForExecTime = meterRegistry.gauge("http.request.duration.seconds", identityTags,
 						statisticForExecTime, statisticForExecTime::getGaugeValue);
 				gaugeMapForExecTime.put(key, gaugeForExecTime);
+
+				List<Tag> transactionStatusTags = new ArrayList<>();
+				transactionStatusTags.addAll(tags);
+				GaugeForTransactionStatus statisticForTransactionStatus = new GaugeForTransactionStatus();
+				GaugeForTransactionStatus gaugeForTransactionStatus = meterRegistry.gauge(
+						"http.request.transaction.status", transactionStatusTags, statisticForTransactionStatus,
+						statisticForTransactionStatus::getGaugeValue);
+				gaugeMapForTransactionStatus.put(key, gaugeForTransactionStatus);
 			}
 		});
 		return gaugeMapForFailurePercent;
@@ -284,6 +301,10 @@ public class TestManagement {
 
 	private Map<String, GaugeForExecTime> getGaugeMapForExecTime() {
 		return this.gaugeMapForExecTime;
+	}
+
+	private Map<String, GaugeForTransactionStatus> getGaugeMapForTransactionStatus() {
+		return this.gaugeMapForTransactionStatus;
 	}
 
 	private String generateKey(HttpRequest httpRequest) {
@@ -399,6 +420,20 @@ public class TestManagement {
 
 		public double getGaugeValue(GaugeForExecTime gaugeForExecTime) {
 			return gaugeForExecTime.gaugeValue;
+		}
+	}
+
+	private static class GaugeForTransactionStatus {
+		Logger logger = LoggerFactory.getLogger(this.getClass());
+		private double gaugeValue;
+
+		public void compute(boolean casePassed) {
+			double status = casePassed ? 0 : 1;
+			gaugeValue = status;
+		}
+
+		public double getGaugeValue(GaugeForTransactionStatus gaugeForTransactionStatus) {
+			return gaugeForTransactionStatus.gaugeValue;
 		}
 	}
 }

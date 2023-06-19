@@ -62,8 +62,8 @@ public class HttpRequestService {
 		try {
 			logger.info("name: " + request.getName() + ", url: " + url + ", method: " + request.getType() + ", body: "
 					+ request.getBody());
-			ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.valueOf(request.getType()), httpEntity,
-					String.class);
+			ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.valueOf(request.getType()),
+					httpEntity, String.class);
 			etime = System.currentTimeMillis();
 			boolean pass = checkBody(result.getBody(), request);
 			response.setPassed(pass);
@@ -76,11 +76,13 @@ public class HttpRequestService {
 			etime = stime + extendedValue;
 			response.setErrMsg(e.getResponseBodyAsString());
 			response.setStatusCode(e.getStatusCode().toString());
+			response.setPassed(false);
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
 //			etime = System.currentTimeMillis();
 			etime = stime + extendedValue;
 			response.setTimeout(true);
+			response.setPassed(false);
 			logger.error(e.getMessage(), e);
 		}
 		response.setExecTime(etime - stime);
