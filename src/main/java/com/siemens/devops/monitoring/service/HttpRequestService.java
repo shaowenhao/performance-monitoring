@@ -56,31 +56,32 @@ public class HttpRequestService {
 		response.setMethod(request.getType());
 		response.setErrMsg("");
 		response.setTimeout(false);
+		response.setTimestamp(getCurrentDate());
 		long stime = System.currentTimeMillis();
 		long etime = stime;
-		response.setTimestamp(getCurrentDate());
 		try {
 			logger.info("name: " + request.getName() + ", url: " + url + ", method: " + request.getType() + ", body: "
 					+ request.getBody());
 			ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.valueOf(request.getType()),
 					httpEntity, String.class);
 			etime = System.currentTimeMillis();
+			
 			boolean pass = checkBody(result.getBody(), request);
-			response.setPassed(pass);
-			if (!pass) {
-				etime = stime + extendedValue;
-			}
+			response.setPassed(pass);			
+//			if (!pass) {
+//				etime = stime + extendedValue;
+//			}
 			response.setStatusCode(result.getStatusCode().toString());
 		} catch (HttpClientErrorException | HttpServerErrorException e) {
-//			etime = System.currentTimeMillis();
-			etime = stime + extendedValue;
+//			etime = stime + extendedValue;
+			etime = System.currentTimeMillis();
 			response.setErrMsg(e.getResponseBodyAsString());
 			response.setStatusCode(e.getStatusCode().toString());
 			response.setPassed(false);
 			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-//			etime = System.currentTimeMillis();
-			etime = stime + extendedValue;
+//			etime = stime + extendedValue;
+			etime = System.currentTimeMillis();
 			response.setTimeout(true);
 			response.setPassed(false);
 			logger.error(e.getMessage(), e);
